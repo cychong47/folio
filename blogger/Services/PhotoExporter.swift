@@ -26,8 +26,18 @@ enum PhotoExporter {
     }
 
     static func readEXIFDate(from data: Data) -> Date? {
-        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
-              let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+        return exifDate(from: source)
+    }
+
+    // Memory-efficient variant: reads only metadata, not the full image
+    static func readEXIFDate(from url: URL) -> Date? {
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        return exifDate(from: source)
+    }
+
+    private static func exifDate(from source: CGImageSource) -> Date? {
+        guard let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
               let exifDict = props[kCGImagePropertyExifDictionary as String] as? [String: Any],
               let dateString = exifDict[kCGImagePropertyExifDateTimeOriginal as String] as? String else {
             return nil

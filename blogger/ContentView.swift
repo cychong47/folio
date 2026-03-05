@@ -20,71 +20,67 @@ struct ContentView: View {
         }
     }
 
-    // Staging directory for images dragged from Photos.app (no App Group needed)
     private var stagingDirectory: URL {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
         return appSupport.appendingPathComponent("Blogger/pending", isDirectory: true)
     }
 
     private func loadDroppedPhotos(_ providers: [NSItemProvider]) {
-        let imageURLPrefix = settings.imageURLPrefix  // capture on main thread
-        try? FileManager.default.createDirectory(at: stagingDirectory, withIntermediateDirectories: true)
+        let imageURLPrefix = settings.imageURLPrefix   // capture on main thread
         let stagingDir = stagingDirectory
+        try? FileManager.default.createDirectory(at: stagingDir, withIntermediateDirectories: true)
 
         let group = DispatchGroup()
         var photos: [ExportedPhoto] = []
         let lock = NSLock()
 
+        // Image type identifiers to try, in priority order
+        let imageTypeIDs = [UTType.jpeg.identifier, UTType.heic.identifier,
+                            UTType.png.identifier,  UTType.tiff.identifier,
+                            UTType.image.identifier]
+
         for provider in providers {
-            // --- Case 1: File URL (drag from Finder) ---
-            if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
-                group.enter()
-                provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
-                    defer { group.leave() }
+            // Prefer file URL (Finder drag); fall back to image data (Photos.app drag)
+            let useFileURL = provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier)
+            let typeID = useFileURL
+                ? UTType.fileURL.identifier
+                : imageTypeIDs.first { provider.hasItemConformingToTypeIdentifier($0) }
 
-                    let fileURL: URL?
-                    if let url = item as? URL {
-                        fileURL = url
-                    } else if let data = item as? Data {
-                        fileURL = URL(dataRepresentation: data, relativeTo: nil)
-                    } else {
-                        fileURL = nil
+            guard let typeID else { continue }
+
+            group.enter()
+
+            // loadFileRepresentation gives a temp file URL — avoids loading full image into RAM
+            provider.loadFileRepresentation(forTypeIdentifier: typeID) { tempURL, error in
+                defer { group.leave() }
+                guard let tempURL else { return }
+
+                // Read EXIF from URL (only metadata, not full pixels)
+                let exifDate = PhotoExporter.readEXIFDate(from: tempURL) ?? Date()
+                let filename = PhotoExporter.exportedFilename(
+                    originalName: tempURL.lastPathComponent, date: exifDate)
+
+                // Copy to staging dir before temp file is deleted
+                let dest = stagingDir.appendingPathComponent(filename)
+                do {
+                    if FileManager.default.fileExists(atPath: dest.path) {
+                        try FileManager.default.removeItem(at: dest)
                     }
-                    guard let url = fileURL else { return }
-
-                    let ext = url.pathExtension.lowercased()
-                    guard ["jpg","jpeg","png","heic","heif","tiff","tif","gif","webp"].contains(ext) else { return }
-                    guard let imageData = try? Data(contentsOf: url) else { return }
-
-                    if let photo = makePhoto(from: imageData, originalName: url.lastPathComponent,
-                                             stagingDir: stagingDir, prefix: imageURLPrefix) {
-                        lock.lock(); photos.append(photo); lock.unlock()
-                    }
+                    try FileManager.default.copyItem(at: tempURL, to: dest)
+                } catch {
+                    return
                 }
 
-            // --- Case 2: Image data (drag from Photos.app) ---
-            } else {
-                // Try common image type identifiers in priority order
-                let imageTypes = [UTType.jpeg.identifier, UTType.heic.identifier,
-                                  UTType.png.identifier, UTType.tiff.identifier,
-                                  UTType.image.identifier]
-                guard let typeID = imageTypes.first(where: { provider.hasItemConformingToTypeIdentifier($0) }) else {
-                    continue
-                }
-
-                group.enter()
-                provider.loadDataRepresentation(forTypeIdentifier: typeID) { data, _ in
-                    defer { group.leave() }
-                    guard let data else { return }
-
-                    let ext = UTType(typeID)?.preferredFilenameExtension ?? "jpg"
-                    let originalName = "photo.\(ext)"
-
-                    if let photo = makePhoto(from: imageData(data), originalName: originalName,
-                                             stagingDir: stagingDir, prefix: imageURLPrefix) {
-                        lock.lock(); photos.append(photo); lock.unlock()
-                    }
-                }
+                let slash = imageURLPrefix.hasSuffix("/") ? imageURLPrefix : imageURLPrefix + "/"
+                let photo = ExportedPhoto(
+                    filename: filename,
+                    markdownPath: "\(slash)\(filename)",
+                    localURL: dest,
+                    exifDate: exifDate
+                )
+                lock.lock()
+                photos.append(photo)
+                lock.unlock()
             }
         }
 
@@ -106,24 +102,5 @@ struct ContentView: View {
             pendingPost.markdownBody = MarkdownGenerator.initialMarkdown(
                 title: pendingPost.title, date: date, photos: allPhotos)
         }
-    }
-
-    // Inline helper to avoid shadowing the parameter name
-    private func imageData(_ data: Data) -> Data { data }
-
-    private func makePhoto(from data: Data, originalName: String,
-                           stagingDir: URL, prefix: String) -> ExportedPhoto? {
-        let exifDate = PhotoExporter.readEXIFDate(from: data) ?? Date()
-        let filename = PhotoExporter.exportedFilename(originalName: originalName, date: exifDate)
-
-        let dest = stagingDir.appendingPathComponent(filename)
-        // Avoid overwriting if same filename already exists
-        if !FileManager.default.fileExists(atPath: dest.path) {
-            guard (try? data.write(to: dest, options: .atomic)) != nil else { return nil }
-        }
-
-        let slash = prefix.hasSuffix("/") ? prefix : prefix + "/"
-        return ExportedPhoto(filename: filename, markdownPath: "\(slash)\(filename)",
-                             localURL: dest, exifDate: exifDate)
     }
 }
