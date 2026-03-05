@@ -14,7 +14,7 @@ struct ContentView: View {
                 PostEditorView()
             }
         }
-        .onDrop(of: [UTType.image, UTType.fileURL], isTargeted: $isDragTargeted) { providers in
+        .onDrop(of: [UTType.fileURL], isTargeted: $isDragTargeted) { providers in
             loadDroppedPhotos(providers)
             return true
         }
@@ -31,14 +31,27 @@ struct ContentView: View {
         for provider in providers {
             guard provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) else { continue }
             group.enter()
-            provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, _ in
+
+            // On macOS, Finder drag-and-drop delivers URLs as NSURL, not Data
+            provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { item, error in
                 defer { group.leave() }
 
-                guard let data = item as? Data,
-                      let url = URL(dataRepresentation: data, relativeTo: nil) else { return }
+                // Handle both NSURL and Data representations
+                let fileURL: URL?
+                if let url = item as? URL {
+                    fileURL = url
+                } else if let data = item as? Data {
+                    fileURL = URL(dataRepresentation: data, relativeTo: nil)
+                } else {
+                    fileURL = nil
+                }
 
-                let uti = UTType(filenameExtension: url.pathExtension)
-                guard uti?.conforms(to: .image) == true else { return }
+                guard let url = fileURL else { return }
+
+                // Only process image files
+                let ext = url.pathExtension.lowercased()
+                let imageExtensions = ["jpg", "jpeg", "png", "heic", "heif", "tiff", "tif", "gif", "webp", "raw"]
+                guard imageExtensions.contains(ext) else { return }
 
                 guard let imageData = try? Data(contentsOf: url) else { return }
 
@@ -49,7 +62,6 @@ struct ContentView: View {
                 let prefix = imageURLPrefix.hasSuffix("/") ? imageURLPrefix : imageURLPrefix + "/"
                 let markdownPath = "\(prefix)\(filename)"
 
-                // Use the original file URL directly — no App Group needed
                 let photo = ExportedPhoto(
                     filename: filename,
                     markdownPath: markdownPath,
@@ -63,6 +75,7 @@ struct ContentView: View {
         }
 
         group.notify(queue: .main) {
+            guard !photos.isEmpty else { return }
             let sorted = photos.sorted { $0.exifDate < $1.exifDate }
             pendingPost.photos.append(contentsOf: sorted)
 
