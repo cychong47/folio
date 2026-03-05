@@ -22,6 +22,14 @@ struct SettingsView: View {
         .formStyle(.grouped)
         .navigationTitle("Settings")
         .frame(minWidth: 500, minHeight: 280)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Done") {
+                    NSApp.keyWindow?.close()
+                }
+                .keyboardShortcut(.return, modifiers: [.command])
+            }
+        }
     }
 }
 
