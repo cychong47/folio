@@ -30,14 +30,14 @@ class DropTargetView: NSView {
         UserDefaults(suiteName: "group.com.blogger.app")?.string(forKey: "staticImagesSubpath") ?? ""
     }
 
-    private func markdownPath(for filename: String, date: Date) -> String {
-        let prefix = imageURLPrefix.hasSuffix("/") ? imageURLPrefix : imageURLPrefix + "/"
-        let sub = AppSettings.resolveSubpath(staticImagesSubpath, for: date)
-        if sub.isEmpty {
-            return "\(prefix)\(filename)"
-        }
-        let subSlashed = sub.hasSuffix("/") ? sub : sub + "/"
-        return "\(prefix)\(subSlashed)\(filename)"
+    // Static so it can be called from escaping closures without capturing self
+    private static func buildMarkdownPath(filename: String, date: Date,
+                                          prefix: String, subpath: String) -> String {
+        let slash = prefix.hasSuffix("/") ? prefix : prefix + "/"
+        let sub = AppSettings.resolveSubpath(subpath, for: date)
+        if sub.isEmpty { return "\(slash)\(filename)" }
+        let subSlash = sub.hasSuffix("/") ? sub : sub + "/"
+        return "\(slash)\(subSlash)\(filename)"
     }
 
     override init(frame: NSRect) {
@@ -107,6 +107,9 @@ class DropTargetView: NSView {
     // MARK: - File promise receiving
 
     private func receiveFilePromises(_ receivers: [NSFilePromiseReceiver], stagingDir: URL) {
+        // Capture values before closures to avoid escaping-closure self requirements
+        let urlPrefix = imageURLPrefix
+        let imagesSubpath = staticImagesSubpath
         let group = DispatchGroup()
         var photos: [ExportedPhoto] = []
         let lock = NSLock()
@@ -127,8 +130,9 @@ class DropTargetView: NSView {
                     try? FileManager.default.moveItem(at: url, to: dest)
                 }
 
-                let photo = ExportedPhoto(filename: filename,
-                                          markdownPath: markdownPath(for: filename, date: exifDate),
+                let mdPath = DropTargetView.buildMarkdownPath(
+                    filename: filename, date: exifDate, prefix: urlPrefix, subpath: imagesSubpath)
+                let photo = ExportedPhoto(filename: filename, markdownPath: mdPath,
                                           localURL: dest, exifDate: exifDate)
                 lock.lock(); photos.append(photo); lock.unlock()
             }
@@ -142,6 +146,9 @@ class DropTargetView: NSView {
     // MARK: - Plain file URL handling
 
     private func processFileURLs(_ urls: [URL], stagingDir: URL) {
+        // Capture values before async block — self is weak, so we can't call instance methods inside
+        let urlPrefix = imageURLPrefix
+        let imagesSubpath = staticImagesSubpath
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             var photos: [ExportedPhoto] = []
             for url in urls {
@@ -151,8 +158,9 @@ class DropTargetView: NSView {
                 let dest = stagingDir.appendingPathComponent(filename)
                 try? FileManager.default.removeItem(at: dest)
                 try? FileManager.default.copyItem(at: url, to: dest)
-                let photo = ExportedPhoto(filename: filename,
-                                          markdownPath: markdownPath(for: filename, date: exifDate),
+                let mdPath = DropTargetView.buildMarkdownPath(
+                    filename: filename, date: exifDate, prefix: urlPrefix, subpath: imagesSubpath)
+                let photo = ExportedPhoto(filename: filename, markdownPath: mdPath,
                                           localURL: dest, exifDate: exifDate)
                 photos.append(photo)
             }
