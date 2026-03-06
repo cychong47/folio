@@ -63,7 +63,7 @@ struct PostEditorView: View {
                 }
                 HStack(alignment: .center, spacing: 6) {
                     Text("Categories:")
-                        .frame(width: 60, alignment: .trailing)
+                        .frame(width: 80, alignment: .trailing)
                         .foregroundStyle(.secondary)
                     // Chips in a horizontal scroll so they never push other items
                     ScrollView(.horizontal, showsIndicators: false) {
