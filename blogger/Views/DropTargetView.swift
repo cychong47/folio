@@ -34,7 +34,8 @@ class DropTargetView: NSView {
     // Static so it can be called from escaping closures without capturing self
     private static func buildMarkdownPath(filename: String, date: Date,
                                           prefix: String, subpath: String) -> String {
-        let slash = prefix.hasSuffix("/") ? prefix : prefix + "/"
+        let resolvedPrefix = AppSettings.resolveSubpath(prefix, for: date)
+        let slash = resolvedPrefix.hasSuffix("/") ? resolvedPrefix : resolvedPrefix + "/"
         let sub = AppSettings.resolveSubpath(subpath, for: date)
         if sub.isEmpty { return "\(slash)\(filename)" }
         let subSlash = sub.hasSuffix("/") ? sub : sub + "/"

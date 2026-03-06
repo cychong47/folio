@@ -54,9 +54,10 @@ struct SettingsView: View {
                     TextField("/images", text: $settings.imageURLPrefix)
                         .frame(maxWidth: 200)
                     let resolvedSub = AppSettings.resolveSubpath(settings.staticImagesSubpath, for: Date())
-                    let prefix = settings.imageURLPrefix.isEmpty ? "/images" : settings.imageURLPrefix
-                    let slash = prefix.hasSuffix("/") ? prefix : prefix + "/"
-                    let preview = resolvedSub.isEmpty ? slash : slash + resolvedSub + "/"
+                    let rawPrefix = settings.imageURLPrefix.isEmpty ? "/images" : settings.imageURLPrefix
+                    let resolvedPrefix = AppSettings.resolveSubpath(rawPrefix, for: Date())
+                    let slash = resolvedPrefix.hasSuffix("/") ? resolvedPrefix : resolvedPrefix + "/"
+                    let preview = resolvedSub.isEmpty ? String(slash.dropLast()) : slash + resolvedSub
                     Text("→ \(preview)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
