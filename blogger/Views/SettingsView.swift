@@ -163,20 +163,26 @@ private struct CategoryTagsEditor: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            FlexWrap(items: categories) { cat in
-                HStack(spacing: 3) {
-                    Text(cat).font(.caption)
-                    Button {
-                        categories.removeAll { $0 == cat }
-                    } label: {
-                        Image(systemName: "xmark").font(.system(size: 8, weight: .bold))
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: 100), alignment: .leading)],
+                alignment: .leading,
+                spacing: 6
+            ) {
+                ForEach(categories, id: \.self) { cat in
+                    HStack(spacing: 3) {
+                        Text(cat).font(.caption)
+                        Button {
+                            categories.removeAll { $0 == cat }
+                        } label: {
+                            Image(systemName: "xmark").font(.system(size: 8, weight: .bold))
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 3)
+                    .background(Color.secondary.opacity(0.15))
+                    .cornerRadius(4)
                 }
-                .padding(.horizontal, 7)
-                .padding(.vertical, 3)
-                .background(Color.secondary.opacity(0.15))
-                .cornerRadius(4)
             }
             HStack(spacing: 6) {
                 if showInput {
@@ -189,7 +195,7 @@ private struct CategoryTagsEditor: View {
                 } else {
                     Button("+ Add category") { showInput = true }
                         .buttonStyle(.plain)
-                        .foregroundStyle(.accentColor)
+                        .foregroundStyle(Color.accentColor)
                         .font(.caption)
                 }
             }
@@ -203,49 +209,6 @@ private struct CategoryTagsEditor: View {
         }
         newText = ""
         showInput = false
-    }
-}
-
-/// Simple left-to-right wrapping layout for tag chips.
-private struct FlexWrap<Item: Hashable, Content: View>: View {
-    let items: [Item]
-    let content: (Item) -> Content
-    @State private var totalHeight: CGFloat = 0
-
-    var body: some View {
-        GeometryReader { geo in
-            self.layout(in: geo.size.width)
-        }
-        .frame(height: totalHeight)
-    }
-
-    private func layout(in width: CGFloat) -> some View {
-        var x: CGFloat = 0
-        var y: CGFloat = 0
-        let spacing: CGFloat = 6
-        let rowHeight: CGFloat = 24
-
-        return ZStack(alignment: .topLeading) {
-            ForEach(items, id: \.self) { item in
-                content(item)
-                    .alignmentGuide(.leading) { d in
-                        if x + d.width > width {
-                            x = 0; y += rowHeight + spacing
-                        }
-                        let result = -x
-                        if item == items.last { x = 0; y += rowHeight }
-                        else { x += d.width + spacing }
-                        return result
-                    }
-                    .alignmentGuide(.top) { _ in -y }
-            }
-        }
-        .background(
-            GeometryReader { geo in
-                Color.clear.onAppear { totalHeight = geo.size.height }
-                    .onChange(of: items) { _ in totalHeight = geo.size.height }
-            }
-        )
     }
 }
 

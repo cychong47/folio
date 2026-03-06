@@ -12,6 +12,10 @@ struct PostEditorView: View {
     @State private var newCategoryText = ""
     @State private var showNewCategoryField = false
 
+    private var availableCategories: [String] {
+        settings.knownCategories.filter { !pendingPost.categories.contains($0) }
+    }
+
     private var stagingDirectory: URL {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
         return appSupport.appendingPathComponent("Blogger/pending", isDirectory: true)
@@ -79,15 +83,14 @@ struct PostEditorView: View {
                         .cornerRadius(4)
                     }
                     // Add button
-                    let available = settings.knownCategories.filter { !pendingPost.categories.contains($0) }
                     Menu {
-                        ForEach(available, id: \.self) { cat in
+                        ForEach(availableCategories, id: \.self) { cat in
                             Button(cat) {
                                 pendingPost.categories.append(cat)
                                 updateFrontmatterCategories(pendingPost.categories)
                             }
                         }
-                        if !available.isEmpty { Divider() }
+                        if !availableCategories.isEmpty { Divider() }
                         Button("New…") { showNewCategoryField = true }
                     } label: {
                         Image(systemName: "plus.circle")
