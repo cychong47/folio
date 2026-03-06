@@ -5,7 +5,10 @@ struct ContentView: View {
     @EnvironmentObject var pendingPost: PendingPost
     @EnvironmentObject var settings: AppSettings
     @State private var isDragTargeted = false
-    @State private var isImporting = false
+    @State private var importTotal: Int = 0
+    @State private var importCompleted: Int = 0
+
+    private var isImporting: Bool { importTotal > 0 }
 
     var body: some View {
         ZStack {
@@ -17,18 +20,25 @@ struct ContentView: View {
 
             DropZone(
                 isDragTargeted: $isDragTargeted,
-                onImportStarted: { isImporting = true },
+                onImportStarted: { total in
+                    importTotal = total
+                    importCompleted = 0
+                },
+                onProgress: { completed, total in
+                    importCompleted = completed
+                    importTotal = total
+                },
                 onDrop: handleDroppedPhotos
             )
 
-            // Importing overlay
             if isImporting {
                 Color.black.opacity(0.25)
                     .ignoresSafeArea()
                 VStack(spacing: 12) {
-                    ProgressView()
-                        .scaleEffect(1.4)
-                    Text("Importing photos…")
+                    ProgressView(value: Double(importCompleted), total: Double(importTotal))
+                        .progressViewStyle(.linear)
+                        .frame(width: 160)
+                    Text("Importing \(importCompleted) / \(importTotal)")
                         .foregroundStyle(.white)
                         .font(.headline)
                 }
@@ -39,7 +49,8 @@ struct ContentView: View {
     }
 
     private func handleDroppedPhotos(_ photos: [ExportedPhoto]) {
-        isImporting = false
+        importTotal = 0
+        importCompleted = 0
         guard !photos.isEmpty else { return }
 
         let existingFilenames = Set(pendingPost.photos.map(\.filename))
@@ -67,13 +78,15 @@ struct ContentView: View {
 
 struct DropZone: NSViewRepresentable {
     @Binding var isDragTargeted: Bool
-    let onImportStarted: () -> Void
+    let onImportStarted: (Int) -> Void
+    let onProgress: (Int, Int) -> Void
     let onDrop: ([ExportedPhoto]) -> Void
 
     func makeNSView(context: Context) -> DropTargetView {
         let view = DropTargetView()
         view.onFilesDropped = onDrop
         view.onImportStarted = onImportStarted
+        view.onProgress = onProgress
         view.onDragEntered = { isDragTargeted = true }
         view.onDragExited  = { isDragTargeted = false }
         return view
@@ -82,5 +95,6 @@ struct DropZone: NSViewRepresentable {
     func updateNSView(_ nsView: DropTargetView, context: Context) {
         nsView.onFilesDropped = onDrop
         nsView.onImportStarted = onImportStarted
+        nsView.onProgress = onProgress
     }
 }

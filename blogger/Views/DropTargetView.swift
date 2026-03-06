@@ -7,7 +7,8 @@ class DropTargetView: NSView {
     var onFilesDropped: (([ExportedPhoto]) -> Void)?
     var onDragEntered: (() -> Void)?
     var onDragExited: (() -> Void)?
-    var onImportStarted: (() -> Void)?
+    var onImportStarted: ((Int) -> Void)?   // called with total count
+    var onProgress: ((Int, Int) -> Void)?   // called with (completed, total)
 
     // Single serial queue — prevents concurrent NSPasteboard access crash (macOS 13)
     private let promiseQueue: OperationQueue = {
@@ -87,19 +88,18 @@ class DropTargetView: NSView {
             item.types.contains { promiseTypeStrings.contains($0.rawValue) }
         } ?? false
 
-        onImportStarted?()
-
         if hasPromises {
             let receivers = (pasteboard.readObjects(forClasses: [NSFilePromiseReceiver.self],
                                                     options: nil) as? [NSFilePromiseReceiver]) ?? []
+            onImportStarted?(receivers.count)
             receiveFilePromises(receivers, stagingDir: stagingDir)
         } else {
-            // Plain file URLs from Finder
             let urls = (pasteboard.readObjects(forClasses: [NSURL.self],
                                                options: [.urlReadingFileURLsOnly: true]) as? [URL]) ?? []
             let imageExts = Set(["jpg","jpeg","png","heic","heif","tiff","tif","gif","webp","raw"])
-            processFileURLs(urls.filter { imageExts.contains($0.pathExtension.lowercased()) },
-                            stagingDir: stagingDir)
+            let imageURLs = urls.filter { imageExts.contains($0.pathExtension.lowercased()) }
+            onImportStarted?(imageURLs.count)
+            processFileURLs(imageURLs, stagingDir: stagingDir)
         }
         return true
     }
@@ -107,18 +107,26 @@ class DropTargetView: NSView {
     // MARK: - File promise receiving
 
     private func receiveFilePromises(_ receivers: [NSFilePromiseReceiver], stagingDir: URL) {
-        // Capture values before closures to avoid escaping-closure self requirements
         let urlPrefix = imageURLPrefix
         let imagesSubpath = staticImagesSubpath
+        let total = receivers.count
         let group = DispatchGroup()
         var photos: [ExportedPhoto] = []
+        var completed = 0
         let lock = NSLock()
 
         for receiver in receivers {
             group.enter()
             receiver.receivePromisedFiles(atDestination: stagingDir, options: [:],
                                           operationQueue: promiseQueue) { url, error in
-                defer { group.leave() }
+                defer {
+                    lock.lock()
+                    completed += 1
+                    let c = completed
+                    lock.unlock()
+                    DispatchQueue.main.async { [weak self] in self?.onProgress?(c, total) }
+                    group.leave()
+                }
                 guard error == nil else { return }
 
                 let exifDate = PhotoExporter.readEXIFDate(from: url) ?? Date()
@@ -146,12 +154,12 @@ class DropTargetView: NSView {
     // MARK: - Plain file URL handling
 
     private func processFileURLs(_ urls: [URL], stagingDir: URL) {
-        // Capture values before async block — self is weak, so we can't call instance methods inside
         let urlPrefix = imageURLPrefix
         let imagesSubpath = staticImagesSubpath
+        let total = urls.count
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             var photos: [ExportedPhoto] = []
-            for url in urls {
+            for (index, url) in urls.enumerated() {
                 let exifDate = PhotoExporter.readEXIFDate(from: url) ?? Date()
                 let filename = PhotoExporter.exportedFilename(
                     originalName: url.lastPathComponent, date: exifDate)
@@ -163,6 +171,8 @@ class DropTargetView: NSView {
                 let photo = ExportedPhoto(filename: filename, markdownPath: mdPath,
                                           localURL: dest, exifDate: exifDate)
                 photos.append(photo)
+                let completed = index + 1
+                DispatchQueue.main.async { [weak self] in self?.onProgress?(completed, total) }
             }
             DispatchQueue.main.async {
                 self?.onFilesDropped?(photos.sorted { $0.exifDate < $1.exifDate })
