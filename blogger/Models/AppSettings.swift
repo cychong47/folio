@@ -16,9 +16,13 @@ class AppSettings: ObservableObject {
     }
 
     /// Subpath template under contentPath, e.g. "YYYY/MM" → 2026/03
-    /// Tokens: YYYY = 4-digit year, MM = 2-digit month, DD = 2-digit day
     @Published var contentSubpath: String {
         didSet { defaults.set(contentSubpath, forKey: Constants.UserDefaultsKeys.contentSubpath) }
+    }
+
+    /// Subpath template under staticImagesPath, e.g. "YYYY/MM" → 2026/03
+    @Published var staticImagesSubpath: String {
+        didSet { defaults.set(staticImagesSubpath, forKey: Constants.UserDefaultsKeys.staticImagesSubpath) }
     }
 
     init() {
@@ -30,6 +34,7 @@ class AppSettings: ObservableObject {
         self.staticImagesPath = defaults.string(forKey: Constants.UserDefaultsKeys.staticImagesPath) ?? ""
         self.imageURLPrefix = defaults.string(forKey: Constants.UserDefaultsKeys.imageURLPrefix) ?? "/images"
         self.contentSubpath = defaults.string(forKey: Constants.UserDefaultsKeys.contentSubpath) ?? "YYYY/MM"
+        self.staticImagesSubpath = defaults.string(forKey: Constants.UserDefaultsKeys.staticImagesSubpath) ?? ""
     }
 
     /// Resolves a subpath template against a date.

@@ -22,10 +22,22 @@ class DropTargetView: NSView {
         return appSupport.appendingPathComponent("Blogger/pending", isDirectory: true)
     }
 
-    // Read imageURLPrefix directly from shared UserDefaults (same store as AppSettings)
     private var imageURLPrefix: String {
-        UserDefaults(suiteName: "group.com.blogger.app")?
-            .string(forKey: "imageURLPrefix") ?? "/images"
+        UserDefaults(suiteName: "group.com.blogger.app")?.string(forKey: "imageURLPrefix") ?? "/images"
+    }
+
+    private var staticImagesSubpath: String {
+        UserDefaults(suiteName: "group.com.blogger.app")?.string(forKey: "staticImagesSubpath") ?? ""
+    }
+
+    private func markdownPath(for filename: String, date: Date) -> String {
+        let prefix = imageURLPrefix.hasSuffix("/") ? imageURLPrefix : imageURLPrefix + "/"
+        let sub = AppSettings.resolveSubpath(staticImagesSubpath, for: date)
+        if sub.isEmpty {
+            return "\(prefix)\(filename)"
+        }
+        let subSlashed = sub.hasSuffix("/") ? sub : sub + "/"
+        return "\(prefix)\(subSlashed)\(filename)"
     }
 
     override init(frame: NSRect) {
@@ -95,7 +107,6 @@ class DropTargetView: NSView {
     // MARK: - File promise receiving
 
     private func receiveFilePromises(_ receivers: [NSFilePromiseReceiver], stagingDir: URL) {
-        let prefix = imageURLPrefix
         let group = DispatchGroup()
         var photos: [ExportedPhoto] = []
         let lock = NSLock()
@@ -116,9 +127,8 @@ class DropTargetView: NSView {
                     try? FileManager.default.moveItem(at: url, to: dest)
                 }
 
-                let slash = prefix.hasSuffix("/") ? prefix : prefix + "/"
                 let photo = ExportedPhoto(filename: filename,
-                                          markdownPath: "\(slash)\(filename)",
+                                          markdownPath: markdownPath(for: filename, date: exifDate),
                                           localURL: dest, exifDate: exifDate)
                 lock.lock(); photos.append(photo); lock.unlock()
             }
@@ -132,7 +142,6 @@ class DropTargetView: NSView {
     // MARK: - Plain file URL handling
 
     private func processFileURLs(_ urls: [URL], stagingDir: URL) {
-        let prefix = imageURLPrefix
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             var photos: [ExportedPhoto] = []
             for url in urls {
@@ -142,9 +151,8 @@ class DropTargetView: NSView {
                 let dest = stagingDir.appendingPathComponent(filename)
                 try? FileManager.default.removeItem(at: dest)
                 try? FileManager.default.copyItem(at: url, to: dest)
-                let slash = prefix.hasSuffix("/") ? prefix : prefix + "/"
                 let photo = ExportedPhoto(filename: filename,
-                                          markdownPath: "\(slash)\(filename)",
+                                          markdownPath: markdownPath(for: filename, date: exifDate),
                                           localURL: dest, exifDate: exifDate)
                 photos.append(photo)
             }

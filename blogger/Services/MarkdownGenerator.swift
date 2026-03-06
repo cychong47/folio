@@ -12,8 +12,10 @@ enum MarkdownGenerator {
         return """
         ---
         title: "\(title)"
-        date: \(dateStr)
+        date: "\(dateStr)"
         draft: false
+        categories: []
+        tags: []
         ---
         """
     }

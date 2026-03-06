@@ -15,5 +15,6 @@ enum Constants {
         static let staticImagesPath = "staticImagesPath"
         static let imageURLPrefix = "imageURLPrefix"
         static let contentSubpath = "contentSubpath"
+        static let staticImagesSubpath = "staticImagesSubpath"
     }
 }

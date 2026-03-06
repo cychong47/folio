@@ -49,9 +49,12 @@ enum PhotoExporter {
     }
 
     static func copyPendingToStatic(photos: [ExportedPhoto], settings: AppSettings) throws {
-        let destDir = URL(fileURLWithPath: settings.staticImagesPath)
-        try FileManager.default.createDirectory(at: destDir, withIntermediateDirectories: true)
+        let base = URL(fileURLWithPath: settings.staticImagesPath)
         for photo in photos {
+            // Resolve subpath per-photo using its EXIF date
+            let subpath = AppSettings.resolveSubpath(settings.staticImagesSubpath, for: photo.exifDate)
+            let destDir = subpath.isEmpty ? base : base.appendingPathComponent(subpath, isDirectory: true)
+            try FileManager.default.createDirectory(at: destDir, withIntermediateDirectories: true)
             let dest = destDir.appendingPathComponent(photo.filename)
             if FileManager.default.fileExists(atPath: dest.path) {
                 try FileManager.default.removeItem(at: dest)
