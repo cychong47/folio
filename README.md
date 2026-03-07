@@ -24,6 +24,11 @@ Leave a subpath empty to put all files flat in the root directory.
 
 **Categories — Scan Posts:** Click **Scan Posts** to collect all existing `categories:` values from your Hugo markdown files. The list is saved and shown as options when writing new posts. Re-scan any time after adding posts outside the app.
 
+**Transferring settings to another Mac:**
+
+- **Export Settings…** — saves all settings to a `blogger-settings.json` file you can copy anywhere.
+- **Import Settings…** — restores settings from a previously exported JSON file. All paths, subpath templates, URL prefix, and known categories are applied immediately.
+
 ---
 
 ### 2. Import Photos
