@@ -2,7 +2,9 @@
 
 ## After every enhancement or bug-fix
 1. Update `HISTORY.md` — add a bullet under the appropriate section (`Released` for shipped work, `Upcoming` for planned features). Remove items from `Upcoming` once they are implemented.
-2. Update `README.md` if the change affects usage, configuration, or build steps.
+2. Update `README.md`:
+   - Add a one-line bullet to the **Features** section for every new user-visible feature.
+   - Update the Usage / Configuration / Building sections if the change affects them.
 3. Commit and push all changed files including the docs in the same commit.
 
 ## Code conventions

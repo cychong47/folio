@@ -5,6 +5,26 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 ---
 
+## Features
+
+- **Drag & drop from Photos.app or Finder** — uses `NSFilePromiseReceiver` to handle Photos.app drags
+- **EXIF date prefix** — filenames derived from `DateTimeOriginal` (e.g. `2026-03-05-IMG_1234.jpg`)
+- **Split-view post editor** — markdown editor on the left, photo thumbnails on the right
+- **Hugo frontmatter** — auto-generated with title, date, categories, and image references
+- **Live slug** — filename slug auto-generated from title and kept in sync as you type
+- **Subpath templates** — `YYYY/MM/DD` tokens for date-based content and image directories
+- **Categories management** — scan existing posts to collect categories; pick or add inline in the editor
+- **Image URL preview** — live preview of the effective image URL in Settings
+- **Import progress indicator** — frosted-glass overlay with progress bar during photo import
+- **Duplicate photo prevention** — same filename dropped twice is silently ignored
+- **Image file permissions** — copied images set to `0644` so web servers (nginx) can serve them
+- **Settings export / import** — transfer all configuration to another Mac via a JSON file
+- **Theme switcher** — System / Light / Dark, fully adaptive warm-cream / dark-charcoal palette
+- **Tabbed Settings window** — General, Categories, and Appearance tabs (no clipped content)
+- **Quit on window close** — closing the main window also dismisses Settings and quits the app
+
+---
+
 ## Usage
 
 ### 1. Configure Settings
