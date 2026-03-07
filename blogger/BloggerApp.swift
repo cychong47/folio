@@ -6,6 +6,14 @@ struct BloggerApp: App {
     @StateObject private var settings = AppSettings()
     @StateObject private var pendingPost = PendingPost()
 
+    private var preferredScheme: ColorScheme? {
+        switch settings.appTheme {
+        case "light": return .light
+        case "dark":  return .dark
+        default:      return nil
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -13,11 +21,13 @@ struct BloggerApp: App {
                 .environmentObject(pendingPost)
                 .frame(minWidth: 800, minHeight: 500)
                 .onAppear { appDelegate.pendingPost = pendingPost }
+                .preferredColorScheme(preferredScheme)
         }
 
         Settings {
             SettingsView()
                 .environmentObject(settings)
+                .preferredColorScheme(preferredScheme)
         }
     }
 }

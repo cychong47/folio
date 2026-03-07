@@ -17,5 +17,6 @@ enum Constants {
         static let contentSubpath = "contentSubpath"
         static let staticImagesSubpath = "staticImagesSubpath"
         static let knownCategories = "knownCategories"
+        static let appTheme = "appTheme"
     }
 }

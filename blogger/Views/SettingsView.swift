@@ -18,6 +18,21 @@ struct SettingsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
 
+            // ── Appearance ────────────────────────────────────────────
+            HStack {
+                SectionLabel("Appearance")
+                Spacer()
+                Picker("", selection: $settings.appTheme) {
+                    Text("System").tag("system")
+                    Text("Light").tag("light")
+                    Text("Dark").tag("dark")
+                }
+                .pickerStyle(.segmented)
+                .frame(width: 180)
+            }
+
+            Divider().padding(.vertical, 16)
+
             // ── Hugo Paths ────────────────────────────────────────────
             SectionLabel("Hugo Paths")
 

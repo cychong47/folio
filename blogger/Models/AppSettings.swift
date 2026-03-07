@@ -30,6 +30,11 @@ class AppSettings: ObservableObject {
         didSet { defaults.set(knownCategories, forKey: Constants.UserDefaultsKeys.knownCategories) }
     }
 
+    /// App colour theme: "system" | "light" | "dark"
+    @Published var appTheme: String {
+        didSet { defaults.set(appTheme, forKey: Constants.UserDefaultsKeys.appTheme) }
+    }
+
     init() {
         guard let defaults = UserDefaults(suiteName: Constants.appGroupID) else {
             fatalError("Cannot access App Group UserDefaults: \(Constants.appGroupID)")
@@ -41,6 +46,7 @@ class AppSettings: ObservableObject {
         self.contentSubpath = defaults.string(forKey: Constants.UserDefaultsKeys.contentSubpath) ?? "YYYY/MM"
         self.staticImagesSubpath = defaults.string(forKey: Constants.UserDefaultsKeys.staticImagesSubpath) ?? ""
         self.knownCategories = defaults.stringArray(forKey: Constants.UserDefaultsKeys.knownCategories) ?? []
+        self.appTheme = defaults.string(forKey: Constants.UserDefaultsKeys.appTheme) ?? "system"
     }
 
     /// Resolves a subpath template against a date.

@@ -70,6 +70,13 @@
 - **Import Settings…**: restores all settings from a previously exported JSON file
 - Allows moving configuration to another Mac without manually re-entering paths and categories
 
+### Theme Switcher (System / Light / Dark)
+- Settings → Appearance: segmented control to choose System, Light, or Dark
+- "System" follows macOS system appearance automatically
+- All `Theme` colours are now fully adaptive using `NSColor` dynamic providers —
+  warm cream in light mode, dark charcoal in dark mode
+- Fixes white-text-on-white-card bug that occurred when system was in dark mode
+
 ### Things-Inspired UI Redesign
 - Warm cream background (`#F7F5F2`) throughout the app instead of default system grey/white
 - `Theme.swift` centralises all design tokens (background, panel, accent, card, chip colours)
