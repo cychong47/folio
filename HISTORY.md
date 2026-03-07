@@ -70,6 +70,16 @@
 - **Import Settings…**: restores all settings from a previously exported JSON file
 - Allows moving configuration to another Mac without manually re-entering paths and categories
 
+### Things-Inspired UI Redesign
+- Warm cream background (`#F7F5F2`) throughout the app instead of default system grey/white
+- `Theme.swift` centralises all design tokens (background, panel, accent, card, chip colours)
+- Post editor header: plain-style `TextField` with no border, larger title font, subheadline labels
+- Category chips: capsule shape with soft blue fill, replacing plain rounded rectangles
+- Photo thumbnails: white card with subtle drop shadow and rounded corners
+- Photo gallery panel: warmer panel colour to distinguish from the editor area
+- Welcome screen: icon centred in a soft circle, calm dashed drop-zone border
+- Footer: cleaner layout with plain Reset button and accent-tinted Publish button
+
 ### Documentation
 - `README.md`: usage guide, configuration storage details, build instructions, project structure
 - `HISTORY.md`: this file
