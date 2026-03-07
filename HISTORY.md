@@ -77,6 +77,13 @@
   warm cream in light mode, dark charcoal in dark mode
 - Fixes white-text-on-white-card bug that occurred when system was in dark mode
 
+### Settings Tabbed Layout
+- Split the single-pane Settings window into three icon tabs: **General**, **Categories**, **Appearance**
+- Matches the macOS Safari / Things-style toolbar tab pattern using `TabView` with `.tabItem { Label(...) }`
+- Removed fixed height constraint — each tab sizes to its own content, eliminating clipped sections
+- Removed the Done button (standard macOS window close chrome replaces it)
+- Export… / Import… buttons moved into the General tab
+
 ### Things-Inspired UI Redesign
 - Warm cream background (`#F7F5F2`) throughout the app instead of default system grey/white
 - `Theme.swift` centralises all design tokens (background, panel, accent, card, chip colours)

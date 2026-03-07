@@ -1,6 +1,6 @@
 import SwiftUI
 
-// Codable snapshot of all settings for export/import
+// Codable snapshot used for export / import
 private struct SettingsExport: Codable {
     var contentPath: String
     var staticImagesPath: String
@@ -10,30 +10,35 @@ private struct SettingsExport: Codable {
     var knownCategories: [String]
 }
 
+// MARK: - Root Settings (tab container)
+
 struct SettingsView: View {
     @EnvironmentObject var settings: AppSettings
-    @State private var isScanning = false
+
+    var body: some View {
+        TabView {
+            GeneralTab()
+                .tabItem { Label("General", systemImage: "gear") }
+
+            CategoriesTab()
+                .tabItem { Label("Categories", systemImage: "tag") }
+
+            AppearanceTab()
+                .tabItem { Label("Appearance", systemImage: "paintpalette") }
+        }
+        .frame(width: 540)
+    }
+}
+
+// MARK: - General Tab
+
+private struct GeneralTab: View {
+    @EnvironmentObject var settings: AppSettings
     @State private var importError: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
 
-            // ── Appearance ────────────────────────────────────────────
-            HStack {
-                SectionLabel("Appearance")
-                Spacer()
-                Picker("", selection: $settings.appTheme) {
-                    Text("System").tag("system")
-                    Text("Light").tag("light")
-                    Text("Dark").tag("dark")
-                }
-                .pickerStyle(.segmented)
-                .frame(width: 180)
-            }
-
-            Divider().padding(.vertical, 16)
-
-            // ── Hugo Paths ────────────────────────────────────────────
             SectionLabel("Hugo Paths")
 
             PathRow(label: "Content Posts",
@@ -45,7 +50,6 @@ struct SettingsView: View {
 
             Divider().padding(.vertical, 16)
 
-            // ── Subpath Templates (side-by-side) ──────────────────────
             HStack(alignment: .top, spacing: 0) {
                 SectionLabel("Subpath Templates")
                 Spacer()
@@ -69,7 +73,6 @@ struct SettingsView: View {
 
             Divider().padding(.vertical, 16)
 
-            // ── Image URL ─────────────────────────────────────────────
             SectionLabel("Image URL")
 
             HStack(alignment: .center, spacing: 8) {
@@ -92,60 +95,19 @@ struct SettingsView: View {
 
             Divider().padding(.vertical, 16)
 
-            // ── Categories ────────────────────────────────────────────
-            HStack {
-                SectionLabel("Categories")
-                Spacer()
-                Button(isScanning ? "Scanning…" : "Scan Posts") {
-                    guard !settings.contentPath.isEmpty else { return }
-                    isScanning = true
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        let found = CategoryScanner.scan(contentPath: settings.contentPath)
-                        DispatchQueue.main.async {
-                            // Merge with any manually added categories
-                            let merged = Array(Set(settings.knownCategories + found)).sorted()
-                            settings.knownCategories = merged
-                            isScanning = false
-                        }
-                    }
-                }
-                .disabled(settings.contentPath.isEmpty || isScanning)
-            }
-
-            if settings.knownCategories.isEmpty {
-                Text(settings.contentPath.isEmpty
-                     ? "Set the Content Posts path above, then scan."
-                     : "No categories found. Click \"Scan Posts\" to collect from existing posts.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .padding(.top, 2)
-            } else {
-                // Tag chips with remove buttons
-                CategoryTagsEditor(categories: $settings.knownCategories)
-                    .padding(.top, 4)
-            }
-
-            Spacer()
-
-            Divider().padding(.vertical, 12)
-
-            HStack {
+            HStack(spacing: 8) {
                 Button("Export…") { exportSettings() }
                 Button("Import…") { importSettings() }
                 if let err = importError {
-                    Text(err).foregroundStyle(.red).font(.caption).lineLimit(1)
+                    Text(err)
+                        .foregroundStyle(.red)
+                        .font(.caption)
+                        .lineLimit(1)
                 }
-                Spacer()
-                Button("Done") { NSApp.keyWindow?.close() }
-                    .keyboardShortcut(.return, modifiers: [.command])
-                    .buttonStyle(.borderedProminent)
             }
         }
         .padding(24)
-        .frame(width: 620, height: 520)
     }
-
-    // MARK: - Export / Import
 
     private func exportSettings() {
         let snapshot = SettingsExport(
@@ -157,7 +119,6 @@ struct SettingsView: View {
             knownCategories: settings.knownCategories
         )
         guard let data = try? JSONEncoder().encode(snapshot) else { return }
-
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.json]
         panel.nameFieldStringValue = "blogger-settings.json"
@@ -174,23 +135,94 @@ struct SettingsView: View {
         panel.allowsMultipleSelection = false
         panel.prompt = "Import"
         guard panel.runModal() == .OK, let url = panel.url else { return }
-
         do {
             let data = try Data(contentsOf: url)
-            let snapshot = try JSONDecoder().decode(SettingsExport.self, from: data)
-            settings.contentPath = snapshot.contentPath
-            settings.staticImagesPath = snapshot.staticImagesPath
-            settings.imageURLPrefix = snapshot.imageURLPrefix
-            settings.contentSubpath = snapshot.contentSubpath
-            settings.staticImagesSubpath = snapshot.staticImagesSubpath
-            settings.knownCategories = snapshot.knownCategories
+            let s = try JSONDecoder().decode(SettingsExport.self, from: data)
+            settings.contentPath        = s.contentPath
+            settings.staticImagesPath  = s.staticImagesPath
+            settings.imageURLPrefix    = s.imageURLPrefix
+            settings.contentSubpath    = s.contentSubpath
+            settings.staticImagesSubpath = s.staticImagesSubpath
+            settings.knownCategories   = s.knownCategories
         } catch {
             importError = "Import failed: \(error.localizedDescription)"
         }
     }
 }
 
-// MARK: - Sub-components
+// MARK: - Categories Tab
+
+private struct CategoriesTab: View {
+    @EnvironmentObject var settings: AppSettings
+    @State private var isScanning = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                SectionLabel("Categories")
+                Spacer()
+                Button(isScanning ? "Scanning…" : "Scan Posts") {
+                    guard !settings.contentPath.isEmpty else { return }
+                    isScanning = true
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        let found = CategoryScanner.scan(contentPath: settings.contentPath)
+                        DispatchQueue.main.async {
+                            settings.knownCategories = Array(
+                                Set(settings.knownCategories + found)
+                            ).sorted()
+                            isScanning = false
+                        }
+                    }
+                }
+                .disabled(settings.contentPath.isEmpty || isScanning)
+            }
+
+            if settings.knownCategories.isEmpty {
+                Text(settings.contentPath.isEmpty
+                     ? "Set the Content Posts path in General, then scan."
+                     : "No categories yet. Click \"Scan Posts\" to collect from existing posts.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 4)
+            } else {
+                CategoryTagsEditor(categories: $settings.knownCategories)
+                    .padding(.top, 8)
+            }
+        }
+        .padding(24)
+        .frame(minHeight: 200)
+    }
+}
+
+// MARK: - Appearance Tab
+
+private struct AppearanceTab: View {
+    @EnvironmentObject var settings: AppSettings
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            SectionLabel("Theme")
+            HStack {
+                Text("Appearance")
+                    .frame(width: 110, alignment: .trailing)
+                    .foregroundStyle(.secondary)
+                Picker("", selection: $settings.appTheme) {
+                    Text("System").tag("system")
+                    Text("Light").tag("light")
+                    Text("Dark").tag("dark")
+                }
+                .pickerStyle(.segmented)
+                .frame(width: 200)
+                Spacer()
+            }
+            .padding(.top, 4)
+        }
+        .padding(24)
+        .frame(minHeight: 120)
+    }
+}
+
+// MARK: - Shared sub-components
 
 private struct SectionLabel: View {
     let text: String
@@ -228,6 +260,29 @@ private struct PathRow: View {
         if panel.runModal() == .OK, let url = panel.url {
             path = url.path
         }
+    }
+}
+
+private struct SubpathField: View {
+    let label: String
+    let placeholder: String
+    @Binding var value: String
+    let previewSuffix: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            TextField(placeholder, text: $value)
+            if !value.isEmpty {
+                let resolved = AppSettings.resolveSubpath(value, for: Date())
+                Text("→ …/\(resolved)\(previewSuffix)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
@@ -284,28 +339,5 @@ private struct CategoryTagsEditor: View {
         }
         newText = ""
         showInput = false
-    }
-}
-
-private struct SubpathField: View {
-    let label: String
-    let placeholder: String
-    @Binding var value: String
-    let previewSuffix: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(label)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            TextField(placeholder, text: $value)
-            if !value.isEmpty {
-                let resolved = AppSettings.resolveSubpath(value, for: Date())
-                Text("→ …/\(resolved)\(previewSuffix)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .frame(maxWidth: .infinity)
     }
 }
