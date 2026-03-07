@@ -12,6 +12,8 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
+            Theme.background.ignoresSafeArea()
+
             if pendingPost.isEmpty {
                 WelcomeView(isDragTargeted: isDragTargeted)
             } else {

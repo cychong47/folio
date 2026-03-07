@@ -29,170 +29,22 @@ struct PostEditorView: View {
         return f.string(from: postDate)
     }
 
-    /// Full filename shown to the user and used when publishing
     private var fullFilename: String {
         let slug = pendingPost.slug.isEmpty ? "untitled" : pendingPost.slug
         return "\(datePrefix)-\(slug)"
     }
 
+    // MARK: - Body
+
     var body: some View {
         VStack(spacing: 0) {
-            // Header fields
-            VStack(spacing: 8) {
-                HStack {
-                    Text("Title:")
-                        .frame(width: 80, alignment: .trailing)
-                        .foregroundStyle(.secondary)
-                    TextField("Post title", text: $pendingPost.title)
-                        .onChange(of: pendingPost.title) { newValue in
-                            pendingPost.slug = SlugGenerator.slugify(newValue)
-                            updateFrontmatterTitle(newValue)
-                        }
-                }
-                HStack {
-                    Text("Filename:")
-                        .frame(width: 80, alignment: .trailing)
-                        .foregroundStyle(.secondary)
-                    Text(datePrefix + "-")
-                        .font(.system(.body, design: .monospaced))
-                        .foregroundStyle(.secondary)
-                    TextField("slug", text: $pendingPost.slug)
-                        .font(.system(.body, design: .monospaced))
-                    Text(".md")
-                        .foregroundStyle(.secondary)
-                }
-                HStack(alignment: .center, spacing: 6) {
-                    Text("Categories:")
-                        .frame(width: 80, alignment: .trailing)
-                        .foregroundStyle(.secondary)
-                    // Chips in a horizontal scroll so they never push other items
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 6) {
-                            ForEach(pendingPost.categories, id: \.self) { cat in
-                                HStack(spacing: 3) {
-                                    Text(cat).font(.caption)
-                                    Button {
-                                        pendingPost.categories.removeAll { $0 == cat }
-                                        updateFrontmatterCategories(pendingPost.categories)
-                                    } label: {
-                                        Image(systemName: "xmark")
-                                            .font(.system(size: 8, weight: .bold))
-                                    }
-                                    .buttonStyle(.plain)
-                                }
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 3)
-                                .background(Color.accentColor.opacity(0.15))
-                                .cornerRadius(4)
-                            }
-                        }
-                    }
-                    .fixedSize(horizontal: false, vertical: true)
-                    // Add button
-                    Menu {
-                        ForEach(availableCategories, id: \.self) { cat in
-                            Button(cat) {
-                                pendingPost.categories.append(cat)
-                                updateFrontmatterCategories(pendingPost.categories)
-                            }
-                        }
-                        if !availableCategories.isEmpty { Divider() }
-                        Button("New…") { showNewCategoryField = true }
-                    } label: {
-                        Image(systemName: "plus.circle")
-                            .foregroundStyle(.secondary)
-                    }
-                    .menuStyle(.borderlessButton)
-                    .frame(width: 22, height: 22)
-                    // Inline new category input
-                    if showNewCategoryField {
-                        TextField("Category name", text: $newCategoryText)
-                            .frame(width: 130)
-                            .onSubmit {
-                                let trimmed = newCategoryText.trimmingCharacters(in: .whitespacesAndNewlines)
-                                if !trimmed.isEmpty && !pendingPost.categories.contains(trimmed) {
-                                    pendingPost.categories.append(trimmed)
-                                    updateFrontmatterCategories(pendingPost.categories)
-                                }
-                                newCategoryText = ""
-                                showNewCategoryField = false
-                            }
-                    }
-                    Spacer()
-                }
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 10)
-
-            Divider()
-
-            HSplitView {
-                // Left: markdown editor (fully editable)
-                TextEditor(text: $pendingPost.markdownBody)
-                    .font(.system(.body, design: .monospaced))
-                    .frame(minWidth: 300)
-
-                // Right: photo gallery
-                VStack(spacing: 0) {
-                    // Staging location info
-                    HStack(spacing: 4) {
-                        Image(systemName: "folder")
-                            .font(.caption2)
-                        Text(stagingDirectory.path)
-                            .font(.caption2)
-                            .lineLimit(1)
-                            .truncationMode(.head)
-                            .help(stagingDirectory.path)
-                        Spacer()
-                        Button {
-                            NSWorkspace.shared.open(stagingDirectory)
-                        } label: {
-                            Image(systemName: "arrow.right.circle")
-                                .font(.caption2)
-                        }
-                        .buttonStyle(.plain)
-                        .help("Reveal in Finder")
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 6)
-                    .foregroundStyle(.secondary)
-                    .background(Color(NSColor.windowBackgroundColor))
-
-                    Divider()
-
-                    ScrollView {
-                        LazyVStack(spacing: 16) {
-                            ForEach(pendingPost.photos) { photo in
-                                PhotoThumbnailView(photo: photo)
-                            }
-                        }
-                        .padding()
-                    }
-                }
-                .frame(minWidth: 200, maxWidth: 360)
-                .background(Color(NSColor.controlBackgroundColor))
-            }
-
-            Divider()
-
-            // Footer toolbar
-            HStack {
-                if let err = publishError {
-                    Text(err)
-                        .foregroundStyle(.red)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                }
-                Spacer()
-                Button("Reset") { showResetConfirm = true }
-                    .foregroundStyle(.red)
-                Button("Publish") { publish() }
-                    .buttonStyle(.borderedProminent)
-                    .keyboardShortcut(.return, modifiers: [.command, .shift])
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
+            headerSection
+            Divider().opacity(0.4)
+            editorSection
+            Divider().opacity(0.4)
+            footerSection
         }
+        .background(Theme.background)
         .alert("Post Published", isPresented: $showPublishSuccess) {
             Button("OK") {
                 deleteStagingFiles()
@@ -213,10 +65,200 @@ struct PostEditorView: View {
         .onAppear { prepopulateMarkdown() }
     }
 
+    // MARK: - Sections
+
+    private var headerSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Title
+            HStack {
+                Text("Title")
+                    .frame(width: 80, alignment: .trailing)
+                    .foregroundStyle(.secondary)
+                    .font(.subheadline)
+                TextField("New post title…", text: $pendingPost.title)
+                    .textFieldStyle(.plain)
+                    .font(.title3.weight(.medium))
+                    .onChange(of: pendingPost.title) { newValue in
+                        pendingPost.slug = SlugGenerator.slugify(newValue)
+                        updateFrontmatterTitle(newValue)
+                    }
+            }
+
+            // Filename
+            HStack {
+                Text("File")
+                    .frame(width: 80, alignment: .trailing)
+                    .foregroundStyle(.secondary)
+                    .font(.subheadline)
+                HStack(spacing: 0) {
+                    Text(datePrefix + "-")
+                        .foregroundStyle(.secondary)
+                    TextField("slug", text: $pendingPost.slug)
+                        .textFieldStyle(.plain)
+                    Text(".md")
+                        .foregroundStyle(.secondary)
+                }
+                .font(.system(.callout, design: .monospaced))
+            }
+
+            // Categories
+            HStack(alignment: .center, spacing: 8) {
+                Text("Categories")
+                    .frame(width: 80, alignment: .trailing)
+                    .foregroundStyle(.secondary)
+                    .font(.subheadline)
+
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 6) {
+                        ForEach(pendingPost.categories, id: \.self) { cat in
+                            HStack(spacing: 4) {
+                                Text(cat)
+                                    .font(.caption.weight(.medium))
+                                Button {
+                                    pendingPost.categories.removeAll { $0 == cat }
+                                    updateFrontmatterCategories(pendingPost.categories)
+                                } label: {
+                                    Image(systemName: "xmark")
+                                        .font(.system(size: 7, weight: .bold))
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .background(Theme.chipBg)
+                            .clipShape(Capsule())
+                        }
+                    }
+                }
+                .fixedSize(horizontal: false, vertical: true)
+
+                Menu {
+                    ForEach(availableCategories, id: \.self) { cat in
+                        Button(cat) {
+                            pendingPost.categories.append(cat)
+                            updateFrontmatterCategories(pendingPost.categories)
+                        }
+                    }
+                    if !availableCategories.isEmpty { Divider() }
+                    Button("New…") { showNewCategoryField = true }
+                } label: {
+                    Image(systemName: "plus.circle.fill")
+                        .foregroundStyle(Theme.accent.opacity(0.8))
+                        .font(.system(size: 17))
+                }
+                .menuStyle(.borderlessButton)
+                .frame(width: 22, height: 22)
+
+                if showNewCategoryField {
+                    TextField("Category", text: $newCategoryText)
+                        .textFieldStyle(.plain)
+                        .font(.callout)
+                        .frame(width: 120)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(Theme.card)
+                        .cornerRadius(6)
+                        .onSubmit {
+                            let trimmed = newCategoryText.trimmingCharacters(in: .whitespacesAndNewlines)
+                            if !trimmed.isEmpty && !pendingPost.categories.contains(trimmed) {
+                                pendingPost.categories.append(trimmed)
+                                updateFrontmatterCategories(pendingPost.categories)
+                            }
+                            newCategoryText = ""
+                            showNewCategoryField = false
+                        }
+                }
+                Spacer()
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 14)
+        .background(Theme.background)
+    }
+
+    private var editorSection: some View {
+        HSplitView {
+            // Left: markdown editor
+            TextEditor(text: $pendingPost.markdownBody)
+                .font(.system(.body, design: .monospaced))
+                .frame(minWidth: 300)
+                .scrollContentBackground(.hidden)
+                .background(Theme.background)
+
+            // Right: photo gallery
+            VStack(spacing: 0) {
+                // Staging path bar
+                HStack(spacing: 4) {
+                    Image(systemName: "folder")
+                        .font(.caption2)
+                    Text(stagingDirectory.path)
+                        .font(.caption2)
+                        .lineLimit(1)
+                        .truncationMode(.head)
+                        .help(stagingDirectory.path)
+                    Spacer()
+                    Button {
+                        NSWorkspace.shared.open(stagingDirectory)
+                    } label: {
+                        Image(systemName: "arrow.up.right.circle")
+                            .font(.caption2)
+                    }
+                    .buttonStyle(.plain)
+                    .help("Reveal in Finder")
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 7)
+                .foregroundStyle(.secondary)
+                .background(Theme.panel)
+
+                Divider().opacity(0.4)
+
+                ScrollView {
+                    LazyVStack(spacing: 12) {
+                        ForEach(pendingPost.photos) { photo in
+                            PhotoThumbnailView(photo: photo)
+                        }
+                    }
+                    .padding(12)
+                }
+                .background(Theme.panel)
+            }
+            .frame(minWidth: 200, maxWidth: 360)
+        }
+    }
+
+    private var footerSection: some View {
+        HStack(spacing: 10) {
+            if let err = publishError {
+                Image(systemName: "exclamationmark.circle.fill")
+                    .foregroundStyle(.red)
+                    .font(.callout)
+                Text(err)
+                    .foregroundStyle(.red)
+                    .font(.callout)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            }
+            Spacer()
+            Button("Reset") { showResetConfirm = true }
+                .buttonStyle(.plain)
+                .foregroundStyle(.red.opacity(0.75))
+                .font(.callout)
+            Button("Publish") { publish() }
+                .buttonStyle(.borderedProminent)
+                .tint(Theme.accent)
+                .keyboardShortcut(.return, modifiers: [.command, .shift])
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 12)
+        .background(Theme.background)
+    }
+
+    // MARK: - Logic (unchanged)
+
     private func updateFrontmatterTitle(_ newTitle: String) {
         guard !pendingPost.markdownBody.isEmpty else { return }
         let escaped = newTitle.replacingOccurrences(of: "\"", with: "\\\"")
-        // Replace only the title: "..." line inside the frontmatter
         if let range = pendingPost.markdownBody.range(of: #"(?m)^title: ".*"$"#, options: .regularExpression) {
             pendingPost.markdownBody.replaceSubrange(range, with: "title: \"\(escaped)\"")
         }
@@ -252,7 +294,6 @@ struct PostEditorView: View {
             publishError = "Filename (slug) cannot be empty."
             return
         }
-
         let date = pendingPost.photos.first?.exifDate ?? Date()
         do {
             try PhotoExporter.copyPendingToStatic(photos: pendingPost.photos, settings: settings)
@@ -264,7 +305,6 @@ struct PostEditorView: View {
             )
             publishedPath = fileURL.path
             showPublishSuccess = true
-            // Staging files are deleted in the alert OK handler after user sees the path
         } catch {
             publishError = error.localizedDescription
         }
@@ -275,7 +315,6 @@ struct PostEditorView: View {
         for photo in pendingPost.photos {
             try? fm.removeItem(at: photo.localURL)
         }
-        // Remove staging dir if now empty
         if let contents = try? fm.contentsOfDirectory(atPath: stagingDirectory.path),
            contents.isEmpty {
             try? fm.removeItem(at: stagingDirectory)
@@ -283,28 +322,33 @@ struct PostEditorView: View {
     }
 }
 
+// MARK: - Photo Thumbnail
+
 struct PhotoThumbnailView: View {
     let photo: ExportedPhoto
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 8) {
+            if let image = NSImage(contentsOf: photo.localURL) {
+                Image(nsImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .cornerRadius(8)
+            } else {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.secondary.opacity(0.08))
+                    .frame(height: 120)
+                    .overlay(Image(systemName: "photo").foregroundStyle(.secondary))
+            }
             Text(photo.filename)
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
                 .truncationMode(.middle)
-
-            if let image = NSImage(contentsOf: photo.localURL) {
-                Image(nsImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .cornerRadius(6)
-            } else {
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(Color.secondary.opacity(0.2))
-                    .frame(height: 120)
-                    .overlay(Image(systemName: "photo").foregroundStyle(.secondary))
-            }
         }
+        .padding(10)
+        .background(Theme.card)
+        .cornerRadius(10)
+        .shadow(color: .black.opacity(0.07), radius: 5, x: 0, y: 2)
     }
 }
