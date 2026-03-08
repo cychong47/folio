@@ -156,7 +156,10 @@ private struct ProfileSidebarPanel: View {
                             profile: profile,
                             isActive: isActive,
                             isEditing: isEditing,
-                            onSelect: { editingProfileID = profile.id },
+                            onSelect: {
+                                editingProfileID = profile.id
+                                settings.selectedProfileID = profile.id
+                            },
                             onDelete: { profileToDelete = profile }
                         )
                         if profile.id != settings.profiles.last?.id {
@@ -241,10 +244,6 @@ private struct ProfileDetailPanel: View {
 
     @State private var draft = BlogProfile(name: "")
 
-    var isActive: Bool {
-        draft.id == (settings.selectedProfileID ?? settings.profiles.first?.id)
-    }
-
     var body: some View {
         Group {
             if editingProfileID == nil || settings.profiles.isEmpty {
@@ -264,27 +263,10 @@ private struct ProfileDetailPanel: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
 
-                        // Name + Active badge
-                        HStack {
-                            TextField("Blog name", text: $draft.name)
-                                .font(.headline)
-                            Spacer()
-                            if isActive {
-                                Text("Active Blog")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                    .padding(.horizontal, 8)
-                                    .padding(.vertical, 3)
-                                    .background(Color.secondary.opacity(0.15))
-                                    .cornerRadius(4)
-                            } else {
-                                Button("Set as Active") {
-                                    settings.selectedProfileID = draft.id
-                                }
-                                .font(.caption)
-                            }
-                        }
-                        .padding(.bottom, 16)
+                        // Name
+                        TextField("Blog name", text: $draft.name)
+                            .font(.headline)
+                            .padding(.bottom, 16)
 
                         // Blog Root
                         PathRow(label: "Blog Root",
@@ -415,21 +397,15 @@ private struct ProfileDetailPanel: View {
 
     private func scanCategories() {
         guard let profileID = editingProfileID,
-              let idx = settings.profiles.firstIndex(where: { $0.id == profileID }),
-              !settings.profiles[idx].contentPath.isEmpty else { return }
-        let contentPath = settings.profiles[idx].contentPath
+              !draft.contentPath.isEmpty else { return }
+        let contentPath = draft.contentPath
         isScanning = true
         DispatchQueue.global(qos: .userInitiated).async {
             let found = CategoryScanner.scan(contentPath: contentPath)
             DispatchQueue.main.async {
-                if idx < settings.profiles.count,
-                   settings.profiles[idx].id == profileID {
-                    let existing = settings.profiles[idx].knownCategories
-                    settings.profiles[idx].knownCategories = mergeCategories(existing, found)
-                    if editingProfileID == profileID {
-                        draft.knownCategories = settings.profiles[idx].knownCategories
-                    }
-                }
+                // Only update draft — onChange(of: draft) writes back to settings
+                guard editingProfileID == profileID else { isScanning = false; return }
+                draft.knownCategories = mergeCategories(draft.knownCategories, found)
                 isScanning = false
             }
         }
