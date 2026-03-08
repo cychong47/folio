@@ -82,6 +82,10 @@ class AppSettings: ObservableObject {
             } else {
                 self.selectedProfileID = decoded.first?.id
             }
+            // Persist normalized profiles (didSet doesn't fire during init)
+            if let normalized = try? JSONEncoder().encode(self.profiles) {
+                defaults.set(normalized, forKey: Constants.UserDefaultsKeys.blogProfiles)
+            }
         } else {
             // Migrate from old single-blog keys
             let oldContent = defaults.string(forKey: "contentPath") ?? ""
