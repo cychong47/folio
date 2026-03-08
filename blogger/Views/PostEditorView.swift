@@ -5,8 +5,6 @@ struct PostEditorView: View {
     @EnvironmentObject var settings: AppSettings
     @EnvironmentObject var pendingPost: PendingPost
 
-    @State private var showPublishSuccess = false
-    @State private var publishedPath = ""
     @State private var publishError: String?
     @State private var showResetConfirm = false
     @State private var newCategoryText = ""
@@ -45,14 +43,6 @@ struct PostEditorView: View {
             footerSection
         }
         .background(Theme.background)
-        .alert("Post Published", isPresented: $showPublishSuccess) {
-            Button("OK") {
-                deleteStagingFiles()
-                pendingPost.clear()
-            }
-        } message: {
-            Text("Saved to:\n\(publishedPath)")
-        }
         .confirmationDialog("Reset post?", isPresented: $showResetConfirm, titleVisibility: .visible) {
             Button("Reset", role: .destructive) {
                 deleteStagingFiles()
@@ -321,14 +311,14 @@ struct PostEditorView: View {
         let date = pendingPost.photos.first?.exifDate ?? Date()
         do {
             try PhotoExporter.copyPendingToStatic(photos: pendingPost.photos, settings: settings)
-            let fileURL = try MarkdownGenerator.write(
+            _ = try MarkdownGenerator.write(
                 content: pendingPost.markdownBody,
                 filename: fullFilename,
                 date: date,
                 settings: settings
             )
-            publishedPath = fileURL.path
-            showPublishSuccess = true
+            deleteStagingFiles()
+            pendingPost.clear()
         } catch {
             publishError = error.localizedDescription
         }
