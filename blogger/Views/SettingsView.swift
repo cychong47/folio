@@ -340,7 +340,15 @@ private struct CategoriesTab: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                SectionLabel("Categories")
+                VStack(alignment: .leading, spacing: 2) {
+                    SectionLabel("Categories")
+                    if let name = settings.activeProfile?.name, !name.isEmpty {
+                        Text(name)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .padding(.top, -4)
+                    }
+                }
                 Spacer()
                 Button(isScanning ? "Scanning…" : "Scan Posts") {
                     guard !settings.contentPath.isEmpty else { return }
