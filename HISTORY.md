@@ -4,6 +4,11 @@
 
 ## Released
 
+### Hugo-Centric Settings Redesign
+- Added **Blog Root** path picker in Settings → General; selecting it auto-fills Content and Images paths with `…/content/posts` and `…/static/images`
+- Manually overridden paths are preserved when Blog Root is changed again
+- `baseBlogPath` key added to `UserDefaults` (App Group) and included in Settings export/import JSON
+
 ### Drag & Drop from Photos.app
 - Implemented `NSView`-based drag-and-drop (`DropTargetView`) using `NSDraggingDestination`
 - Used `NSFilePromiseReceiver` to handle Photos.app drags (file promises, not plain URLs)

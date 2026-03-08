@@ -18,6 +18,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Import progress indicator** — frosted-glass overlay with progress bar during photo import
 - **Duplicate photo prevention** — same filename dropped twice is silently ignored
 - **Image file permissions** — copied images set to `0644` so web servers (nginx) can serve them
+- **Blog Root picker** — single folder selection auto-fills Hugo content and images paths; manually edited paths are preserved on subsequent picks
 - **Settings export / import** — transfer all configuration to another Mac via a JSON file
 - **Theme switcher** — System / Light / Dark, fully adaptive warm-cream / dark-charcoal palette
 - **Tabbed Settings window** — General, Categories, and Appearance tabs (no clipped content)
@@ -33,8 +34,9 @@ Open **Settings** (`⌘,`) before first use.
 
 | Field | Description | Example |
 |-------|-------------|---------|
-| **Content Posts** path | Hugo `content/posts` directory | `/Users/you/blog/content/posts` |
-| **Static Images** path | Hugo `static/images` directory | `/Users/you/blog/static/images` |
+| **Blog Root** | Root of your Hugo site; auto-fills Content and Images paths | `/Users/you/blog` |
+| **Content Posts** path | Hugo `content/posts` directory (auto-filled or override) | `/Users/you/blog/content/posts` |
+| **Static Images** path | Hugo `static/images` directory (auto-filled or override) | `/Users/you/blog/static/images` |
 | **Content Posts** subpath | Date-based subdirectory template | `YYYY/MM` → `2026/03` |
 | **Static Images** subpath | Date-based subdirectory template | `YYYY/MM` → `2026/03` |
 | **URL Prefix** | Base URL used in markdown image refs | `/images` |

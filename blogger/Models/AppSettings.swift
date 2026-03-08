@@ -3,6 +3,10 @@ import Foundation
 class AppSettings: ObservableObject {
     private let defaults: UserDefaults
 
+    @Published var baseBlogPath: String {
+        didSet { defaults.set(baseBlogPath, forKey: Constants.UserDefaultsKeys.baseBlogPath) }
+    }
+
     @Published var contentPath: String {
         didSet { defaults.set(contentPath, forKey: Constants.UserDefaultsKeys.contentPath) }
     }
@@ -40,6 +44,7 @@ class AppSettings: ObservableObject {
             fatalError("Cannot access App Group UserDefaults: \(Constants.appGroupID)")
         }
         self.defaults = defaults
+        self.baseBlogPath = defaults.string(forKey: Constants.UserDefaultsKeys.baseBlogPath) ?? ""
         self.contentPath = defaults.string(forKey: Constants.UserDefaultsKeys.contentPath) ?? ""
         self.staticImagesPath = defaults.string(forKey: Constants.UserDefaultsKeys.staticImagesPath) ?? ""
         self.imageURLPrefix = defaults.string(forKey: Constants.UserDefaultsKeys.imageURLPrefix) ?? "/images"

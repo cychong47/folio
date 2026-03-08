@@ -2,6 +2,7 @@ import SwiftUI
 
 // Codable snapshot used for export / import
 private struct SettingsExport: Codable {
+    var baseBlogPath: String
     var contentPath: String
     var staticImagesPath: String
     var imageURLPrefix: String
@@ -39,14 +40,30 @@ private struct GeneralTab: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
 
+            SectionLabel("Blog Root")
+
+            PathRow(label: "Blog Root",
+                    placeholder: "/Users/you/blog",
+                    path: $settings.baseBlogPath,
+                    onChoose: pickBlogRoot)
+
+            Divider().padding(.vertical, 12)
+
             SectionLabel("Hugo Paths")
 
-            PathRow(label: "Content Posts",
+            PathRow(label: "Content",
                     placeholder: "/Users/you/blog/content/posts",
                     path: $settings.contentPath)
-            PathRow(label: "Static Images",
+            PathRow(label: "Images",
                     placeholder: "/Users/you/blog/static/images",
                     path: $settings.staticImagesPath)
+
+            if !settings.baseBlogPath.isEmpty {
+                Text("Auto-filled from Blog Root. Edit to override.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.bottom, 4)
+            }
 
             Divider().padding(.vertical, 16)
 
@@ -111,6 +128,7 @@ private struct GeneralTab: View {
 
     private func exportSettings() {
         let snapshot = SettingsExport(
+            baseBlogPath: settings.baseBlogPath,
             contentPath: settings.contentPath,
             staticImagesPath: settings.staticImagesPath,
             imageURLPrefix: settings.imageURLPrefix,
@@ -138,6 +156,7 @@ private struct GeneralTab: View {
         do {
             let data = try Data(contentsOf: url)
             let s = try JSONDecoder().decode(SettingsExport.self, from: data)
+            settings.baseBlogPath      = s.baseBlogPath
             settings.contentPath        = s.contentPath
             settings.staticImagesPath  = s.staticImagesPath
             settings.imageURLPrefix    = s.imageURLPrefix
@@ -146,6 +165,24 @@ private struct GeneralTab: View {
             settings.knownCategories   = s.knownCategories
         } catch {
             importError = "Import failed: \(error.localizedDescription)"
+        }
+    }
+
+    private func pickBlogRoot() {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = false
+        panel.canChooseDirectories = true
+        panel.allowsMultipleSelection = false
+        panel.prompt = "Select"
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        let oldDerivedContent = settings.baseBlogPath + "/content/posts"
+        let oldDerivedImages  = settings.baseBlogPath + "/static/images"
+        settings.baseBlogPath = url.path
+        if settings.contentPath.isEmpty || settings.contentPath == oldDerivedContent {
+            settings.contentPath = url.path + "/content/posts"
+        }
+        if settings.staticImagesPath.isEmpty || settings.staticImagesPath == oldDerivedImages {
+            settings.staticImagesPath = url.path + "/static/images"
         }
     }
 }
@@ -238,6 +275,7 @@ private struct PathRow: View {
     let label: String
     let placeholder: String
     @Binding var path: String
+    var onChoose: (() -> Void)? = nil
 
     var body: some View {
         HStack {
@@ -246,7 +284,7 @@ private struct PathRow: View {
                 .foregroundStyle(.secondary)
             TextField(placeholder, text: $path)
                 .truncationMode(.middle)
-            Button("Choose…") { pickFolder() }
+            Button("Choose…") { onChoose != nil ? onChoose!() : pickFolder() }
         }
         .padding(.bottom, 6)
     }
