@@ -10,10 +10,15 @@ enum CategoryScanner {
             options: [.skipsHiddenFiles]
         ) else { return [] }
 
-        var categories = Set<String>()
+        var seen = Set<String>()   // lowercase keys for case-insensitive dedup
+        var categories: [String] = []
         for case let url as URL in enumerator where url.pathExtension == "md" {
             guard let content = try? String(contentsOf: url, encoding: .utf8) else { continue }
-            parseFrontmatterCategories(from: content).forEach { categories.insert($0) }
+            for cat in parseFrontmatterCategories(from: content) {
+                if seen.insert(cat.lowercased()).inserted {
+                    categories.append(cat)
+                }
+            }
         }
         return categories.sorted()
     }

@@ -84,7 +84,7 @@ class AppSettings: ObservableObject {
                 var seen       = Set<String>()
                 let cats       = rawCats
                     .map { $0.trimmingCharacters(in: quoteChars) }
-                    .filter { !$0.isEmpty && seen.insert($0).inserted }
+                    .filter { !$0.isEmpty && seen.insert($0.lowercased()).inserted }
                 let profile = BlogProfile(
                     name: "sosa0sa",
                     blogRoot: blogRoot,

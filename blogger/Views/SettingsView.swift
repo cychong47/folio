@@ -319,11 +319,15 @@ private struct ProfileEditorSheet: View {
         panel.allowsMultipleSelection = false
         panel.prompt = "Select"
         guard panel.runModal() == .OK, let url = panel.url else { return }
+        let fm = FileManager.default
         let oldDerivedContent = draft.blogRoot + "/content/posts"
         let oldDerivedImages  = draft.blogRoot + "/static/images"
         draft.blogRoot = url.path
         if draft.contentPath.isEmpty || draft.contentPath == oldDerivedContent {
-            draft.contentPath = url.path + "/content/posts"
+            // Detect whether this Hugo site uses content/post or content/posts
+            let postPath  = url.path + "/content/post"
+            let postsPath = url.path + "/content/posts"
+            draft.contentPath = fm.fileExists(atPath: postPath) ? postPath : postsPath
         }
         if draft.staticImagesPath.isEmpty || draft.staticImagesPath == oldDerivedImages {
             draft.staticImagesPath = url.path + "/static/images"
@@ -359,7 +363,7 @@ private struct CategoriesTab: View {
                         DispatchQueue.main.async {
                             let existing = settings.knownCategories
                             settings.updateActiveProfile {
-                                $0.knownCategories = Array(Set(existing + found)).sorted()
+                                $0.knownCategories = Self.mergeCategories(existing, found)
                             }
                             isScanning = false
                         }
@@ -386,6 +390,18 @@ private struct CategoriesTab: View {
         }
         .padding(24)
         .frame(minHeight: 200)
+    }
+
+    /// Merges two category lists with case-insensitive deduplication (existing takes priority).
+    static func mergeCategories(_ existing: [String], _ new: [String]) -> [String] {
+        var seen = Set<String>()
+        var result: [String] = []
+        for cat in existing + new {
+            if seen.insert(cat.lowercased()).inserted {
+                result.append(cat)
+            }
+        }
+        return result.sorted()
     }
 }
 
@@ -533,7 +549,8 @@ private struct CategoryTagsEditor: View {
         let trimmed = newText
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .trimmingCharacters(in: quoteChars)
-        if !trimmed.isEmpty && !categories.contains(trimmed) {
+        let alreadyExists = categories.contains { $0.lowercased() == trimmed.lowercased() }
+        if !trimmed.isEmpty && !alreadyExists {
             categories = (categories + [trimmed]).sorted()
         }
         newText = ""
