@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0302472D0F0FA6A97DA48413 /* BlogProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A62666FE7E3C778ACB35300 /* BlogProfile.swift */; };
 		19171811019C3AD5A5CA5696 /* CategoryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5452EDD7EEB33FDE32F4CFC6 /* CategoryScanner.swift */; };
 		2A2F6ED7BB5EF8C5BC2A08D6 /* SharedContainerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E52C4F20A2A62A64FC0C6F9 /* SharedContainerService.swift */; };
 		38B9D0308F7179D66250A148 /* BloggerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362006FED2645BD41AF8F85B /* BloggerApp.swift */; };
@@ -30,6 +31,7 @@
 /* Begin PBXFileReference section */
 		0620724DE52ACDCD01B51CBF /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		155D6C9578C2BA1FD8879397 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2A62666FE7E3C778ACB35300 /* BlogProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogProfile.swift; sourceTree = "<group>"; };
 		2E52C4F20A2A62A64FC0C6F9 /* SharedContainerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContainerService.swift; sourceTree = "<group>"; };
 		362006FED2645BD41AF8F85B /* BloggerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloggerApp.swift; sourceTree = "<group>"; };
 		3AB9307E546CF780F4C4D77F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				C0E86D73425A36828F85F667 /* AppSettings.swift */,
+				2A62666FE7E3C778ACB35300 /* BlogProfile.swift */,
 				5132B1F992D1E39806DDB453 /* PendingPost.swift */,
 			);
 			path = Models;
@@ -263,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A3937222DC5CF8A11577922 /* AppSettings.swift in Sources */,
+				0302472D0F0FA6A97DA48413 /* BlogProfile.swift in Sources */,
 				38B9D0308F7179D66250A148 /* BloggerApp.swift in Sources */,
 				19171811019C3AD5A5CA5696 /* CategoryScanner.swift in Sources */,
 				58EF1896AF84E924A05ACF2A /* Constants.swift in Sources */,

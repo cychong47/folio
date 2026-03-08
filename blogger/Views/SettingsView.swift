@@ -2,13 +2,9 @@ import SwiftUI
 
 // Codable snapshot used for export / import
 private struct SettingsExport: Codable {
-    var baseBlogPath: String
-    var contentPath: String
-    var staticImagesPath: String
-    var imageURLPrefix: String
-    var contentSubpath: String
-    var staticImagesSubpath: String
-    var knownCategories: [String]
+    var profiles: [BlogProfile]
+    var selectedProfileID: UUID?
+    var appTheme: String
 }
 
 // MARK: - Root Settings (tab container)
@@ -35,80 +31,53 @@ struct SettingsView: View {
 
 private struct GeneralTab: View {
     @EnvironmentObject var settings: AppSettings
+    @State private var editingProfile: BlogProfile?
+    @State private var profileToDelete: BlogProfile?
     @State private var importError: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
 
-            SectionLabel("Blog Root")
-
-            PathRow(label: "Blog Root",
-                    placeholder: "/Users/you/blog",
-                    path: $settings.baseBlogPath,
-                    onChoose: pickBlogRoot)
-
-            Divider().padding(.vertical, 12)
-
-            SectionLabel("Hugo Paths")
-
-            PathRow(label: "Content",
-                    placeholder: "/Users/you/blog/content/posts",
-                    path: $settings.contentPath)
-            PathRow(label: "Images",
-                    placeholder: "/Users/you/blog/static/images",
-                    path: $settings.staticImagesPath)
-
-            if !settings.baseBlogPath.isEmpty {
-                Text("Auto-filled from Blog Root. Edit to override.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .padding(.bottom, 4)
-            }
-
-            Divider().padding(.vertical, 16)
-
-            HStack(alignment: .top, spacing: 0) {
-                SectionLabel("Subpath Templates")
+            HStack {
+                SectionLabel("Blog Profiles")
                 Spacer()
-                Text("Tokens: YYYY · MM · DD")
+                Button {
+                    editingProfile = BlogProfile(name: "")
+                } label: {
+                    Label("Add Profile", systemImage: "plus")
+                }
+                .font(.callout)
+            }
+
+            if settings.profiles.isEmpty {
+                Text("No blog profiles. Click + Add Profile to create one.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                    .padding(.top, 2)
+                    .padding(.top, 6)
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(settings.profiles) { profile in
+                        let isActive = profile.id == (settings.selectedProfileID ?? settings.profiles.first?.id)
+                        ProfileRow(
+                            profile: profile,
+                            isActive: isActive,
+                            onSelect: { settings.selectedProfileID = profile.id },
+                            onEdit:   { editingProfile = profile },
+                            onDelete: { profileToDelete = profile }
+                        )
+                        if profile.id != settings.profiles.last?.id {
+                            Divider().padding(.leading, 40)
+                        }
+                    }
+                }
+                .background(Color(nsColor: .controlBackgroundColor))
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                )
+                .padding(.top, 4)
             }
-
-            HStack(alignment: .top, spacing: 20) {
-                SubpathField(label: "Content Posts",
-                             placeholder: "e.g. YYYY/MM",
-                             value: $settings.contentSubpath,
-                             previewSuffix: "/slug.md")
-                SubpathField(label: "Static Images",
-                             placeholder: "e.g. YYYY/MM  (leave empty for flat)",
-                             value: $settings.staticImagesSubpath,
-                             previewSuffix: "/")
-            }
-            .padding(.top, 6)
-
-            Divider().padding(.vertical, 16)
-
-            SectionLabel("Image URL")
-
-            HStack(alignment: .center, spacing: 8) {
-                Text("URL Prefix")
-                    .frame(width: 110, alignment: .trailing)
-                    .foregroundStyle(.secondary)
-                TextField("/images", text: $settings.imageURLPrefix)
-                    .frame(maxWidth: 200)
-                let resolvedSub = AppSettings.resolveSubpath(settings.staticImagesSubpath, for: Date())
-                let rawPrefix = settings.imageURLPrefix.isEmpty ? "/images" : settings.imageURLPrefix
-                let resolvedPrefix = AppSettings.resolveSubpath(rawPrefix, for: Date())
-                let slash = resolvedPrefix.hasSuffix("/") ? resolvedPrefix : resolvedPrefix + "/"
-                let preview = resolvedSub.isEmpty ? String(slash.dropLast()) : slash + resolvedSub
-                Text("→ \(preview)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Spacer()
-            }
-            .padding(.top, 4)
 
             Divider().padding(.vertical, 16)
 
@@ -124,17 +93,47 @@ private struct GeneralTab: View {
             }
         }
         .padding(24)
+        .sheet(item: $editingProfile) { profile in
+            ProfileEditorSheet(profile: profile) { saved in
+                if let idx = settings.profiles.firstIndex(where: { $0.id == saved.id }) {
+                    settings.profiles[idx] = saved
+                } else {
+                    settings.profiles.append(saved)
+                    settings.selectedProfileID = saved.id
+                }
+                editingProfile = nil
+            } onCancel: {
+                editingProfile = nil
+            }
+        }
+        .confirmationDialog(
+            "Delete \"\(profileToDelete?.name ?? "")\"?",
+            isPresented: Binding(
+                get: { profileToDelete != nil },
+                set: { if !$0 { profileToDelete = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) {
+                if let id = profileToDelete?.id {
+                    settings.profiles.removeAll { $0.id == id }
+                    if settings.selectedProfileID == id {
+                        settings.selectedProfileID = settings.profiles.first?.id
+                    }
+                }
+                profileToDelete = nil
+            }
+            Button("Cancel", role: .cancel) { profileToDelete = nil }
+        } message: {
+            Text("This cannot be undone.")
+        }
     }
 
     private func exportSettings() {
         let snapshot = SettingsExport(
-            baseBlogPath: settings.baseBlogPath,
-            contentPath: settings.contentPath,
-            staticImagesPath: settings.staticImagesPath,
-            imageURLPrefix: settings.imageURLPrefix,
-            contentSubpath: settings.contentSubpath,
-            staticImagesSubpath: settings.staticImagesSubpath,
-            knownCategories: settings.knownCategories
+            profiles: settings.profiles,
+            selectedProfileID: settings.selectedProfileID,
+            appTheme: settings.appTheme
         )
         guard let data = try? JSONEncoder().encode(snapshot) else { return }
         let panel = NSSavePanel()
@@ -156,16 +155,161 @@ private struct GeneralTab: View {
         do {
             let data = try Data(contentsOf: url)
             let s = try JSONDecoder().decode(SettingsExport.self, from: data)
-            settings.baseBlogPath      = s.baseBlogPath
-            settings.contentPath        = s.contentPath
-            settings.staticImagesPath  = s.staticImagesPath
-            settings.imageURLPrefix    = s.imageURLPrefix
-            settings.contentSubpath    = s.contentSubpath
-            settings.staticImagesSubpath = s.staticImagesSubpath
-            settings.knownCategories   = s.knownCategories
+            settings.profiles        = s.profiles
+            settings.selectedProfileID = s.selectedProfileID
+            settings.appTheme        = s.appTheme
         } catch {
             importError = "Import failed: \(error.localizedDescription)"
         }
+    }
+}
+
+// MARK: - Profile row
+
+private struct ProfileRow: View {
+    let profile: BlogProfile
+    let isActive: Bool
+    let onSelect: () -> Void
+    let onEdit: () -> Void
+    let onDelete: () -> Void
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: isActive ? "checkmark.circle.fill" : "circle")
+                .foregroundStyle(isActive ? Color.accentColor : .secondary)
+                .font(.system(size: 16))
+                .onTapGesture { onSelect() }
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(profile.name.isEmpty ? "Unnamed" : profile.name)
+                    .fontWeight(.medium)
+                if !profile.blogRoot.isEmpty {
+                    Text(profile.blogRoot)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                        .truncationMode(.head)
+                }
+            }
+            .contentShape(Rectangle())
+            .onTapGesture { onSelect() }
+
+            Spacer()
+
+            Button("Edit") { onEdit() }
+                .buttonStyle(.plain)
+                .foregroundStyle(Color.accentColor)
+                .font(.callout)
+
+            Button {
+                onDelete()
+            } label: {
+                Image(systemName: "trash")
+                    .foregroundStyle(.red.opacity(0.7))
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 9)
+    }
+}
+
+// MARK: - Profile editor sheet
+
+private struct ProfileEditorSheet: View {
+    @State private var draft: BlogProfile
+    let onSave: (BlogProfile) -> Void
+    let onCancel: () -> Void
+
+    init(profile: BlogProfile, onSave: @escaping (BlogProfile) -> Void, onCancel: @escaping () -> Void) {
+        _draft = State(initialValue: profile)
+        self.onSave = onSave
+        self.onCancel = onCancel
+    }
+
+    var isNewProfile: Bool { draft.name.isEmpty && draft.blogRoot.isEmpty && draft.contentPath.isEmpty }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+
+            Text(isNewProfile ? "New Profile" : "Edit Profile")
+                .font(.headline)
+                .padding(.bottom, 16)
+
+            // Name
+            HStack {
+                Text("Name")
+                    .frame(width: 110, alignment: .trailing)
+                    .foregroundStyle(.secondary)
+                TextField("My Blog", text: $draft.name)
+            }
+            .padding(.bottom, 10)
+
+            // Blog Root
+            PathRow(label: "Blog Root",
+                    placeholder: "/Users/you/blog",
+                    path: $draft.blogRoot,
+                    onChoose: pickBlogRoot)
+
+            Divider().padding(.vertical, 10)
+
+            Text("Hugo Paths")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .padding(.bottom, 6)
+
+            PathRow(label: "Content",
+                    placeholder: "/Users/you/blog/content/posts",
+                    path: $draft.contentPath)
+            PathRow(label: "Images",
+                    placeholder: "/Users/you/blog/static/images",
+                    path: $draft.staticImagesPath)
+
+            if !draft.blogRoot.isEmpty {
+                Text("Auto-filled from Blog Root. Edit to override.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.bottom, 6)
+            }
+
+            Divider().padding(.vertical, 10)
+
+            HStack(alignment: .top, spacing: 0) {
+                Text("Subpath Templates")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text("Tokens: YYYY · MM · DD")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 2)
+            }
+            .padding(.bottom, 6)
+
+            HStack(alignment: .top, spacing: 20) {
+                SubpathField(label: "Content Posts",
+                             placeholder: "e.g. YYYY/MM",
+                             value: $draft.contentSubpath,
+                             previewSuffix: "/slug.md")
+                SubpathField(label: "Static Images",
+                             placeholder: "e.g. YYYY/MM  (leave empty for flat)",
+                             value: $draft.staticImagesSubpath,
+                             previewSuffix: "/")
+            }
+
+            Spacer()
+
+            HStack {
+                Spacer()
+                Button("Cancel") { onCancel() }
+                Button("Save") { onSave(draft) }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(draft.name.isEmpty)
+            }
+            .padding(.top, 16)
+        }
+        .padding(24)
+        .frame(width: 500, height: 430)
     }
 
     private func pickBlogRoot() {
@@ -175,14 +319,14 @@ private struct GeneralTab: View {
         panel.allowsMultipleSelection = false
         panel.prompt = "Select"
         guard panel.runModal() == .OK, let url = panel.url else { return }
-        let oldDerivedContent = settings.baseBlogPath + "/content/posts"
-        let oldDerivedImages  = settings.baseBlogPath + "/static/images"
-        settings.baseBlogPath = url.path
-        if settings.contentPath.isEmpty || settings.contentPath == oldDerivedContent {
-            settings.contentPath = url.path + "/content/posts"
+        let oldDerivedContent = draft.blogRoot + "/content/posts"
+        let oldDerivedImages  = draft.blogRoot + "/static/images"
+        draft.blogRoot = url.path
+        if draft.contentPath.isEmpty || draft.contentPath == oldDerivedContent {
+            draft.contentPath = url.path + "/content/posts"
         }
-        if settings.staticImagesPath.isEmpty || settings.staticImagesPath == oldDerivedImages {
-            settings.staticImagesPath = url.path + "/static/images"
+        if draft.staticImagesPath.isEmpty || draft.staticImagesPath == oldDerivedImages {
+            draft.staticImagesPath = url.path + "/static/images"
         }
     }
 }
@@ -201,12 +345,14 @@ private struct CategoriesTab: View {
                 Button(isScanning ? "Scanning…" : "Scan Posts") {
                     guard !settings.contentPath.isEmpty else { return }
                     isScanning = true
+                    let contentPath = settings.contentPath
                     DispatchQueue.global(qos: .userInitiated).async {
-                        let found = CategoryScanner.scan(contentPath: settings.contentPath)
+                        let found = CategoryScanner.scan(contentPath: contentPath)
                         DispatchQueue.main.async {
-                            settings.knownCategories = Array(
-                                Set(settings.knownCategories + found)
-                            ).sorted()
+                            let existing = settings.knownCategories
+                            settings.updateActiveProfile {
+                                $0.knownCategories = Array(Set(existing + found)).sorted()
+                            }
                             isScanning = false
                         }
                     }
@@ -216,13 +362,17 @@ private struct CategoriesTab: View {
 
             if settings.knownCategories.isEmpty {
                 Text(settings.contentPath.isEmpty
-                     ? "Set the Content Posts path in General, then scan."
+                     ? "Set up a blog profile in General, then scan."
                      : "No categories yet. Click \"Scan Posts\" to collect from existing posts.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .padding(.top, 4)
             } else {
-                CategoryTagsEditor(categories: $settings.knownCategories)
+                let categoriesBinding = Binding<[String]>(
+                    get: { settings.activeProfile?.knownCategories ?? [] },
+                    set: { newVal in settings.updateActiveProfile { $0.knownCategories = newVal } }
+                )
+                CategoryTagsEditor(categories: categoriesBinding)
                     .padding(.top, 8)
             }
         }

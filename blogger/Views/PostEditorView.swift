@@ -101,6 +101,27 @@ struct PostEditorView: View {
                 .font(.system(.callout, design: .monospaced))
             }
 
+            // Blog selector (only when multiple profiles exist)
+            if settings.profiles.count > 1 {
+                HStack {
+                    Text("Blog")
+                        .frame(width: 80, alignment: .trailing)
+                        .foregroundStyle(.secondary)
+                        .font(.subheadline)
+                    Picker("", selection: Binding(
+                        get: { settings.selectedProfileID ?? settings.profiles.first?.id ?? UUID() },
+                        set: { settings.selectedProfileID = $0 }
+                    )) {
+                        ForEach(settings.profiles) { profile in
+                            Text(profile.name).tag(profile.id)
+                        }
+                    }
+                    .labelsHidden()
+                    .frame(maxWidth: 220)
+                    Spacer()
+                }
+            }
+
             // Categories
             HStack(alignment: .center, spacing: 8) {
                 Text("Categories")

@@ -11,13 +11,8 @@ enum Constants {
     }
 
     enum UserDefaultsKeys {
-        static let baseBlogPath = "baseBlogPath"
-        static let contentPath = "contentPath"
-        static let staticImagesPath = "staticImagesPath"
-        static let imageURLPrefix = "imageURLPrefix"
-        static let contentSubpath = "contentSubpath"
-        static let staticImagesSubpath = "staticImagesSubpath"
-        static let knownCategories = "knownCategories"
+        static let blogProfiles = "blogProfiles"
+        static let selectedProfileID = "selectedProfileID"
         static let appTheme = "appTheme"
     }
 }

@@ -4,10 +4,14 @@
 
 ## Released
 
-### Hugo-Centric Settings Redesign
-- Added **Blog Root** path picker in Settings → General; selecting it auto-fills Content and Images paths with `…/content/posts` and `…/static/images`
-- Manually overridden paths are preserved when Blog Root is changed again
-- `baseBlogPath` key added to `UserDefaults` (App Group) and included in Settings export/import JSON
+### Multi-Blog Profile Support
+- Introduced `BlogProfile` model: each profile stores name, blog root, content path, images path, per-blog subpath templates, and categories
+- Settings → General tab replaced with a blog profiles list (add, edit, delete, select active profile)
+- Profile editor sheet: Blog Root picker auto-fills content/images paths; subpath templates per blog; manual overrides preserved
+- Image URL prefix removed from settings — auto-derived from `blogRoot`/`staticImagesPath` (Hugo `static/` convention)
+- Blog picker added to post editor header (visible only when 2+ profiles exist)
+- Existing single-blog configuration migrated automatically to a profile named "sosa0sa" on first launch
+- Settings export/import updated to multi-blog JSON format (`profiles` array)
 
 ### Drag & Drop from Photos.app
 - Implemented `NSView`-based drag-and-drop (`DropTargetView`) using `NSDraggingDestination`
