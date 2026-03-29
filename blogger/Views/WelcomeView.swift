@@ -24,20 +24,22 @@ struct WelcomeView: View {
                 VStack(spacing: 6) {
                     Text("Blogger")
                         .font(.title2.weight(.semibold))
-                    Text(isDragTargeted
-                         ? "Drop to start a new post"
-                         : "Drag photos here or click \"New Post\" to create a Hugo post")
+                    if isDragTargeted {
+                        Text("Drop to start a new post")
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        HStack(spacing: 0) {
+                            Text("Drag photos here or click ")
+                            Button("New Post") { startTextPost() }
+                                .buttonStyle(.plain)
+                                .foregroundStyle(Theme.accent)
+                            Text(" to create a Hugo post")
+                        }
                         .font(.callout)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
-                        .frame(maxWidth: 280)
-
-                    if !isDragTargeted {
-                        Button("New Post") { startTextPost() }
-                            .buttonStyle(.plain)
-                            .font(.callout)
-                            .foregroundStyle(Theme.accent)
-                            .padding(.top, 4)
+                        .frame(maxWidth: 300)
                     }
                 }
                 .animation(.easeInOut(duration: 0.15), value: isDragTargeted)
