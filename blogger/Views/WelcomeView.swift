@@ -26,7 +26,7 @@ struct WelcomeView: View {
                         .font(.title2.weight(.semibold))
                     Text(isDragTargeted
                          ? "Drop to start a new post"
-                         : "Drag photos here to create a Hugo post")
+                         : "Drag photos here or click \"New Post\" to create a Hugo post")
                         .font(.callout)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
