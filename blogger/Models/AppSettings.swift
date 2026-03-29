@@ -55,7 +55,20 @@ class AppSettings: ObservableObject {
         get { activeProfile?.knownSeries ?? [] }
         set { updateActiveProfile { $0.knownSeries = newValue } }
     }
+    var githubToken: String {
+        get { activeProfile?.githubToken ?? "" }
+        set { updateActiveProfile { $0.githubToken = newValue } }
+    }
+    var githubRepo: String {
+        get { activeProfile?.githubRepo ?? "" }
+        set { updateActiveProfile { $0.githubRepo = newValue } }
+    }
+    var githubBranch: String {
+        get { activeProfile?.githubBranch ?? "" }
+        set { updateActiveProfile { $0.githubBranch = newValue } }
+    }
     var isConfigured: Bool { activeProfile?.isConfigured ?? false }
+    var isGitHubConfigured: Bool { activeProfile?.isGitHubConfigured ?? false }
 
     // MARK: - Init
 

@@ -10,6 +10,9 @@ struct BlogProfile: Codable, Identifiable, Equatable {
     var staticImagesSubpath: String
     var knownCategories: [String]
     var knownSeries: [String]
+    var githubToken: String
+    var githubRepo: String
+    var githubBranch: String
 
     init(
         id: UUID = UUID(),
@@ -20,7 +23,10 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         contentSubpath: String = "YYYY/MM",
         staticImagesSubpath: String = "",
         knownCategories: [String] = [],
-        knownSeries: [String] = []
+        knownSeries: [String] = [],
+        githubToken: String = "",
+        githubRepo: String = "",
+        githubBranch: String = ""
     ) {
         self.id = id
         self.name = name
@@ -31,7 +37,12 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         self.staticImagesSubpath = staticImagesSubpath
         self.knownCategories = knownCategories
         self.knownSeries = knownSeries
+        self.githubToken = githubToken
+        self.githubRepo = githubRepo
+        self.githubBranch = githubBranch
     }
+
+    var isGitHubConfigured: Bool { !githubToken.isEmpty && !githubRepo.isEmpty }
 
     /// URL-space path prefix for images, auto-derived from blogRoot and staticImagesPath.
     /// e.g. blogRoot=/…/blog staticImagesPath=/…/blog/static/images → /images

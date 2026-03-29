@@ -22,6 +22,7 @@ struct PendingPostMetadata: Codable {
 struct PublishedRecord {
     let markdownURL: URL
     let imageURLs: [URL]
+    let title: String
 }
 
 class PendingPost: ObservableObject {

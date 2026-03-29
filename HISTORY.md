@@ -4,6 +4,12 @@
 
 ## Released
 
+### GitHub Publish (closes #1)
+- "Publish" renamed to "Save" — writes the markdown file and images to disk, stays in editor
+- New "Publish" button appears after saving; commits and pushes only the saved files via the GitHub REST API (no git binary required)
+- Settings → General → GitHub section: Personal Access Token, repo (`owner/repo`), branch; "Auto-detect" reads repo and branch from the blog root's `.git/config`
+- Reset from the editor now also deletes already-saved files if present
+
 ### Text-only Post (closes #4)
 - "New Post" button added to the welcome screen for starting a post without photos
 - Default title is the current date + time (e.g. `2026-03-29 15:30:45`); user changes it before publishing

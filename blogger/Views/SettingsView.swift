@@ -374,6 +374,45 @@ private struct ProfileDetailPanel: View {
                                 .padding(.top, 8)
                         }
 
+                        Divider().padding(.vertical, 12)
+
+                        HStack {
+                            SectionLabel("GitHub")
+                            Spacer()
+                            Button("Auto-detect") { autoDetectGitHub() }
+                                .disabled(draft.blogRoot.isEmpty)
+                        }
+                        .padding(.bottom, 6)
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text("Token")
+                                    .frame(width: 70, alignment: .trailing)
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                                SecureField("Personal Access Token (repo scope)", text: $draft.githubToken)
+                                    .textFieldStyle(.roundedBorder)
+                            }
+                            HStack {
+                                Text("Repo")
+                                    .frame(width: 70, alignment: .trailing)
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                                TextField("owner/repository", text: $draft.githubRepo)
+                                    .textFieldStyle(.roundedBorder)
+                            }
+                            HStack {
+                                Text("Branch")
+                                    .frame(width: 70, alignment: .trailing)
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                                TextField("main", text: $draft.githubBranch)
+                                    .textFieldStyle(.roundedBorder)
+                                    .frame(maxWidth: 120)
+                                Spacer()
+                            }
+                        }
+
                         Spacer(minLength: 24)
                     }
                     .padding(24)
@@ -415,6 +454,13 @@ private struct ProfileDetailPanel: View {
         if draft.staticImagesPath.isEmpty || draft.staticImagesPath == oldDerivedImages {
             draft.staticImagesPath = url.path + "/static/images"
         }
+    }
+
+    private func autoDetectGitHub() {
+        guard !draft.blogRoot.isEmpty,
+              let info = GitHubPublisher.detectRepoInfo(blogRoot: draft.blogRoot) else { return }
+        if draft.githubRepo.isEmpty { draft.githubRepo = info.repo }
+        if draft.githubBranch.isEmpty { draft.githubBranch = info.branch }
     }
 
     private func scanCategories() {

@@ -6,6 +6,7 @@ struct PostEditorView: View {
     @EnvironmentObject var pendingPost: PendingPost
 
     @State private var publishError: String?
+    @State private var isPublishing = false
     @State private var showResetConfirm = false
     @State private var newCategoryText = ""
     @State private var showNewCategoryField = false
@@ -49,12 +50,20 @@ struct PostEditorView: View {
         .background(Theme.background)
         .confirmationDialog("Reset post?", isPresented: $showResetConfirm, titleVisibility: .visible) {
             Button("Reset", role: .destructive) {
+                if let last = pendingPost.lastPublished {
+                    let fm = FileManager.default
+                    try? fm.removeItem(at: last.markdownURL)
+                    for url in last.imageURLs { try? fm.removeItem(at: url) }
+                    pendingPost.lastPublished = nil
+                }
                 deleteStagingFiles()
                 pendingPost.clear()
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("This will discard all photos and text. Staged image files will be deleted.")
+            Text(pendingPost.lastPublished != nil
+                 ? "This will discard all content and delete the saved post files."
+                 : "This will discard all photos and text. Staged image files will be deleted.")
         }
         .onAppear { prepopulateMarkdown() }
     }
@@ -400,10 +409,16 @@ struct PostEditorView: View {
                 .buttonStyle(.plain)
                 .foregroundStyle(.red.opacity(0.75))
                 .font(.callout)
-            Button("Publish") { publish() }
+            Button("Save") { save() }
                 .buttonStyle(.borderedProminent)
                 .tint(Theme.accent)
                 .keyboardShortcut(.return, modifiers: [.command, .shift])
+            if pendingPost.lastPublished != nil {
+                Button(isPublishing ? "Publishing…" : "Publish") { publishToGitHub() }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.green)
+                    .disabled(isPublishing || !settings.isGitHubConfigured)
+            }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 12)
@@ -417,7 +432,7 @@ struct PostEditorView: View {
         pendingPost.markdownBody = MarkdownGenerator.initialBody(photos: pendingPost.photos)
     }
 
-    private func publish() {
+    private func save() {
         publishError = nil
         guard settings.isConfigured else {
             publishError = "Configure paths in Settings first."
@@ -443,11 +458,65 @@ struct PostEditorView: View {
                 date: date,
                 settings: settings
             )
-            pendingPost.lastPublished = PublishedRecord(markdownURL: mdURL, imageURLs: imageURLs)
-            deleteStagingFiles()
-            pendingPost.clear()
+            pendingPost.lastPublished = PublishedRecord(
+                markdownURL: mdURL,
+                imageURLs: imageURLs,
+                title: pendingPost.title
+            )
+            // Staging files and editor state are preserved until Publish or Reset
         } catch {
             publishError = error.localizedDescription
+        }
+    }
+
+    private func publishToGitHub() {
+        guard let last = pendingPost.lastPublished,
+              let profile = settings.activeProfile,
+              profile.isGitHubConfigured else {
+            publishError = "Configure GitHub token and repo in Settings first."
+            return
+        }
+
+        isPublishing = true
+        publishError = nil
+
+        let blogRoot = profile.blogRoot
+        let token = profile.githubToken
+        let repo = profile.githubRepo
+        let branch = profile.githubBranch.isEmpty ? "main" : profile.githubBranch
+        let message = "Add post: \(last.title)"
+
+        var files: [(relativePath: String, data: Data)] = []
+        let allURLs = [last.markdownURL] + last.imageURLs
+        let prefix = blogRoot.hasSuffix("/") ? blogRoot : blogRoot + "/"
+        for url in allURLs {
+            guard url.path.hasPrefix(prefix),
+                  let data = try? Data(contentsOf: url) else { continue }
+            let relativePath = String(url.path.dropFirst(prefix.count))
+            files.append((relativePath, data))
+        }
+
+        Task {
+            do {
+                try await GitHubPublisher.commit(
+                    files: files,
+                    message: message,
+                    token: token,
+                    repo: repo,
+                    branch: branch
+                )
+                await MainActor.run {
+                    isPublishing = false
+                    pendingPost.lastPublished = nil
+                    deleteStagingFiles()
+                    pendingPost.clear()
+                }
+            } catch {
+                await MainActor.run {
+                    isPublishing = false
+                    publishError = error.localizedDescription
+                }
+            }
         }
     }
 
