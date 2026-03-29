@@ -19,7 +19,7 @@ struct PostEditorView: View {
         return appSupport.appendingPathComponent("Blogger/pending", isDirectory: true)
     }
 
-    private var postDate: Date { pendingPost.photos.first?.exifDate ?? Date() }
+    private var postDate: Date { pendingPost.postDate }
 
     private var datePrefix: String {
         let f = DateFormatter()
@@ -89,6 +89,21 @@ struct PostEditorView: View {
                         .foregroundStyle(.secondary)
                 }
                 .font(.system(.callout, design: .monospaced))
+            }
+
+            // Date
+            HStack {
+                Text("Date")
+                    .frame(width: 80, alignment: .trailing)
+                    .foregroundStyle(.secondary)
+                    .font(.subheadline)
+                DatePicker("", selection: Binding(
+                    get: { pendingPost.postDate },
+                    set: { applyDateOverride($0) }
+                ), displayedComponents: .date)
+                .datePickerStyle(.compact)
+                .labelsHidden()
+                Spacer()
             }
 
             // Blog selector (only when multiple profiles exist)
@@ -279,7 +294,7 @@ struct PostEditorView: View {
 
     private func prepopulateMarkdown() {
         guard !pendingPost.photos.isEmpty, pendingPost.markdownBody.isEmpty else { return }
-        let date = pendingPost.photos.first?.exifDate ?? Date()
+        let date = pendingPost.postDate
         pendingPost.markdownBody = MarkdownGenerator.initialMarkdown(
             title: pendingPost.title,
             date: date,
@@ -322,6 +337,61 @@ struct PostEditorView: View {
         } catch {
             publishError = error.localizedDescription
         }
+    }
+
+    private func applyDateOverride(_ newDate: Date) {
+        let fm = FileManager.default
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        let newDateStr = f.string(from: newDate)
+
+        var updatedPhotos: [ExportedPhoto] = []
+        for photo in pendingPost.photos {
+            // Photo filenames are always "YYYY-MM-DD-name.ext" (11-char prefix)
+            let rest = photo.filename.count > 11 ? String(photo.filename.dropFirst(11)) : photo.filename
+            let newFilename = "\(newDateStr)-\(rest)"
+            let newLocalURL = photo.localURL.deletingLastPathComponent()
+                .appendingPathComponent(newFilename)
+
+            if photo.localURL.path != newLocalURL.path {
+                try? fm.moveItem(at: photo.localURL, to: newLocalURL)
+            }
+
+            let newMarkdownPath = buildMarkdownPath(filename: newFilename, date: newDate)
+            pendingPost.markdownBody = pendingPost.markdownBody
+                .replacingOccurrences(of: photo.markdownPath, with: newMarkdownPath)
+
+            updatedPhotos.append(ExportedPhoto(
+                filename: newFilename,
+                markdownPath: newMarkdownPath,
+                localURL: newLocalURL,
+                exifDate: photo.exifDate
+            ))
+        }
+
+        pendingPost.photos = updatedPhotos
+        pendingPost.dateOverride = newDate
+        updateFrontmatterDate(newDate)
+    }
+
+    private func updateFrontmatterDate(_ date: Date) {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        let dateStr = f.string(from: date)
+        if let range = pendingPost.markdownBody.range(of: #"(?m)^date: .*$"#, options: .regularExpression) {
+            pendingPost.markdownBody.replaceSubrange(range, with: "date: \(dateStr)")
+        }
+    }
+
+    /// Replicates DropTargetView's buildMarkdownPath logic using current settings.
+    private func buildMarkdownPath(filename: String, date: Date) -> String {
+        let prefix = settings.imageURLPrefix
+        let resolvedPrefix = AppSettings.resolveSubpath(prefix, for: date)
+        let slash = resolvedPrefix.hasSuffix("/") ? resolvedPrefix : resolvedPrefix + "/"
+        let sub = AppSettings.resolveSubpath(settings.staticImagesSubpath, for: date)
+        if sub.isEmpty { return "\(slash)\(filename)" }
+        let subSlash = sub.hasSuffix("/") ? sub : sub + "/"
+        return "\(slash)\(subSlash)\(filename)"
     }
 
     private func deleteStagingFiles() {

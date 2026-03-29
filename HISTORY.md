@@ -4,6 +4,11 @@
 
 ## Released
 
+### Editable Post Date (closes #2)
+- A "Date" row with a compact date picker now appears in the post editor header
+- Changing the date updates the frontmatter `date:` field, renames staged photo files to use the new date prefix, and updates all image references in the markdown body
+- Falls back to the first photo's EXIF date (or today) when no override is set
+
 ### Cancel Last Post (closes #3)
 - After publishing, a "Cancel last post" button appears on the welcome screen
 - Canceling deletes the markdown file and copied static images written in that session only

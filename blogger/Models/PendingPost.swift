@@ -30,9 +30,13 @@ class PendingPost: ObservableObject {
     @Published var slug: String = ""
     @Published var markdownBody: String = ""
     @Published var categories: [String] = []
+    @Published var dateOverride: Date? = nil
     @Published var lastPublished: PublishedRecord? = nil
 
     var isEmpty: Bool { photos.isEmpty && title.isEmpty }
+
+    /// The effective post date: user override if set, otherwise first photo's EXIF date, otherwise today.
+    var postDate: Date { dateOverride ?? photos.first?.exifDate ?? Date() }
 
     func clear() {
         photos = []
@@ -40,6 +44,7 @@ class PendingPost: ObservableObject {
         slug = ""
         markdownBody = ""
         categories = []
+        dateOverride = nil
         // lastPublished intentionally preserved so the user can still cancel
     }
 }
