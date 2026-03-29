@@ -30,16 +30,13 @@ struct WelcomeView: View {
                             .foregroundStyle(.secondary)
                     } else {
                         HStack(spacing: 0) {
-                            Text("Drag photos here or click ")
+                            Text("Drag photos here, or ")
                             Button("New Post") { startTextPost() }
                                 .buttonStyle(.plain)
                                 .foregroundStyle(Theme.accent)
-                            Text(" to create a Hugo post")
                         }
                         .font(.callout)
                         .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: 300)
                     }
                 }
                 .animation(.easeInOut(duration: 0.15), value: isDragTargeted)
