@@ -68,12 +68,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     post.title = formatter.string(from: firstDate)
                     post.slug = SlugGenerator.slugify(post.title)
                 }
-                post.markdownBody = MarkdownGenerator.initialMarkdown(
-                    title: post.title,
-                    date: firstDate,
-                    photos: photos,
-                    categories: post.categories
-                )
+                post.markdownBody = MarkdownGenerator.initialBody(photos: photos)
             }
         } catch {
             print("[Blogger] Failed to load pending post: \(error)")

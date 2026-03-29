@@ -9,6 +9,8 @@ struct PostEditorView: View {
     @State private var showResetConfirm = false
     @State private var newCategoryText = ""
     @State private var showNewCategoryField = false
+    @State private var newTagText = ""
+    @State private var showNewTagField = false
 
     private var availableCategories: [String] {
         settings.knownCategories.filter { !pendingPost.categories.contains($0) }
@@ -70,7 +72,6 @@ struct PostEditorView: View {
                     .font(.title3.weight(.medium))
                     .onChange(of: pendingPost.title) { newValue in
                         pendingPost.slug = SlugGenerator.slugify(newValue)
-                        updateFrontmatterTitle(newValue)
                     }
             }
 
@@ -142,7 +143,6 @@ struct PostEditorView: View {
                                     .font(.caption.weight(.medium))
                                 Button {
                                     pendingPost.categories.removeAll { $0 == cat }
-                                    updateFrontmatterCategories(pendingPost.categories)
                                 } label: {
                                     Image(systemName: "xmark")
                                         .font(.system(size: 7, weight: .bold))
@@ -162,7 +162,6 @@ struct PostEditorView: View {
                     ForEach(availableCategories, id: \.self) { cat in
                         Button(cat) {
                             pendingPost.categories.append(cat)
-                            updateFrontmatterCategories(pendingPost.categories)
                         }
                     }
                     if !availableCategories.isEmpty { Divider() }
@@ -191,10 +190,68 @@ struct PostEditorView: View {
                                 .trimmingCharacters(in: quoteChars)
                             if !trimmed.isEmpty && !pendingPost.categories.contains(trimmed) {
                                 pendingPost.categories.append(trimmed)
-                                updateFrontmatterCategories(pendingPost.categories)
                             }
                             newCategoryText = ""
                             showNewCategoryField = false
+                        }
+                }
+                Spacer()
+            }
+
+            // Tags
+            HStack(alignment: .center, spacing: 8) {
+                Text("Tags")
+                    .frame(width: 80, alignment: .trailing)
+                    .foregroundStyle(.secondary)
+                    .font(.subheadline)
+
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 6) {
+                        ForEach(pendingPost.tags, id: \.self) { tag in
+                            HStack(spacing: 4) {
+                                Text(tag)
+                                    .font(.caption.weight(.medium))
+                                Button {
+                                    pendingPost.tags.removeAll { $0 == tag }
+                                } label: {
+                                    Image(systemName: "xmark")
+                                        .font(.system(size: 7, weight: .bold))
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .background(Theme.chipBg)
+                            .clipShape(Capsule())
+                        }
+                    }
+                }
+                .fixedSize(horizontal: false, vertical: true)
+
+                Button { showNewTagField = true } label: {
+                    Image(systemName: "plus.circle.fill")
+                        .foregroundStyle(Theme.accent.opacity(0.8))
+                        .font(.system(size: 17))
+                }
+                .buttonStyle(.plain)
+                .frame(width: 22, height: 22)
+
+                if showNewTagField {
+                    TextField("Tag", text: $newTagText)
+                        .textFieldStyle(.plain)
+                        .font(.callout)
+                        .frame(width: 120)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(Theme.card)
+                        .cornerRadius(6)
+                        .onSubmit {
+                            let trimmed = newTagText.trimmingCharacters(in: .whitespacesAndNewlines)
+                            if !trimmed.isEmpty && !pendingPost.tags.contains(trimmed) {
+                                pendingPost.tags.append(trimmed)
+                            }
+                            newTagText = ""
+                            showNewTagField = false
                         }
                 }
                 Spacer()
@@ -285,31 +342,9 @@ struct PostEditorView: View {
 
     // MARK: - Logic (unchanged)
 
-    private func updateFrontmatterTitle(_ newTitle: String) {
-        guard !pendingPost.markdownBody.isEmpty else { return }
-        if let range = pendingPost.markdownBody.range(of: #"(?m)^title: .*$"#, options: .regularExpression) {
-            pendingPost.markdownBody.replaceSubrange(range, with: "title: \(MarkdownGenerator.yamlScalar(newTitle))")
-        }
-    }
-
     private func prepopulateMarkdown() {
         guard !pendingPost.photos.isEmpty, pendingPost.markdownBody.isEmpty else { return }
-        let date = pendingPost.postDate
-        pendingPost.markdownBody = MarkdownGenerator.initialMarkdown(
-            title: pendingPost.title,
-            date: date,
-            photos: pendingPost.photos,
-            categories: pendingPost.categories
-        )
-    }
-
-    private func updateFrontmatterCategories(_ categories: [String]) {
-        guard !pendingPost.markdownBody.isEmpty else { return }
-        let catsStr = categories.map { MarkdownGenerator.yamlFlowScalar($0) }.joined(separator: ", ")
-        if let range = pendingPost.markdownBody.range(
-            of: #"(?m)^categories: \[.*\]$"#, options: .regularExpression) {
-            pendingPost.markdownBody.replaceSubrange(range, with: "categories: [\(catsStr)]")
-        }
+        pendingPost.markdownBody = MarkdownGenerator.initialBody(photos: pendingPost.photos)
     }
 
     private func publish() {
@@ -322,11 +357,17 @@ struct PostEditorView: View {
             publishError = "Filename (slug) cannot be empty."
             return
         }
-        let date = pendingPost.photos.first?.exifDate ?? Date()
+        let date = pendingPost.postDate
         do {
             let imageURLs = try PhotoExporter.copyPendingToStatic(photos: pendingPost.photos, settings: settings)
+            let fullContent = MarkdownGenerator.frontmatter(
+                title: pendingPost.title,
+                date: date,
+                categories: pendingPost.categories,
+                tags: pendingPost.tags
+            ) + "\n" + pendingPost.markdownBody
             let mdURL = try MarkdownGenerator.write(
-                content: pendingPost.markdownBody,
+                content: fullContent,
                 filename: fullFilename,
                 date: date,
                 settings: settings
@@ -371,16 +412,6 @@ struct PostEditorView: View {
 
         pendingPost.photos = updatedPhotos
         pendingPost.dateOverride = newDate
-        updateFrontmatterDate(newDate)
-    }
-
-    private func updateFrontmatterDate(_ date: Date) {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        let dateStr = f.string(from: date)
-        if let range = pendingPost.markdownBody.range(of: #"(?m)^date: .*$"#, options: .regularExpression) {
-            pendingPost.markdownBody.replaceSubrange(range, with: "date: \(dateStr)")
-        }
     }
 
     /// Replicates DropTargetView's buildMarkdownPath logic using current settings.

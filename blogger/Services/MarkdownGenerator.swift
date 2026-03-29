@@ -28,16 +28,17 @@ enum MarkdownGenerator {
         return needsQuoting ? "\"\(s.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\""))\"" : s
     }
 
-    static func frontmatter(title: String, date: Date, categories: [String] = []) -> String {
+    static func frontmatter(title: String, date: Date, categories: [String] = [], tags: [String] = []) -> String {
         let dateStr = dateFormatter.string(from: date)
         let catsStr = categories.map { yamlFlowScalar($0) }.joined(separator: ", ")
+        let tagsStr = tags.map { yamlFlowScalar($0) }.joined(separator: ", ")
         return """
         ---
         title: \(yamlScalar(title))
         date: \(dateStr)
         draft: false
         categories: [\(catsStr)]
-        tags: []
+        tags: [\(tagsStr)]
         ---
         """
     }
@@ -46,8 +47,10 @@ enum MarkdownGenerator {
         "![](\(markdownPath))"
     }
 
-    static func initialMarkdown(title: String, date: Date, photos: [ExportedPhoto], categories: [String] = []) -> String {
-        var parts: [String] = [frontmatter(title: title, date: date, categories: categories), ""]
+    /// Returns only the body content (image references + blank lines) — no frontmatter.
+    /// Frontmatter is composed from model fields at publish time.
+    static func initialBody(photos: [ExportedPhoto]) -> String {
+        var parts: [String] = [""]
         let imageRefs = photos.map { imageReference(markdownPath: $0.markdownPath) }
         parts.append(contentsOf: imageRefs)
         parts.append("")

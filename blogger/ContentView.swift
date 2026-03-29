@@ -72,8 +72,7 @@ struct ContentView: View {
             pendingPost.slug = SlugGenerator.slugify(pendingPost.title)
         }
 
-        pendingPost.markdownBody = MarkdownGenerator.initialMarkdown(
-            title: pendingPost.title, date: date, photos: allPhotos, categories: pendingPost.categories)
+        pendingPost.markdownBody = MarkdownGenerator.initialBody(photos: allPhotos)
     }
 }
 
