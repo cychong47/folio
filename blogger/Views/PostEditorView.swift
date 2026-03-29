@@ -11,6 +11,8 @@ struct PostEditorView: View {
     @State private var showNewCategoryField = false
     @State private var newTagText = ""
     @State private var showNewTagField = false
+    @State private var newSeriesText = ""
+    @State private var showNewSeriesField = false
 
     private var availableCategories: [String] {
         settings.knownCategories.filter { !pendingPost.categories.contains($0) }
@@ -256,6 +258,69 @@ struct PostEditorView: View {
                 }
                 Spacer()
             }
+
+            // Series
+            HStack(alignment: .center, spacing: 8) {
+                Text("Series")
+                    .frame(width: 80, alignment: .trailing)
+                    .foregroundStyle(.secondary)
+                    .font(.subheadline)
+
+                if !pendingPost.series.isEmpty {
+                    HStack(spacing: 4) {
+                        Text(pendingPost.series)
+                            .font(.caption.weight(.medium))
+                        Button {
+                            pendingPost.series = ""
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.system(size: 7, weight: .bold))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(Theme.chipBg)
+                    .clipShape(Capsule())
+                }
+
+                Menu {
+                    ForEach(settings.knownSeries.filter { $0 != pendingPost.series }, id: \.self) { s in
+                        Button(s) { pendingPost.series = s }
+                    }
+                    if !settings.knownSeries.filter({ $0 != pendingPost.series }).isEmpty { Divider() }
+                    Button("New…") { showNewSeriesField = true }
+                } label: {
+                    Image(systemName: pendingPost.series.isEmpty ? "plus.circle.fill" : "pencil.circle.fill")
+                        .foregroundStyle(Theme.accent.opacity(0.8))
+                        .font(.system(size: 17))
+                }
+                .menuStyle(.borderlessButton)
+                .frame(width: 22, height: 22)
+
+                if showNewSeriesField {
+                    TextField("Series name", text: $newSeriesText)
+                        .textFieldStyle(.plain)
+                        .font(.callout)
+                        .frame(width: 140)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(Theme.card)
+                        .cornerRadius(6)
+                        .onSubmit {
+                            let trimmed = newSeriesText.trimmingCharacters(in: .whitespacesAndNewlines)
+                            if !trimmed.isEmpty {
+                                pendingPost.series = trimmed
+                                if !settings.knownSeries.contains(trimmed) {
+                                    settings.knownSeries.append(trimmed)
+                                }
+                            }
+                            newSeriesText = ""
+                            showNewSeriesField = false
+                        }
+                }
+                Spacer()
+            }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 14)
@@ -364,7 +429,8 @@ struct PostEditorView: View {
                 title: pendingPost.title,
                 date: date,
                 categories: pendingPost.categories,
-                tags: pendingPost.tags
+                tags: pendingPost.tags,
+                series: pendingPost.series
             ) + "\n" + pendingPost.markdownBody
             let mdURL = try MarkdownGenerator.write(
                 content: fullContent,

@@ -4,6 +4,11 @@
 
 ## Released
 
+### Series Field (closes #6)
+- "Series" row added to the post editor below Tags — pick from known series via the menu or type a new one
+- Series is optional; omitted from frontmatter when empty; written as `series: [Name]` when set
+- Settings → General now shows a "Series" section alongside Categories; both are populated by the same "Scan Posts" action
+
 ### Hidden Frontmatter + Tags Field (closes #5)
 - Frontmatter is now hidden from the markdown editor; it is generated from the UI fields (title, date, categories, tags) at publish time
 - Tags field added below Categories with the same chip UI — click "+" to type a tag, press Return to add it

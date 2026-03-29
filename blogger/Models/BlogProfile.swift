@@ -9,6 +9,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
     var contentSubpath: String
     var staticImagesSubpath: String
     var knownCategories: [String]
+    var knownSeries: [String]
 
     init(
         id: UUID = UUID(),
@@ -18,7 +19,8 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         staticImagesPath: String = "",
         contentSubpath: String = "YYYY/MM",
         staticImagesSubpath: String = "",
-        knownCategories: [String] = []
+        knownCategories: [String] = [],
+        knownSeries: [String] = []
     ) {
         self.id = id
         self.name = name
@@ -28,6 +30,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         self.contentSubpath = contentSubpath
         self.staticImagesSubpath = staticImagesSubpath
         self.knownCategories = knownCategories
+        self.knownSeries = knownSeries
     }
 
     /// URL-space path prefix for images, auto-derived from blogRoot and staticImagesPath.

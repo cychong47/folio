@@ -31,6 +31,7 @@ class PendingPost: ObservableObject {
     @Published var markdownBody: String = ""
     @Published var categories: [String] = []
     @Published var tags: [String] = []
+    @Published var series: String = ""
     @Published var dateOverride: Date? = nil
     @Published var lastPublished: PublishedRecord? = nil
 
@@ -46,6 +47,7 @@ class PendingPost: ObservableObject {
         markdownBody = ""
         categories = []
         tags = []
+        series = ""
         dateOverride = nil
         // lastPublished intentionally preserved so the user can still cancel
     }

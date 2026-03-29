@@ -353,6 +353,27 @@ private struct ProfileDetailPanel: View {
                                 .padding(.top, 8)
                         }
 
+                        Divider().padding(.vertical, 12)
+
+                        SectionLabel("Series")
+                            .padding(.bottom, 4)
+
+                        if draft.knownSeries.isEmpty {
+                            Text(draft.contentPath.isEmpty
+                                 ? "Set up content path above, then scan."
+                                 : "No series yet. Click \"Scan Posts\" to collect from existing posts.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .padding(.top, 4)
+                        } else {
+                            let seriesBinding = Binding<[String]>(
+                                get: { draft.knownSeries },
+                                set: { draft.knownSeries = $0 }
+                            )
+                            CategoryTagsEditor(categories: seriesBinding)
+                                .padding(.top, 8)
+                        }
+
                         Spacer(minLength: 24)
                     }
                     .padding(24)
@@ -402,11 +423,12 @@ private struct ProfileDetailPanel: View {
         let contentPath = draft.contentPath
         isScanning = true
         DispatchQueue.global(qos: .userInitiated).async {
-            let found = CategoryScanner.scan(contentPath: contentPath)
+            let result = CategoryScanner.scan(contentPath: contentPath)
             DispatchQueue.main.async {
                 // Only update draft — onChange(of: draft) writes back to settings
                 guard editingProfileID == profileID else { isScanning = false; return }
-                draft.knownCategories = mergeCategories(draft.knownCategories, found)
+                draft.knownCategories = mergeCategories(draft.knownCategories, result.categories)
+                draft.knownSeries = mergeCategories(draft.knownSeries, result.series)
                 isScanning = false
             }
         }

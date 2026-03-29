@@ -51,6 +51,10 @@ class AppSettings: ObservableObject {
         get { activeProfile?.knownCategories ?? [] }
         set { updateActiveProfile { $0.knownCategories = newValue } }
     }
+    var knownSeries: [String] {
+        get { activeProfile?.knownSeries ?? [] }
+        set { updateActiveProfile { $0.knownSeries = newValue } }
+    }
     var isConfigured: Bool { activeProfile?.isConfigured ?? false }
 
     // MARK: - Init

@@ -28,19 +28,23 @@ enum MarkdownGenerator {
         return needsQuoting ? "\"\(s.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\""))\"" : s
     }
 
-    static func frontmatter(title: String, date: Date, categories: [String] = [], tags: [String] = []) -> String {
+    static func frontmatter(title: String, date: Date, categories: [String] = [], tags: [String] = [], series: String = "") -> String {
         let dateStr = dateFormatter.string(from: date)
         let catsStr = categories.map { yamlFlowScalar($0) }.joined(separator: ", ")
         let tagsStr = tags.map { yamlFlowScalar($0) }.joined(separator: ", ")
-        return """
-        ---
-        title: \(yamlScalar(title))
-        date: \(dateStr)
-        draft: false
-        categories: [\(catsStr)]
-        tags: [\(tagsStr)]
-        ---
-        """
+        var lines = [
+            "---",
+            "title: \(yamlScalar(title))",
+            "date: \(dateStr)",
+            "draft: false",
+            "categories: [\(catsStr)]",
+            "tags: [\(tagsStr)]",
+        ]
+        if !series.isEmpty {
+            lines.append("series: [\(yamlFlowScalar(series))]")
+        }
+        lines.append("---")
+        return lines.joined(separator: "\n")
     }
 
     static func imageReference(markdownPath: String) -> String {
