@@ -4,6 +4,11 @@
 
 ## Released
 
+### Text-only Post (closes #4)
+- "New Post" button added to the welcome screen for starting a post without photos
+- Default title is the current date + time (e.g. `2026-03-29 15:30:45`); user changes it before publishing
+- Post date picker is available as usual to override the date
+
 ### Series Field (closes #6)
 - "Series" row added to the post editor below Tags — pick from known series via the menu or type a new one
 - Series is optional; omitted from frontmatter when empty; written as `series: [Name]` when set

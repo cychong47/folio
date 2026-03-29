@@ -31,6 +31,14 @@ struct WelcomeView: View {
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: 280)
+
+                    if !isDragTargeted {
+                        Button("New Post") { startTextPost() }
+                            .buttonStyle(.plain)
+                            .font(.callout)
+                            .foregroundStyle(Theme.accent)
+                            .padding(.top, 4)
+                    }
                 }
                 .animation(.easeInOut(duration: 0.15), value: isDragTargeted)
             }
@@ -62,6 +70,14 @@ struct WelcomeView: View {
         } message: {
             Text("The markdown file and imported images will be permanently deleted.")
         }
+    }
+
+    private func startTextPost() {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let title = f.string(from: Date())
+        pendingPost.title = title
+        pendingPost.slug = SlugGenerator.slugify(title)
     }
 
     private func cancelLastPost() {
