@@ -4,6 +4,9 @@
 
 ## Released
 
+### Build Info in About Panel
+- About Blogger now shows the git commit date and short hash (e.g. `2026-03-29 (2767d18)`) injected at build time via a pre-build script
+
 ### Cleaner Frontmatter Quoting
 - `title`, `categories`, and `tags` values are no longer wrapped in quotes unless YAML requires it (e.g. value contains `: `, ` #`, or flow-indicator characters)
 

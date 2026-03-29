@@ -29,6 +29,15 @@ struct BloggerApp: App {
                 .environmentObject(settings)
                 .preferredColorScheme(preferredScheme)
         }
+        .commands {
+            CommandGroup(replacing: .appInfo) {
+                Button("About Blogger") {
+                    NSApp.orderFrontStandardAboutPanel(options: [
+                        .applicationVersion: "\(BuildInfo.commitDate) (\(BuildInfo.commitHash))"
+                    ])
+                }
+            }
+        }
     }
 }
 
