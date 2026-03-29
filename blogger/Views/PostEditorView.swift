@@ -272,9 +272,8 @@ struct PostEditorView: View {
 
     private func updateFrontmatterTitle(_ newTitle: String) {
         guard !pendingPost.markdownBody.isEmpty else { return }
-        let escaped = newTitle.replacingOccurrences(of: "\"", with: "\\\"")
-        if let range = pendingPost.markdownBody.range(of: #"(?m)^title: ".*"$"#, options: .regularExpression) {
-            pendingPost.markdownBody.replaceSubrange(range, with: "title: \"\(escaped)\"")
+        if let range = pendingPost.markdownBody.range(of: #"(?m)^title: .*$"#, options: .regularExpression) {
+            pendingPost.markdownBody.replaceSubrange(range, with: "title: \(MarkdownGenerator.yamlScalar(newTitle))")
         }
     }
 
@@ -291,7 +290,7 @@ struct PostEditorView: View {
 
     private func updateFrontmatterCategories(_ categories: [String]) {
         guard !pendingPost.markdownBody.isEmpty else { return }
-        let catsStr = categories.map { "\"\($0)\"" }.joined(separator: ", ")
+        let catsStr = categories.map { MarkdownGenerator.yamlFlowScalar($0) }.joined(separator: ", ")
         if let range = pendingPost.markdownBody.range(
             of: #"(?m)^categories: \[.*\]$"#, options: .regularExpression) {
             pendingPost.markdownBody.replaceSubrange(range, with: "categories: [\(catsStr)]")

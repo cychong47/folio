@@ -4,6 +4,9 @@
 
 ## Released
 
+### Cleaner Frontmatter Quoting
+- `title`, `categories`, and `tags` values are no longer wrapped in quotes unless YAML requires it (e.g. value contains `: `, ` #`, or flow-indicator characters)
+
 ### Settings Master-Detail Redesign
 - Settings → General tab replaced with a master-detail layout: profile list on the left, full profile detail (paths + subpath templates + categories) on the right — everything about a blog in one place
 - Categories tab removed; category scanning and management now live in the General tab detail panel

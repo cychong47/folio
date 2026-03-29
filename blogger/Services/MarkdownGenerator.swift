@@ -7,13 +7,34 @@ enum MarkdownGenerator {
         return f
     }()
 
+    // Quote a YAML scalar only when the value would be ambiguous or invalid as a plain scalar.
+    // Block context (e.g. `title: value`).
+    static func yamlScalar(_ s: String) -> String {
+        let needsQuoting = s.isEmpty
+            || s.contains(": ") || s.hasSuffix(":")
+            || s.contains(" #")
+            || s.first.map({ "\"'|>{[&*!%@`".contains($0) }) ?? false
+        return needsQuoting ? "\"\(s.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\""))\"" : s
+    }
+
+    // Flow sequence context (e.g. inside `[…]`): additionally forbid flow-indicator chars.
+    static func yamlFlowScalar(_ s: String) -> String {
+        let needsQuoting = s.isEmpty
+            || s.contains(",") || s.contains("[") || s.contains("]")
+            || s.contains("{") || s.contains("}")
+            || s.contains(": ") || s.hasSuffix(":")
+            || s.contains(" #")
+            || s.first.map({ "\"'|>&*!%@`".contains($0) }) ?? false
+        return needsQuoting ? "\"\(s.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\""))\"" : s
+    }
+
     static func frontmatter(title: String, date: Date, categories: [String] = []) -> String {
         let dateStr = dateFormatter.string(from: date)
-        let catsStr = categories.map { "\"\($0)\"" }.joined(separator: ", ")
+        let catsStr = categories.map { yamlFlowScalar($0) }.joined(separator: ", ")
         return """
         ---
-        title: "\(title)"
-        date: "\(dateStr)"
+        title: \(yamlScalar(title))
+        date: \(dateStr)
         draft: false
         categories: [\(catsStr)]
         tags: []
