@@ -266,23 +266,28 @@ struct PostEditorView: View {
                     .foregroundStyle(.secondary)
                     .font(.subheadline)
 
-                if !pendingPost.series.isEmpty {
-                    HStack(spacing: 4) {
-                        Text(pendingPost.series)
-                            .font(.caption.weight(.medium))
-                        Button {
-                            pendingPost.series = ""
-                        } label: {
-                            Image(systemName: "xmark")
-                                .font(.system(size: 7, weight: .bold))
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 6) {
+                        if !pendingPost.series.isEmpty {
+                            HStack(spacing: 4) {
+                                Text(pendingPost.series)
+                                    .font(.caption.weight(.medium))
+                                Button {
+                                    pendingPost.series = ""
+                                } label: {
+                                    Image(systemName: "xmark")
+                                        .font(.system(size: 7, weight: .bold))
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .background(Theme.chipBg)
+                            .clipShape(Capsule())
                         }
-                        .buttonStyle(.plain)
                     }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 4)
-                    .background(Theme.chipBg)
-                    .clipShape(Capsule())
                 }
+                .fixedSize(horizontal: false, vertical: true)
 
                 Menu {
                     ForEach(settings.knownSeries.filter { $0 != pendingPost.series }, id: \.self) { s in
