@@ -59,6 +59,7 @@ struct ContentView: View {
         let newPhotos = photos.filter { !existingFilenames.contains($0.filename) }
         guard !newPhotos.isEmpty else { return }
 
+        pendingPost.lastPublished = nil
         pendingPost.photos.append(contentsOf: newPhotos)
 
         let allPhotos = pendingPost.photos

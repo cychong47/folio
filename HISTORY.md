@@ -4,6 +4,11 @@
 
 ## Released
 
+### Cancel Last Post (closes #3)
+- After publishing, a "Cancel last post" button appears on the welcome screen
+- Canceling deletes the markdown file and copied static images written in that session only
+- Starting a new post (dropping photos) dismisses the cancel option
+
 ### Build Info in About Panel
 - About Blogger now shows the git commit date and short hash (e.g. `2026-03-29 (2767d18)`) injected at build time via a pre-build script
 

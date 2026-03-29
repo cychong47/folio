@@ -2,6 +2,8 @@ import SwiftUI
 
 struct WelcomeView: View {
     var isDragTargeted: Bool = false
+    @EnvironmentObject var pendingPost: PendingPost
+    @State private var showCancelConfirm = false
 
     var body: some View {
         ZStack {
@@ -42,6 +44,33 @@ struct WelcomeView: View {
                     .padding(20)
                     .animation(.easeInOut(duration: 0.15), value: isDragTargeted)
             )
+
+            if pendingPost.lastPublished != nil {
+                VStack {
+                    Spacer()
+                    Button("Cancel last post") { showCancelConfirm = true }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(.red.opacity(0.7))
+                        .font(.callout)
+                        .padding(.bottom, 20)
+                }
+            }
         }
+        .confirmationDialog("Cancel last post?", isPresented: $showCancelConfirm, titleVisibility: .visible) {
+            Button("Delete Files", role: .destructive) { cancelLastPost() }
+            Button("Keep", role: .cancel) {}
+        } message: {
+            Text("The markdown file and imported images will be permanently deleted.")
+        }
+    }
+
+    private func cancelLastPost() {
+        guard let last = pendingPost.lastPublished else { return }
+        let fm = FileManager.default
+        try? fm.removeItem(at: last.markdownURL)
+        for url in last.imageURLs {
+            try? fm.removeItem(at: url)
+        }
+        pendingPost.lastPublished = nil
     }
 }

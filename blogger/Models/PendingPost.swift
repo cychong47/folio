@@ -19,12 +19,18 @@ struct PendingPostMetadata: Codable {
     }
 }
 
+struct PublishedRecord {
+    let markdownURL: URL
+    let imageURLs: [URL]
+}
+
 class PendingPost: ObservableObject {
     @Published var photos: [ExportedPhoto] = []
     @Published var title: String = ""
     @Published var slug: String = ""
     @Published var markdownBody: String = ""
     @Published var categories: [String] = []
+    @Published var lastPublished: PublishedRecord? = nil
 
     var isEmpty: Bool { photos.isEmpty && title.isEmpty }
 
@@ -34,5 +40,6 @@ class PendingPost: ObservableObject {
         slug = ""
         markdownBody = ""
         categories = []
+        // lastPublished intentionally preserved so the user can still cancel
     }
 }

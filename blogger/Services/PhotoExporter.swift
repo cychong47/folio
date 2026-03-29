@@ -48,8 +48,10 @@ enum PhotoExporter {
         return formatter.date(from: dateString)
     }
 
-    static func copyPendingToStatic(photos: [ExportedPhoto], settings: AppSettings) throws {
+    @discardableResult
+    static func copyPendingToStatic(photos: [ExportedPhoto], settings: AppSettings) throws -> [URL] {
         let base = URL(fileURLWithPath: settings.staticImagesPath)
+        var written: [URL] = []
         for photo in photos {
             // Resolve subpath per-photo using its EXIF date
             let subpath = AppSettings.resolveSubpath(settings.staticImagesSubpath, for: photo.exifDate)
@@ -61,6 +63,8 @@ enum PhotoExporter {
             }
             try FileManager.default.copyItem(at: photo.localURL, to: dest)
             try FileManager.default.setAttributes([.posixPermissions: 0o644], ofItemAtPath: dest.path)
+            written.append(dest)
         }
+        return written
     }
 }

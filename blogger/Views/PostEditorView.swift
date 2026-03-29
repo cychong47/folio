@@ -309,13 +309,14 @@ struct PostEditorView: View {
         }
         let date = pendingPost.photos.first?.exifDate ?? Date()
         do {
-            try PhotoExporter.copyPendingToStatic(photos: pendingPost.photos, settings: settings)
-            _ = try MarkdownGenerator.write(
+            let imageURLs = try PhotoExporter.copyPendingToStatic(photos: pendingPost.photos, settings: settings)
+            let mdURL = try MarkdownGenerator.write(
                 content: pendingPost.markdownBody,
                 filename: fullFilename,
                 date: date,
                 settings: settings
             )
+            pendingPost.lastPublished = PublishedRecord(markdownURL: mdURL, imageURLs: imageURLs)
             deleteStagingFiles()
             pendingPost.clear()
         } catch {
