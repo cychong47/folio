@@ -134,6 +134,7 @@ private enum PhotoExporter {
             return nil
         }
         let f = DateFormatter()
+        f.locale = Locale(identifier: "en_US_POSIX")
         f.dateFormat = "yyyy:MM:dd HH:mm:ss"
         return f.date(from: dateString)
     }

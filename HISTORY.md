@@ -4,6 +4,9 @@
 
 ## Released
 
+### Fix EXIF Date Parsing on Non-English Locales
+- Set `en_US_POSIX` locale on all EXIF date formatters so `DateTimeOriginal` parses correctly regardless of system language
+
 ### GitHub Publish: Full URL Support + Codeberg
 - Repository field now accepts full URLs (`https://github.com/owner/repo`) as well as plain `owner/repo`
 - Codeberg and other Gitea-compatible hosts are supported — API base is derived automatically from the URL host
