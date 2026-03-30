@@ -44,6 +44,38 @@ struct BlogProfile: Codable, Identifiable, Equatable {
 
     var isGitHubConfigured: Bool { !githubToken.isEmpty && !githubRepo.isEmpty }
 
+    /// Parses `githubRepo` — accepts `owner/repo`, `https://github.com/owner/repo`,
+    /// `https://codeberg.org/owner/repo`, etc.
+    /// Returns `(apiBase, ownerRepo)` where apiBase already ends without a trailing slash.
+    var resolvedRepoAPI: (apiBase: String, ownerRepo: String)? {
+        let raw = githubRepo.trimmingCharacters(in: .whitespaces)
+        guard !raw.isEmpty else { return nil }
+
+        if raw.hasPrefix("http://") || raw.hasPrefix("https://") {
+            guard let url = URL(string: raw) else { return nil }
+            let host = url.host ?? ""
+            // path is "/owner/repo" or "/owner/repo.git"
+            var path = url.path
+                .replacingOccurrences(of: ".git", with: "")
+                .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+            let parts = path.split(separator: "/")
+            guard parts.count >= 2 else { return nil }
+            let ownerRepo = parts.prefix(2).joined(separator: "/")
+            let apiBase: String
+            if host == "github.com" {
+                apiBase = "https://api.github.com/repos/\(ownerRepo)"
+            } else {
+                // Gitea-compatible hosts (Codeberg, Forgejo, self-hosted Gitea)
+                apiBase = "https://\(host)/api/v1/repos/\(ownerRepo)"
+            }
+            return (apiBase, ownerRepo)
+        } else {
+            // Plain "owner/repo" — assume GitHub
+            let ownerRepo = raw.replacingOccurrences(of: ".git", with: "")
+            return ("https://api.github.com/repos/\(ownerRepo)", ownerRepo)
+        }
+    }
+
     /// URL-space path prefix for images, auto-derived from blogRoot and staticImagesPath.
     /// e.g. blogRoot=/…/blog staticImagesPath=/…/blog/static/images → /images
     var imageURLPrefix: String {

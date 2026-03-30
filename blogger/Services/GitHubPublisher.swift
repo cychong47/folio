@@ -12,10 +12,11 @@ enum GitHubPublisher {
         files: [(relativePath: String, data: Data)],
         message: String,
         token: String,
-        repo: String,       // "owner/name"
+        apiBase: String,    // e.g. "https://api.github.com/repos/owner/repo"
+        ownerRepo: String,  // "owner/repo" — used in error messages only
         branch: String
     ) async throws {
-        let base = URL(string: "https://api.github.com/repos/\(repo)")!
+        let base = URL(string: apiBase)!
 
         func apiRequest(_ path: String, method: String = "GET", body: [String: Any]? = nil) async throws -> [String: Any] {
             var req = URLRequest(url: base.appendingPathComponent(path))
@@ -41,7 +42,7 @@ enum GitHubPublisher {
         do {
             refData = try await apiRequest("git/ref/heads/\(branch)")
         } catch let e as GitHubError {
-            throw GitHubError(message: "Step 1 (get branch '\(branch)'): \(e.message)\n\nCheck: repo '\(repo)' is correct, branch '\(branch)' exists, and token has 'repo' scope.")
+            throw GitHubError(message: "Step 1 (get branch '\(branch)'): \(e.message)\n\nCheck: repo '\(ownerRepo)' is correct, branch '\(branch)' exists, and token has repo read/write scope.")
         }
         guard let headSHA = (refData["object"] as? [String: Any])?["sha"] as? String else {
             throw GitHubError(message: "Could not read HEAD SHA for branch '\(branch)'")

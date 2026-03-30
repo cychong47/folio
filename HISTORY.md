@@ -4,6 +4,10 @@
 
 ## Released
 
+### GitHub Publish: Full URL Support + Codeberg
+- Repository field now accepts full URLs (`https://github.com/owner/repo`) as well as plain `owner/repo`
+- Codeberg and other Gitea-compatible hosts are supported — API base is derived automatically from the URL host
+
 ### GitHub Publish: Better Error Messages
 - Each API step now reports which step failed with actionable hints (e.g. wrong repo, wrong branch, missing token scope)
 

@@ -480,9 +480,14 @@ struct PostEditorView: View {
         isPublishing = true
         publishError = nil
 
+        guard let (apiBase, ownerRepo) = profile.resolvedRepoAPI else {
+            publishError = "Invalid repository URL in Settings."
+            isPublishing = false
+            return
+        }
+
         let blogRoot = profile.blogRoot
         let token = profile.githubToken
-        let repo = profile.githubRepo
         let branch = profile.githubBranch.isEmpty ? "main" : profile.githubBranch
         let message = "Add post: \(last.title)"
 
@@ -502,7 +507,8 @@ struct PostEditorView: View {
                     files: files,
                     message: message,
                     token: token,
-                    repo: repo,
+                    apiBase: apiBase,
+                    ownerRepo: ownerRepo,
                     branch: branch
                 )
                 await MainActor.run {
