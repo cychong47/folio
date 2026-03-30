@@ -4,6 +4,10 @@
 
 ## Released
 
+### Consistent Version Display
+- About window now shows "Version 1.0 (commithash)" — reads `CFBundleShortVersionString` from the bundle instead of the commit date
+- `CFBundleShortVersionString` in `project.yml` is the single source of truth for the version shown in About and checked by the updater
+
 ### OTA Updates (closes #8)
 - Settings → **Updates** tab checks GitHub releases on open and shows the installed version
 - "Download & Install" downloads the release zip and opens it with Archive Utility; drag Blogger.app to Applications to complete the install

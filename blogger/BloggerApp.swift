@@ -32,8 +32,10 @@ struct BloggerApp: App {
         .commands {
             CommandGroup(replacing: .appInfo) {
                 Button("About Blogger") {
+                    let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
                     NSApp.orderFrontStandardAboutPanel(options: [
-                        .applicationVersion: "\(BuildInfo.commitDate) (\(BuildInfo.commitHash))"
+                        .applicationVersion: version,
+                        .version: BuildInfo.commitHash
                     ])
                 }
             }
