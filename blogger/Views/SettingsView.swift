@@ -33,6 +33,9 @@ struct SettingsView: View {
 
             AppearanceTab()
                 .tabItem { Label("Appearance", systemImage: "paintpalette") }
+
+            UpdatesTab()
+                .tabItem { Label("Updates", systemImage: "arrow.down.circle") }
         }
         .frame(width: 740, height: 560)
     }
@@ -506,6 +509,111 @@ private struct AppearanceTab: View {
             Spacer()
         }
         .padding(24)
+    }
+}
+
+// MARK: - Updates Tab
+
+private struct UpdatesTab: View {
+    @StateObject private var checker = UpdateChecker()
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            SectionLabel("Software Update")
+
+            HStack(spacing: 0) {
+                Text("Installed Version")
+                    .frame(width: 150, alignment: .trailing)
+                    .foregroundStyle(.secondary)
+                Text(checker.currentVersion)
+                    .padding(.leading, 12)
+            }
+
+            Divider()
+
+            statusView
+
+            Spacer()
+        }
+        .padding(24)
+        .onAppear { checker.checkForUpdates() }
+    }
+
+    @ViewBuilder
+    private var statusView: some View {
+        switch checker.state {
+        case .idle:
+            EmptyView()
+
+        case .checking:
+            HStack(spacing: 8) {
+                ProgressView().controlSize(.small)
+                Text("Checking for updates…").foregroundStyle(.secondary)
+            }
+
+        case .upToDate:
+            HStack(spacing: 8) {
+                Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                Text("Blogger is up to date.")
+                Button("Check Again") { checker.checkForUpdates() }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(Theme.accent)
+            }
+
+        case .available(let tagName, let downloadURL):
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 8) {
+                    Image(systemName: "arrow.down.circle.fill").foregroundStyle(Theme.accent)
+                    Text("Version \(tagName) is available").fontWeight(.medium)
+                }
+                if downloadURL.isEmpty {
+                    Text("No download asset is attached to this release yet. Check the GitHub releases page.")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Button("Download & Install") {
+                        checker.downloadAndInstall(downloadURL: downloadURL)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    Text("The update will be extracted automatically. Drag Blogger.app to Applications to complete the install.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+
+        case .downloading:
+            HStack(spacing: 8) {
+                ProgressView().controlSize(.small)
+                Text("Downloading update…").foregroundStyle(.secondary)
+            }
+
+        case .awaitingInstall:
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) {
+                    Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                    Text("Update downloaded.").fontWeight(.medium)
+                }
+                Text("Drag Blogger.app from the opened Finder window to your Applications folder, then relaunch.")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+        case .error(let message):
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+                    Text("Update check failed")
+                }
+                Text(message)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Button("Try Again") { checker.checkForUpdates() }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(Theme.accent)
+            }
+        }
     }
 }
 

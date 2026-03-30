@@ -4,6 +4,10 @@
 
 ## Released
 
+### OTA Updates (closes #8)
+- Settings → **Updates** tab checks GitHub releases on open and shows the installed version
+- "Download & Install" downloads the release zip and opens it with Archive Utility; drag Blogger.app to Applications to complete the install
+
 ### Fix EXIF Date Parsing on Non-English Locales
 - Set `en_US_POSIX` locale on all EXIF date formatters so `DateTimeOriginal` parses correctly regardless of system language
 
