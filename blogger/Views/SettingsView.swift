@@ -1,4 +1,5 @@
 import SwiftUI
+import Photos
 
 // Codable snapshot used for export / import
 private struct SettingsExport: Codable {
@@ -62,6 +63,12 @@ private struct GeneralTab: View {
                     isScanning: $isScanning
                 )
             }
+
+            Divider()
+
+            Divider()
+
+            PhotosAccessRow()
 
             Divider()
 
@@ -509,6 +516,60 @@ private struct AppearanceTab: View {
             Spacer()
         }
         .padding(24)
+    }
+}
+
+// MARK: - Photos Access Row
+
+private struct PhotosAccessRow: View {
+    @State private var status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: statusIcon)
+                .foregroundStyle(statusColor)
+                .frame(width: 16)
+            Text(statusLabel)
+                .font(.callout)
+                .foregroundStyle(.secondary)
+            Spacer()
+            if status != .authorized && status != .limited {
+                Button("Grant Access") {
+                    Task {
+                        await PhotoLibraryDate.requestAuthorization()
+                        status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+    }
+
+    private var statusIcon: String {
+        switch status {
+        case .authorized, .limited: return "checkmark.circle.fill"
+        case .denied, .restricted:  return "xmark.circle.fill"
+        default:                    return "photo.circle"
+        }
+    }
+
+    private var statusColor: Color {
+        switch status {
+        case .authorized, .limited: return .green
+        case .denied, .restricted:  return .red
+        default:                    return .secondary
+        }
+    }
+
+    private var statusLabel: String {
+        switch status {
+        case .authorized: return "Photos access granted — dates read automatically for non-EXIF images"
+        case .limited:    return "Photos access limited — some dates may not be detected"
+        case .denied:     return "Photos access denied — open System Settings to enable"
+        case .restricted: return "Photos access restricted by system policy"
+        default:          return "Photos access not granted — enable to fix screenshot dates"
+        }
     }
 }
 

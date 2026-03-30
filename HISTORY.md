@@ -4,7 +4,12 @@
 
 ## Released
 
-### Screenshot Date Fix
+### Screenshot Date Fix (PhotoKit)
+- Non-EXIF images (screenshots, downloaded images) dragged from Photos.app now get the correct date via `PHAsset.creationDate` — requires granting Photos access in Settings → General
+- Settings → General now shows a Photos access status row with a "Grant Access" button
+- Falls back to file creation date → today for images not in Photos
+
+### Screenshot Date Fix (earlier attempt, superseded)
 - Screenshots and images without EXIF `DateTimeOriginal` (e.g. iOS screenshots) now use the file's creation date — which Photos.app preserves on export — instead of falling back to today's date
 - Applies to both drag-and-drop in the main app and the Share Extension
 

@@ -37,11 +37,14 @@ enum PhotoExporter {
         return exifDate(from: source)
     }
 
-    /// Best available date for any image: EXIF DateTimeOriginal when present (camera photos),
-    /// file creation date as fallback (screenshots and other non-EXIF images).
-    /// Photos.app preserves the original creation date when exporting via file promise or share.
+    /// Best available date for any image:
+    ///  1. EXIF DateTimeOriginal (camera photos)
+    ///  2. PHAsset creationDate via UUID in the exported filename (Photos.app drags, when authorized)
+    ///  3. File creation date
+    ///  4. Today as last resort
     static func readDate(from url: URL) -> Date {
         if let d = readEXIFDate(from: url) { return d }
+        if let d = PhotoLibraryDate.creationDate(forExportedFile: url) { return d }
         let attrs = try? FileManager.default.attributesOfItem(atPath: url.path)
         return (attrs?[.creationDate] as? Date) ?? Date()
     }

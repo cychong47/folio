@@ -36,6 +36,7 @@ targets:
           - CFBundleURLName: com.blogger.app
             CFBundleURLSchemes:
               - blogger
+        NSPhotoLibraryUsageDescription: "Blogger reads photo dates to set the correct date on your blog posts."
     entitlements:
       path: blogger/Blogger.entitlements
       properties:
@@ -44,6 +45,9 @@ targets:
         com.apple.security.application-groups:
           - group.com.blogger.app
         com.apple.security.network.client: true
+        com.apple.security.personal-information.photos-library: true
+    dependencies:
+      - sdk: Photos.framework
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.blogger.app
