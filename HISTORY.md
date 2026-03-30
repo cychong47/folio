@@ -4,6 +4,9 @@
 
 ## Released
 
+### Welcome Screen Polish
+- "New Post" inline link no longer shows a focus ring on app launch
+
 ### Full Timestamp in Frontmatter (closes #7)
 - Frontmatter `date:` field now includes time and timezone offset (e.g. `2026-03-30T14:05:00+09:00`) instead of date-only
 - Ensures posts published on the same day sort correctly in Hugo by time of creation

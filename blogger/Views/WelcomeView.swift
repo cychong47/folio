@@ -34,6 +34,7 @@ struct WelcomeView: View {
                             Button("New Post") { startTextPost() }
                                 .buttonStyle(.plain)
                                 .foregroundStyle(Theme.accent)
+                                .focusable(false)
                         }
                         .font(.callout)
                         .foregroundStyle(.secondary)
