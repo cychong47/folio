@@ -47,18 +47,18 @@ class ShareViewController: NSViewController {
             }
 
             group.enter()
-            provider.loadDataRepresentation(forTypeIdentifier: typeID) { [weak self] data, error in
+            provider.loadFileRepresentation(forTypeIdentifier: typeID) { [weak self] url, error in
                 defer { group.leave() }
-                guard let self, let data else { return }
+                guard let self, let url else { return }
 
-                let ext = UTType(typeID)?.preferredFilenameExtension ?? "jpg"
-                let originalName = "photo.\(ext)"
-                let exifDate = PhotoExporter.readEXIFDate(from: data) ?? Date()
+                let exifDate = PhotoExporter.readDate(from: url)
+                let originalName = url.lastPathComponent.isEmpty ? "photo.\(url.pathExtension)" : url.lastPathComponent
                 let filename = PhotoExporter.exportedFilename(originalName: originalName, date: exifDate)
 
                 let destURL = pendingDir.appendingPathComponent(filename)
                 do {
-                    try data.write(to: destURL, options: .atomic)
+                    try? FileManager.default.removeItem(at: destURL)
+                    try FileManager.default.copyItem(at: url, to: destURL)
 
                     // Read image URL prefix from shared defaults
                     let defaults = UserDefaults(suiteName: self.appGroupID)
@@ -126,8 +126,8 @@ private enum PhotoExporter {
         return ext.isEmpty ? "\(dateStr)-\(sanitised)" : "\(dateStr)-\(sanitised).\(ext)"
     }
 
-    static func readEXIFDate(from data: Data) -> Date? {
-        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
+    static func readEXIFDate(from url: URL) -> Date? {
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
               let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
               let exifDict = props[kCGImagePropertyExifDictionary as String] as? [String: Any],
               let dateString = exifDict[kCGImagePropertyExifDateTimeOriginal as String] as? String else {
@@ -137,6 +137,12 @@ private enum PhotoExporter {
         f.locale = Locale(identifier: "en_US_POSIX")
         f.dateFormat = "yyyy:MM:dd HH:mm:ss"
         return f.date(from: dateString)
+    }
+
+    static func readDate(from url: URL) -> Date {
+        if let d = readEXIFDate(from: url) { return d }
+        let attrs = try? FileManager.default.attributesOfItem(atPath: url.path)
+        return (attrs?[.creationDate] as? Date) ?? Date()
     }
 }
 

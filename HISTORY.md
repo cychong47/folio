@@ -4,6 +4,10 @@
 
 ## Released
 
+### Screenshot Date Fix
+- Screenshots and images without EXIF `DateTimeOriginal` (e.g. iOS screenshots) now use the file's creation date — which Photos.app preserves on export — instead of falling back to today's date
+- Applies to both drag-and-drop in the main app and the Share Extension
+
 ### Consistent Version Display
 - About window now shows "Version 1.0 (commithash)" — reads `CFBundleShortVersionString` from the bundle instead of the commit date
 - `CFBundleShortVersionString` in `project.yml` is the single source of truth for the version shown in About and checked by the updater

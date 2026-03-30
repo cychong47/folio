@@ -37,6 +37,15 @@ enum PhotoExporter {
         return exifDate(from: source)
     }
 
+    /// Best available date for any image: EXIF DateTimeOriginal when present (camera photos),
+    /// file creation date as fallback (screenshots and other non-EXIF images).
+    /// Photos.app preserves the original creation date when exporting via file promise or share.
+    static func readDate(from url: URL) -> Date {
+        if let d = readEXIFDate(from: url) { return d }
+        let attrs = try? FileManager.default.attributesOfItem(atPath: url.path)
+        return (attrs?[.creationDate] as? Date) ?? Date()
+    }
+
     private static func exifDate(from source: CGImageSource) -> Date? {
         guard let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
               let exifDict = props[kCGImagePropertyExifDictionary as String] as? [String: Any],

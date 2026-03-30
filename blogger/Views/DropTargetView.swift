@@ -130,7 +130,7 @@ class DropTargetView: NSView {
                 }
                 guard error == nil else { return }
 
-                let exifDate = PhotoExporter.readEXIFDate(from: url) ?? Date()
+                let exifDate = PhotoExporter.readDate(from: url)
                 let filename = PhotoExporter.exportedFilename(
                     originalName: url.lastPathComponent, date: exifDate)
                 let dest = stagingDir.appendingPathComponent(filename)
@@ -161,7 +161,7 @@ class DropTargetView: NSView {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             var photos: [ExportedPhoto] = []
             for (index, url) in urls.enumerated() {
-                let exifDate = PhotoExporter.readEXIFDate(from: url) ?? Date()
+                let exifDate = PhotoExporter.readDate(from: url)
                 let filename = PhotoExporter.exportedFilename(
                     originalName: url.lastPathComponent, date: exifDate)
                 let dest = stagingDir.appendingPathComponent(filename)
