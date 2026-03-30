@@ -37,13 +37,23 @@ enum GitHubPublisher {
         }
 
         // 1. Get current HEAD SHA
-        let refData = try await apiRequest("git/ref/heads/\(branch)")
+        let refData: [String: Any]
+        do {
+            refData = try await apiRequest("git/ref/heads/\(branch)")
+        } catch let e as GitHubError {
+            throw GitHubError(message: "Step 1 (get branch '\(branch)'): \(e.message)\n\nCheck: repo '\(repo)' is correct, branch '\(branch)' exists, and token has 'repo' scope.")
+        }
         guard let headSHA = (refData["object"] as? [String: Any])?["sha"] as? String else {
             throw GitHubError(message: "Could not read HEAD SHA for branch '\(branch)'")
         }
 
         // 2. Get base tree SHA from the commit
-        let commitData = try await apiRequest("git/commits/\(headSHA)")
+        let commitData: [String: Any]
+        do {
+            commitData = try await apiRequest("git/commits/\(headSHA)")
+        } catch let e as GitHubError {
+            throw GitHubError(message: "Step 2 (get commit): \(e.message)")
+        }
         guard let treeSHA = (commitData["tree"] as? [String: Any])?["sha"] as? String else {
             throw GitHubError(message: "Could not read tree SHA")
         }
@@ -51,10 +61,15 @@ enum GitHubPublisher {
         // 3. Create a blob for each file
         var treeItems: [[String: String]] = []
         for file in files {
-            let blobData = try await apiRequest("git/blobs", method: "POST", body: [
-                "content": file.data.base64EncodedString(),
-                "encoding": "base64"
-            ])
+            let blobData: [String: Any]
+            do {
+                blobData = try await apiRequest("git/blobs", method: "POST", body: [
+                    "content": file.data.base64EncodedString(),
+                    "encoding": "base64"
+                ])
+            } catch let e as GitHubError {
+                throw GitHubError(message: "Step 3 (upload '\(file.relativePath)'): \(e.message)")
+            }
             guard let blobSHA = blobData["sha"] as? String else {
                 throw GitHubError(message: "Could not create blob for \(file.relativePath)")
             }
@@ -62,29 +77,43 @@ enum GitHubPublisher {
         }
 
         // 4. Create a new tree on top of the base tree
-        let newTreeData = try await apiRequest("git/trees", method: "POST", body: [
-            "base_tree": treeSHA,
-            "tree": treeItems
-        ])
+        let newTreeData: [String: Any]
+        do {
+            newTreeData = try await apiRequest("git/trees", method: "POST", body: [
+                "base_tree": treeSHA,
+                "tree": treeItems
+            ])
+        } catch let e as GitHubError {
+            throw GitHubError(message: "Step 4 (create tree): \(e.message)")
+        }
         guard let newTreeSHA = newTreeData["sha"] as? String else {
             throw GitHubError(message: "Could not create tree")
         }
 
         // 5. Create the commit
-        let newCommitData = try await apiRequest("git/commits", method: "POST", body: [
-            "message": message,
-            "tree": newTreeSHA,
-            "parents": [headSHA]
-        ])
+        let newCommitData: [String: Any]
+        do {
+            newCommitData = try await apiRequest("git/commits", method: "POST", body: [
+                "message": message,
+                "tree": newTreeSHA,
+                "parents": [headSHA]
+            ])
+        } catch let e as GitHubError {
+            throw GitHubError(message: "Step 5 (create commit): \(e.message)")
+        }
         guard let newCommitSHA = newCommitData["sha"] as? String else {
             throw GitHubError(message: "Could not create commit")
         }
 
         // 6. Update the branch ref
-        _ = try await apiRequest("git/refs/heads/\(branch)", method: "PATCH", body: [
-            "sha": newCommitSHA,
-            "force": false
-        ])
+        do {
+            _ = try await apiRequest("git/refs/heads/\(branch)", method: "PATCH", body: [
+                "sha": newCommitSHA,
+                "force": false
+            ])
+        } catch let e as GitHubError {
+            throw GitHubError(message: "Step 6 (update ref): \(e.message)")
+        }
     }
 
     // MARK: - Auto-detect from .git/config

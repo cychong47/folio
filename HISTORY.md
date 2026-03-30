@@ -4,6 +4,9 @@
 
 ## Released
 
+### GitHub Publish: Better Error Messages
+- Each API step now reports which step failed with actionable hints (e.g. wrong repo, wrong branch, missing token scope)
+
 ### Welcome Screen Polish
 - "New Post" inline link no longer shows a focus ring on app launch
 
