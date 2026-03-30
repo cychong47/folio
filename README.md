@@ -212,7 +212,7 @@ blogger/
 ```yaml
 ---
 title: "My Post Title"
-date: "2026-03-07"
+date: "2026-03-07T14:05:00+09:00"
 draft: false
 categories: ["Vancouver"]
 tags: []

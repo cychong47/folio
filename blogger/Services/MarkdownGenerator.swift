@@ -3,7 +3,7 @@ import Foundation
 enum MarkdownGenerator {
     private static let dateFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
+        f.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXXXX"
         return f
     }()
 

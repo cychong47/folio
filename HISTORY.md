@@ -4,6 +4,10 @@
 
 ## Released
 
+### Full Timestamp in Frontmatter (closes #7)
+- Frontmatter `date:` field now includes time and timezone offset (e.g. `2026-03-30T14:05:00+09:00`) instead of date-only
+- Ensures posts published on the same day sort correctly in Hugo by time of creation
+
 ### GitHub Publish (closes #1)
 - "Publish" renamed to "Save" — writes the markdown file and images to disk, stays in editor
 - New "Publish" button appears after saving; commits and pushes only the saved files via the GitHub REST API (no git binary required)
