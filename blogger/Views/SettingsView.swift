@@ -409,6 +409,18 @@ private struct ProfileDetailPanel: View {
                             Spacer()
                         }
 
+                        HStack(spacing: 8) {
+                            Text("Privacy")
+                                .frame(width: 70, alignment: .trailing)
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                            Toggle("Strip GPS & device metadata", isOn: $draft.stripEXIF)
+                                .toggleStyle(.checkbox)
+                                .font(.callout)
+                            Spacer()
+                        }
+                        .padding(.top, 4)
+
                         Divider().padding(.vertical, 12)
 
                         HStack {

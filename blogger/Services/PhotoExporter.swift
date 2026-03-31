@@ -65,6 +65,7 @@ enum PhotoExporter {
     static func copyPendingToStatic(photos: [ExportedPhoto], settings: AppSettings) throws -> [URL] {
         let base = URL(fileURLWithPath: settings.staticImagesPath)
         let maxDim = settings.activeProfile?.maxImageDimension
+        let strip = settings.activeProfile?.stripEXIF ?? true
         var written: [URL] = []
         for photo in photos {
             // Resolve subpath per-photo using its EXIF date
@@ -76,7 +77,10 @@ enum PhotoExporter {
                 try FileManager.default.removeItem(at: dest)
             }
             if let maxDim, let resized = resized(url: photo.localURL, maxLongEdge: maxDim) {
-                try resized.write(to: dest)
+                let final = strip ? stripped(data: resized, url: photo.localURL) ?? resized : resized
+                try final.write(to: dest)
+            } else if strip, let stripped = stripped(url: photo.localURL) {
+                try stripped.write(to: dest)
             } else {
                 try FileManager.default.copyItem(at: photo.localURL, to: dest)
             }
@@ -84,6 +88,34 @@ enum PhotoExporter {
             written.append(dest)
         }
         return written
+    }
+
+    /// Re-encodes image data with GPS and sensitive EXIF fields removed.
+    private static func stripped(data: Data, url: URL) -> Data? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+        return strippedFromSource(source, url: url)
+    }
+
+    /// Re-encodes image at url with GPS and sensitive EXIF fields removed.
+    private static func stripped(url: URL) -> Data? {
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        return strippedFromSource(source, url: url)
+    }
+
+    private static func strippedFromSource(_ source: CGImageSource, url: URL) -> Data? {
+        guard let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) else { return nil }
+        let uti: CFString = url.pathExtension.lowercased() == "png" ? "public.png" : "public.jpeg"
+        let out = NSMutableData()
+        guard let dest = CGImageDestinationCreateWithData(out, uti, 1, nil) else { return nil }
+        // Pass nil properties to write the image with no metadata
+        let options: [CFString: Any] = [
+            kCGImageDestinationLossyCompressionQuality: 0.92,
+            kCGImageMetadataShouldExcludeGPS: true,
+            kCGImageMetadataShouldExcludeXMP: false
+        ]
+        CGImageDestinationAddImage(dest, cgImage, options as CFDictionary)
+        CGImageDestinationFinalize(dest)
+        return out as Data
     }
 
     /// Returns JPEG/PNG data for the image resized so its long edge ≤ maxLongEdge, or nil if no resize is needed.

@@ -4,6 +4,11 @@
 
 ## Released
 
+### Strip EXIF metadata on export (closes #30)
+- New "Strip GPS & device metadata" toggle in Settings → General → Image Export (on by default)
+- Removes GPS coordinates and device info from images before they are written to the Hugo static directory
+- DateTimeOriginal is preserved internally for filename generation but not written to the output file
+
 ### Cap exported image dimensions (closes #28)
 - Each blog profile can now set a maximum long-edge size (default: no limit) in Settings → General → Image Export
 - Images exceeding the limit are downscaled while preserving aspect ratio before being copied to the Hugo static directory

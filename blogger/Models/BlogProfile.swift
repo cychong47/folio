@@ -22,6 +22,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
     var githubBranch: String
     var customFrontmatterFields: [FrontmatterField]
     var maxImageDimension: Int?   // nil = no limit; otherwise max long-edge in pixels
+    var stripEXIF: Bool           // remove GPS, device, and owner metadata on export
 
     init(
         id: UUID = UUID(),
@@ -38,7 +39,8 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         githubRepo: String = "",
         githubBranch: String = "",
         customFrontmatterFields: [FrontmatterField] = [],
-        maxImageDimension: Int? = nil
+        maxImageDimension: Int? = nil,
+        stripEXIF: Bool = true
     ) {
         self.id = id
         self.name = name
@@ -55,6 +57,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         self.githubBranch = githubBranch
         self.customFrontmatterFields = customFrontmatterFields
         self.maxImageDimension = maxImageDimension
+        self.stripEXIF = stripEXIF
     }
 
     var isGitHubConfigured: Bool { !githubToken.isEmpty && !githubRepo.isEmpty }
