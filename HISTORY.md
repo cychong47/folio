@@ -4,6 +4,10 @@
 
 ## Released
 
+### Text + image preview panel (closes #14)
+- The right-hand panel now renders both the typed text and images in their document order, so you can see exactly how captions and images are laid out relative to each other
+- Text is displayed as plain text (no markdown formatting needed); images are rendered at full panel width
+
 ### Auto-scan for categories and series
 - New "Auto-scan" checkbox in Settings scans for categories and series every 30 minutes in the background while the app is running; persisted per blog profile
 - Manual "Scan Posts" button still available; a manual scan while an auto-scan is in progress cancels the auto result and applies the manual one instead

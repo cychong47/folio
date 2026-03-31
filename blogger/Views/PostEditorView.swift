@@ -350,6 +350,38 @@ struct PostEditorView: View {
         .background(Theme.background)
     }
 
+    private static let imageRefRegex = try! NSRegularExpression(pattern: #"^!\[\]\(([^)]+)\)$"#)
+
+    private var previewBlocks: [PostPreviewBlock] {
+        var blocks: [PostPreviewBlock] = []
+        var textLines: [String] = []
+        var index = 0
+
+        func flushText() {
+            let joined = textLines.joined(separator: "\n")
+            if !joined.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                blocks.append(PostPreviewBlock(id: index, kind: .text(joined)))
+                index += 1
+            }
+            textLines = []
+        }
+
+        for line in pendingPost.markdownBody.components(separatedBy: "\n") {
+            let range = NSRange(line.startIndex..., in: line)
+            if let match = Self.imageRefRegex.firstMatch(in: line, range: range),
+               let capRange = Range(match.range(at: 1), in: line),
+               let photo = pendingPost.photos.first(where: { $0.markdownPath == String(line[capRange]) }) {
+                flushText()
+                blocks.append(PostPreviewBlock(id: index, kind: .image(photo)))
+                index += 1
+            } else {
+                textLines.append(line)
+            }
+        }
+        flushText()
+        return blocks
+    }
+
     private var editorSection: some View {
         HSplitView {
             // Left: markdown editor
@@ -359,7 +391,7 @@ struct PostEditorView: View {
                 .scrollContentBackground(.hidden)
                 .background(Theme.background)
 
-            // Right: photo gallery
+            // Right: preview panel
             VStack(spacing: 0) {
                 // Staging path bar
                 HStack(spacing: 4) {
@@ -388,9 +420,27 @@ struct PostEditorView: View {
                 Divider().opacity(0.4)
 
                 ScrollView {
-                    LazyVStack(spacing: 12) {
-                        ForEach(pendingPost.photos) { photo in
-                            PhotoThumbnailView(photo: photo)
+                    LazyVStack(alignment: .leading, spacing: 16) {
+                        ForEach(previewBlocks) { block in
+                            switch block.kind {
+                            case .text(let content):
+                                Text(content.trimmingCharacters(in: .newlines))
+                                    .font(.callout)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.horizontal, 4)
+                            case .image(let photo):
+                                if let img = NSImage(contentsOf: photo.localURL) {
+                                    Image(nsImage: img)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .cornerRadius(8)
+                                } else {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color.secondary.opacity(0.08))
+                                        .frame(height: 100)
+                                        .overlay(Image(systemName: "photo").foregroundStyle(.secondary))
+                                }
+                            }
                         }
                     }
                     .padding(12)
@@ -630,4 +680,12 @@ struct PhotoThumbnailView: View {
         .cornerRadius(10)
         .shadow(color: .black.opacity(0.07), radius: 5, x: 0, y: 2)
     }
+}
+
+// MARK: - Preview Block Model
+
+struct PostPreviewBlock: Identifiable {
+    let id: Int
+    enum Kind { case text(String); case image(ExportedPhoto) }
+    let kind: Kind
 }

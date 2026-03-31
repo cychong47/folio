@@ -9,7 +9,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 - **Drag & drop from Photos.app or Finder** — uses `NSFilePromiseReceiver` to handle Photos.app drags
 - **EXIF date prefix** — filenames derived from `DateTimeOriginal` (e.g. `2026-03-05-IMG_1234.jpg`)
-- **Split-view post editor** — markdown editor on the left, photo thumbnails on the right
+- **Split-view post editor** — markdown editor on the left, live text+image preview on the right showing content in document order
 - **Hugo frontmatter** — auto-generated with title, date, categories, and image references
 - **Live slug** — filename slug auto-generated from title and kept in sync as you type
 - **Title validation** — Save is blocked with a red-bordered title field when title is left empty
