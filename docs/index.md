@@ -9,7 +9,7 @@ description: What's new in each version of Folio for macOS
 A native macOS app for creating [Hugo](https://gohugo.io/) blog posts from photos.
 Drag photos from Photos.app or Finder, write a post in the split-view editor, and publish directly to your Hugo site via the GitHub API.
 
-**[View all features →](features)**   &nbsp;|&nbsp;   **[Download latest release →](https://github.com/cychong47/blogger/releases/latest)**
+**[View all features →](features)**   &nbsp;|&nbsp;   **[Download latest release →](https://github.com/cychong47/folio/releases/latest)**
 
 ---
 
@@ -19,7 +19,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 ### v1.7
 
-- GitHub Pages release notes site at https://cychong47.github.io/blogger/ — auto-generated from HISTORY.md on every CI push
+- GitHub Pages release notes site at https://cychong47.github.io/folio/ — auto-generated from HISTORY.md on every CI push
 - Settings → Updates now shows a "Release Notes" link
 
 ---

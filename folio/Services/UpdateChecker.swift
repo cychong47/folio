@@ -17,7 +17,7 @@ final class UpdateChecker: ObservableObject {
     @Published var state: State = .idle
 
     let currentVersion: String
-    private static let releasesURL = URL(string: "https://api.github.com/repos/cychong47/blogger/releases/latest")!
+    private static let releasesURL = URL(string: "https://api.github.com/repos/cychong47/folio/releases/latest")!
 
     init() {
         currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"
