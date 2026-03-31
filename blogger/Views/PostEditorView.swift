@@ -526,6 +526,11 @@ struct PostEditorView: View {
                 )
                 await MainActor.run {
                     isPublishing = false
+                    if let last = pendingPost.lastPublished {
+                        let fm = FileManager.default
+                        try? fm.removeItem(at: last.markdownURL)
+                        for url in last.imageURLs { try? fm.removeItem(at: url) }
+                    }
                     pendingPost.lastPublished = nil
                     deleteStagingFiles()
                     pendingPost.clear()

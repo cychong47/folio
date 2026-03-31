@@ -4,6 +4,10 @@
 
 ## Released
 
+### Delete local post files after GitHub publish (closes #11)
+- After a successful GitHub publish, the markdown file and photo files written to the local Hugo repository are now deleted automatically
+- Prevents `git pull` from failing due to untracked/conflicting files left behind in the repo
+
 ### Empty default title with validation (closes #10)
 - Post title now defaults to empty instead of the photo date, prompting the user to enter a meaningful title
 - Clicking "Save" with an empty title highlights the title field with a red border instead of saving with a placeholder date
