@@ -8,6 +8,7 @@ struct PostEditorView: View {
     @State private var publishError: String?
     @State private var isPublishing = false
     @State private var showResetConfirm = false
+    @State private var titleIsInvalid = false
     @State private var newCategoryText = ""
     @State private var showNewCategoryField = false
     @State private var newTagText = ""
@@ -58,6 +59,7 @@ struct PostEditorView: View {
                 }
                 deleteStagingFiles()
                 pendingPost.clear()
+                titleIsInvalid = false
             }
             Button("Cancel", role: .cancel) {}
         } message: {
@@ -81,8 +83,15 @@ struct PostEditorView: View {
                 TextField("New post title…", text: $pendingPost.title)
                     .textFieldStyle(.plain)
                     .font(.title3.weight(.medium))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 4)
+                            .stroke(titleIsInvalid ? Color.red : Color.clear, lineWidth: 1.5)
+                            .padding(.horizontal, -4)
+                            .padding(.vertical, -2)
+                    )
                     .onChange(of: pendingPost.title) { newValue in
                         pendingPost.slug = SlugGenerator.slugify(newValue)
+                        if !newValue.isEmpty { titleIsInvalid = false }
                     }
             }
 
@@ -436,6 +445,10 @@ struct PostEditorView: View {
         publishError = nil
         guard settings.isConfigured else {
             publishError = "Configure paths in Settings first."
+            return
+        }
+        guard !pendingPost.title.isEmpty else {
+            titleIsInvalid = true
             return
         }
         guard !pendingPost.slug.isEmpty else {

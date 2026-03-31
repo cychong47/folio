@@ -4,6 +4,10 @@
 
 ## Released
 
+### Empty default title with validation (closes #10)
+- Post title now defaults to empty instead of the photo date, prompting the user to enter a meaningful title
+- Clicking "Save" with an empty title highlights the title field with a red border instead of saving with a placeholder date
+
 ### Sort drag-and-drop photos by filename (closes #9)
 - Photos dragged into the app are now sorted by filename in ascending order, preserving the original capture sequence within the same day
 

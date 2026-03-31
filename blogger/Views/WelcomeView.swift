@@ -81,10 +81,8 @@ struct WelcomeView: View {
 
     private func startTextPost() {
         let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let title = f.string(from: Date())
-        pendingPost.title = title
-        pendingPost.slug = SlugGenerator.slugify(title)
+        f.dateFormat = "yyyy-MM-dd"
+        pendingPost.slug = f.string(from: Date())
     }
 
     private func cancelLastPost() {

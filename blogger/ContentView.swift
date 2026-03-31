@@ -65,11 +65,10 @@ struct ContentView: View {
         let allPhotos = pendingPost.photos
         let date = allPhotos.first?.exifDate ?? Date()
 
-        if pendingPost.title.isEmpty {
+        if pendingPost.slug.isEmpty {
             let f = DateFormatter()
             f.dateFormat = "yyyy-MM-dd"
-            pendingPost.title = f.string(from: date)
-            pendingPost.slug = SlugGenerator.slugify(pendingPost.title)
+            pendingPost.slug = f.string(from: date)
         }
 
         pendingPost.markdownBody = MarkdownGenerator.initialBody(photos: allPhotos)

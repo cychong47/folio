@@ -64,11 +64,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             DispatchQueue.main.async {
                 post.photos = photos
                 let firstDate = photos.first?.exifDate ?? Date()
-                if post.title.isEmpty {
+                if post.slug.isEmpty {
                     let formatter = DateFormatter()
                     formatter.dateFormat = "yyyy-MM-dd"
-                    post.title = formatter.string(from: firstDate)
-                    post.slug = SlugGenerator.slugify(post.title)
+                    post.slug = formatter.string(from: firstDate)
                 }
                 post.markdownBody = MarkdownGenerator.initialBody(photos: photos)
             }
