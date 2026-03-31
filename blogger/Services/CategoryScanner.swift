@@ -31,6 +31,19 @@ enum CategoryScanner {
         return ScanResult(categories: categories.sorted(), series: series.sorted())
     }
 
+    /// Merges two sorted lists, deduplicating case-insensitively and stripping stray quotes.
+    static func merge(_ existing: [String], _ new: [String]) -> [String] {
+        let quoteChars = CharacterSet(charactersIn: "\"\'\u{201C}\u{201D}\u{2018}\u{2019}")
+        var seen = Set<String>()
+        var result: [String] = []
+        for item in existing + new {
+            let cleaned = item.trimmingCharacters(in: quoteChars)
+            guard !cleaned.isEmpty, seen.insert(cleaned.lowercased()).inserted else { continue }
+            result.append(cleaned)
+        }
+        return result.sorted()
+    }
+
     /// Parses the `categories:` value from a markdown frontmatter block.
     /// Handles both single-line `categories: ["Cat1", "Cat2"]` and
     /// multi-line YAML list format:

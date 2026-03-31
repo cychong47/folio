@@ -10,6 +10,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
     var staticImagesSubpath: String
     var knownCategories: [String]
     var knownSeries: [String]
+    var autoScanEnabled: Bool
     var githubToken: String
     var githubRepo: String
     var githubBranch: String
@@ -24,6 +25,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         staticImagesSubpath: String = "",
         knownCategories: [String] = [],
         knownSeries: [String] = [],
+        autoScanEnabled: Bool = false,
         githubToken: String = "",
         githubRepo: String = "",
         githubBranch: String = ""
@@ -37,6 +39,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         self.staticImagesSubpath = staticImagesSubpath
         self.knownCategories = knownCategories
         self.knownSeries = knownSeries
+        self.autoScanEnabled = autoScanEnabled
         self.githubToken = githubToken
         self.githubRepo = githubRepo
         self.githubBranch = githubBranch

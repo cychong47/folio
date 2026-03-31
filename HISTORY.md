@@ -4,6 +4,11 @@
 
 ## Released
 
+### Auto-scan for categories and series
+- New "Auto-scan" checkbox in Settings scans for categories and series every 30 minutes in the background while the app is running; persisted per blog profile
+- Manual "Scan Posts" button still available; a manual scan while an auto-scan is in progress cancels the auto result and applies the manual one instead
+- Scan timing info line shows elapsed time and counts after each scan (e.g. `42ms · 3 cats, 2 series`)
+
 ### OTA update flow fixed (closes #12)
 - CI workflow now publishes a GitHub Release (with `Blogger.zip` as an asset) on every push to `main`, so the in-app updater can find it via the GitHub Releases API
 - Version bumped to 1.1; `permissions: contents: write` added to the workflow so `GITHUB_TOKEN` can create/update releases

@@ -3,14 +3,40 @@ import Foundation
 class AppSettings: ObservableObject {
     private let defaults: UserDefaults
 
+    // MARK: - Scan state (published so views can observe)
+
+    struct ScanInfo {
+        let duration: TimeInterval
+        let categoryCount: Int
+        let seriesCount: Int
+        let date: Date
+
+        var displayText: String {
+            let t = duration < 1 ? "\(Int(duration * 1000))ms" : String(format: "%.2fs", duration)
+            return "\(t) · \(categoryCount) cat\(categoryCount == 1 ? "" : "s"), \(seriesCount) series"
+        }
+    }
+
+    @Published var isScanning = false
+    @Published var lastScanInfo: ScanInfo? = nil
+
+    private var scanGeneration = 0
+    private var autoScanTimer: Timer?
+    private var lastAppliedAutoScanEnabled: Bool? = nil  // nil = not yet applied
+
     @Published var profiles: [BlogProfile] {
-        didSet { saveProfiles() }
+        didSet {
+            saveProfiles()
+            applyAutoScan()
+        }
     }
 
     @Published var selectedProfileID: UUID? {
         didSet {
             defaults.set(selectedProfileID?.uuidString,
                          forKey: Constants.UserDefaultsKeys.selectedProfileID)
+            lastAppliedAutoScanEnabled = nil  // force re-evaluate for new profile
+            applyAutoScan()
         }
     }
 
@@ -66,6 +92,10 @@ class AppSettings: ObservableObject {
     var githubBranch: String {
         get { activeProfile?.githubBranch ?? "" }
         set { updateActiveProfile { $0.githubBranch = newValue } }
+    }
+    var autoScanEnabled: Bool {
+        get { activeProfile?.autoScanEnabled ?? false }
+        set { updateActiveProfile { $0.autoScanEnabled = newValue } }
     }
     var isConfigured: Bool { activeProfile?.isConfigured ?? false }
     var isGitHubConfigured: Bool { activeProfile?.isGitHubConfigured ?? false }
@@ -132,6 +162,8 @@ class AppSettings: ObservableObject {
                 self.selectedProfileID = nil
             }
         }
+        // Start auto-scan timer if a profile already has it enabled
+        applyAutoScan()
     }
 
     // MARK: - Persistence
@@ -162,5 +194,49 @@ class AppSettings: ObservableObject {
             .replacingOccurrences(of: "YYYY", with: year)
             .replacingOccurrences(of: "MM",   with: month)
             .replacingOccurrences(of: "DD",   with: day)
+    }
+
+    // MARK: - Scanning
+
+    /// Single entry point for both manual and automatic scans.
+    /// Each call increments `scanGeneration`; a completion whose captured generation
+    /// no longer matches is silently discarded, so a manual scan always wins over
+    /// an in-flight auto-scan and vice-versa.
+    func triggerScan() {
+        guard !contentPath.isEmpty else { return }
+        scanGeneration += 1
+        let gen = scanGeneration
+        isScanning = true
+        let path = contentPath
+        DispatchQueue.global(qos: .userInitiated).async {
+            let start = Date()
+            let result = CategoryScanner.scan(contentPath: path)
+            let duration = Date().timeIntervalSince(start)
+            DispatchQueue.main.async {
+                guard gen == self.scanGeneration else { return }
+                self.knownCategories = CategoryScanner.merge(self.knownCategories, result.categories)
+                self.knownSeries     = CategoryScanner.merge(self.knownSeries,     result.series)
+                self.lastScanInfo    = ScanInfo(duration: duration,
+                                               categoryCount: result.categories.count,
+                                               seriesCount: result.series.count,
+                                               date: Date())
+                self.isScanning = false
+            }
+        }
+    }
+
+    /// Starts or stops the 30-minute auto-scan timer based on the active profile's setting.
+    /// No-ops when the enabled state hasn't changed, so frequent `profiles.didSet` calls
+    /// from typing in other fields don't reset the countdown.
+    private func applyAutoScan() {
+        let enabled = autoScanEnabled
+        guard enabled != lastAppliedAutoScanEnabled else { return }
+        lastAppliedAutoScanEnabled = enabled
+        autoScanTimer?.invalidate()
+        autoScanTimer = nil
+        guard enabled, !contentPath.isEmpty else { return }
+        autoScanTimer = Timer.scheduledTimer(withTimeInterval: 30 * 60, repeats: true) { [weak self] _ in
+            self?.triggerScan()
+        }
     }
 }

@@ -8,20 +8,6 @@ private struct SettingsExport: Codable {
     var appTheme: String
 }
 
-// MARK: - mergeCategories (file-level helper)
-
-private func mergeCategories(_ existing: [String], _ new: [String]) -> [String] {
-    let quoteChars = CharacterSet(charactersIn: "\"\'\u{201C}\u{201D}\u{2018}\u{2019}")
-    var seen = Set<String>()
-    var result: [String] = []
-    for cat in existing + new {
-        let cleaned = cat.trimmingCharacters(in: quoteChars)
-        guard !cleaned.isEmpty, seen.insert(cleaned.lowercased()).inserted else { continue }
-        result.append(cleaned)
-    }
-    return result.sorted()
-}
-
 // MARK: - Root Settings (tab container)
 
 struct SettingsView: View {
@@ -49,7 +35,6 @@ private struct GeneralTab: View {
     @State private var editingProfileID: UUID? = nil
     @State private var profileToDelete: BlogProfile? = nil
     @State private var importError: String? = nil
-    @State private var isScanning = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -58,10 +43,7 @@ private struct GeneralTab: View {
                     editingProfileID: $editingProfileID,
                     profileToDelete: $profileToDelete
                 )
-                ProfileDetailPanel(
-                    editingProfileID: $editingProfileID,
-                    isScanning: $isScanning
-                )
+                ProfileDetailPanel(editingProfileID: $editingProfileID)
             }
 
             Divider()
@@ -251,7 +233,6 @@ private struct ProfileSidebarRow: View {
 private struct ProfileDetailPanel: View {
     @EnvironmentObject var settings: AppSettings
     @Binding var editingProfileID: UUID?
-    @Binding var isScanning: Bool
 
     @State private var draft = BlogProfile(name: "")
 
@@ -340,10 +321,19 @@ private struct ProfileDetailPanel: View {
                         HStack {
                             SectionLabel("Categories")
                             Spacer()
-                            Button(isScanning ? "Scanning…" : "Scan Posts") {
-                                scanCategories()
+                            if let info = settings.lastScanInfo {
+                                Text(info.displayText)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
                             }
-                            .disabled(draft.contentPath.isEmpty || isScanning)
+                            Toggle("Auto-scan", isOn: $draft.autoScanEnabled)
+                                .toggleStyle(.checkbox)
+                                .font(.caption)
+                                .disabled(draft.contentPath.isEmpty)
+                            Button(settings.isScanning ? "Scanning…" : "Scan Posts") {
+                                settings.triggerScan()
+                            }
+                            .disabled(draft.contentPath.isEmpty || settings.isScanning)
                         }
                         .padding(.bottom, 4)
 
@@ -473,22 +463,6 @@ private struct ProfileDetailPanel: View {
         if draft.githubBranch.isEmpty { draft.githubBranch = info.branch }
     }
 
-    private func scanCategories() {
-        guard let profileID = editingProfileID,
-              !draft.contentPath.isEmpty else { return }
-        let contentPath = draft.contentPath
-        isScanning = true
-        DispatchQueue.global(qos: .userInitiated).async {
-            let result = CategoryScanner.scan(contentPath: contentPath)
-            DispatchQueue.main.async {
-                // Only update draft — onChange(of: draft) writes back to settings
-                guard editingProfileID == profileID else { isScanning = false; return }
-                draft.knownCategories = mergeCategories(draft.knownCategories, result.categories)
-                draft.knownSeries = mergeCategories(draft.knownSeries, result.series)
-                isScanning = false
-            }
-        }
-    }
 }
 
 // MARK: - Appearance Tab
