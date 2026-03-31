@@ -4,6 +4,10 @@
 
 ## Released
 
+### OTA update flow fixed (closes #12)
+- CI workflow now publishes a GitHub Release (with `Blogger.zip` as an asset) on every push to `main`, so the in-app updater can find it via the GitHub Releases API
+- Version bumped to 1.1; `permissions: contents: write` added to the workflow so `GITHUB_TOKEN` can create/update releases
+
 ### Delete local post files after GitHub publish (closes #11)
 - After a successful GitHub publish, the markdown file and photo files written to the local Hugo repository are now deleted automatically
 - Prevents `git pull` from failing due to untracked/conflicting files left behind in the repo

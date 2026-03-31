@@ -18,12 +18,16 @@
 		7541537CC7770EEBC0FB1089 /* PhotoExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B230E412BF7E2A71C9BDB9 /* PhotoExporter.swift */; };
 		77CCD44FA2DC1E93161EBC8D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB9307E546CF780F4C4D77F /* SettingsView.swift */; };
 		85BFE8551284696B4FCA0420 /* SlugGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D167E3BBDB2DA89DA855AF0 /* SlugGenerator.swift */; };
+		8F544897CEFB26B4B7599D5A /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9139B2428189F5F8095B8CD5 /* Photos.framework */; };
 		AD5A941747405C84C2F97F55 /* PostEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85C967F3720B3665E530430 /* PostEditorView.swift */; };
 		AECF71FF08B739AF1A96C417 /* MarkdownGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3ECABBDBD629A0705789F72 /* MarkdownGenerator.swift */; };
 		AF813366FA22FBF8C39BBA7F /* PendingPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5132B1F992D1E39806DDB453 /* PendingPost.swift */; };
 		B06E87B5E6C2B55E38DB818C /* DropTargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1220F8FB461B75589DC7265 /* DropTargetView.swift */; };
+		C458E8EFBF8FE8F003D0DA0E /* PhotoLibraryDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B71E45C3C28203C9E6F3C9 /* PhotoLibraryDate.swift */; };
 		C4FCFBD1DD6761A33B0E798B /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B6E26B5BF84BFCE846D220 /* WelcomeView.swift */; };
+		C7A64E1A42AB710B370E4EC5 /* GitHubPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA1253A7A26733E8FA67D04C /* GitHubPublisher.swift */; };
 		D39CC53E11A77AF41D711A15 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7B5EFEF89109C760E9FD3CB /* ImageIO.framework */; };
+		DFB7D3B5E29D9711E4151AB0 /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837C615A7F100D0F92BBC5CB /* UpdateChecker.swift */; };
 		F50C1058A4E22E7E600B2813 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 155D6C9578C2BA1FD8879397 /* Assets.xcassets */; };
 		F71D07A2549F2C4608D5CC2D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0620724DE52ACDCD01B51CBF /* Theme.swift */; };
 		FF9AA02EA5D048996321BF1D /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C538679C063E36BAF48EDF16 /* ShareViewController.swift */; };
@@ -37,6 +41,7 @@
 		362006FED2645BD41AF8F85B /* BloggerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloggerApp.swift; sourceTree = "<group>"; };
 		3AB9307E546CF780F4C4D77F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3D167E3BBDB2DA89DA855AF0 /* SlugGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlugGenerator.swift; sourceTree = "<group>"; };
+		44B71E45C3C28203C9E6F3C9 /* PhotoLibraryDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryDate.swift; sourceTree = "<group>"; };
 		486D3444EACCC5BE08B9D6F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5132B1F992D1E39806DDB453 /* PendingPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingPost.swift; sourceTree = "<group>"; };
 		52B6E26B5BF84BFCE846D220 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
@@ -45,8 +50,11 @@
 		618D4FB4EF944E5FABA36A00 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7353E8871ABB6A3D09990D39 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		805440A92592DDE2FD1341D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		837C615A7F100D0F92BBC5CB /* UpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChecker.swift; sourceTree = "<group>"; };
+		9139B2428189F5F8095B8CD5 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		A76E8C6B19AB9018300E5821 /* BloggerShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BloggerShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1220F8FB461B75589DC7265 /* DropTargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropTargetView.swift; sourceTree = "<group>"; };
+		BA1253A7A26733E8FA67D04C /* GitHubPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubPublisher.swift; sourceTree = "<group>"; };
 		BD76A58DE1BD8D8333B55BB7 /* Blogger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blogger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0E86D73425A36828F85F667 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		C538679C063E36BAF48EDF16 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
@@ -67,6 +75,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DD64C5144A5B05D223653A6F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8F544897CEFB26B4B7599D5A /* Photos.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -74,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				F7B5EFEF89109C760E9FD3CB /* ImageIO.framework */,
+				9139B2428189F5F8095B8CD5 /* Photos.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -82,10 +99,13 @@
 			isa = PBXGroup;
 			children = (
 				5452EDD7EEB33FDE32F4CFC6 /* CategoryScanner.swift */,
+				BA1253A7A26733E8FA67D04C /* GitHubPublisher.swift */,
 				E3ECABBDBD629A0705789F72 /* MarkdownGenerator.swift */,
 				C5B230E412BF7E2A71C9BDB9 /* PhotoExporter.swift */,
+				44B71E45C3C28203C9E6F3C9 /* PhotoLibraryDate.swift */,
 				2E52C4F20A2A62A64FC0C6F9 /* SharedContainerService.swift */,
 				3D167E3BBDB2DA89DA855AF0 /* SlugGenerator.swift */,
+				837C615A7F100D0F92BBC5CB /* UpdateChecker.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -194,6 +214,7 @@
 				D44E5A43F954D4230AC0580F /* Generate BuildInfo */,
 				7A05F451C204457494A64A66 /* Sources */,
 				2D2CFF4570C65CF0169FA683 /* Resources */,
+				DD64C5144A5B05D223653A6F /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -300,14 +321,17 @@
 				58EF1896AF84E924A05ACF2A /* Constants.swift in Sources */,
 				70976E97AA613B3F0036E75D /* ContentView.swift in Sources */,
 				B06E87B5E6C2B55E38DB818C /* DropTargetView.swift in Sources */,
+				C7A64E1A42AB710B370E4EC5 /* GitHubPublisher.swift in Sources */,
 				AECF71FF08B739AF1A96C417 /* MarkdownGenerator.swift in Sources */,
 				AF813366FA22FBF8C39BBA7F /* PendingPost.swift in Sources */,
 				7541537CC7770EEBC0FB1089 /* PhotoExporter.swift in Sources */,
+				C458E8EFBF8FE8F003D0DA0E /* PhotoLibraryDate.swift in Sources */,
 				AD5A941747405C84C2F97F55 /* PostEditorView.swift in Sources */,
 				77CCD44FA2DC1E93161EBC8D /* SettingsView.swift in Sources */,
 				2A2F6ED7BB5EF8C5BC2A08D6 /* SharedContainerService.swift in Sources */,
 				85BFE8551284696B4FCA0420 /* SlugGenerator.swift in Sources */,
 				F71D07A2549F2C4608D5CC2D /* Theme.swift in Sources */,
+				DFB7D3B5E29D9711E4151AB0 /* UpdateChecker.swift in Sources */,
 				C4FCFBD1DD6761A33B0E798B /* WelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

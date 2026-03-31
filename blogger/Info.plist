@@ -33,6 +33,8 @@
 	<string>1</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>13.0</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Blogger reads photo dates to set the correct date on your blog posts.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

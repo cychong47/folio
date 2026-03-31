@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: macos-15
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -50,3 +52,18 @@ jobs:
           name: Blogger-macOS
           path: Blogger.zip
           retention-days: 30
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(grep 'CFBundleShortVersionString' project.yml | head -1 | sed 's/.*"\(.*\)".*/\1/')
+          TAG="v${VERSION}"
+          if gh release view "$TAG" &>/dev/null; then
+            gh release upload "$TAG" Blogger.zip --clobber
+          else
+            gh release create "$TAG" Blogger.zip \
+              --title "Blogger ${TAG}" \
+              --notes "Release ${TAG}" \
+              --latest
+          fi
