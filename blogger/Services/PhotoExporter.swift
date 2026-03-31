@@ -104,7 +104,7 @@ enum PhotoExporter {
 
     private static func strippedFromSource(_ source: CGImageSource, url: URL) -> Data? {
         guard let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) else { return nil }
-        let uti: CFString = url.pathExtension.lowercased() == "png" ? "public.png" : "public.jpeg"
+        let uti: CFString = (url.pathExtension.lowercased() == "png" ? "public.png" : "public.jpeg") as CFString
         let out = NSMutableData()
         guard let dest = CGImageDestinationCreateWithData(out, uti, 1, nil) else { return nil }
         // Pass nil properties to write the image with no metadata
@@ -135,7 +135,7 @@ enum PhotoExporter {
         ) else { return nil }
         ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: newW, height: newH))
         guard let outImage = ctx.makeImage() else { return nil }
-        let uti: CFString = url.pathExtension.lowercased() == "png" ? "public.png" : "public.jpeg"
+        let uti: CFString = (url.pathExtension.lowercased() == "png" ? "public.png" : "public.jpeg") as CFString
         let data = NSMutableData()
         guard let imgDest = CGImageDestinationCreateWithData(data, uti, 1, nil) else { return nil }
         CGImageDestinationAddImage(imgDest, outImage, [kCGImageDestinationLossyCompressionQuality: 0.85] as CFDictionary)
