@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Features
-description: Full feature list for Blogger — a native macOS app for creating Hugo blog posts from photos
+description: Full feature list for Folio — a native macOS app for creating Hugo blog posts from photos
 ---
 
 # Features

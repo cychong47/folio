@@ -1,4 +1,4 @@
-name: Build Blogger
+name: Build Folio
 
 on:
   push:
@@ -30,8 +30,8 @@ jobs:
       - name: Build
         run: |
           xcodebuild \
-            -project Blogger.xcodeproj \
-            -scheme Blogger \
+            -project Folio.xcodeproj \
+            -scheme Folio \
             -configuration Release \
             -derivedDataPath build \
             -destination "platform=macOS" \
@@ -44,15 +44,15 @@ jobs:
 
       - name: Package app
         run: |
-          APP_PATH=$(find build -name "Blogger.app" -type d | head -1)
+          APP_PATH=$(find build -name "Folio.app" -type d | head -1)
           echo "Found: $APP_PATH"
-          ditto -c -k --keepParent "$APP_PATH" Blogger.zip
+          ditto -c -k --keepParent "$APP_PATH" Folio.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Blogger-macOS
-          path: Blogger.zip
+          name: Folio-macOS
+          path: Folio.zip
           retention-days: 30
 
       - name: Publish GitHub Release
@@ -62,10 +62,10 @@ jobs:
           VERSION=$(grep 'CFBundleShortVersionString' project.yml | head -1 | sed 's/.*"\(.*\)".*/\1/')
           TAG="v${VERSION}"
           if gh release view "$TAG" &>/dev/null; then
-            gh release upload "$TAG" Blogger.zip --clobber
+            gh release upload "$TAG" Folio.zip --clobber
           else
-            gh release create "$TAG" Blogger.zip \
-              --title "Blogger ${TAG}" \
+            gh release create "$TAG" Folio.zip \
+              --title "Folio ${TAG}" \
               --notes "Release ${TAG}" \
               --latest
           fi

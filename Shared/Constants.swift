@@ -1,9 +1,9 @@
 // Constants.swift — Shared between main app and Share Extension
 
 enum Constants {
-    static let appGroupID = "group.com.blogger.app"
-    static let urlScheme = "blogger"
-    static let newPostURL = "blogger://new-post"
+    static let appGroupID = "group.com.folio.app"
+    static let urlScheme = "folio"
+    static let newPostURL = "folio://new-post"
 
     enum AppGroup {
         static let pendingDirectory = "pending"

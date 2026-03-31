@@ -1,4 +1,4 @@
-# Blogger
+# Folio
 
 A native macOS app for creating [Hugo](https://gohugo.io/) blog posts from photos.
 Drag photos from Photos.app or Finder, write a post in the split-view editor, and publish directly to your Hugo site.
@@ -57,7 +57,7 @@ The image URL prefix (used in markdown `![]()` references) is automatically deri
 
 **Transferring settings to another Mac:**
 
-- **Export Settings…** — saves all profiles to a `blogger-settings.json` file you can copy anywhere.
+- **Export Settings…** — saves all profiles to a `folio-settings.json` file you can copy anywhere.
 - **Import Settings…** — restores all profiles from a previously exported JSON file.
 
 ---
@@ -123,12 +123,12 @@ Settings are stored in **macOS UserDefaults** as a `.plist` file — no SQLite, 
 
 **File location:**
 ```
-~/Library/Group Containers/group.com.blogger.app/Library/Preferences/group.com.blogger.app.plist
+~/Library/Group Containers/group.com.folio.app/Library/Preferences/group.com.folio.app.plist
 ```
 
 **Inspect from Terminal:**
 ```bash
-defaults read group.com.blogger.app
+defaults read group.com.folio.app
 ```
 
 **Keys stored:**
@@ -143,7 +143,7 @@ defaults read group.com.blogger.app
 | `knownCategories` | [String] | `[]` | Categories collected from existing posts |
 
 **Why App Group UserDefaults?**
-The preference suite `group.com.blogger.app` was designed to be shared between the main app and a Share Extension (so both targets can read the same settings). The data lands in `~/Library/Group Containers/` rather than the standard `~/Library/Preferences/`.
+The preference suite `group.com.folio.app` was designed to be shared between the main app and a Share Extension (so both targets can read the same settings). The data lands in `~/Library/Group Containers/` rather than the standard `~/Library/Preferences/`.
 
 ---
 
@@ -153,13 +153,13 @@ The project uses [xcodegen](https://github.com/yonaskolb/XcodeGen) to generate t
 
 ### GitHub Actions (recommended)
 
-Push to `main` — the [build workflow](.github/workflows/build.yml) runs automatically on a macOS runner, builds the app unsigned, and uploads `Blogger.zip` as a downloadable artifact.
+Push to `main` — the [build workflow](.github/workflows/build.yml) runs automatically on a macOS runner, builds the app unsigned, and uploads `Folio.zip` as a downloadable artifact.
 
-1. Go to **Actions** → latest **Build Blogger** run → **Artifacts** → download `Blogger.zip`
-2. Unzip and move `Blogger.app` to `/Applications`
+1. Go to **Actions** → latest **Build Folio** run → **Artifacts** → download `Folio.zip`
+2. Unzip and move `Folio.app` to `/Applications`
 3. On first launch macOS may block the app. Go to **System Settings → Privacy & Security** and click **Open Anyway**, or run:
    ```bash
-   xattr -dr com.apple.quarantine /Applications/Blogger.app
+   xattr -dr com.apple.quarantine /Applications/Folio.app
    ```
 
 ### Local (no Xcode required)
@@ -173,7 +173,7 @@ unzip /tmp/xcodegen.zip -d /tmp/xcodegen_bin
 
 # Generate project and build
 /tmp/xcodegen_bin/xcodegen/bin/xcodegen generate
-xcodebuild -project Blogger.xcodeproj -scheme Blogger \
+xcodebuild -project Folio.xcodeproj -scheme Folio \
   -configuration Release CODE_SIGNING_ALLOWED=NO \
   -derivedDataPath build
 ```
@@ -188,8 +188,8 @@ blogger/
 ├── .github/workflows/build.yml          # GitHub Actions CI build
 ├── Shared/
 │   └── Constants.swift                  # App Group ID, URL scheme, UserDefaults keys
-├── blogger/                             # Main app target
-│   ├── BloggerApp.swift                 # App entry point, URL scheme handler
+├── folio/                               # Main app target
+│   ├── FolioApp.swift                   # App entry point, URL scheme handler
 │   ├── ContentView.swift                # Root view (editor or welcome screen)
 │   ├── Models/
 │   │   ├── AppSettings.swift            # UserDefaults-backed settings (ObservableObject)
@@ -205,7 +205,7 @@ blogger/
 │       ├── CategoryScanner.swift        # Scans .md files to extract categories
 │       ├── SlugGenerator.swift          # String → URL-safe slug
 │       └── SharedContainerService.swift # App Group container read/write helpers
-└── BloggerShareExtension/               # Share Extension target (Photos.app integration)
+└── FolioShareExtension/                 # Share Extension target (Photos.app integration)
     ├── ShareViewController.swift
     └── Info.plist
 ```

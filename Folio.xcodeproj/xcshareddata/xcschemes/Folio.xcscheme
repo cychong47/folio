@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "322D566021E5A6EDEA3EC0ED"
-               BuildableName = "Blogger.app"
-               BlueprintName = "Blogger"
-               ReferencedContainer = "container:Blogger.xcodeproj">
+               BlueprintIdentifier = "0C56AF64BE26DB444D566E60"
+               BuildableName = "Folio.app"
+               BlueprintName = "Folio"
+               ReferencedContainer = "container:Folio.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,10 +29,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "014E939304177918C7029FEA"
-               BuildableName = "BloggerShareExtension.appex"
-               BlueprintName = "BloggerShareExtension"
-               ReferencedContainer = "container:Blogger.xcodeproj">
+               BlueprintIdentifier = "E5EACF0ABE062ADC0EBB854F"
+               BuildableName = "FolioShareExtension.appex"
+               BlueprintName = "FolioShareExtension"
+               ReferencedContainer = "container:Folio.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,10 +46,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "322D566021E5A6EDEA3EC0ED"
-            BuildableName = "Blogger.app"
-            BlueprintName = "Blogger"
-            ReferencedContainer = "container:Blogger.xcodeproj">
+            BlueprintIdentifier = "0C56AF64BE26DB444D566E60"
+            BuildableName = "Folio.app"
+            BlueprintName = "Folio"
+            ReferencedContainer = "container:Folio.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -71,10 +71,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "322D566021E5A6EDEA3EC0ED"
-            BuildableName = "Blogger.app"
-            BlueprintName = "Blogger"
-            ReferencedContainer = "container:Blogger.xcodeproj">
+            BlueprintIdentifier = "0C56AF64BE26DB444D566E60"
+            BuildableName = "Folio.app"
+            BlueprintName = "Folio"
+            ReferencedContainer = "container:Folio.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -90,10 +90,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "322D566021E5A6EDEA3EC0ED"
-            BuildableName = "Blogger.app"
-            BlueprintName = "Blogger"
-            ReferencedContainer = "container:Blogger.xcodeproj">
+            BlueprintIdentifier = "0C56AF64BE26DB444D566E60"
+            BuildableName = "Folio.app"
+            BlueprintName = "Folio"
+            ReferencedContainer = "container:Folio.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>

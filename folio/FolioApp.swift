@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct BloggerApp: App {
+struct FolioApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var settings = AppSettings()
     @StateObject private var pendingPost = PendingPost()
@@ -31,7 +31,7 @@ struct BloggerApp: App {
         }
         .commands {
             CommandGroup(replacing: .appInfo) {
-                Button("About Blogger") {
+                Button("About Folio") {
                     let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
                     NSApp.orderFrontStandardAboutPanel(options: [
                         .applicationVersion: version,
@@ -72,7 +72,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 post.markdownBody = MarkdownGenerator.initialBody(photos: photos)
             }
         } catch {
-            print("[Blogger] Failed to load pending post: \(error)")
+            print("[Folio] Failed to load pending post: \(error)")
         }
     }
 }

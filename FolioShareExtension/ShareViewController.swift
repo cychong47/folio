@@ -5,8 +5,8 @@ import ImageIO
 class ShareViewController: NSViewController {
     override var nibName: NSNib.Name? { return NSNib.Name("ShareViewController") }
 
-    private let appGroupID = "group.com.blogger.app"
-    private let urlScheme = "blogger://new-post"
+    private let appGroupID = "group.com.folio.app"
+    private let urlScheme = "folio://new-post"
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -104,7 +104,7 @@ private struct GeneralTab: View {
         guard let data = try? JSONEncoder().encode(snapshot) else { return }
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.json]
-        panel.nameFieldStringValue = "blogger-settings.json"
+        panel.nameFieldStringValue = "folio-settings.json"
         panel.prompt = "Export"
         if panel.runModal() == .OK, let url = panel.url {
             try? data.write(to: url)
@@ -687,7 +687,7 @@ private struct UpdatesTab: View {
         case .upToDate:
             HStack(spacing: 8) {
                 Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                Text("Blogger is up to date.")
+                Text("Folio is up to date.")
                 Button("Check Again") { checker.checkForUpdates() }
                     .buttonStyle(.plain)
                     .foregroundStyle(Theme.accent)
@@ -708,7 +708,7 @@ private struct UpdatesTab: View {
                         checker.downloadAndInstall(downloadURL: downloadURL)
                     }
                     .buttonStyle(.borderedProminent)
-                    Text("The update will be extracted automatically. Drag Blogger.app to Applications to complete the install.")
+                    Text("The update will be extracted automatically. Drag Folio.app to Applications to complete the install.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -727,7 +727,7 @@ private struct UpdatesTab: View {
                     Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
                     Text("Update downloaded.").fontWeight(.medium)
                 }
-                Text("Drag Blogger.app from the opened Finder window to your Applications folder, then relaunch.")
+                Text("Drag Folio.app from the opened Finder window to your Applications folder, then relaunch.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

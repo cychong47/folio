@@ -14,21 +14,21 @@ class DropTargetView: NSView {
     private let promiseQueue: OperationQueue = {
         let q = OperationQueue()
         q.maxConcurrentOperationCount = 1
-        q.name = "com.blogger.filepromise"
+        q.name = "com.folio.filepromise"
         return q
     }()
 
     private var stagingDirectory: URL {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        return appSupport.appendingPathComponent("Blogger/pending", isDirectory: true)
+        return appSupport.appendingPathComponent("Folio/pending", isDirectory: true)
     }
 
     private var imageURLPrefix: String {
-        UserDefaults(suiteName: "group.com.blogger.app")?.string(forKey: "imageURLPrefix") ?? "/images"
+        UserDefaults(suiteName: "group.com.folio.app")?.string(forKey: "imageURLPrefix") ?? "/images"
     }
 
     private var staticImagesSubpath: String {
-        UserDefaults(suiteName: "group.com.blogger.app")?.string(forKey: "staticImagesSubpath") ?? ""
+        UserDefaults(suiteName: "group.com.folio.app")?.string(forKey: "staticImagesSubpath") ?? ""
     }
 
     // Static so it can be called from escaping closures without capturing self

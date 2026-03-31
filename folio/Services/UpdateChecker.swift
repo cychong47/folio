@@ -74,7 +74,7 @@ final class UpdateChecker: ObservableObject {
         do {
             let (tempURL, _) = try await URLSession.shared.download(from: url)
             let dest = FileManager.default.temporaryDirectory
-                .appendingPathComponent("Blogger-update.zip")
+                .appendingPathComponent("Folio-update.zip")
             try? FileManager.default.removeItem(at: dest)
             try FileManager.default.moveItem(at: tempURL, to: dest)
             NSWorkspace.shared.open(dest)

@@ -1,10 +1,10 @@
 ---
 layout: default
 title: Release Notes
-description: What's new in each version of Blogger for macOS
+description: What's new in each version of Folio for macOS
 ---
 
-# Blogger for macOS
+# Folio for macOS
 
 A native macOS app for creating [Hugo](https://gohugo.io/) blog posts from photos.
 Drag photos from Photos.app or Finder, write a post in the split-view editor, and publish directly to your Hugo site via the GitHub API.

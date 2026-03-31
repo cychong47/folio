@@ -22,7 +22,7 @@ struct PostEditorView: View {
 
     private var stagingDirectory: URL {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        return appSupport.appendingPathComponent("Blogger/pending", isDirectory: true)
+        return appSupport.appendingPathComponent("Folio/pending", isDirectory: true)
     }
 
     private var postDate: Date { pendingPost.postDate }

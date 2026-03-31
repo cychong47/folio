@@ -1,4 +1,4 @@
-# Blogger — Project Instructions for Claude
+# Folio — Project Instructions for Claude
 
 ## After every enhancement or bug-fix
 1. Update `HISTORY.md` — add a bullet under `### vX.Y` (the current version) in the `Released` section. Use the format: `- Short description — detail (closes #N)`.
@@ -18,7 +18,7 @@ Do NOT add free-form sections without a version heading. `docs/index.md` is auto
 ## Code conventions
 - Deployment target: **macOS 13.0** — use `.onChange(of:) { newValue in }` (1-arg), not the 2-arg form.
 - No `#Preview` macros (breaks swiftc CLI typecheck).
-- All design tokens (colours, spacing) live in `blogger/Views/Theme.swift`.
+- All design tokens (colours, spacing) live in `folio/Views/Theme.swift`.
 - Run xcodegen with `/tmp/xcodegen_bin/xcodegen/bin/xcodegen generate` (no brew).
 
 ## Project structure reminders
