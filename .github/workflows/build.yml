@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install xcodegen
         run: |
@@ -66,4 +68,34 @@ jobs:
               --title "Blogger ${TAG}" \
               --notes "Release ${TAG}" \
               --latest
+          fi
+
+      - name: Update release notes page
+        run: |
+          python3 - <<'PYEOF'
+          import re
+          with open("HISTORY.md") as f:
+              content = f.read()
+          content = re.sub(r'^# .+?\n\n---\n\n', '', content, count=1)
+          page = """---
+layout: default
+title: Release Notes
+description: What's new in each version of Blogger for macOS
+---
+
+# Release Notes
+
+""" + content
+          with open("docs/index.md", "w") as f:
+              f.write(page)
+          PYEOF
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/index.md
+          if git diff --cached --quiet; then
+            echo "Release notes unchanged, skipping commit"
+          else
+            git commit -m "Update release notes page [skip ci]"
+            git push
           fi

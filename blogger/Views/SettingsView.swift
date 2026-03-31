@@ -654,6 +654,14 @@ private struct UpdatesTab: View {
                     .padding(.leading, 12)
             }
 
+            HStack(spacing: 0) {
+                Text("Release Notes")
+                    .frame(width: 150, alignment: .trailing)
+                    .foregroundStyle(.secondary)
+                Link("cychong47.github.io/blogger", destination: URL(string: "https://cychong47.github.io/blogger")!)
+                    .padding(.leading, 12)
+            }
+
             Divider()
 
             statusView

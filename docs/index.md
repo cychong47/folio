@@ -1,12 +1,12 @@
-# Blogger — Change History
-
+---
+layout: default
+title: Release Notes
+description: What's new in each version of Blogger for macOS
 ---
 
-## Released
+# Release Notes
 
-### GitHub Pages release notes site
-- Added a public release notes page at https://cychong47.github.io/blogger/ auto-generated from HISTORY.md on every CI push
-- Settings → Updates now shows a "Release Notes" link that opens the page in the browser
+## Released
 
 ### Strip EXIF metadata on export (closes #30)
 - New "Strip GPS & device metadata" toggle in Settings → General → Image Export (on by default)
