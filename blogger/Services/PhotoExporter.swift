@@ -64,6 +64,7 @@ enum PhotoExporter {
     @discardableResult
     static func copyPendingToStatic(photos: [ExportedPhoto], settings: AppSettings) throws -> [URL] {
         let base = URL(fileURLWithPath: settings.staticImagesPath)
+        let maxDim = settings.activeProfile?.maxImageDimension
         var written: [URL] = []
         for photo in photos {
             // Resolve subpath per-photo using its EXIF date
@@ -74,10 +75,39 @@ enum PhotoExporter {
             if FileManager.default.fileExists(atPath: dest.path) {
                 try FileManager.default.removeItem(at: dest)
             }
-            try FileManager.default.copyItem(at: photo.localURL, to: dest)
+            if let maxDim, let resized = resized(url: photo.localURL, maxLongEdge: maxDim) {
+                try resized.write(to: dest)
+            } else {
+                try FileManager.default.copyItem(at: photo.localURL, to: dest)
+            }
             try FileManager.default.setAttributes([.posixPermissions: 0o644], ofItemAtPath: dest.path)
             written.append(dest)
         }
         return written
+    }
+
+    /// Returns JPEG/PNG data for the image resized so its long edge ≤ maxLongEdge, or nil if no resize is needed.
+    private static func resized(url: URL, maxLongEdge: Int) -> Data? {
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
+              let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) else { return nil }
+        let w = cgImage.width, h = cgImage.height
+        guard max(w, h) > maxLongEdge else { return nil }
+        let scale = CGFloat(maxLongEdge) / CGFloat(max(w, h))
+        let newW = Int((CGFloat(w) * scale).rounded())
+        let newH = Int((CGFloat(h) * scale).rounded())
+        guard let ctx = CGContext(
+            data: nil, width: newW, height: newH,
+            bitsPerComponent: 8, bytesPerRow: 0,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue
+        ) else { return nil }
+        ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: newW, height: newH))
+        guard let outImage = ctx.makeImage() else { return nil }
+        let uti: CFString = url.pathExtension.lowercased() == "png" ? "public.png" : "public.jpeg"
+        let data = NSMutableData()
+        guard let imgDest = CGImageDestinationCreateWithData(data, uti, 1, nil) else { return nil }
+        CGImageDestinationAddImage(imgDest, outImage, [kCGImageDestinationLossyCompressionQuality: 0.85] as CFDictionary)
+        CGImageDestinationFinalize(imgDest)
+        return data as Data
     }
 }

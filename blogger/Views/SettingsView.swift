@@ -376,6 +376,41 @@ private struct ProfileDetailPanel: View {
 
                         Divider().padding(.vertical, 12)
 
+                        SectionLabel("Image Export")
+                            .padding(.bottom, 6)
+
+                        HStack(spacing: 8) {
+                            Text("Max size")
+                                .frame(width: 70, alignment: .trailing)
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                            let isLimited = draft.maxImageDimension != nil
+                            Toggle("", isOn: Binding(
+                                get: { isLimited },
+                                set: { draft.maxImageDimension = $0 ? 1920 : nil }
+                            ))
+                            .toggleStyle(.checkbox)
+                            .labelsHidden()
+                            if let dim = draft.maxImageDimension {
+                                TextField("px", value: Binding(
+                                    get: { dim },
+                                    set: { draft.maxImageDimension = max(100, $0) }
+                                ), formatter: NumberFormatter())
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 70)
+                                Text("px (long edge)")
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                Text("No limit")
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                        }
+
+                        Divider().padding(.vertical, 12)
+
                         HStack {
                             SectionLabel("Custom Frontmatter")
                             Spacer()

@@ -4,6 +4,11 @@
 
 ## Released
 
+### Cap exported image dimensions (closes #28)
+- Each blog profile can now set a maximum long-edge size (default: no limit) in Settings → General → Image Export
+- Images exceeding the limit are downscaled while preserving aspect ratio before being copied to the Hugo static directory
+- Images already within the limit are copied unchanged
+
 ### Custom frontmatter fields per profile (closes #23)
 - Each blog profile can now define extra key/value pairs (e.g. `author`, `description`, `og_image`) in Settings → General → Custom Frontmatter
 - Fields are appended to every post's frontmatter at Save time

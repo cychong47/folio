@@ -21,6 +21,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
     var githubRepo: String
     var githubBranch: String
     var customFrontmatterFields: [FrontmatterField]
+    var maxImageDimension: Int?   // nil = no limit; otherwise max long-edge in pixels
 
     init(
         id: UUID = UUID(),
@@ -36,7 +37,8 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         githubToken: String = "",
         githubRepo: String = "",
         githubBranch: String = "",
-        customFrontmatterFields: [FrontmatterField] = []
+        customFrontmatterFields: [FrontmatterField] = [],
+        maxImageDimension: Int? = nil
     ) {
         self.id = id
         self.name = name
@@ -52,6 +54,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         self.githubRepo = githubRepo
         self.githubBranch = githubBranch
         self.customFrontmatterFields = customFrontmatterFields
+        self.maxImageDimension = maxImageDimension
     }
 
     var isGitHubConfigured: Bool { !githubToken.isEmpty && !githubRepo.isEmpty }

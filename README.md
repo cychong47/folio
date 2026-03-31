@@ -21,6 +21,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Image file permissions** — copied images set to `0644` so web servers (nginx) can serve them
 - **Multi-blog profiles** — manage multiple Hugo sites; each profile has its own paths, subpath templates, categories, and custom frontmatter fields; switch active blog in the post editor
 - **Custom frontmatter fields** — define extra key/value pairs per profile (e.g. `author`, `description`) appended to every post's frontmatter
+- **Image resize cap** — set a max long-edge dimension per profile; images are downscaled on export to keep the Hugo site lean
 - **Settings export / import** — transfer all profiles and configuration to another Mac via a JSON file
 - **Theme switcher** — System / Light / Dark, fully adaptive warm-cream / dark-charcoal palette
 - **Tabbed Settings window** — General (master-detail) and Appearance tabs; categories management merged into the General detail panel
