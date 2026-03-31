@@ -74,18 +74,35 @@ jobs:
         run: |
           python3 - <<'PYEOF'
           import re
+
           with open("HISTORY.md") as f:
               content = f.read()
-          content = re.sub(r'^# .+?\n\n---\n\n', '', content, count=1)
-          page = """---
-layout: default
-title: Release Notes
-description: What's new in each version of Blogger for macOS
----
 
-# Release Notes
+          # Extract the Released section
+          m = re.search(r'## Released\n\n(.*?)(?=\n---\n|\n## Upcoming|$)', content, re.DOTALL)
+          released = m.group(1).strip() if m else ""
 
-""" + content
+          # Parse each ### vX.Y block
+          blocks = re.split(r'\n(?=### v)', released)
+          sections = []
+          for block in blocks:
+              block = block.strip()
+              if not block:
+                  continue
+              lines = block.split('\n')
+              heading = lines[0]          # e.g. "### v1.7"
+              body = '\n'.join(lines[1:]).strip()
+              sections.append(f"{heading}\n\n{body}")
+
+          releases_md = "\n\n---\n\n".join(sections)
+
+          # Read the static header (everything up to and including the AUTO-GENERATED comment)
+          with open("docs/index.md") as f:
+              header = f.read()
+          header = re.sub(r'\n<!-- AUTO-GENERATED.*', '', header, flags=re.DOTALL).rstrip()
+
+          page = header + "\n\n<!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->\n\n" + releases_md + "\n"
+
           with open("docs/index.md", "w") as f:
               f.write(page)
           PYEOF
