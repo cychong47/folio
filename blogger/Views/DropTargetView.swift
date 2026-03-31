@@ -148,7 +148,7 @@ class DropTargetView: NSView {
         }
 
         group.notify(queue: .main) { [weak self] in
-            self?.onFilesDropped?(photos.sorted { $0.exifDate < $1.exifDate })
+            self?.onFilesDropped?(photos.sorted { $0.filename < $1.filename })
         }
     }
 
@@ -176,7 +176,7 @@ class DropTargetView: NSView {
                 DispatchQueue.main.async { [weak self] in self?.onProgress?(completed, total) }
             }
             DispatchQueue.main.async {
-                self?.onFilesDropped?(photos.sorted { $0.exifDate < $1.exifDate })
+                self?.onFilesDropped?(photos.sorted { $0.filename < $1.filename })
             }
         }
     }

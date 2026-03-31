@@ -4,6 +4,9 @@
 
 ## Released
 
+### Sort drag-and-drop photos by filename (closes #9)
+- Photos dragged into the app are now sorted by filename in ascending order, preserving the original capture sequence within the same day
+
 ### Screenshot Date Fix (PhotoKit)
 - Non-EXIF images (screenshots, downloaded images) dragged from Photos.app now get the correct date via `PHAsset.creationDate` — requires granting Photos access in Settings → General
 - Settings → General now shows a Photos access status row with a "Grant Access" button
