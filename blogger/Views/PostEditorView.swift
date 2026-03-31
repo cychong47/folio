@@ -513,7 +513,8 @@ struct PostEditorView: View {
                 date: date,
                 categories: pendingPost.categories,
                 tags: pendingPost.tags,
-                series: pendingPost.series
+                series: pendingPost.series,
+                customFields: settings.activeProfile?.customFrontmatterFields ?? []
             ) + "\n" + pendingPost.markdownBody
             let mdURL = try MarkdownGenerator.write(
                 content: fullContent,

@@ -28,7 +28,7 @@ enum MarkdownGenerator {
         return needsQuoting ? "\"\(s.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\""))\"" : s
     }
 
-    static func frontmatter(title: String, date: Date, categories: [String] = [], tags: [String] = [], series: String = "") -> String {
+    static func frontmatter(title: String, date: Date, categories: [String] = [], tags: [String] = [], series: String = "", customFields: [FrontmatterField] = []) -> String {
         let dateStr = dateFormatter.string(from: date)
         let catsStr = categories.map { yamlFlowScalar($0) }.joined(separator: ", ")
         let tagsStr = tags.map { yamlFlowScalar($0) }.joined(separator: ", ")
@@ -42,6 +42,11 @@ enum MarkdownGenerator {
         ]
         if !series.isEmpty {
             lines.append("series: [\(yamlFlowScalar(series))]")
+        }
+        for field in customFields {
+            let k = field.key.trimmingCharacters(in: .whitespaces)
+            guard !k.isEmpty else { continue }
+            lines.append("\(k): \(yamlScalar(field.value))")
         }
         lines.append("---")
         return lines.joined(separator: "\n")

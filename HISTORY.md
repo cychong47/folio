@@ -4,6 +4,11 @@
 
 ## Released
 
+### Custom frontmatter fields per profile (closes #23)
+- Each blog profile can now define extra key/value pairs (e.g. `author`, `description`, `og_image`) in Settings → General → Custom Frontmatter
+- Fields are appended to every post's frontmatter at Save time
+- Fields can be added, edited, and removed per profile
+
 ### Text + image preview panel (closes #14)
 - The right-hand panel now renders both the typed text and images in their document order, so you can see exactly how captions and images are laid out relative to each other
 - Text is displayed as plain text (no markdown formatting needed); images are rendered at full panel width

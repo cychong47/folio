@@ -377,6 +377,49 @@ private struct ProfileDetailPanel: View {
                         Divider().padding(.vertical, 12)
 
                         HStack {
+                            SectionLabel("Custom Frontmatter")
+                            Spacer()
+                            Button {
+                                draft.customFrontmatterFields.append(FrontmatterField(key: "", value: ""))
+                            } label: {
+                                Image(systemName: "plus")
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        .padding(.bottom, 4)
+
+                        if draft.customFrontmatterFields.isEmpty {
+                            Text("No custom fields. Click + to add a key/value pair that will be appended to every post's frontmatter.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .padding(.top, 4)
+                        } else {
+                            VStack(spacing: 6) {
+                                ForEach($draft.customFrontmatterFields) { $field in
+                                    HStack(spacing: 6) {
+                                        TextField("key", text: $field.key)
+                                            .textFieldStyle(.roundedBorder)
+                                            .frame(width: 110)
+                                        Text(":")
+                                            .foregroundStyle(.secondary)
+                                        TextField("value", text: $field.value)
+                                            .textFieldStyle(.roundedBorder)
+                                        Button {
+                                            draft.customFrontmatterFields.removeAll { $0.id == field.id }
+                                        } label: {
+                                            Image(systemName: "minus.circle.fill")
+                                                .foregroundStyle(.red.opacity(0.7))
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
+                                }
+                            }
+                            .padding(.top, 4)
+                        }
+
+                        Divider().padding(.vertical, 12)
+
+                        HStack {
                             SectionLabel("GitHub")
                             Spacer()
                             Button("Auto-detect") { autoDetectGitHub() }

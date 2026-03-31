@@ -1,5 +1,11 @@
 import Foundation
 
+struct FrontmatterField: Codable, Identifiable, Equatable {
+    var id: UUID = UUID()
+    var key: String
+    var value: String
+}
+
 struct BlogProfile: Codable, Identifiable, Equatable {
     var id: UUID
     var name: String
@@ -14,6 +20,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
     var githubToken: String
     var githubRepo: String
     var githubBranch: String
+    var customFrontmatterFields: [FrontmatterField]
 
     init(
         id: UUID = UUID(),
@@ -28,7 +35,8 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         autoScanEnabled: Bool = false,
         githubToken: String = "",
         githubRepo: String = "",
-        githubBranch: String = ""
+        githubBranch: String = "",
+        customFrontmatterFields: [FrontmatterField] = []
     ) {
         self.id = id
         self.name = name
@@ -43,6 +51,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         self.githubToken = githubToken
         self.githubRepo = githubRepo
         self.githubBranch = githubBranch
+        self.customFrontmatterFields = customFrontmatterFields
     }
 
     var isGitHubConfigured: Bool { !githubToken.isEmpty && !githubRepo.isEmpty }
