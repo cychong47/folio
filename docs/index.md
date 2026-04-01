@@ -17,8 +17,15 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.8
+
+- What's New sheet on first launch of each new version — shows changes since the last-seen version (closes #32)
+
+---
+
 ### v1.7
 
+- Rename app from Blogger to Folio — new bundle ID `com.folio.app`, app group `group.com.folio.app`, URL scheme `folio://`
 - GitHub Pages release notes site at https://cychong47.github.io/folio/ — auto-generated from HISTORY.md on every CI push
 - Settings → Updates now shows a "Release Notes" link
 
