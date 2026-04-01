@@ -14,16 +14,16 @@ struct BlogProfile: Codable, Identifiable, Equatable {
     var staticImagesPath: String
     var contentSubpath: String
     var staticImagesSubpath: String
-    var knownCategories: [String]
+    var knownCategories: [String] = []
     var knownTags: [String] = []
-    var knownSeries: [String]
-    var autoScanEnabled: Bool
-    var githubToken: String
-    var githubRepo: String
-    var githubBranch: String
-    var customFrontmatterFields: [FrontmatterField]
-    var maxImageDimension: Int?   // nil = no limit; otherwise max long-edge in pixels
-    var stripEXIF: Bool           // remove GPS, device, and owner metadata on export
+    var knownSeries: [String] = []
+    var autoScanEnabled: Bool = false
+    var githubToken: String = ""
+    var githubRepo: String = ""
+    var githubBranch: String = ""
+    var customFrontmatterFields: [FrontmatterField] = []
+    var maxImageDimension: Int?
+    var stripEXIF: Bool = true
 
     init(
         id: UUID = UUID(),

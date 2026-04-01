@@ -28,7 +28,7 @@ targets:
         CFBundleIdentifier: com.folio.app
         CFBundleName: Folio
         CFBundleDisplayName: Folio
-        CFBundleShortVersionString: "1.8.3"
+        CFBundleShortVersionString: "1.8.4"
         CFBundleVersion: "2"
         LSMinimumSystemVersion: "13.0"
         NSPrincipalClass: NSApplication
@@ -80,7 +80,7 @@ targets:
       path: FolioShareExtension/Info.plist
       properties:
         CFBundleDisplayName: Folio
-        CFBundleShortVersionString: "1.8.3"
+        CFBundleShortVersionString: "1.8.4"
         CFBundleVersion: "2"
         NSExtension:
           NSExtensionAttributes:
