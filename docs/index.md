@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.8.2
+
+
+
+---
+
 ### v1.8.1
 
 - Scan Posts now collects tags from existing posts — tag suggestions appear in the post editor menu; Tags section added to Settings (closes #13)
