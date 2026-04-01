@@ -14,5 +14,6 @@ enum Constants {
         static let blogProfiles = "blogProfiles"
         static let selectedProfileID = "selectedProfileID"
         static let appTheme = "appTheme"
+        static let lastSeenVersion = "lastSeenVersion"
     }
 }

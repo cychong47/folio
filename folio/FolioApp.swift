@@ -14,13 +14,34 @@ struct FolioApp: App {
         }
     }
 
+    @AppStorage(Constants.UserDefaultsKeys.lastSeenVersion) private var lastSeenVersion: String = ""
+    @State private var showWhatsNew = false
+
+    private var currentVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(settings)
                 .environmentObject(pendingPost)
                 .frame(minWidth: 800, minHeight: 500)
-                .onAppear { appDelegate.pendingPost = pendingPost }
+                .onAppear {
+                    appDelegate.pendingPost = pendingPost
+                    if lastSeenVersion != currentVersion {
+                        showWhatsNew = true
+                    }
+                }
+                .sheet(isPresented: $showWhatsNew) {
+                    WhatsNewView(
+                        currentVersion: currentVersion,
+                        sinceVersion: lastSeenVersion
+                    ) {
+                        lastSeenVersion = currentVersion
+                        showWhatsNew = false
+                    }
+                }
                 .preferredColorScheme(preferredScheme)
         }
 

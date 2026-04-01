@@ -30,11 +30,13 @@
 		CA03A240842B6F5BB31E3E93 /* SharedContainerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17B1651EC06ECB5BB73ACF1 /* SharedContainerService.swift */; };
 		DBCED57409B1BED707B4C241 /* PostEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890B76E57CC40C519EB3E600 /* PostEditorView.swift */; };
 		EE1AFCE796547E947AB771E2 /* BuildInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83881053F0757635B74EE730 /* BuildInfo.swift */; };
+		F18568F882D6B313E89A00AD /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17EAF2F4E11BD88A8AB06DC8 /* WhatsNewView.swift */; };
 		F6F0BE9D2162BC08B11E7206 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72E38E1B4666949A59985EF8 /* WelcomeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		04EDB32DC6E392FFD022B877 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		17EAF2F4E11BD88A8AB06DC8 /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
 		1C458DDBFE3AF1C5416B6241 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2D1573328390571F3C04B0D2 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		3E2C8832A6F8D661FB89B544 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				04EDB32DC6E392FFD022B877 /* SettingsView.swift */,
 				B43FCB528E9EBCAF9CECDCF5 /* Theme.swift */,
 				72E38E1B4666949A59985EF8 /* WelcomeView.swift */,
+				17EAF2F4E11BD88A8AB06DC8 /* WhatsNewView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				699A3C39E7FDA305B6EABA40 /* Theme.swift in Sources */,
 				A07EFE770E7FEC41498A66BE /* UpdateChecker.swift in Sources */,
 				F6F0BE9D2162BC08B11E7206 /* WelcomeView.swift in Sources */,
+				F18568F882D6B313E89A00AD /* WhatsNewView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

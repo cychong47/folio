@@ -76,6 +76,7 @@ description: Full feature list for Folio — a native macOS app for creating Hug
 
 - **OTA updates** — Settings → Updates checks GitHub Releases; one-click download and install via Archive Utility
 - **Release Notes** — Settings → Updates links to the release notes page
+- **What's New sheet** — shown automatically on first launch of each new version; lists all changes since the last-seen version
 - **Share Extension** — trigger the app from the Photos.app Share sheet; photos exported and app opened automatically
 - **Theme switcher** — System / Light / Dark; fully adaptive warm-cream / dark-charcoal palette
 - **Quit on window close** — closing the main window also dismisses Settings and quits the app

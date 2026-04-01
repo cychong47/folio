@@ -28,6 +28,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Tabbed Settings window** — General (master-detail) and Appearance tabs; categories management merged into the General detail panel
 - **Quit on window close** — closing the main window also dismisses Settings and quits the app
 - **OTA updates** — Settings → Updates checks GitHub releases; one-click download and install via Archive Utility
+- **What's New sheet** — shown automatically on first launch of each new version; lists changes since the last-seen version
 
 ---
 
