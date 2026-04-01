@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.8.8
+
+- Settings: Tags section shows count instead of chip list — categories and series still editable as chips
+
+---
+
 ### v1.8.7
 
 - Fix: BlogProfile decode now uses custom init(from:) with decodeIfPresent — property-level defaults are ignored by Swift's synthesized Codable decoder, causing keyNotFound for missing fields in old data
