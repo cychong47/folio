@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.8.6
+- Debug: NSLog blogProfiles load result on startup (NSLog appears in Console.app unlike print)
+
 ### v1.8.5
 - Debug: log blogProfiles load result on startup to diagnose migration issues
 
