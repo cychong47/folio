@@ -2,6 +2,9 @@ import SwiftUI
 
 // Add new entries here each release. All versions newer than lastSeenVersion are shown.
 private let releaseNotes: [(version: String, bullets: [String])] = [
+    ("1.8", [
+        "What's New sheet — shown automatically on first launch of each new version",
+    ]),
     ("1.7", [
         "Renamed from Blogger to Folio",
         "GitHub Pages release notes site — auto-generated from the changelog on every CI push",

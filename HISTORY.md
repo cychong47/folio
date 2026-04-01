@@ -4,11 +4,13 @@
 
 ## Released
 
+### v1.8
+- What's New sheet on first launch of each new version — shows changes since the last-seen version (closes #32)
+
 ### v1.7
 - Rename app from Blogger to Folio — new bundle ID `com.folio.app`, app group `group.com.folio.app`, URL scheme `folio://`
 - GitHub Pages release notes site at https://cychong47.github.io/folio/ — auto-generated from HISTORY.md on every CI push
 - Settings → Updates now shows a "Release Notes" link
-- What's New sheet on first launch of each new version — shows changes since the last-seen version (closes #32)
 
 ### v1.6
 - Strip GPS & device EXIF metadata on image export (closes #30) — new Privacy toggle in Settings → Image Export (on by default)
