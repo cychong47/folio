@@ -14,7 +14,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Live slug** — filename slug auto-generated from title and kept in sync as you type
 - **Title validation** — Save is blocked with a red-bordered title field when title is left empty
 - **Subpath templates** — `YYYY/MM/DD` tokens for date-based content and image directories
-- **Categories management** — scan existing posts to collect categories; pick or add inline in the editor
+- **Categories & tags management** — scan existing posts to collect categories and tags; pick or add inline in the editor via suggestion menu
 - **Image URL preview** — live preview of the effective image URL in Settings
 - **Import progress indicator** — frosted-glass overlay with progress bar during photo import
 - **Duplicate photo prevention** — same filename dropped twice is silently ignored

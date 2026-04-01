@@ -8,12 +8,13 @@ class AppSettings: ObservableObject {
     struct ScanInfo {
         let duration: TimeInterval
         let categoryCount: Int
+        let tagCount: Int
         let seriesCount: Int
         let date: Date
 
         var displayText: String {
             let t = duration < 1 ? "\(Int(duration * 1000))ms" : String(format: "%.2fs", duration)
-            return "\(t) · \(categoryCount) cat\(categoryCount == 1 ? "" : "s"), \(seriesCount) series"
+            return "\(t) · \(categoryCount) cat\(categoryCount == 1 ? "" : "s"), \(tagCount) tag\(tagCount == 1 ? "" : "s"), \(seriesCount) series"
         }
     }
 
@@ -76,6 +77,10 @@ class AppSettings: ObservableObject {
     var knownCategories: [String] {
         get { activeProfile?.knownCategories ?? [] }
         set { updateActiveProfile { $0.knownCategories = newValue } }
+    }
+    var knownTags: [String] {
+        get { activeProfile?.knownTags ?? [] }
+        set { updateActiveProfile { $0.knownTags = newValue } }
     }
     var knownSeries: [String] {
         get { activeProfile?.knownSeries ?? [] }
@@ -215,9 +220,11 @@ class AppSettings: ObservableObject {
             DispatchQueue.main.async {
                 guard gen == self.scanGeneration else { return }
                 self.knownCategories = CategoryScanner.merge(self.knownCategories, result.categories)
+                self.knownTags       = CategoryScanner.merge(self.knownTags,       result.tags)
                 self.knownSeries     = CategoryScanner.merge(self.knownSeries,     result.series)
                 self.lastScanInfo    = ScanInfo(duration: duration,
                                                categoryCount: result.categories.count,
+                                               tagCount: result.tags.count,
                                                seriesCount: result.series.count,
                                                date: Date())
                 self.isScanning = false

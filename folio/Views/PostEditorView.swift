@@ -20,6 +20,10 @@ struct PostEditorView: View {
         settings.knownCategories.filter { !pendingPost.categories.contains($0) }
     }
 
+    private var availableTags: [String] {
+        settings.knownTags.filter { !pendingPost.tags.contains($0) }
+    }
+
     private var stagingDirectory: URL {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
         return appSupport.appendingPathComponent("Folio/pending", isDirectory: true)
@@ -248,12 +252,20 @@ struct PostEditorView: View {
                 }
                 .fixedSize(horizontal: false, vertical: true)
 
-                Button { showNewTagField = true } label: {
+                Menu {
+                    ForEach(availableTags, id: \.self) { tag in
+                        Button(tag) {
+                            pendingPost.tags.append(tag)
+                        }
+                    }
+                    if !availableTags.isEmpty { Divider() }
+                    Button("New…") { showNewTagField = true }
+                } label: {
                     Image(systemName: "plus.circle.fill")
                         .foregroundStyle(Theme.accent.opacity(0.8))
                         .font(.system(size: 17))
                 }
-                .buttonStyle(.plain)
+                .menuStyle(.borderlessButton)
                 .frame(width: 22, height: 22)
 
                 if showNewTagField {

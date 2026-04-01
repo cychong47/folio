@@ -355,6 +355,27 @@ private struct ProfileDetailPanel: View {
 
                         Divider().padding(.vertical, 12)
 
+                        SectionLabel("Tags")
+                            .padding(.bottom, 4)
+
+                        if draft.knownTags.isEmpty {
+                            Text(draft.contentPath.isEmpty
+                                 ? "Set up content path above, then scan."
+                                 : "No tags yet. Click \"Scan Posts\" to collect from existing posts.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .padding(.top, 4)
+                        } else {
+                            let tagsBinding = Binding<[String]>(
+                                get: { draft.knownTags },
+                                set: { draft.knownTags = $0 }
+                            )
+                            CategoryTagsEditor(categories: tagsBinding)
+                                .padding(.top, 8)
+                        }
+
+                        Divider().padding(.vertical, 12)
+
                         SectionLabel("Series")
                             .padding(.bottom, 4)
 

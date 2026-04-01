@@ -3,32 +3,38 @@ import Foundation
 enum CategoryScanner {
     struct ScanResult {
         var categories: [String]
+        var tags: [String]
         var series: [String]
     }
 
-    /// Walks all .md files under contentPath and returns sorted unique categories and series.
+    /// Walks all .md files under contentPath and returns sorted unique categories, tags, and series.
     static func scan(contentPath: String) -> ScanResult {
         let base = URL(fileURLWithPath: contentPath)
         guard let enumerator = FileManager.default.enumerator(
             at: base,
             includingPropertiesForKeys: nil,
             options: [.skipsHiddenFiles]
-        ) else { return ScanResult(categories: [], series: []) }
+        ) else { return ScanResult(categories: [], tags: [], series: []) }
 
         var seenCats = Set<String>()
+        var seenTags = Set<String>()
         var seenSeries = Set<String>()
         var categories: [String] = []
+        var tags: [String] = []
         var series: [String] = []
         for case let url as URL in enumerator where url.pathExtension == "md" {
             guard let content = try? String(contentsOf: url, encoding: .utf8) else { continue }
             for cat in parseFrontmatterCategories(from: content) {
                 if seenCats.insert(cat.lowercased()).inserted { categories.append(cat) }
             }
+            for tag in parseFrontmatterTags(from: content) {
+                if seenTags.insert(tag.lowercased()).inserted { tags.append(tag) }
+            }
             if let s = parseFrontmatterSeries(from: content) {
                 if seenSeries.insert(s.lowercased()).inserted { series.append(s) }
             }
         }
-        return ScanResult(categories: categories.sorted(), series: series.sorted())
+        return ScanResult(categories: categories.sorted(), tags: tags.sorted(), series: series.sorted())
     }
 
     /// Merges two sorted lists, deduplicating case-insensitively and stripping stray quotes.
@@ -79,6 +85,47 @@ enum CategoryScanner {
         //   - Cat2
         if let range = content.range(
             of: #"(?m)^categories:\s*\n((?:[ \t]*-[ \t]+[^\n]+\n?)+)"#,
+            options: .regularExpression
+        ) {
+            let block = String(content[range])
+            return block.components(separatedBy: "\n").compactMap { line in
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                guard trimmed.hasPrefix("-") else { return nil }
+                let value = String(trimmed.dropFirst())
+                    .trimmingCharacters(in: .whitespaces)
+                    .trimmingCharacters(in: quoteChars)
+                return value.isEmpty ? nil : value
+            }
+        }
+
+        return []
+    }
+
+    /// Parses the `tags:` value from a markdown frontmatter block.
+    /// Handles the same single-line and multi-line YAML formats as categories.
+    static func parseFrontmatterTags(from content: String) -> [String] {
+        let quoteChars = CharacterSet(charactersIn: "\"\'\u{201C}\u{201D}\u{2018}\u{2019}")
+
+        if let range = content.range(
+            of: #"(?m)^tags:\s*\[([^\]]*)\]"#,
+            options: .regularExpression
+        ) {
+            let match = String(content[range])
+            if let open = match.firstIndex(of: "["),
+               let close = match.lastIndex(of: "]") {
+                let inside = String(match[match.index(after: open)..<close])
+                guard !inside.trimmingCharacters(in: .whitespaces).isEmpty else { return [] }
+                return inside.components(separatedBy: ",").compactMap { item in
+                    let trimmed = item
+                        .trimmingCharacters(in: .whitespacesAndNewlines)
+                        .trimmingCharacters(in: quoteChars)
+                    return trimmed.isEmpty ? nil : trimmed
+                }
+            }
+        }
+
+        if let range = content.range(
+            of: #"(?m)^tags:\s*\n((?:[ \t]*-[ \t]+[^\n]+\n?)+)"#,
             options: .regularExpression
         ) {
             let block = String(content[range])
