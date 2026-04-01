@@ -4,10 +4,12 @@
 
 ## Released
 
+### v1.8.1
+- Scan Posts now collects tags from existing posts — tag suggestions appear in the post editor menu; Tags section added to Settings (closes #13)
+- Fix: Series (and Categories) section stays empty after Scan Posts — draft was not refreshed from updated profile after scan completed
+
 ### v1.8
 - What's New sheet on first launch of each new version — shows changes since the last-seen version (closes #32)
-- Scan Posts now collects tags from existing posts — tag suggestions appear in the post editor menu; Tags section added to Settings (closes #13)
-- Fix: Series section stays empty after Scan Posts — draft was not refreshed from updated profile after scan completed
 
 ### v1.7
 - Rename app from Blogger to Folio — new bundle ID `com.folio.app`, app group `group.com.folio.app`, URL scheme `folio://`
