@@ -138,6 +138,27 @@ class AppSettings: ObservableObject {
             if let normalized = try? JSONEncoder().encode(self.profiles) {
                 defaults.set(normalized, forKey: Constants.UserDefaultsKeys.blogProfiles)
             }
+        } else if let oldDefaults = UserDefaults(suiteName: "group.com.blogger.app"),
+                  let data = oldDefaults.data(forKey: Constants.UserDefaultsKeys.blogProfiles),
+                  let decoded = try? JSONDecoder().decode([BlogProfile].self, from: data),
+                  !decoded.isEmpty {
+            // Migrate from old Blogger app group (app was renamed from Blogger to Folio)
+            self.profiles = decoded
+            if let idStr = oldDefaults.string(forKey: Constants.UserDefaultsKeys.selectedProfileID),
+               let id = UUID(uuidString: idStr) {
+                self.selectedProfileID = id
+            } else {
+                self.selectedProfileID = decoded.first?.id
+            }
+            if let theme = oldDefaults.string(forKey: Constants.UserDefaultsKeys.appTheme) {
+                self.appTheme = theme
+                defaults.set(theme, forKey: Constants.UserDefaultsKeys.appTheme)
+            }
+            // Persist to new group so migration only runs once
+            if let encoded = try? JSONEncoder().encode(self.profiles) {
+                defaults.set(encoded, forKey: Constants.UserDefaultsKeys.blogProfiles)
+                defaults.set(self.selectedProfileID?.uuidString, forKey: Constants.UserDefaultsKeys.selectedProfileID)
+            }
         } else {
             // Migrate from old single-blog keys
             let oldContent = defaults.string(forKey: "contentPath") ?? ""
