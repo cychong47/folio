@@ -512,6 +512,9 @@ private struct ProfileDetailPanel: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear { loadDraft() }
         .onChange(of: editingProfileID) { _ in loadDraft() }
+        .onChange(of: settings.isScanning) { scanning in
+            if !scanning { loadDraft() }
+        }
         .onChange(of: draft) { newDraft in
             guard let idx = settings.profiles.firstIndex(where: { $0.id == newDraft.id }),
                   settings.profiles[idx] != newDraft else { return }
