@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.8.4
+
+- Fix: Blogger → Folio migration now works — several fields missing from old data (autoScanEnabled, customFrontmatterFields, stripEXIF, knownTags) caused JSON decode to fail silently; all fields now have property-level defaults
+
+---
+
 ### v1.8.3
 
 - Fix: Blogger → Folio migration failed silently — knownTags missing from old data caused JSON decode to fail, skipping profile migration entirely
