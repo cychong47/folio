@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.8.5
+- Debug: log blogProfiles load result on startup to diagnose migration issues
+
 ### v1.8.4
 - Fix: Blogger → Folio migration now works — several fields missing from old data (autoScanEnabled, customFrontmatterFields, stripEXIF, knownTags) caused JSON decode to fail silently; all fields now have property-level defaults
 

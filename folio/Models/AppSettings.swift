@@ -115,6 +115,15 @@ class AppSettings: ObservableObject {
         self.appTheme = defaults.string(forKey: Constants.UserDefaultsKeys.appTheme) ?? "system"
 
         // Load from new multi-blog format
+        let rawData = defaults.data(forKey: Constants.UserDefaultsKeys.blogProfiles)
+        print("[Folio] blogProfiles data: \(rawData.map { "\($0.count) bytes" } ?? "nil")")
+        if let data = rawData {
+            if let decoded = try? JSONDecoder().decode([BlogProfile].self, from: data) {
+                print("[Folio] decoded \(decoded.count) profile(s)")
+            } else {
+                print("[Folio] decode FAILED — JSON: \(String(data: data, encoding: .utf8) ?? "unreadable")")
+            }
+        }
         if let data = defaults.data(forKey: Constants.UserDefaultsKeys.blogProfiles),
            let decoded = try? JSONDecoder().decode([BlogProfile].self, from: data) {
             // Normalize categories in every profile: strip stray quotes, case-insensitive dedup
