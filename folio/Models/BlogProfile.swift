@@ -63,6 +63,29 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         self.stripEXIF = stripEXIF
     }
 
+    // Custom decoder so missing keys in older saved data fall back to defaults
+    // instead of throwing keyNotFound and discarding the entire profile.
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id                    = try c.decode(UUID.self,               forKey: .id)
+        name                  = try c.decode(String.self,             forKey: .name)
+        blogRoot              = try c.decodeIfPresent(String.self,    forKey: .blogRoot)              ?? ""
+        contentPath           = try c.decodeIfPresent(String.self,    forKey: .contentPath)           ?? ""
+        staticImagesPath      = try c.decodeIfPresent(String.self,    forKey: .staticImagesPath)      ?? ""
+        contentSubpath        = try c.decodeIfPresent(String.self,    forKey: .contentSubpath)        ?? "YYYY/MM"
+        staticImagesSubpath   = try c.decodeIfPresent(String.self,    forKey: .staticImagesSubpath)   ?? ""
+        knownCategories       = try c.decodeIfPresent([String].self,  forKey: .knownCategories)       ?? []
+        knownTags             = try c.decodeIfPresent([String].self,  forKey: .knownTags)             ?? []
+        knownSeries           = try c.decodeIfPresent([String].self,  forKey: .knownSeries)           ?? []
+        autoScanEnabled       = try c.decodeIfPresent(Bool.self,      forKey: .autoScanEnabled)       ?? false
+        githubToken           = try c.decodeIfPresent(String.self,    forKey: .githubToken)           ?? ""
+        githubRepo            = try c.decodeIfPresent(String.self,    forKey: .githubRepo)            ?? ""
+        githubBranch          = try c.decodeIfPresent(String.self,    forKey: .githubBranch)          ?? ""
+        customFrontmatterFields = try c.decodeIfPresent([FrontmatterField].self, forKey: .customFrontmatterFields) ?? []
+        maxImageDimension     = try c.decodeIfPresent(Int.self,       forKey: .maxImageDimension)
+        stripEXIF             = try c.decodeIfPresent(Bool.self,      forKey: .stripEXIF)             ?? true
+    }
+
     var isGitHubConfigured: Bool { !githubToken.isEmpty && !githubRepo.isEmpty }
 
     /// Parses `githubRepo` — accepts `owner/repo`, `https://github.com/owner/repo`,

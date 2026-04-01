@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.8.7
+- Fix: BlogProfile decode now uses custom init(from:) with decodeIfPresent — property-level defaults are ignored by Swift's synthesized Codable decoder, causing keyNotFound for missing fields in old data
+
 ### v1.8.6
 - Debug: NSLog blogProfiles load result on startup (NSLog appears in Console.app unlike print)
 
