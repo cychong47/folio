@@ -2,6 +2,9 @@ import SwiftUI
 
 // Add new entries here each release. All versions newer than lastSeenVersion are shown.
 private let releaseNotes: [(version: String, bullets: [String])] = [
+    ("1.8.8", [
+        "Settings: Tags section shows collected count instead of chip list",
+    ]),
     ("1.8.4", [
         "Fix: Blogger → Folio migration now works — blog settings restored automatically on first launch",
     ]),
@@ -32,6 +35,9 @@ private let releaseNotes: [(version: String, bullets: [String])] = [
 ]
 
 struct WhatsNewView: View {
+    static func hasContent(since version: String) -> Bool {
+        releaseNotes.contains { isNewer($0.version, than: version) }
+    }
     let currentVersion: String
     let sinceVersion: String
     let onDismiss: () -> Void
@@ -91,14 +97,15 @@ struct WhatsNewView: View {
         .background(Theme.background)
     }
 
-    private func isNewer(_ version: String, than other: String) -> Bool {
-        let a = version.split(separator: ".").compactMap { Int($0) }
-        let b = other.split(separator: ".").compactMap { Int($0) }
-        for i in 0..<max(a.count, b.count) {
-            let av = i < a.count ? a[i] : 0
-            let bv = i < b.count ? b[i] : 0
-            if av != bv { return av > bv }
-        }
-        return false
+}
+
+private func isNewer(_ version: String, than other: String) -> Bool {
+    let a = version.split(separator: ".").compactMap { Int($0) }
+    let b = other.split(separator: ".").compactMap { Int($0) }
+    for i in 0..<max(a.count, b.count) {
+        let av = i < a.count ? a[i] : 0
+        let bv = i < b.count ? b[i] : 0
+        if av != bv { return av > bv }
     }
+    return false
 }

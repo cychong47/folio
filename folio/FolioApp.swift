@@ -29,8 +29,11 @@ struct FolioApp: App {
                 .frame(minWidth: 800, minHeight: 500)
                 .onAppear {
                     appDelegate.pendingPost = pendingPost
-                    if lastSeenVersion != currentVersion {
+                    if lastSeenVersion != currentVersion &&
+                       WhatsNewView.hasContent(since: lastSeenVersion) {
                         showWhatsNew = true
+                    } else {
+                        lastSeenVersion = currentVersion
                     }
                 }
                 .sheet(isPresented: $showWhatsNew) {

@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.8.9
+- Fix: What's New popup no longer appears empty — skipped silently when no release notes exist for intermediate versions
+
 ### v1.8.8
 - Settings: Tags section shows count instead of chip list — categories and series still editable as chips
 
