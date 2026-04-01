@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.8.6
+
+- Debug: NSLog blogProfiles load result on startup (NSLog appears in Console.app unlike print)
+
+---
+
 ### v1.8.5
 
 - Debug: log blogProfiles load result on startup to diagnose migration issues
