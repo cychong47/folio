@@ -15,7 +15,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
     var contentSubpath: String
     var staticImagesSubpath: String
     var knownCategories: [String]
-    var knownTags: [String]
+    var knownTags: [String] = []
     var knownSeries: [String]
     var autoScanEnabled: Bool
     var githubToken: String

@@ -2,6 +2,9 @@ import SwiftUI
 
 // Add new entries here each release. All versions newer than lastSeenVersion are shown.
 private let releaseNotes: [(version: String, bullets: [String])] = [
+    ("1.8.3", [
+        "Fix: Blogger → Folio migration now works correctly — settings are restored on first launch",
+    ]),
     ("1.8.2", [
         "Fix: Blog settings lost after updating from Blogger to Folio — profiles are auto-migrated on first launch",
     ]),
