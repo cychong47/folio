@@ -21,6 +21,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 - Scan Posts now collects tags from existing posts — tag suggestions appear in the post editor menu; Tags section added to Settings (closes #13)
 - Fix: Series (and Categories) section stays empty after Scan Posts — draft was not refreshed from updated profile after scan completed
+- Fix: Blog settings lost after updating from Blogger to Folio — profiles are now auto-migrated from the old app group on first launch
 
 ---
 
