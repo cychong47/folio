@@ -4,6 +4,7 @@
 
 ## Released
 
+### v1.8.2
 ### v1.8.1
 - Scan Posts now collects tags from existing posts — tag suggestions appear in the post editor menu; Tags section added to Settings (closes #13)
 - Fix: Series (and Categories) section stays empty after Scan Posts — draft was not refreshed from updated profile after scan completed
