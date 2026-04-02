@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.10.1
+
+- Fix: exported images now respect EXIF orientation — photos taken in portrait or upside-down are correctly rotated when stripped or resized
+
+---
+
 ### v1.10.0
 
 - Preview button: launch `hugo server` and open the current post in the browser before publishing — hugo path configurable per profile in Settings (closes #18)
