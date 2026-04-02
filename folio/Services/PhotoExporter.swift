@@ -1,5 +1,6 @@
 import Foundation
 import ImageIO
+import CoreImage
 import AppKit
 
 enum PhotoExporter {
@@ -102,8 +103,24 @@ enum PhotoExporter {
         return strippedFromSource(source, url: url)
     }
 
+    /// Returns a CGImage with EXIF orientation baked into the pixel data.
+    /// When images are re-encoded (strip/resize), the orientation tag is lost,
+    /// so we must rotate/flip the pixels before writing.
+    private static func orientationCorrected(_ cgImage: CGImage, from source: CGImageSource) -> CGImage {
+        guard let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
+              let raw = props[kCGImagePropertyOrientation as String] as? UInt32,
+              let orientation = CGImagePropertyOrientation(rawValue: raw),
+              orientation != .up else {
+            return cgImage
+        }
+        let ci = CIImage(cgImage: cgImage).oriented(orientation)
+        let ctx = CIContext(options: [.useSoftwareRenderer: false])
+        return ctx.createCGImage(ci, from: ci.extent) ?? cgImage
+    }
+
     private static func strippedFromSource(_ source: CGImageSource, url: URL) -> Data? {
-        guard let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) else { return nil }
+        guard let raw = CGImageSourceCreateImageAtIndex(source, 0, nil) else { return nil }
+        let cgImage = orientationCorrected(raw, from: source)
         let uti: CFString = (url.pathExtension.lowercased() == "png" ? "public.png" : "public.jpeg") as CFString
         let out = NSMutableData()
         guard let dest = CGImageDestinationCreateWithData(out, uti, 1, nil) else { return nil }
@@ -121,7 +138,10 @@ enum PhotoExporter {
     /// Returns JPEG/PNG data for the image resized so its long edge ≤ maxLongEdge, or nil if no resize is needed.
     private static func resized(url: URL, maxLongEdge: Int) -> Data? {
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
-              let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) else { return nil }
+              let raw = CGImageSourceCreateImageAtIndex(source, 0, nil) else { return nil }
+        // Apply EXIF orientation before measuring dimensions; a 90° rotated source
+        // has its width/height swapped relative to what the viewer expects.
+        let cgImage = orientationCorrected(raw, from: source)
         let w = cgImage.width, h = cgImage.height
         guard max(w, h) > maxLongEdge else { return nil }
         let scale = CGFloat(maxLongEdge) / CGFloat(max(w, h))
