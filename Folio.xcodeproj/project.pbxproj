@@ -25,6 +25,7 @@
 		8DC2A09959B67B4EAE48DB84 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EADC807028A6FB6FD2616D54 /* Assets.xcassets */; };
 		99233CDA0BE03407CD26FE4A /* PhotoLibraryDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F3E05D446EEAC57E4AE387 /* PhotoLibraryDate.swift */; };
 		A07EFE770E7FEC41498A66BE /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE36F53D49BEC53E0A86A969 /* UpdateChecker.swift */; };
+		BC21B676607AEE926B359C88 /* HugoConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A8EA5536C10E0505554E5E /* HugoConfigReader.swift */; };
 		C1A118477956DFFEB97F15AA /* SlugGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA07B03D86847712523DC840 /* SlugGenerator.swift */; };
 		C2D7B66BBE1B94D033868288 /* GitHubPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6895426545500590238FA9FA /* GitHubPublisher.swift */; };
 		CA03A240842B6F5BB31E3E93 /* SharedContainerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17B1651EC06ECB5BB73ACF1 /* SharedContainerService.swift */; };
@@ -36,6 +37,7 @@
 
 /* Begin PBXFileReference section */
 		04EDB32DC6E392FFD022B877 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		05A8EA5536C10E0505554E5E /* HugoConfigReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HugoConfigReader.swift; sourceTree = "<group>"; };
 		17EAF2F4E11BD88A8AB06DC8 /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
 		1C458DDBFE3AF1C5416B6241 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2D1573328390571F3C04B0D2 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 			children = (
 				4FFB191807DC943F715D2C6A /* CategoryScanner.swift */,
 				6895426545500590238FA9FA /* GitHubPublisher.swift */,
+				05A8EA5536C10E0505554E5E /* HugoConfigReader.swift */,
 				9481A6CF1EFCFDC63CE6CC04 /* MarkdownGenerator.swift */,
 				929BADBC33145B54A87A0E45 /* PhotoExporter.swift */,
 				99F3E05D446EEAC57E4AE387 /* PhotoLibraryDate.swift */,
@@ -317,6 +320,7 @@
 				5CFB4EAE8D619559EBEEE962 /* DropTargetView.swift in Sources */,
 				87DC42E3481BC5FBE5CDDBD6 /* FolioApp.swift in Sources */,
 				C2D7B66BBE1B94D033868288 /* GitHubPublisher.swift in Sources */,
+				BC21B676607AEE926B359C88 /* HugoConfigReader.swift in Sources */,
 				6C8A2117EECAC0C8720A49E6 /* MarkdownGenerator.swift in Sources */,
 				476E24E9D2E3BA24BCDB89C7 /* PendingPost.swift in Sources */,
 				2A81F58A8EE033C93D52E6EF /* PhotoExporter.swift in Sources */,

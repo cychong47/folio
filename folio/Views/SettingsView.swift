@@ -550,16 +550,20 @@ private struct ProfileDetailPanel: View {
         panel.prompt = "Select"
         guard panel.runModal() == .OK, let url = panel.url else { return }
         let fm = FileManager.default
-        let oldDerivedContent = draft.blogRoot + "/content/posts"
-        let oldDerivedImages  = draft.blogRoot + "/static/images"
+        let oldRoot = draft.blogRoot
         draft.blogRoot = url.path
-        if draft.contentPath.isEmpty || draft.contentPath == oldDerivedContent {
-            let postPath  = url.path + "/content/post"
-            let postsPath = url.path + "/content/posts"
+
+        let hugoConfig = HugoConfigReader.read(blogRoot: url.path)
+        let contentDir = hugoConfig?.contentDir ?? "content"
+        let staticDir  = hugoConfig?.staticDir  ?? "static"
+
+        if draft.contentPath.isEmpty || (!oldRoot.isEmpty && draft.contentPath.hasPrefix(oldRoot)) {
+            let postPath  = url.path + "/\(contentDir)/post"
+            let postsPath = url.path + "/\(contentDir)/posts"
             draft.contentPath = fm.fileExists(atPath: postPath) ? postPath : postsPath
         }
-        if draft.staticImagesPath.isEmpty || draft.staticImagesPath == oldDerivedImages {
-            draft.staticImagesPath = url.path + "/static/images"
+        if draft.staticImagesPath.isEmpty || (!oldRoot.isEmpty && draft.staticImagesPath.hasPrefix(oldRoot)) {
+            draft.staticImagesPath = url.path + "/\(staticDir)/images"
         }
     }
 
