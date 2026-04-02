@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.9.0
+
+- Settings: auto-read Hugo config (hugo.toml/yaml/json, config.toml/yaml/json) when Blog Root is set — pre-fills Content Path and Images Path from contentDir/staticDir (closes #24)
+
+---
+
 ### v1.8.9
 
 - Fix: What's New popup no longer appears empty — skipped silently when no release notes exist for intermediate versions
