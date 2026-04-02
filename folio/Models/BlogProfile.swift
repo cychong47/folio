@@ -24,6 +24,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
     var customFrontmatterFields: [FrontmatterField] = []
     var maxImageDimension: Int?
     var stripEXIF: Bool = true
+    var hugoPath: String = ""
 
     init(
         id: UUID = UUID(),
@@ -42,7 +43,8 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         githubBranch: String = "",
         customFrontmatterFields: [FrontmatterField] = [],
         maxImageDimension: Int? = nil,
-        stripEXIF: Bool = true
+        stripEXIF: Bool = true,
+        hugoPath: String = ""
     ) {
         self.id = id
         self.name = name
@@ -61,6 +63,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         self.customFrontmatterFields = customFrontmatterFields
         self.maxImageDimension = maxImageDimension
         self.stripEXIF = stripEXIF
+        self.hugoPath = hugoPath
     }
 
     // Custom decoder so missing keys in older saved data fall back to defaults
@@ -84,6 +87,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         customFrontmatterFields = try c.decodeIfPresent([FrontmatterField].self, forKey: .customFrontmatterFields) ?? []
         maxImageDimension     = try c.decodeIfPresent(Int.self,       forKey: .maxImageDimension)
         stripEXIF             = try c.decodeIfPresent(Bool.self,      forKey: .stripEXIF)             ?? true
+        hugoPath              = try c.decodeIfPresent(String.self,    forKey: .hugoPath)              ?? ""
     }
 
     var isGitHubConfigured: Bool { !githubToken.isEmpty && !githubRepo.isEmpty }

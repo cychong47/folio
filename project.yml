@@ -28,7 +28,7 @@ targets:
         CFBundleIdentifier: com.folio.app
         CFBundleName: Folio
         CFBundleDisplayName: Folio
-        CFBundleShortVersionString: "1.9.0"
+        CFBundleShortVersionString: "1.10.0"
         CFBundleVersion: "2"
         LSMinimumSystemVersion: "13.0"
         NSPrincipalClass: NSApplication
@@ -46,6 +46,7 @@ targets:
           - group.com.folio.app
           - group.com.blogger.app
         com.apple.security.network.client: true
+        com.apple.security.network.server: true
         com.apple.security.personal-information.photos-library: true
     dependencies:
       - sdk: Photos.framework
@@ -80,7 +81,7 @@ targets:
       path: FolioShareExtension/Info.plist
       properties:
         CFBundleDisplayName: Folio
-        CFBundleShortVersionString: "1.9.0"
+        CFBundleShortVersionString: "1.10.0"
         CFBundleVersion: "2"
         NSExtension:
           NSExtensionAttributes:

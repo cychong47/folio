@@ -5,6 +5,8 @@ struct PostEditorView: View {
     @EnvironmentObject var settings: AppSettings
     @EnvironmentObject var pendingPost: PendingPost
 
+    @StateObject private var hugoServer = HugoServerManager()
+
     @State private var publishError: String?
     @State private var isPublishing = false
     @State private var showResetConfirm = false
@@ -72,6 +74,7 @@ struct PostEditorView: View {
                  : "This will discard all photos and text. Staged image files will be deleted.")
         }
         .onAppear { prepopulateMarkdown() }
+        .onDisappear { hugoServer.stop() }
     }
 
     // MARK: - Sections
@@ -485,6 +488,12 @@ struct PostEditorView: View {
                 .tint(Theme.accent)
                 .keyboardShortcut(.return, modifiers: [.command, .shift])
             if pendingPost.lastPublished != nil {
+                Button("Preview") { previewInBrowser() }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.indigo)
+                    .help(hugoServer.isRunning ? "Hugo server running — opens post in browser" : "Start Hugo server and open post in browser")
+            }
+            if pendingPost.lastPublished != nil {
                 Button(isPublishing ? "Publishing…" : "Publish") { publishToGitHub() }
                     .buttonStyle(.borderedProminent)
                     .tint(.green)
@@ -496,7 +505,25 @@ struct PostEditorView: View {
         .background(Theme.background)
     }
 
-    // MARK: - Logic (unchanged)
+    // MARK: - Logic
+
+    private func previewInBrowser() {
+        guard let profile = settings.activeProfile,
+              !profile.blogRoot.isEmpty,
+              let url = HugoServerManager.previewURL(
+                  profile: profile,
+                  date: pendingPost.postDate,
+                  slug: pendingPost.slug
+              ) else {
+            publishError = "Cannot compute preview URL — check Blog Root and Content Path in Settings."
+            return
+        }
+        let wasRunning = hugoServer.isRunning
+        if !wasRunning {
+            hugoServer.start(blogRoot: profile.blogRoot, hugoPath: profile.hugoPath)
+        }
+        hugoServer.openInBrowser(url: url, serverWasAlreadyRunning: wasRunning)
+    }
 
     private func prepopulateMarkdown() {
         guard !pendingPost.photos.isEmpty, pendingPost.markdownBody.isEmpty else { return }

@@ -480,6 +480,25 @@ private struct ProfileDetailPanel: View {
 
                         Divider().padding(.vertical, 12)
 
+                        SectionLabel("Hugo")
+                            .padding(.bottom, 6)
+
+                        HStack {
+                            Text("Path")
+                                .frame(width: 70, alignment: .trailing)
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                            TextField("hugo  (or absolute path, e.g. /opt/homebrew/bin/hugo)", text: $draft.hugoPath)
+                                .textFieldStyle(.roundedBorder)
+                                .font(.callout)
+                        }
+                        Text("Used by the Preview button to launch a local Hugo server.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .padding(.top, 2)
+
+                        Divider().padding(.vertical, 12)
+
                         HStack {
                             SectionLabel("GitHub")
                             Spacer()
