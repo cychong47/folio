@@ -416,7 +416,7 @@ struct PostEditorView: View {
             // Left: markdown editor
             TextEditor(text: $pendingPost.markdownBody)
                 .font(.system(.body, design: .monospaced))
-                .frame(minWidth: 300)
+                .frame(minWidth: 300, maxWidth: .infinity)
                 .scrollContentBackground(.hidden)
                 .background(Theme.background)
 
@@ -478,7 +478,7 @@ struct PostEditorView: View {
                 }
                 .background(Theme.panel)
             }
-            .frame(minWidth: 200, maxWidth: 360)
+            .frame(minWidth: 200, maxWidth: .infinity)
         }
     }
 
