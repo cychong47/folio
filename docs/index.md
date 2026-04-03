@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.12.0
+
+- Post list view: browse all existing posts in the content directory, sorted by date; tap any row to open it for re-editing (closes #15)
+
+---
+
 ### v1.11.0
 
 - Settings → Git: per-profile toggle to auto git commit & push on Save, with a customisable commit message template (`{{title}}` token) — works with any remote (closes #22)
