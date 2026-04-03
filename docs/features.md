@@ -56,6 +56,7 @@ description: Full feature list for Folio — a native macOS app for creating Hug
 ## Publishing
 
 - **Save to local Hugo repo** — writes `YYYY-MM-DD-slug.md` and copies images to the configured static directory
+- **Auto git commit on Save** — per-profile toggle; runs `git add -A && git commit && git push` in the blog root after each successful Save; commit message template supports `{{title}}`; success/error shown inline in the editor footer
 - **GitHub publish** — commits and pushes only the saved files via the GitHub REST API (no git binary required)
 - **Codeberg & Gitea support** — full URL accepted in the Repo field; API base auto-derived from the host
 - **Auto-detect GitHub settings** — reads repo and branch from the blog root's `.git/config`

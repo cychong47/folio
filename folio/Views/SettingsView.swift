@@ -556,6 +556,30 @@ private struct ProfileDetailPanel: View {
                             }
                         }
 
+                        Divider().padding(.vertical, 12)
+
+                        SectionLabel("Git")
+                            .padding(.bottom, 6)
+
+                        Toggle("Auto git commit on Save", isOn: $draft.autoGitCommit)
+                            .toggleStyle(.switch)
+
+                        if draft.autoGitCommit {
+                            HStack {
+                                Text("Message")
+                                    .frame(width: 70, alignment: .trailing)
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                                TextField("Add post: {{title}}", text: $draft.gitCommitTemplate)
+                                    .textFieldStyle(.roundedBorder)
+                                    .font(.callout)
+                            }
+                            Text("Use {{title}} for the post title. Runs git add -A, commit, and push in the blog root.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .padding(.top, 2)
+                        }
+
                         Spacer(minLength: 24)
                     }
                     .padding(24)

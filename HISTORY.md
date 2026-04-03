@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.11.0
+- Settings → Git: per-profile toggle to auto git commit & push on Save, with a customisable commit message template (`{{title}}` token) — works with any remote (closes #22)
+
 ### v1.10.2
 - Settings → Image Export: "Fix Orientation" button corrects rotation on already-exported images in staticImagesPath in-place
 

@@ -25,6 +25,8 @@ struct BlogProfile: Codable, Identifiable, Equatable {
     var maxImageDimension: Int?
     var stripEXIF: Bool = true
     var hugoPath: String = ""
+    var autoGitCommit: Bool = false
+    var gitCommitTemplate: String = "Add post: {{title}}"
 
     init(
         id: UUID = UUID(),
@@ -44,7 +46,9 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         customFrontmatterFields: [FrontmatterField] = [],
         maxImageDimension: Int? = nil,
         stripEXIF: Bool = true,
-        hugoPath: String = ""
+        hugoPath: String = "",
+        autoGitCommit: Bool = false,
+        gitCommitTemplate: String = "Add post: {{title}}"
     ) {
         self.id = id
         self.name = name
@@ -64,6 +68,8 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         self.maxImageDimension = maxImageDimension
         self.stripEXIF = stripEXIF
         self.hugoPath = hugoPath
+        self.autoGitCommit = autoGitCommit
+        self.gitCommitTemplate = gitCommitTemplate
     }
 
     // Custom decoder so missing keys in older saved data fall back to defaults
@@ -88,6 +94,8 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         maxImageDimension     = try c.decodeIfPresent(Int.self,       forKey: .maxImageDimension)
         stripEXIF             = try c.decodeIfPresent(Bool.self,      forKey: .stripEXIF)             ?? true
         hugoPath              = try c.decodeIfPresent(String.self,    forKey: .hugoPath)              ?? ""
+        autoGitCommit         = try c.decodeIfPresent(Bool.self,      forKey: .autoGitCommit)         ?? false
+        gitCommitTemplate     = try c.decodeIfPresent(String.self,    forKey: .gitCommitTemplate)     ?? "Add post: {{title}}"
     }
 
     var isGitHubConfigured: Bool { !githubToken.isEmpty && !githubRepo.isEmpty }

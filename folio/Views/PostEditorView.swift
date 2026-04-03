@@ -9,6 +9,8 @@ struct PostEditorView: View {
 
     @State private var publishError: String?
     @State private var isPublishing = false
+    @State private var gitStatus: String?
+    @State private var gitSuccess = false
     @State private var showResetConfirm = false
     @State private var titleIsInvalid = false
     @State private var newCategoryText = ""
@@ -468,15 +470,31 @@ struct PostEditorView: View {
 
     private var footerSection: some View {
         HStack(spacing: 10) {
-            if let err = publishError {
-                Image(systemName: "exclamationmark.circle.fill")
-                    .foregroundStyle(.red)
-                    .font(.callout)
-                Text(err)
-                    .foregroundStyle(.red)
-                    .font(.callout)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
+            VStack(alignment: .leading, spacing: 4) {
+                if let err = publishError {
+                    HStack(spacing: 4) {
+                        Image(systemName: "exclamationmark.circle.fill")
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                        Text(err)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                    }
+                }
+                if let status = gitStatus {
+                    HStack(spacing: 4) {
+                        Image(systemName: gitSuccess ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+                            .foregroundStyle(gitSuccess ? Color.green : Color.orange)
+                            .font(.callout)
+                        Text(status)
+                            .foregroundStyle(gitSuccess ? Color.green : Color.orange)
+                            .font(.callout)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                    }
+                }
             }
             Spacer()
             Button("Reset") { showResetConfirm = true }
@@ -532,6 +550,7 @@ struct PostEditorView: View {
 
     private func save() {
         publishError = nil
+        gitStatus = nil
         guard settings.isConfigured else {
             publishError = "Configure paths in Settings first."
             return
@@ -567,6 +586,25 @@ struct PostEditorView: View {
                 title: pendingPost.title
             )
             // Staging files and editor state are preserved until Publish or Reset
+
+            if settings.activeProfile?.autoGitCommit == true {
+                let blogRoot = settings.activeProfile?.blogRoot ?? ""
+                let template = settings.activeProfile?.gitCommitTemplate ?? "Add post: {{title}}"
+                let message = template.replacingOccurrences(of: "{{title}}", with: pendingPost.title)
+                Task.detached(priority: .utility) {
+                    let result = GitRunner.commitAndPush(blogRoot: blogRoot, commitMessage: message)
+                    await MainActor.run {
+                        switch result {
+                        case .success:
+                            gitStatus = "Committed & pushed"
+                            gitSuccess = true
+                        case .failure(let err):
+                            gitStatus = err.localizedDescription
+                            gitSuccess = false
+                        }
+                    }
+                }
+            }
         } catch {
             publishError = error.localizedDescription
         }
