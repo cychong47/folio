@@ -121,42 +121,37 @@ private struct PostRowView: View {
     }()
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text(post.title)
-                    .font(.body.weight(.medium))
-                    .lineLimit(1)
+        HStack(spacing: 10) {
+            Text(Self.dateFormatter.string(from: post.date))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(width: 84, alignment: .leading)
 
-                if post.isDraft {
-                    Text("Draft")
-                        .font(.caption.weight(.semibold))
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 2)
-                        .background(Color.orange.opacity(0.15))
-                        .foregroundStyle(.orange)
-                        .clipShape(Capsule())
-                }
+            Text(post.title)
+                .font(.callout.weight(.medium))
+                .lineLimit(1)
 
-                Spacer()
-
-                Text(Self.dateFormatter.string(from: post.date))
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
+            if post.isDraft {
+                Text("Draft")
+                    .font(.caption2.weight(.semibold))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Color.orange.opacity(0.15))
+                    .foregroundStyle(.orange)
+                    .clipShape(Capsule())
             }
 
-            if !post.categories.isEmpty {
-                HStack(spacing: 6) {
-                    ForEach(post.categories, id: \.self) { cat in
-                        Text(cat)
-                            .font(.caption.weight(.medium))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 3)
-                            .background(Theme.chipBg)
-                            .clipShape(Capsule())
-                    }
-                }
+            ForEach(post.categories, id: \.self) { cat in
+                Text(cat)
+                    .font(.caption2.weight(.medium))
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 2)
+                    .background(Theme.chipBg)
+                    .clipShape(Capsule())
             }
+
+            Spacer()
         }
-        .padding(.vertical, 10)
+        .padding(.vertical, 6)
     }
 }
