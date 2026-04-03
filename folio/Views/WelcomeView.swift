@@ -3,6 +3,7 @@ import Photos
 
 struct WelcomeView: View {
     var isDragTargeted: Bool = false
+    var onBrowse: (() -> Void)? = nil
     @EnvironmentObject var pendingPost: PendingPost
     @State private var showCancelConfirm = false
     @State private var photosStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
@@ -34,6 +35,11 @@ struct WelcomeView: View {
                         HStack(spacing: 0) {
                             Text("Drag photos here, or ")
                             Button("New Post") { startTextPost() }
+                                .buttonStyle(.plain)
+                                .foregroundStyle(Theme.accent)
+                                .focusable(false)
+                            Text(" · ")
+                            Button("Browse Posts") { onBrowse?() }
                                 .buttonStyle(.plain)
                                 .foregroundStyle(Theme.accent)
                                 .focusable(false)

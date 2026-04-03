@@ -67,6 +67,11 @@ enum MarkdownGenerator {
         return parts.joined(separator: "\n")
     }
 
+    /// Overwrites a specific file URL — used when re-editing an existing post.
+    static func write(content: String, to url: URL) throws {
+        try content.write(to: url, atomically: true, encoding: .utf8)
+    }
+
     static func write(content: String, filename: String, date: Date, settings: AppSettings) throws -> URL {
         let subpath = AppSettings.resolveSubpath(settings.contentSubpath, for: date)
         var destDir = URL(fileURLWithPath: settings.contentPath)

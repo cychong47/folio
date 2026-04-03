@@ -12,6 +12,7 @@ description: Full feature list for Folio — a native macOS app for creating Hug
 
 ## Content Authoring
 
+- **Post list view** — "Browse Posts" opens a full list of every `.md` file in the content directory, sorted by date descending; each row shows title, date, categories, and a Draft badge; select any post to open it for re-editing
 - **Split-view post editor** — monospaced markdown editor on the left; text + image preview on the right showing content in document order
 - **Live text + image preview** — typed text and photos rendered in sequence so you can see how captions relate to photos before publishing
 - **Hugo frontmatter auto-generation** — title, date (with time and timezone offset), categories, tags, and series written automatically at Save time

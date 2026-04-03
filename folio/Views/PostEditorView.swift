@@ -46,6 +46,18 @@ struct PostEditorView: View {
         return "\(datePrefix)-\(slug)"
     }
 
+    private var isReEditing: Bool { pendingPost.existingFileURL != nil }
+
+    private var resetMessage: String {
+        if isReEditing {
+            return "This will discard your unsaved changes."
+        } else if pendingPost.lastPublished != nil {
+            return "This will discard all content and delete the saved post files."
+        } else {
+            return "This will discard all photos and text. Staged image files will be deleted."
+        }
+    }
+
     // MARK: - Body
 
     var body: some View {
@@ -59,21 +71,21 @@ struct PostEditorView: View {
         .background(Theme.background)
         .confirmationDialog("Reset post?", isPresented: $showResetConfirm, titleVisibility: .visible) {
             Button("Reset", role: .destructive) {
-                if let last = pendingPost.lastPublished {
+                if pendingPost.existingFileURL == nil, let last = pendingPost.lastPublished {
                     let fm = FileManager.default
                     try? fm.removeItem(at: last.markdownURL)
                     for url in last.imageURLs { try? fm.removeItem(at: url) }
                     pendingPost.lastPublished = nil
                 }
-                deleteStagingFiles()
+                if pendingPost.existingFileURL == nil {
+                    deleteStagingFiles()
+                }
                 pendingPost.clear()
                 titleIsInvalid = false
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text(pendingPost.lastPublished != nil
-                 ? "This will discard all content and delete the saved post files."
-                 : "This will discard all photos and text. Staged image files will be deleted.")
+            Text(resetMessage)
         }
         .onAppear { prepopulateMarkdown() }
         .onDisappear { hugoServer.stop() }
@@ -410,18 +422,20 @@ struct PostEditorView: View {
 
             // Right: preview panel
             VStack(spacing: 0) {
-                // Staging path bar
+                // Path bar
                 HStack(spacing: 4) {
                     Image(systemName: "folder")
                         .font(.caption2)
-                    Text(stagingDirectory.path)
+                    let displayPath = pendingPost.existingFileURL?.path ?? stagingDirectory.path
+                    Text(displayPath)
                         .font(.caption2)
                         .lineLimit(1)
                         .truncationMode(.head)
-                        .help(stagingDirectory.path)
+                        .help(displayPath)
                     Spacer()
                     Button {
-                        NSWorkspace.shared.open(stagingDirectory)
+                        let revealURL = pendingPost.existingFileURL ?? stagingDirectory
+                        NSWorkspace.shared.activateFileViewerSelecting([revealURL])
                     } label: {
                         Image(systemName: "arrow.up.right.circle")
                             .font(.caption2)
@@ -565,7 +579,10 @@ struct PostEditorView: View {
         }
         let date = pendingPost.postDate
         do {
-            let imageURLs = try PhotoExporter.copyPendingToStatic(photos: pendingPost.photos, settings: settings)
+            // When re-editing, images are already in place — skip copying.
+            let imageURLs = isReEditing
+                ? []
+                : (try PhotoExporter.copyPendingToStatic(photos: pendingPost.photos, settings: settings))
             let fullContent = MarkdownGenerator.frontmatter(
                 title: pendingPost.title,
                 date: date,
@@ -574,12 +591,18 @@ struct PostEditorView: View {
                 series: pendingPost.series,
                 customFields: settings.activeProfile?.customFrontmatterFields ?? []
             ) + "\n" + pendingPost.markdownBody
-            let mdURL = try MarkdownGenerator.write(
-                content: fullContent,
-                filename: fullFilename,
-                date: date,
-                settings: settings
-            )
+            let mdURL: URL
+            if let existingURL = pendingPost.existingFileURL {
+                try MarkdownGenerator.write(content: fullContent, to: existingURL)
+                mdURL = existingURL
+            } else {
+                mdURL = try MarkdownGenerator.write(
+                    content: fullContent,
+                    filename: fullFilename,
+                    date: date,
+                    settings: settings
+                )
+            }
             pendingPost.lastPublished = PublishedRecord(
                 markdownURL: mdURL,
                 imageURLs: imageURLs,

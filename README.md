@@ -27,6 +27,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Theme switcher** — System / Light / Dark, fully adaptive warm-cream / dark-charcoal palette
 - **Tabbed Settings window** — General (master-detail) and Appearance tabs; categories management merged into the General detail panel
 - **Quit on window close** — closing the main window also dismisses Settings and quits the app
+- **Post list view** — "Browse Posts" on the welcome screen lists all existing posts in the content directory sorted by date; select any post to re-edit its title, body, frontmatter, or metadata
 - **Auto git commit on Save** — per-profile toggle in Settings; runs `git add -A && git commit && git push` in the blog root after each Save; commit message template supports `{{title}}`
 - **OTA updates** — Settings → Updates checks GitHub releases; one-click download and install via Archive Utility
 - **What's New sheet** — shown automatically on first launch of each new version; lists changes since the last-seen version

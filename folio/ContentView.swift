@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var isDragTargeted = false
     @State private var importTotal: Int = 0
     @State private var importCompleted: Int = 0
+    @State private var browsing = false
 
     private var isImporting: Bool { importTotal > 0 }
 
@@ -14,10 +15,18 @@ struct ContentView: View {
         ZStack {
             Theme.background.ignoresSafeArea()
 
-            if pendingPost.isEmpty {
-                WelcomeView(isDragTargeted: isDragTargeted)
-            } else {
+            if !pendingPost.isEmpty {
                 PostEditorView()
+            } else if browsing {
+                PostListView(
+                    onBack: { browsing = false },
+                    onSelect: { summary in
+                        loadPost(summary)
+                        browsing = false
+                    }
+                )
+            } else {
+                WelcomeView(isDragTargeted: isDragTargeted, onBrowse: { browsing = true })
             }
 
             DropZone(
@@ -48,6 +57,64 @@ struct ContentView: View {
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
             }
         }
+    }
+
+    private func loadPost(_ summary: PostSummary) {
+        pendingPost.clear()
+        pendingPost.title = summary.title
+        pendingPost.slug = summary.slug
+        pendingPost.dateOverride = summary.date
+        pendingPost.categories = summary.categories
+        pendingPost.tags = summary.tags
+        pendingPost.series = summary.series
+        pendingPost.markdownBody = summary.bodyText
+        pendingPost.existingFileURL = summary.fileURL
+        pendingPost.photos = resolvedPhotos(from: summary.bodyText, postDate: summary.date)
+    }
+
+    /// Parses image references from markdown body and resolves them to ExportedPhoto instances
+    /// pointing at files already on disk in staticImagesPath.
+    private func resolvedPhotos(from body: String, postDate: Date) -> [ExportedPhoto] {
+        let pattern = #"!\[.*?\]\(([^)]+)\)"#
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return [] }
+        let staticBase = URL(fileURLWithPath: settings.staticImagesPath)
+        let prefix = settings.imageURLPrefix
+
+        var photos: [ExportedPhoto] = []
+        var seen = Set<String>()
+        for line in body.components(separatedBy: "\n") {
+            let ns = line as NSString
+            let matches = regex.matches(in: line, range: NSRange(location: 0, length: ns.length))
+            for match in matches {
+                guard let range = Range(match.range(at: 1), in: line) else { continue }
+                let markdownPath = String(line[range])
+                guard seen.insert(markdownPath).inserted else { continue }
+
+                // Strip imageURLPrefix to get path relative to staticImagesPath
+                let stripped: String
+                let normalizedPrefix = prefix.hasSuffix("/") ? String(prefix.dropLast()) : prefix
+                if markdownPath.hasPrefix(normalizedPrefix + "/") {
+                    stripped = String(markdownPath.dropFirst(normalizedPrefix.count + 1))
+                } else if markdownPath.hasPrefix(normalizedPrefix) {
+                    stripped = String(markdownPath.dropFirst(normalizedPrefix.count))
+                } else {
+                    stripped = (markdownPath as NSString).lastPathComponent
+                }
+
+                let localURL = staticBase.appendingPathComponent(stripped)
+                guard FileManager.default.fileExists(atPath: localURL.path) else { continue }
+
+                let filename = localURL.lastPathComponent
+                let exifDate = PhotoExporter.readEXIFDate(from: localURL) ?? postDate
+                photos.append(ExportedPhoto(
+                    filename: filename,
+                    markdownPath: markdownPath,
+                    localURL: localURL,
+                    exifDate: exifDate
+                ))
+            }
+        }
+        return photos
     }
 
     private func handleDroppedPhotos(_ photos: [ExportedPhoto]) {
