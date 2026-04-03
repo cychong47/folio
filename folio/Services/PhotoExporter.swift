@@ -62,6 +62,53 @@ enum PhotoExporter {
         return formatter.date(from: dateString)
     }
 
+    /// Scans `directory` for JPEG/PNG images whose EXIF orientation is not `.up`,
+    /// bakes the correct rotation into the pixel data, and overwrites the file.
+    /// Returns the number of files that were actually corrected.
+    @discardableResult
+    static func fixOrientationInPlace(directory: String,
+                                      progress: @escaping (Int, Int) -> Void) -> Int {
+        let fm = FileManager.default
+        let root = URL(fileURLWithPath: directory)
+        guard let enumerator = fm.enumerator(at: root, includingPropertiesForKeys: nil) else { return 0 }
+
+        let imageExts = Set(["jpg", "jpeg", "png"])
+        var files: [URL] = []
+        for case let fileURL as URL in enumerator
+            where imageExts.contains(fileURL.pathExtension.lowercased()) {
+            files.append(fileURL)
+        }
+
+        let total = files.count
+        var fixed = 0
+        let ciCtx = CIContext(options: [.useSoftwareRenderer: false])
+
+        for (i, fileURL) in files.enumerated() {
+            progress(i, total)
+            guard let source = CGImageSourceCreateWithURL(fileURL as CFURL, nil),
+                  let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
+                  let rawOrientation = props[kCGImagePropertyOrientation as String] as? UInt32,
+                  let orientation = CGImagePropertyOrientation(rawValue: rawOrientation),
+                  orientation != .up,
+                  let rawCGImage = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
+                continue
+            }
+            let ci = CIImage(cgImage: rawCGImage).oriented(orientation)
+            guard let corrected = ciCtx.createCGImage(ci, from: ci.extent) else { continue }
+            let uti: CFString = fileURL.pathExtension.lowercased() == "png"
+                ? "public.png" as CFString : "public.jpeg" as CFString
+            let out = NSMutableData()
+            guard let dest = CGImageDestinationCreateWithData(out, uti, 1, nil) else { continue }
+            CGImageDestinationAddImage(dest, corrected,
+                [kCGImageDestinationLossyCompressionQuality: 0.92] as CFDictionary)
+            guard CGImageDestinationFinalize(dest) else { continue }
+            try? (out as Data).write(to: fileURL)
+            fixed += 1
+        }
+        progress(total, total)
+        return fixed
+    }
+
     @discardableResult
     static func copyPendingToStatic(photos: [ExportedPhoto], settings: AppSettings) throws -> [URL] {
         let base = URL(fileURLWithPath: settings.staticImagesPath)

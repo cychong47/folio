@@ -235,6 +235,8 @@ private struct ProfileDetailPanel: View {
     @Binding var editingProfileID: UUID?
 
     @State private var draft = BlogProfile(name: "")
+    @State private var isFixingOrientation = false
+    @State private var fixOrientationStatus: String?
 
     var body: some View {
         Group {
@@ -435,6 +437,24 @@ private struct ProfileDetailPanel: View {
                         }
                         .padding(.top, 4)
 
+                        HStack(spacing: 8) {
+                            Text("Fix old")
+                                .frame(width: 70, alignment: .trailing)
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                            Button(isFixingOrientation ? "Fixing…" : "Fix Orientation") {
+                                fixOrientation()
+                            }
+                            .disabled(isFixingOrientation || draft.staticImagesPath.isEmpty)
+                            if let status = fixOrientationStatus {
+                                Text(status)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                        }
+                        .padding(.top, 4)
+
                         Divider().padding(.vertical, 12)
 
                         HStack {
@@ -559,6 +579,23 @@ private struct ProfileDetailPanel: View {
         guard let id = editingProfileID,
               let profile = settings.profiles.first(where: { $0.id == id }) else { return }
         draft = profile
+    }
+
+    private func fixOrientation() {
+        let path = draft.staticImagesPath
+        guard !path.isEmpty else { return }
+        isFixingOrientation = true
+        fixOrientationStatus = nil
+        DispatchQueue.global(qos: .userInitiated).async {
+            let fixed = PhotoExporter.fixOrientationInPlace(directory: path) { done, total in
+                // progress updates available if needed
+                _ = (done, total)
+            }
+            DispatchQueue.main.async {
+                isFixingOrientation = false
+                fixOrientationStatus = fixed == 0 ? "All images already correct" : "\(fixed) image\(fixed == 1 ? "" : "s") fixed"
+            }
+        }
     }
 
     private func pickBlogRoot() {

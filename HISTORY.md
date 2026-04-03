@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.10.2
+- Settings → Image Export: "Fix Orientation" button corrects rotation on already-exported images in staticImagesPath in-place
+
 ### v1.10.1
 - Fix: exported images now respect EXIF orientation — photos taken in portrait or upside-down are correctly rotated when stripped or resized
 
