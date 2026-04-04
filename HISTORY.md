@@ -4,6 +4,10 @@
 
 ## Released
 
+### v1.12.1
+- Fix: post list rows are now single-line and compact (date, title, category chips on one row)
+- Fix: split-view divider now correctly resizes editor and preview panels
+
 ### v1.12.0
 - Post list view: browse all existing posts in the content directory, sorted by date; tap any row to open it for re-editing (closes #15)
 
