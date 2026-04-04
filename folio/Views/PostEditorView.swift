@@ -1,12 +1,15 @@
 import SwiftUI
 import AppKit
 
-// Watches a single file for external writes and fires a callback on the main queue.
+// Watches a single file for external writes and fires a debounced callback on the main queue.
 // Handles both direct writes and atomic-rename saves (VSCode, Neovim, etc.) by
 // watching .write, .rename, and .delete, then re-opening the file after each event
 // to track whatever inode is now at the path.
+// The 150 ms debounce coalesces rapid events (e.g. mid-write flushes from direct-write
+// editors) so onChange fires once per logical save, not once per flush.
 private final class FileWatcher: ObservableObject {
     private var source: DispatchSourceFileSystemObject?
+    private var debounceTask: Task<Void, Never>?
     private var pendingIgnore = false
 
     func watch(url: URL, onChange: @escaping () -> Void) {
@@ -26,14 +29,22 @@ private final class FileWatcher: ObservableObject {
             guard let self else { return }
             let shouldNotify = !self.pendingIgnore
             self.pendingIgnore = false
-            if shouldNotify { onChange() }
-            // Re-open after this handler returns so we track the new inode
+            // Re-open after this handler returns to track the new inode
             // if the editor replaced the file via atomic rename.
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 self.source?.cancel()
                 self.source = nil
                 self.openAndWatch(url: url, onChange: onChange)
+            }
+            guard shouldNotify else { return }
+            // Debounce: cancel any pending notification and wait 150 ms for writes to settle.
+            self.debounceTask?.cancel()
+            self.debounceTask = Task { @MainActor [weak self] in
+                guard let self else { return }
+                try? await Task.sleep(nanoseconds: 150_000_000)
+                guard !Task.isCancelled else { return }
+                onChange()
             }
         }
         src.setCancelHandler { close(fd) }
@@ -45,6 +56,8 @@ private final class FileWatcher: ObservableObject {
     func ignoreNextChange() { pendingIgnore = true }
 
     func stop() {
+        debounceTask?.cancel()
+        debounceTask = nil
         source?.cancel()
         source = nil
     }

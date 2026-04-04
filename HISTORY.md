@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.16.6
+- External-editor reload: add 150 ms debounce inside FileWatcher to coalesce rapid flush events from direct-write editors, preventing partial-content flicker
+
 ### v1.16.5
 - Fix external-editor live reload: also watch .rename/.delete events so atomic-save editors (VSCode, Neovim, etc.) trigger a reload; re-opens the file after each event to track the new inode
 
