@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.16.2
+
+- Fix OTA install: "Quit & Install" now correctly replaces the app bundle — previously `cp -Rf` nested the new app inside the old one (because the destination directory already existed) so the update was silently discarded and the old version relaunched
+
+---
+
 ### v1.16.1
 
 - Image resize cap now defaults to 1024 px (long edge) and is enabled for all new profiles — previously the cap was off by default
