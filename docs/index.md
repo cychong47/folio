@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.16.3
+
+- Live reload from external editor — editor body refreshes automatically when the markdown file is modified outside Folio (e.g. in VSCode or Neovim)
+
+---
+
 ### v1.16.2
 
 - Fix OTA install: "Quit & Install" now correctly replaces the app bundle — previously `cp -Rf` nested the new app inside the old one (because the destination directory already existed) so the update was silently discarded and the old version relaunched
