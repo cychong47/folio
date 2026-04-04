@@ -72,7 +72,7 @@ struct FolioApp: App {
                     ])
                 }
             }
-            CommandMenu("Folio") {
+            CommandGroup(after: .appInfo) {
                 Button("Check for Updates…") {
                     updateChecker.checkForUpdates()
                     showUpdatePopup = true
