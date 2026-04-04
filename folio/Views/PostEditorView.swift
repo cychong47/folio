@@ -2,26 +2,39 @@ import SwiftUI
 import AppKit
 
 // Watches a single file for external writes and fires a callback on the main queue.
+// Handles both direct writes and atomic-rename saves (VSCode, Neovim, etc.) by
+// watching .write, .rename, and .delete, then re-opening the file after each event
+// to track whatever inode is now at the path.
 private final class FileWatcher: ObservableObject {
     private var source: DispatchSourceFileSystemObject?
     private var pendingIgnore = false
 
     func watch(url: URL, onChange: @escaping () -> Void) {
         stop()
+        openAndWatch(url: url, onChange: onChange)
+    }
+
+    private func openAndWatch(url: URL, onChange: @escaping () -> Void) {
         let fd = open(url.path, O_EVTONLY)
         guard fd >= 0 else { return }
         let src = DispatchSource.makeFileSystemObjectSource(
             fileDescriptor: fd,
-            eventMask: .write,
+            eventMask: [.write, .rename, .delete],
             queue: .main
         )
         src.setEventHandler { [weak self] in
             guard let self else { return }
-            if self.pendingIgnore {
-                self.pendingIgnore = false
-                return
+            let shouldNotify = !self.pendingIgnore
+            self.pendingIgnore = false
+            if shouldNotify { onChange() }
+            // Re-open after this handler returns so we track the new inode
+            // if the editor replaced the file via atomic rename.
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.source?.cancel()
+                self.source = nil
+                self.openAndWatch(url: url, onChange: onChange)
             }
-            onChange()
         }
         src.setCancelHandler { close(fd) }
         src.resume()
