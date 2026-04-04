@@ -71,15 +71,18 @@ struct PostEditorView: View {
             footerSection
         }
         .background(Theme.background)
-        .confirmationDialog("Reset post?", isPresented: $showResetConfirm, titleVisibility: .visible) {
-            Button("Reset", role: .destructive) {
-                if pendingPost.existingFileURL == nil, let last = pendingPost.lastPublished {
-                    let fm = FileManager.default
-                    try? fm.removeItem(at: last.markdownURL)
-                    for url in last.imageURLs { try? fm.removeItem(at: url) }
+        .confirmationDialog(isReEditing ? "Discard changes?" : "Reset post?", isPresented: $showResetConfirm, titleVisibility: .visible) {
+            Button(isReEditing ? "Discard Changes" : "Reset", role: .destructive) {
+                if isReEditing {
+                    // Re-editing: just abandon the session, leave the existing file untouched
                     pendingPost.lastPublished = nil
-                }
-                if pendingPost.existingFileURL == nil {
+                } else {
+                    if let last = pendingPost.lastPublished {
+                        let fm = FileManager.default
+                        try? fm.removeItem(at: last.markdownURL)
+                        for url in last.imageURLs { try? fm.removeItem(at: url) }
+                        pendingPost.lastPublished = nil
+                    }
                     deleteStagingFiles()
                 }
                 pendingPost.clear()
@@ -528,7 +531,7 @@ struct PostEditorView: View {
                 }
             }
             Spacer()
-            Button("Reset") { showResetConfirm = true }
+            Button(isReEditing ? "Discard Changes" : "Reset") { showResetConfirm = true }
                 .buttonStyle(.plain)
                 .foregroundStyle(.red.opacity(0.75))
                 .font(.callout)

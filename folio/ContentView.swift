@@ -61,6 +61,7 @@ struct ContentView: View {
 
     private func loadPost(_ summary: PostSummary) {
         pendingPost.clear()
+        pendingPost.lastPublished = nil   // don't carry previous session's record into a re-edit
         pendingPost.title = summary.title
         pendingPost.slug = summary.slug
         pendingPost.dateOverride = summary.date

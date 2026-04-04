@@ -4,6 +4,10 @@
 
 ## Released
 
+### v1.15.1
+- Fix: re-editing an existing post then discarding no longer deletes the post files — "Reset" is now "Discard Changes" when re-editing and only closes the editor without touching files
+- Fix: opening an existing post from Browse Posts no longer inherits the previous session's cancel record, preventing accidental deletion via "Cancel last post"
+
 ### v1.15.0
 - Keyboard shortcuts: `⌘N` New Post, `⌘B` Browse Posts, `⌘S` Save (replaces `⌘⇧↩`), `⌘⇧U` Publish (closes #35)
 - Check for Updates: new Folio menu bar item; shows a popup with current status and a Download button when an update is available (closes #35)
