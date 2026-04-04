@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.16.4
+
+- Fix OTA "Quit & Install": write update script to /tmp, run via nohup for true process detachment, strip quarantine xattr so macOS doesn't block the relaunched app
+
+---
+
 ### v1.16.3
 
 - Live reload from external editor — editor body refreshes automatically when the markdown file is modified outside Folio (e.g. in VSCode or Neovim)
