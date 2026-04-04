@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.16.5
+
+- Fix external-editor live reload: also watch .rename/.delete events so atomic-save editors (VSCode, Neovim, etc.) trigger a reload; re-opens the file after each event to track the new inode
+
+---
+
 ### v1.16.4
 
 - Fix OTA "Quit & Install": write update script to /tmp, run via nohup for true process detachment, strip quarantine xattr so macOS doesn't block the relaunched app
