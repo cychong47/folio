@@ -17,6 +17,13 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.15.0
+
+- Keyboard shortcuts: `⌘N` New Post, `⌘B` Browse Posts, `⌘S` Save (replaces `⌘⇧↩`), `⌘⇧U` Publish (closes #35)
+- Check for Updates: new Folio menu bar item; shows a popup with current status and a Download button when an update is available (closes #35)
+
+---
+
 ### v1.14.0
 
 - Editor performance: preview panel now debounces updates (300 ms after last keystroke) so typing stays fast with long posts (closes #34)
