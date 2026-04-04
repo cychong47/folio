@@ -16,7 +16,7 @@ struct SettingsView: View {
     var body: some View {
         TabView {
             GeneralTab()
-                .tabItem { Label("General", systemImage: "gear") }
+                .tabItem { Label("Blog", systemImage: "doc.text") }
 
             AppearanceTab()
                 .tabItem { Label("Appearance", systemImage: "paintpalette") }
