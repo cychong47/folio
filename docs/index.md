@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.15.3
+
+- Settings: renamed "General" tab to "Blog"
+
+---
+
 ### v1.15.2
 
 - OTA update: after downloading, Folio extracts the zip automatically and shows a "Quit & Install" button; the app quits, replaces itself in-place, and relaunches without any manual steps
