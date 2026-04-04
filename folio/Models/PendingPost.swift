@@ -6,6 +6,7 @@ struct ExportedPhoto: Identifiable, Codable {
     let markdownPath: String    // e.g. "/images/2026-03-05-photo.jpg"
     let localURL: URL           // file URL in App Group /pending/
     let exifDate: Date
+    var isVideo: Bool = false
 }
 
 struct PendingPostMetadata: Codable {

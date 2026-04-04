@@ -56,12 +56,20 @@ enum MarkdownGenerator {
         "![](\(markdownPath))"
     }
 
-    /// Returns only the body content (image references + blank lines) — no frontmatter.
+    static func videoReference(markdownPath: String) -> String {
+        "{{< video library=\"1\" src=\"\(markdownPath)\" controls=\"yes\" >}}"
+    }
+
+    /// Returns only the body content (image/video references + blank lines) — no frontmatter.
     /// Frontmatter is composed from model fields at publish time.
     static func initialBody(photos: [ExportedPhoto]) -> String {
         var parts: [String] = [""]
-        let imageRefs = photos.map { imageReference(markdownPath: $0.markdownPath) }
-        parts.append(contentsOf: imageRefs)
+        let refs = photos.map { photo in
+            photo.isVideo
+                ? videoReference(markdownPath: photo.markdownPath)
+                : imageReference(markdownPath: photo.markdownPath)
+        }
+        parts.append(contentsOf: refs)
         parts.append("")
         parts.append("")
         return parts.joined(separator: "\n")

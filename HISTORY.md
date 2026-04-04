@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.16.0
+- Video support: drag-and-drop `.mp4`, `.mov`, and `.webm` files from Finder; inserts a Hugo `{{< video >}}` shortcode at the cursor position and copies the file to the static directory on save; preview panel shows a film-strip placeholder (closes #29)
+
 ### v1.15.4
 - Fix: OTA auto-update now works — removed App Sandbox from the main app so the install script can replace Folio.app in place (sandbox blocked the cp command silently, causing the old app to relaunch)
 

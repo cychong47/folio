@@ -124,7 +124,9 @@ enum PhotoExporter {
             if FileManager.default.fileExists(atPath: dest.path) {
                 try FileManager.default.removeItem(at: dest)
             }
-            if let maxDim, let resized = resized(url: photo.localURL, maxLongEdge: maxDim) {
+            if photo.isVideo {
+                try FileManager.default.copyItem(at: photo.localURL, to: dest)
+            } else if let maxDim, let resized = resized(url: photo.localURL, maxLongEdge: maxDim) {
                 let final = strip ? stripped(data: resized, url: photo.localURL) ?? resized : resized
                 try final.write(to: dest)
             } else if strip, let stripped = stripped(url: photo.localURL) {

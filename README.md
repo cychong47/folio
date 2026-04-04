@@ -8,6 +8,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 ## Features
 
 - **Drag & drop from Photos.app or Finder** — uses `NSFilePromiseReceiver` to handle Photos.app drags
+- **Video file support** — drag `.mp4`, `.mov`, or `.webm` files from Finder; inserts a Hugo `{{< video >}}` shortcode and copies the file to the static directory on save
 - **EXIF date prefix** — filenames derived from `DateTimeOriginal` (e.g. `2026-03-05-IMG_1234.jpg`)
 - **Split-view post editor** — markdown editor on the left, live text+image preview on the right showing content in document order
 - **Hugo frontmatter** — auto-generated with title, date, categories, and image references

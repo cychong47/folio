@@ -97,10 +97,10 @@ class DropTargetView: NSView {
         } else {
             let urls = (pasteboard.readObjects(forClasses: [NSURL.self],
                                                options: [.urlReadingFileURLsOnly: true]) as? [URL]) ?? []
-            let imageExts = Set(["jpg","jpeg","png","heic","heif","tiff","tif","gif","webp","raw"])
-            let imageURLs = urls.filter { imageExts.contains($0.pathExtension.lowercased()) }
-            onImportStarted?(imageURLs.count)
-            processFileURLs(imageURLs, stagingDir: stagingDir)
+            let mediaExts = Set(["jpg","jpeg","png","heic","heif","tiff","tif","gif","webp","raw","mp4","mov","webm"])
+            let mediaURLs = urls.filter { mediaExts.contains($0.pathExtension.lowercased()) }
+            onImportStarted?(mediaURLs.count)
+            processFileURLs(mediaURLs, stagingDir: stagingDir)
         }
         return true
     }
@@ -141,8 +141,10 @@ class DropTargetView: NSView {
 
                 let mdPath = DropTargetView.buildMarkdownPath(
                     filename: filename, date: exifDate, prefix: urlPrefix, subpath: imagesSubpath)
+                let videoExts = Set(["mp4","mov","webm"])
+                let isVideo = videoExts.contains(url.pathExtension.lowercased())
                 let photo = ExportedPhoto(filename: filename, markdownPath: mdPath,
-                                          localURL: dest, exifDate: exifDate)
+                                          localURL: dest, exifDate: exifDate, isVideo: isVideo)
                 lock.lock(); photos.append(photo); lock.unlock()
             }
         }
@@ -169,8 +171,10 @@ class DropTargetView: NSView {
                 try? FileManager.default.copyItem(at: url, to: dest)
                 let mdPath = DropTargetView.buildMarkdownPath(
                     filename: filename, date: exifDate, prefix: urlPrefix, subpath: imagesSubpath)
+                let videoExts = Set(["mp4","mov","webm"])
+                let isVideo = videoExts.contains(url.pathExtension.lowercased())
                 let photo = ExportedPhoto(filename: filename, markdownPath: mdPath,
-                                          localURL: dest, exifDate: exifDate)
+                                          localURL: dest, exifDate: exifDate, isVideo: isVideo)
                 photos.append(photo)
                 let completed = index + 1
                 DispatchQueue.main.async { [weak self] in self?.onProgress?(completed, total) }

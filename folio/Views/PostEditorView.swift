@@ -400,6 +400,7 @@ struct PostEditorView: View {
     }
 
     private static let imageRefRegex = try! NSRegularExpression(pattern: #"^!\[\]\(([^)]+)\)$"#)
+    private static let videoRefRegex = try! NSRegularExpression(pattern: #"\{\{< video [^>]*src="([^"]+)"[^>]* >\}\}"#)
 
     private var previewBlocks: [PostPreviewBlock] {
         var blocks: [PostPreviewBlock] = []
@@ -422,6 +423,12 @@ struct PostEditorView: View {
                let photo = pendingPost.photos.first(where: { $0.markdownPath == String(line[capRange]) }) {
                 flushText()
                 blocks.append(PostPreviewBlock(id: index, kind: .image(photo)))
+                index += 1
+            } else if let match = Self.videoRefRegex.firstMatch(in: line, range: range),
+                      let capRange = Range(match.range(at: 1), in: line),
+                      let video = pendingPost.photos.first(where: { $0.markdownPath == String(line[capRange]) && $0.isVideo }) {
+                flushText()
+                blocks.append(PostPreviewBlock(id: index, kind: .video(video)))
                 index += 1
             } else {
                 textLines.append(line)
@@ -491,6 +498,22 @@ struct PostEditorView: View {
                                         .frame(height: 100)
                                         .overlay(Image(systemName: "photo").foregroundStyle(.secondary))
                                 }
+                            case .video(let video):
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color.secondary.opacity(0.08))
+                                    .frame(height: 100)
+                                    .overlay(
+                                        VStack(spacing: 6) {
+                                            Image(systemName: "film")
+                                                .font(.title2)
+                                                .foregroundStyle(.secondary)
+                                            Text(video.filename)
+                                                .font(.caption2)
+                                                .foregroundStyle(.secondary)
+                                                .lineLimit(1)
+                                                .truncationMode(.middle)
+                                        }
+                                    )
                             }
                         }
                     }
@@ -808,6 +831,6 @@ struct PhotoThumbnailView: View {
 
 struct PostPreviewBlock: Identifiable {
     let id: Int
-    enum Kind { case text(String); case image(ExportedPhoto) }
+    enum Kind { case text(String); case image(ExportedPhoto); case video(ExportedPhoto) }
     let kind: Kind
 }
