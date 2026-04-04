@@ -17,6 +17,13 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.12.1
+
+- Fix: post list rows are now single-line and compact (date, title, category chips on one row)
+- Fix: split-view divider now correctly resizes editor and preview panels
+
+---
+
 ### v1.12.0
 
 - Post list view: browse all existing posts in the content directory, sorted by date; tap any row to open it for re-editing (closes #15)
