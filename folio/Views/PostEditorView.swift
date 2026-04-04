@@ -1,11 +1,48 @@
 import SwiftUI
 import AppKit
 
+// Watches a single file for external writes and fires a callback on the main queue.
+private final class FileWatcher: ObservableObject {
+    private var source: DispatchSourceFileSystemObject?
+    private var pendingIgnore = false
+
+    func watch(url: URL, onChange: @escaping () -> Void) {
+        stop()
+        let fd = open(url.path, O_EVTONLY)
+        guard fd >= 0 else { return }
+        let src = DispatchSource.makeFileSystemObjectSource(
+            fileDescriptor: fd,
+            eventMask: .write,
+            queue: .main
+        )
+        src.setEventHandler { [weak self] in
+            guard let self else { return }
+            if self.pendingIgnore {
+                self.pendingIgnore = false
+                return
+            }
+            onChange()
+        }
+        src.setCancelHandler { close(fd) }
+        src.resume()
+        source = src
+    }
+
+    /// Call before writing the file from within the app to skip the next event.
+    func ignoreNextChange() { pendingIgnore = true }
+
+    func stop() {
+        source?.cancel()
+        source = nil
+    }
+}
+
 struct PostEditorView: View {
     @EnvironmentObject var settings: AppSettings
     @EnvironmentObject var pendingPost: PendingPost
 
     @StateObject private var hugoServer = HugoServerManager()
+    @StateObject private var fileWatcher = FileWatcher()
 
     @State private var publishError: String?
     @State private var isPublishing = false
@@ -95,10 +132,21 @@ struct PostEditorView: View {
         .onAppear {
             prepopulateMarkdown()
             previewBody = pendingPost.markdownBody
+            if let url = pendingPost.existingFileURL {
+                fileWatcher.watch(url: url) { reloadBodyFromDisk(url: url) }
+            }
         }
         .onDisappear {
             hugoServer.stop()
             previewDebounceTask?.cancel()
+            fileWatcher.stop()
+        }
+        .onChange(of: pendingPost.existingFileURL) { url in
+            if let url {
+                fileWatcher.watch(url: url) { reloadBodyFromDisk(url: url) }
+            } else {
+                fileWatcher.stop()
+            }
         }
         .onChange(of: pendingPost.markdownBody) { newValue in
             previewDebounceTask?.cancel()
@@ -601,6 +649,21 @@ struct PostEditorView: View {
         hugoServer.openInBrowser(url: url, serverWasAlreadyRunning: wasRunning)
     }
 
+    private func reloadBodyFromDisk(url: URL) {
+        guard let content = try? String(contentsOf: url, encoding: .utf8) else { return }
+        let lines = content.components(separatedBy: "\n")
+        guard lines.first?.trimmingCharacters(in: .whitespaces) == "---" else { return }
+        var fmEnd = -1
+        for (i, line) in lines.dropFirst().enumerated() {
+            if line.trimmingCharacters(in: .whitespaces) == "---" { fmEnd = i + 1; break }
+        }
+        guard fmEnd > 0 else { return }
+        let body = fmEnd + 1 < lines.count ? lines[(fmEnd + 1)...].joined(separator: "\n") : ""
+        if body != pendingPost.markdownBody {
+            pendingPost.markdownBody = body
+        }
+    }
+
     private func prepopulateMarkdown() {
         guard !pendingPost.photos.isEmpty, pendingPost.markdownBody.isEmpty else { return }
         pendingPost.markdownBody = MarkdownGenerator.initialBody(photos: pendingPost.photos)
@@ -637,6 +700,7 @@ struct PostEditorView: View {
             ) + "\n" + pendingPost.markdownBody
             let mdURL: URL
             if let existingURL = pendingPost.existingFileURL {
+                fileWatcher.ignoreNextChange()
                 try MarkdownGenerator.write(content: fullContent, to: existingURL)
                 mdURL = existingURL
             } else {

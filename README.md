@@ -11,6 +11,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Video file support** — drag `.mp4`, `.mov`, or `.webm` files from Finder; inserts a Hugo `{{< video >}}` shortcode and copies the file to the static directory on save
 - **EXIF date prefix** — filenames derived from `DateTimeOriginal` (e.g. `2026-03-05-IMG_1234.jpg`)
 - **Split-view post editor** — markdown editor on the left, live text+image preview on the right showing content in document order
+- **External editor live reload** — body text refreshes automatically when the post file is modified in an external editor (VSCode, Neovim, etc.)
 - **Hugo frontmatter** — auto-generated with title, date, categories, and image references
 - **Live slug** — filename slug auto-generated from title and kept in sync as you type
 - **Title validation** — Save is blocked with a red-bordered title field when title is left empty
