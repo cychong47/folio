@@ -34,31 +34,48 @@ final class UpdateChecker: ObservableObject {
     }
 
     /// Replaces the running app bundle with `newAppURL`, then relaunches.
-    /// Runs in a detached background shell so it survives after NSApp.terminate().
+    /// Writes a shell script to /tmp and runs it via nohup so it outlives this process.
     func installAndRelaunch(from newAppURL: URL) {
         let src = newAppURL.path
         let dst = Bundle.main.bundleURL.path
-        // Copy to the parent dir so cp creates dst fresh (if dst already exists as a
-        // directory, `cp -Rf src dst` nests src *inside* dst instead of replacing it).
+        // Copy into the parent dir so cp creates dst fresh; copying *to* an existing
+        // directory would nest src inside dst instead of replacing it.
         let dstParent = (dst as NSString).deletingLastPathComponent
 
-        // Shell-escape single quotes in paths (POSIX ' → '\'' trick)
+        // POSIX single-quote escape: ' → '\''
         func esc(_ s: String) -> String { s.replacingOccurrences(of: "'", with: "'\\''") }
 
-        // Remove old bundle first, then copy new one into the parent directory.
-        // Subshell runs in background (&) → survives after Folio quits.
-        let cmd = "( sleep 2 && rm -rf '\(esc(dst))' && cp -Rf '\(esc(src))' '\(esc(dstParent))' && open '\(esc(dst))' ) &"
+        // Write the update steps to a script file so they survive after Folio exits.
+        let scriptPath = (NSTemporaryDirectory() as NSString)
+            .appendingPathComponent("folio_update.sh")
+        let logPath = (NSTemporaryDirectory() as NSString)
+            .appendingPathComponent("folio_update.log")
+        let script = """
+        #!/bin/sh
+        exec >'\(esc(logPath))' 2>&1
+        set -x
+        sleep 2
+        rm -rf '\(esc(dst))'
+        cp -Rf '\(esc(src))' '\(esc(dstParent))'
+        xattr -dr com.apple.quarantine '\(esc(dst))' 2>/dev/null || true
+        open '\(esc(dst))'
+        """
+        try? script.write(toFile: scriptPath, atomically: true, encoding: .utf8)
+        try? FileManager.default.setAttributes([.posixPermissions: 0o755],
+                                               ofItemAtPath: scriptPath)
 
+        // nohup + & ensures the script is fully detached from this process group
+        // and won't be killed when NSApp.terminate() runs.
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/bin/sh")
-        task.arguments = ["-c", cmd]
+        task.arguments = ["-c", "nohup sh '\(esc(scriptPath))' >/dev/null 2>&1 &"]
         task.standardInput = FileHandle.nullDevice
         task.standardOutput = FileHandle.nullDevice
         task.standardError = FileHandle.nullDevice
         try? task.run()
 
-        // Wait briefly so the shell has time to fork the background subshell before we exit
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        // Give nohup time to fork the detached script before we exit.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             NSApp.terminate(nil)
         }
     }
