@@ -824,14 +824,10 @@ private struct UpdatesTab: View {
                         .font(.callout)
                         .foregroundStyle(.secondary)
                 } else {
-                    Button("Download & Install") {
+                    Button("Download Update") {
                         checker.downloadAndInstall(downloadURL: downloadURL)
                     }
                     .buttonStyle(.borderedProminent)
-                    Text("The update will be extracted automatically. Drag Folio.app to Applications to complete the install.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
 
@@ -841,16 +837,20 @@ private struct UpdatesTab: View {
                 Text("Downloading update…").foregroundStyle(.secondary)
             }
 
-        case .awaitingInstall:
+        case .readyToInstall(let newAppURL):
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 8) {
-                    Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                    Text("Update downloaded.").fontWeight(.medium)
+                    Image(systemName: "checkmark.circle.fill").foregroundStyle(Theme.accent)
+                    Text("Update ready to install").fontWeight(.medium)
                 }
-                Text("Drag Folio.app from the opened Finder window to your Applications folder, then relaunch.")
+                Text("Folio will quit, replace itself, and reopen automatically.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
+                Button("Quit & Install") {
+                    checker.installAndRelaunch(from: newAppURL)
+                }
+                .buttonStyle(.borderedProminent)
             }
 
         case .error(let message):

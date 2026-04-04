@@ -10,7 +10,7 @@ final class UpdateChecker: ObservableObject {
         case upToDate
         case available(tagName: String, downloadURL: String)
         case downloading
-        case awaitingInstall
+        case readyToInstall(newAppURL: URL)
         case error(String)
     }
 
@@ -24,11 +24,39 @@ final class UpdateChecker: ObservableObject {
     }
 
     func checkForUpdates() {
+        // If an update is already extracted and ready, don't re-check — just re-show the popup.
+        if case .readyToInstall = state { return }
         Task { await _check() }
     }
 
     func downloadAndInstall(downloadURL: String) {
         Task { await _download(from: downloadURL) }
+    }
+
+    /// Replaces the running app bundle with `newAppURL`, then relaunches.
+    /// Runs in a detached background shell so it survives after NSApp.terminate().
+    func installAndRelaunch(from newAppURL: URL) {
+        let src = newAppURL.path
+        let dst = Bundle.main.bundleURL.path
+
+        // Shell-escape single quotes in paths (POSIX ' → '\'' trick)
+        func esc(_ s: String) -> String { s.replacingOccurrences(of: "'", with: "'\\''") }
+
+        // Subshell runs in background (&) → survives after Folio quits
+        let cmd = "( sleep 1.5 && cp -Rf '\(esc(src))' '\(esc(dst))' && open '\(esc(dst))' ) &"
+
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/bin/sh")
+        task.arguments = ["-c", cmd]
+        task.standardInput = FileHandle.nullDevice
+        task.standardOutput = FileHandle.nullDevice
+        task.standardError = FileHandle.nullDevice
+        try? task.run()
+
+        // Small delay so the shell has time to fork before we exit
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            NSApp.terminate(nil)
+        }
     }
 
     // MARK: - Private
@@ -72,13 +100,37 @@ final class UpdateChecker: ObservableObject {
         }
         state = .downloading
         do {
-            let (tempURL, _) = try await URLSession.shared.download(from: url)
-            let dest = FileManager.default.temporaryDirectory
-                .appendingPathComponent("Folio-update.zip")
-            try? FileManager.default.removeItem(at: dest)
-            try FileManager.default.moveItem(at: tempURL, to: dest)
-            NSWorkspace.shared.open(dest)
-            state = .awaitingInstall
+            let (zipURL, _) = try await URLSession.shared.download(from: url)
+
+            // Extract on a background thread so the main thread stays free
+            let extractDir = FileManager.default.temporaryDirectory
+                .appendingPathComponent("FolioUpdateExtract", isDirectory: true)
+
+            let appURL: URL? = await Task.detached {
+                try? FileManager.default.removeItem(at: extractDir)
+                try? FileManager.default.createDirectory(at: extractDir,
+                                                          withIntermediateDirectories: true)
+                let unzip = Process()
+                unzip.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
+                unzip.arguments = ["-o", zipURL.path, "-d", extractDir.path]
+                unzip.standardOutput = FileHandle.nullDevice
+                unzip.standardError = FileHandle.nullDevice
+                guard (try? unzip.run()) != nil else { return nil }
+                unzip.waitUntilExit()
+                guard unzip.terminationStatus == 0 else { return nil }
+
+                let contents = (try? FileManager.default.contentsOfDirectory(
+                    at: extractDir, includingPropertiesForKeys: nil)) ?? []
+                return contents.first { $0.pathExtension == "app" }
+            }.value
+
+            if let appURL {
+                state = .readyToInstall(newAppURL: appURL)
+            } else {
+                // Extraction failed — fall back to manual: open the zip with Archive Utility
+                NSWorkspace.shared.open(zipURL)
+                state = .error("Could not extract the update automatically. The archive has been opened for manual install.")
+            }
         } catch {
             state = .error(error.localizedDescription)
         }

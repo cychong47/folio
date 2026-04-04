@@ -24,14 +24,7 @@ struct UpdatePopupView: View {
     @ViewBuilder
     private var statusView: some View {
         switch checker.state {
-        case .idle:
-            HStack(spacing: 8) {
-                ProgressView().controlSize(.small)
-                Text("Checking for updates…")
-                    .foregroundStyle(.secondary)
-            }
-
-        case .checking:
+        case .idle, .checking:
             HStack(spacing: 8) {
                 ProgressView().controlSize(.small)
                 Text("Checking for updates…")
@@ -59,15 +52,11 @@ struct UpdatePopupView: View {
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 } else {
-                    Button("Download & Install") {
+                    Button("Download Update") {
                         checker.downloadAndInstall(downloadURL: downloadURL)
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(Theme.accent)
-                    Text("The update will be extracted automatically. Drag Folio.app to Applications to complete the install.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
 
@@ -78,18 +67,28 @@ struct UpdatePopupView: View {
                     .foregroundStyle(.secondary)
             }
 
-        case .awaitingInstall:
-            VStack(alignment: .leading, spacing: 8) {
+        case .readyToInstall(let newAppURL):
+            VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 8) {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
-                    Text("Update downloaded.")
+                        .foregroundStyle(Theme.accent)
+                    Text("Update ready to install")
                         .fontWeight(.medium)
                 }
-                Text("Drag Folio.app from the opened Finder window to your Applications folder, then relaunch.")
+                Text("Folio will quit, replace itself with the new version, and reopen automatically.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
+                HStack(spacing: 10) {
+                    Button("Quit & Install") {
+                        checker.installAndRelaunch(from: newAppURL)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(Theme.accent)
+                    Button("Later") { onClose() }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(.secondary)
+                }
             }
 
         case .error(let message):

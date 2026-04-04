@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.15.2
+- OTA update: after downloading, Folio extracts the zip automatically and shows a "Quit & Install" button; the app quits, replaces itself in-place, and relaunches without any manual steps
+
 ### v1.15.1
 - Fix: re-editing an existing post then discarding no longer deletes the post files — "Reset" is now "Discard Changes" when re-editing and only closes the editor without touching files
 - Fix: opening an existing post from Browse Posts no longer inherits the previous session's cancel record, preventing accidental deletion via "Cancel last post"
