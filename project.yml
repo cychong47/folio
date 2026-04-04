@@ -28,7 +28,7 @@ targets:
         CFBundleIdentifier: com.folio.app
         CFBundleName: Folio
         CFBundleDisplayName: Folio
-        CFBundleShortVersionString: "1.15.3"
+        CFBundleShortVersionString: "1.15.4"
         CFBundleVersion: "2"
         LSMinimumSystemVersion: "13.0"
         NSPrincipalClass: NSApplication
@@ -40,8 +40,6 @@ targets:
     entitlements:
       path: folio/Folio.entitlements
       properties:
-        com.apple.security.app-sandbox: true
-        com.apple.security.files.user-selected.read-write: true
         com.apple.security.application-groups:
           - group.com.folio.app
           - group.com.blogger.app
@@ -81,7 +79,7 @@ targets:
       path: FolioShareExtension/Info.plist
       properties:
         CFBundleDisplayName: Folio
-        CFBundleShortVersionString: "1.15.3"
+        CFBundleShortVersionString: "1.15.4"
         CFBundleVersion: "2"
         NSExtension:
           NSExtensionAttributes:

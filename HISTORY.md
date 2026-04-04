@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.15.4
+- Fix: OTA auto-update now works — removed App Sandbox from the main app so the install script can replace Folio.app in place (sandbox blocked the cp command silently, causing the old app to relaunch)
+
 ### v1.15.3
 - Settings: renamed "General" tab to "Blog"
 
