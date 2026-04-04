@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.13.0
+
+- Taxonomy manager: view all categories, tags, and series with post counts; rename or merge terms across every post from Settings → General (closes #21)
+
+---
+
 ### v1.12.1
 
 - Fix: post list rows are now single-line and compact (date, title, category chips on one row)
