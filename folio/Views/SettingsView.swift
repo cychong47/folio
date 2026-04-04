@@ -418,7 +418,7 @@ private struct ProfileDetailPanel: View {
                             let isLimited = draft.maxImageDimension != nil
                             Toggle("", isOn: Binding(
                                 get: { isLimited },
-                                set: { draft.maxImageDimension = $0 ? 1920 : nil }
+                                set: { draft.maxImageDimension = $0 ? 1024 : nil }
                             ))
                             .toggleStyle(.checkbox)
                             .labelsHidden()

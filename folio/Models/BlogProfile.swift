@@ -22,7 +22,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
     var githubRepo: String = ""
     var githubBranch: String = ""
     var customFrontmatterFields: [FrontmatterField] = []
-    var maxImageDimension: Int?
+    var maxImageDimension: Int? = 1024
     var stripEXIF: Bool = true
     var hugoPath: String = ""
     var autoGitCommit: Bool = false
@@ -44,7 +44,7 @@ struct BlogProfile: Codable, Identifiable, Equatable {
         githubRepo: String = "",
         githubBranch: String = "",
         customFrontmatterFields: [FrontmatterField] = [],
-        maxImageDimension: Int? = nil,
+        maxImageDimension: Int? = 1024,
         stripEXIF: Bool = true,
         hugoPath: String = "",
         autoGitCommit: Bool = false,

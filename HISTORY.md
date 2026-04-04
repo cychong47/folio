@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.16.1
+- Image resize cap now defaults to 1024 px (long edge) and is enabled for all new profiles — previously the cap was off by default
+
 ### v1.16.0
 - Video support: drag-and-drop `.mp4`, `.mov`, and `.webm` files from Finder; inserts a Hugo `{{< video >}}` shortcode at the cursor position and copies the file to the static directory on save; preview panel shows a film-strip placeholder (closes #29)
 
