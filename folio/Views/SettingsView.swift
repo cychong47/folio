@@ -237,6 +237,7 @@ private struct ProfileDetailPanel: View {
     @State private var draft = BlogProfile(name: "")
     @State private var isFixingOrientation = false
     @State private var fixOrientationStatus: String?
+    @State private var showTaxonomyManager = false
 
     var body: some View {
         Group {
@@ -389,6 +390,20 @@ private struct ProfileDetailPanel: View {
                             CategoryTagsEditor(categories: seriesBinding)
                                 .padding(.top, 8)
                         }
+
+                        Divider().padding(.vertical, 12)
+
+                        HStack {
+                            SectionLabel("Taxonomy")
+                            Spacer()
+                            Button("Manage…") { showTaxonomyManager = true }
+                                .disabled(draft.contentPath.isEmpty)
+                        }
+                        .padding(.bottom, 4)
+                        Text("Rename or merge categories, tags, and series across all posts.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .padding(.bottom, 4)
 
                         Divider().padding(.vertical, 12)
 
@@ -596,6 +611,10 @@ private struct ProfileDetailPanel: View {
             guard let idx = settings.profiles.firstIndex(where: { $0.id == newDraft.id }),
                   settings.profiles[idx] != newDraft else { return }
             settings.profiles[idx] = newDraft
+        }
+        .sheet(isPresented: $showTaxonomyManager) {
+            TaxonomyManagerView(contentPath: draft.contentPath)
+                .environmentObject(settings)
         }
     }
 

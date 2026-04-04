@@ -51,6 +51,7 @@ description: Full feature list for Folio — a native macOS app for creating Hug
 - **Tags field** — same chip UI as categories; written to `tags:` frontmatter
 - **Scan Posts** — scans all `.md` files in the content directory and collects every `categories:` and `series:` value
 - **Auto-scan** — background scan every 30 minutes while the app is running; toggle per profile in Settings
+- **Taxonomy manager** — Settings → General → Manage…; aggregates all categories, tags, and series across the site with post counts; rename a term or merge two terms into one with bulk frontmatter rewriting across all affected files
 
 ---
 

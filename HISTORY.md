@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.13.0
+- Taxonomy manager: view all categories, tags, and series with post counts; rename or merge terms across every post from Settings → General (closes #21)
+
 ### v1.12.1
 - Fix: post list rows are now single-line and compact (date, title, category chips on one row)
 - Fix: split-view divider now correctly resizes editor and preview panels
