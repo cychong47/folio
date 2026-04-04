@@ -75,6 +75,16 @@ description: Full feature list for Folio — a native macOS app for creating Hug
 
 ---
 
+## Keyboard Shortcuts
+
+- **`⌘N` — New Post** — start a blank text post from the welcome screen
+- **`⌘B` — Browse Posts** — open the post list from the welcome screen
+- **`⌘S` — Save** — save the current post (available in the editor)
+- **`⌘⇧U` — Publish** — publish the current post to GitHub (available in the editor when a saved post exists)
+- **Check for Updates** — Folio menu bar item; shows a popup with update status and a Download button when a new version is available
+
+---
+
 ## App & Distribution
 
 - **OTA updates** — Settings → Updates checks GitHub Releases; one-click download and install via Archive Utility

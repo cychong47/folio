@@ -760,7 +760,7 @@ private struct PhotosAccessRow: View {
 // MARK: - Updates Tab
 
 private struct UpdatesTab: View {
-    @StateObject private var checker = UpdateChecker()
+    @EnvironmentObject private var checker: UpdateChecker
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {

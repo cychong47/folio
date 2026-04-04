@@ -535,7 +535,7 @@ struct PostEditorView: View {
             Button("Save") { save() }
                 .buttonStyle(.borderedProminent)
                 .tint(Theme.accent)
-                .keyboardShortcut(.return, modifiers: [.command, .shift])
+                .keyboardShortcut("s", modifiers: .command)
             if pendingPost.lastPublished != nil {
                 Button("Preview") { previewInBrowser() }
                     .buttonStyle(.borderedProminent)
@@ -547,6 +547,7 @@ struct PostEditorView: View {
                     .buttonStyle(.borderedProminent)
                     .tint(.green)
                     .disabled(isPublishing || !settings.isGitHubConfigured)
+                    .keyboardShortcut("u", modifiers: [.command, .shift])
             }
         }
         .padding(.horizontal, 20)

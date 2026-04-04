@@ -33,6 +33,7 @@
 		99233CDA0BE03407CD26FE4A /* PhotoLibraryDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F3E05D446EEAC57E4AE387 /* PhotoLibraryDate.swift */; };
 		A07EFE770E7FEC41498A66BE /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE36F53D49BEC53E0A86A969 /* UpdateChecker.swift */; };
 		BC21B676607AEE926B359C88 /* HugoConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A8EA5536C10E0505554E5E /* HugoConfigReader.swift */; };
+		C00571FB13E03F08285FE3C6 /* UpdatePopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCB8F5D61E7ECB3F114B09 /* UpdatePopupView.swift */; };
 		C1A118477956DFFEB97F15AA /* SlugGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA07B03D86847712523DC840 /* SlugGenerator.swift */; };
 		C2D7B66BBE1B94D033868288 /* GitHubPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6895426545500590238FA9FA /* GitHubPublisher.swift */; };
 		CA03A240842B6F5BB31E3E93 /* SharedContainerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17B1651EC06ECB5BB73ACF1 /* SharedContainerService.swift */; };
@@ -62,6 +63,7 @@
 		7B17A87A099352DE34BE4524 /* TaxonomyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxonomyManager.swift; sourceTree = "<group>"; };
 		7D67E33935ACFB4FB8731A44 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		83881053F0757635B74EE730 /* BuildInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildInfo.swift; sourceTree = "<group>"; };
+		87DCB8F5D61E7ECB3F114B09 /* UpdatePopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePopupView.swift; sourceTree = "<group>"; };
 		890B76E57CC40C519EB3E600 /* PostEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEditorView.swift; sourceTree = "<group>"; };
 		929BADBC33145B54A87A0E45 /* PhotoExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoExporter.swift; sourceTree = "<group>"; };
 		93F39948F543A4FB5A64F2AC /* HugoServerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HugoServerManager.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				04EDB32DC6E392FFD022B877 /* SettingsView.swift */,
 				663B3BA8E1B64061034F2EB7 /* TaxonomyManagerView.swift */,
 				B43FCB528E9EBCAF9CECDCF5 /* Theme.swift */,
+				87DCB8F5D61E7ECB3F114B09 /* UpdatePopupView.swift */,
 				72E38E1B4666949A59985EF8 /* WelcomeView.swift */,
 				17EAF2F4E11BD88A8AB06DC8 /* WhatsNewView.swift */,
 			);
@@ -359,6 +362,7 @@
 				6E1E59B0F43331463E40D4A7 /* TaxonomyManagerView.swift in Sources */,
 				699A3C39E7FDA305B6EABA40 /* Theme.swift in Sources */,
 				A07EFE770E7FEC41498A66BE /* UpdateChecker.swift in Sources */,
+				C00571FB13E03F08285FE3C6 /* UpdatePopupView.swift in Sources */,
 				F6F0BE9D2162BC08B11E7206 /* WelcomeView.swift in Sources */,
 				F18568F882D6B313E89A00AD /* WhatsNewView.swift in Sources */,
 			);

@@ -38,11 +38,13 @@ struct WelcomeView: View {
                                 .buttonStyle(.plain)
                                 .foregroundStyle(Theme.accent)
                                 .focusable(false)
+                                .keyboardShortcut("n", modifiers: .command)
                             Text(" · ")
                             Button("Browse Posts") { onBrowse?() }
                                 .buttonStyle(.plain)
                                 .foregroundStyle(Theme.accent)
                                 .focusable(false)
+                                .keyboardShortcut("b", modifiers: .command)
                         }
                         .font(.callout)
                         .foregroundStyle(.secondary)

@@ -5,6 +5,7 @@ struct FolioApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var settings = AppSettings()
     @StateObject private var pendingPost = PendingPost()
+    @StateObject private var updateChecker = UpdateChecker()
 
     private var preferredScheme: ColorScheme? {
         switch settings.appTheme {
@@ -16,6 +17,7 @@ struct FolioApp: App {
 
     @AppStorage(Constants.UserDefaultsKeys.lastSeenVersion) private var lastSeenVersion: String = ""
     @State private var showWhatsNew = false
+    @State private var showUpdatePopup = false
 
     private var currentVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
@@ -26,6 +28,7 @@ struct FolioApp: App {
             ContentView()
                 .environmentObject(settings)
                 .environmentObject(pendingPost)
+                .environmentObject(updateChecker)
                 .frame(minWidth: 800, minHeight: 500)
                 .onAppear {
                     appDelegate.pendingPost = pendingPost
@@ -45,12 +48,18 @@ struct FolioApp: App {
                         showWhatsNew = false
                     }
                 }
+                .sheet(isPresented: $showUpdatePopup) {
+                    UpdatePopupView(checker: updateChecker) {
+                        showUpdatePopup = false
+                    }
+                }
                 .preferredColorScheme(preferredScheme)
         }
 
         Settings {
             SettingsView()
                 .environmentObject(settings)
+                .environmentObject(updateChecker)
                 .preferredColorScheme(preferredScheme)
         }
         .commands {
@@ -61,6 +70,12 @@ struct FolioApp: App {
                         .applicationVersion: version,
                         .version: BuildInfo.commitHash
                     ])
+                }
+            }
+            CommandMenu("Folio") {
+                Button("Check for Updates…") {
+                    updateChecker.checkForUpdates()
+                    showUpdatePopup = true
                 }
             }
         }
