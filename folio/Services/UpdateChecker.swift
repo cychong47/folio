@@ -38,12 +38,16 @@ final class UpdateChecker: ObservableObject {
     func installAndRelaunch(from newAppURL: URL) {
         let src = newAppURL.path
         let dst = Bundle.main.bundleURL.path
+        // Copy to the parent dir so cp creates dst fresh (if dst already exists as a
+        // directory, `cp -Rf src dst` nests src *inside* dst instead of replacing it).
+        let dstParent = (dst as NSString).deletingLastPathComponent
 
         // Shell-escape single quotes in paths (POSIX ' → '\'' trick)
         func esc(_ s: String) -> String { s.replacingOccurrences(of: "'", with: "'\\''") }
 
-        // Subshell runs in background (&) → survives after Folio quits
-        let cmd = "( sleep 1.5 && cp -Rf '\(esc(src))' '\(esc(dst))' && open '\(esc(dst))' ) &"
+        // Remove old bundle first, then copy new one into the parent directory.
+        // Subshell runs in background (&) → survives after Folio quits.
+        let cmd = "( sleep 2 && rm -rf '\(esc(dst))' && cp -Rf '\(esc(src))' '\(esc(dstParent))' && open '\(esc(dst))' ) &"
 
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/bin/sh")
@@ -53,8 +57,8 @@ final class UpdateChecker: ObservableObject {
         task.standardError = FileHandle.nullDevice
         try? task.run()
 
-        // Small delay so the shell has time to fork before we exit
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        // Wait briefly so the shell has time to fork the background subshell before we exit
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             NSApp.terminate(nil)
         }
     }
