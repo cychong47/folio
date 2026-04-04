@@ -19,6 +19,8 @@ struct PostEditorView: View {
     @State private var showNewTagField = false
     @State private var newSeriesText = ""
     @State private var showNewSeriesField = false
+    @State private var previewBody: String = ""
+    @State private var previewDebounceTask: Task<Void, Never>? = nil
 
     private var availableCategories: [String] {
         settings.knownCategories.filter { !pendingPost.categories.contains($0) }
@@ -87,8 +89,23 @@ struct PostEditorView: View {
         } message: {
             Text(resetMessage)
         }
-        .onAppear { prepopulateMarkdown() }
-        .onDisappear { hugoServer.stop() }
+        .onAppear {
+            prepopulateMarkdown()
+            previewBody = pendingPost.markdownBody
+        }
+        .onDisappear {
+            hugoServer.stop()
+            previewDebounceTask?.cancel()
+        }
+        .onChange(of: pendingPost.markdownBody) { newValue in
+            previewDebounceTask?.cancel()
+            previewDebounceTask = Task { @MainActor in
+                do {
+                    try await Task.sleep(nanoseconds: 300_000_000)
+                    previewBody = newValue
+                } catch {}
+            }
+        }
     }
 
     // MARK: - Sections
@@ -395,7 +412,7 @@ struct PostEditorView: View {
             textLines = []
         }
 
-        for line in pendingPost.markdownBody.components(separatedBy: "\n") {
+        for line in previewBody.components(separatedBy: "\n") {
             let range = NSRange(line.startIndex..., in: line)
             if let match = Self.imageRefRegex.firstMatch(in: line, range: range),
                let capRange = Range(match.range(at: 1), in: line),

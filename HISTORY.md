@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.14.0
+- Editor performance: preview panel now debounces updates (300 ms after last keystroke) so typing stays fast with long posts (closes #34)
+
 ### v1.13.0
 - Taxonomy manager: view all categories, tags, and series with post counts; rename or merge terms across every post from Settings → General (closes #21)
 
