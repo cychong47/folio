@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.16.7
+
+- Fix static-images subpath template ignored on drag-drop: DropTargetView was reading stale flat UserDefaults keys that are never written; now decodes the active BlogProfile from `blogProfiles` JSON so the configured subpath (e.g. YYYY/MM) is applied correctly
+
+---
+
 ### v1.16.6
 
 - External-editor reload: add 150 ms debounce inside FileWatcher to coalesce rapid flush events from direct-write editors, preventing partial-content flicker
