@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.16.9
+- Edit view: show "Cancel" instead of "Discard Changes" when reopening an existing post with no edits; "Discard Changes" (with confirmation) only appears once the title or body has been modified
+
 ### v1.16.8
 - Fix images with trailing whitespace (markdown line-break `  `) not rendering in edit view — imageRefRegex `$` anchor rejected lines ending with spaces
 

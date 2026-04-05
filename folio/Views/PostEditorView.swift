@@ -84,6 +84,7 @@ struct PostEditorView: View {
     @State private var showNewSeriesField = false
     @State private var previewBody: String = ""
     @State private var previewDebounceTask: Task<Void, Never>? = nil
+    @State private var originalSnapshot: String = ""
 
     private var availableCategories: [String] {
         settings.knownCategories.filter { !pendingPost.categories.contains($0) }
@@ -112,6 +113,9 @@ struct PostEditorView: View {
     }
 
     private var isReEditing: Bool { pendingPost.existingFileURL != nil }
+    private var hasEdits: Bool {
+        isReEditing && (pendingPost.title + pendingPost.markdownBody) != originalSnapshot
+    }
 
     private var resetMessage: String {
         if isReEditing {
@@ -158,6 +162,7 @@ struct PostEditorView: View {
         .onAppear {
             prepopulateMarkdown()
             previewBody = pendingPost.markdownBody
+            originalSnapshot = pendingPost.title + pendingPost.markdownBody
             if let url = pendingPost.existingFileURL {
                 fileWatcher.watch(url: url) { reloadBodyFromDisk(url: url) }
             }
@@ -168,6 +173,7 @@ struct PostEditorView: View {
             fileWatcher.stop()
         }
         .onChange(of: pendingPost.existingFileURL) { url in
+            originalSnapshot = pendingPost.title + pendingPost.markdownBody
             if let url {
                 fileWatcher.watch(url: url) { reloadBodyFromDisk(url: url) }
             } else {
@@ -628,7 +634,13 @@ struct PostEditorView: View {
                 }
             }
             Spacer()
-            Button(isReEditing ? "Discard Changes" : "Reset") { showResetConfirm = true }
+            Button(isReEditing ? (hasEdits ? "Discard Changes" : "Cancel") : "Reset") {
+                if isReEditing && !hasEdits {
+                    pendingPost.clear()
+                } else {
+                    showResetConfirm = true
+                }
+            }
                 .buttonStyle(.plain)
                 .foregroundStyle(.red.opacity(0.75))
                 .font(.callout)
