@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.16.8
+- Fix images with trailing whitespace (markdown line-break `  `) not rendering in edit view — imageRefRegex `$` anchor rejected lines ending with spaces
+
 ### v1.16.7
 - Fix static-images subpath template ignored on drag-drop: DropTargetView was reading stale flat UserDefaults keys that are never written; now decodes the active BlogProfile from `blogProfiles` JSON so the configured subpath (e.g. YYYY/MM) is applied correctly
 

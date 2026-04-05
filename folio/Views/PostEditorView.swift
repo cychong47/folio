@@ -473,7 +473,7 @@ struct PostEditorView: View {
         .background(Theme.background)
     }
 
-    private static let imageRefRegex = try! NSRegularExpression(pattern: #"^!\[\]\(([^)]+)\)$"#)
+    private static let imageRefRegex = try! NSRegularExpression(pattern: #"^!\[\]\(([^)]+)\)\s*$"#)
     private static let videoRefRegex = try! NSRegularExpression(pattern: #"\{\{< video [^>]*src="([^"]+)"[^>]* >\}\}"#)
 
     private var previewBlocks: [PostPreviewBlock] {
