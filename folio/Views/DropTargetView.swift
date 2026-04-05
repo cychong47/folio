@@ -23,12 +23,25 @@ class DropTargetView: NSView {
         return appSupport.appendingPathComponent("Folio/pending", isDirectory: true)
     }
 
+    private var activeProfile: BlogProfile? {
+        let defaults = UserDefaults(suiteName: Constants.appGroupID)
+        guard let data = defaults?.data(forKey: Constants.UserDefaultsKeys.blogProfiles),
+              let profiles = try? JSONDecoder().decode([BlogProfile].self, from: data),
+              !profiles.isEmpty else { return nil }
+        if let idStr = defaults?.string(forKey: Constants.UserDefaultsKeys.selectedProfileID),
+           let id = UUID(uuidString: idStr),
+           let found = profiles.first(where: { $0.id == id }) {
+            return found
+        }
+        return profiles.first
+    }
+
     private var imageURLPrefix: String {
-        UserDefaults(suiteName: "group.com.folio.app")?.string(forKey: "imageURLPrefix") ?? "/images"
+        activeProfile?.imageURLPrefix ?? "/images"
     }
 
     private var staticImagesSubpath: String {
-        UserDefaults(suiteName: "group.com.folio.app")?.string(forKey: "staticImagesSubpath") ?? ""
+        activeProfile?.staticImagesSubpath ?? ""
     }
 
     // Static so it can be called from escaping closures without capturing self
