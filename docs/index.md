@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.16.10
+
+- Fix "New Post" link not opening the editor — `PendingPost.isEmpty` ignored `slug`, so setting it on "New Post" click had no effect
+
+---
+
 ### v1.16.9
 
 - Edit view: show "Cancel" instead of "Discard Changes" when reopening an existing post with no edits; "Discard Changes" (with confirmation) only appears once the title or body has been modified
