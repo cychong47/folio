@@ -81,6 +81,7 @@ struct UpdatePopupView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 HStack(spacing: 10) {
                     Button("Quit & Install") {
+                        onClose()
                         checker.installAndRelaunch(from: newAppURL)
                     }
                     .buttonStyle(.borderedProminent)

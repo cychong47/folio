@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.16.11
+- Fix "Quit & Install" in menu-bar update popup — sheet modal state blocked `NSApp.terminate`; now dismisses the sheet before initiating the update
+
 ### v1.16.10
 - Fix "New Post" link not opening the editor — `PendingPost.isEmpty` ignored `slug`, so setting it on "New Post" click had no effect
 
