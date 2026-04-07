@@ -39,7 +39,7 @@ class PendingPost: ObservableObject {
     /// Set when re-editing an existing post; save() will overwrite this URL directly.
     @Published var existingFileURL: URL? = nil
 
-    var isEmpty: Bool { photos.isEmpty && title.isEmpty && existingFileURL == nil }
+    var isEmpty: Bool { photos.isEmpty && title.isEmpty && slug.isEmpty && existingFileURL == nil }
 
     /// The effective post date: user override if set, otherwise first photo's EXIF date, otherwise today.
     var postDate: Date { dateOverride ?? photos.first?.exifDate ?? Date() }
