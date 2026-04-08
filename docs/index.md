@@ -17,6 +17,15 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.17.0
+
+- Photo strip in editor — horizontal thumbnail row above the markdown editor; hover to reveal × remove button or right-click for context menu
+- Add photos while editing — drag onto the editor window or click `+` to open file picker; new refs appended without overwriting existing edits
+- Remove photos while editing — deferred staging-file deletion preserves `Cmd+Z` undo of the ref line
+- Orphaned thumbnail indicator — thumbnails greyed out when their ref is manually deleted from the markdown body
+
+---
+
 ### v1.16.11
 
 - Fix "Quit & Install" in menu-bar update popup — sheet modal state blocked `NSApp.terminate`; now dismisses the sheet before initiating the update
