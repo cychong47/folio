@@ -32,6 +32,7 @@
 		8DC2A09959B67B4EAE48DB84 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EADC807028A6FB6FD2616D54 /* Assets.xcassets */; };
 		99233CDA0BE03407CD26FE4A /* PhotoLibraryDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F3E05D446EEAC57E4AE387 /* PhotoLibraryDate.swift */; };
 		A07EFE770E7FEC41498A66BE /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE36F53D49BEC53E0A86A969 /* UpdateChecker.swift */; };
+		A7DAB8B89CD799316591ECE0 /* PhotoStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318355C96597587227B6474 /* PhotoStripView.swift */; };
 		BC21B676607AEE926B359C88 /* HugoConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A8EA5536C10E0505554E5E /* HugoConfigReader.swift */; };
 		C00571FB13E03F08285FE3C6 /* UpdatePopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCB8F5D61E7ECB3F114B09 /* UpdatePopupView.swift */; };
 		C1A118477956DFFEB97F15AA /* SlugGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA07B03D86847712523DC840 /* SlugGenerator.swift */; };
@@ -53,6 +54,7 @@
 		3E2C8832A6F8D661FB89B544 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4A68A0F4EBFEB09E1A7DEB67 /* BlogProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogProfile.swift; sourceTree = "<group>"; };
 		4FFB191807DC943F715D2C6A /* CategoryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryScanner.swift; sourceTree = "<group>"; };
+		5318355C96597587227B6474 /* PhotoStripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStripView.swift; sourceTree = "<group>"; };
 		5328FB7826F609FFD6E9E0FF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		56822196D79F1F744F0CB93D /* FolioShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FolioShareExtension.entitlements; sourceTree = "<group>"; };
 		5B8BAAD0990BFEBF5AC22207 /* Folio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Folio.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				D7A8E1EF808466E6467CAF2A /* DropTargetView.swift */,
+				5318355C96597587227B6474 /* PhotoStripView.swift */,
 				890B76E57CC40C519EB3E600 /* PostEditorView.swift */,
 				AD6AD760F0A959490FBEC687 /* PostListView.swift */,
 				04EDB32DC6E392FFD022B877 /* SettingsView.swift */,
@@ -351,6 +354,7 @@
 				476E24E9D2E3BA24BCDB89C7 /* PendingPost.swift in Sources */,
 				2A81F58A8EE033C93D52E6EF /* PhotoExporter.swift in Sources */,
 				99233CDA0BE03407CD26FE4A /* PhotoLibraryDate.swift in Sources */,
+				A7DAB8B89CD799316591ECE0 /* PhotoStripView.swift in Sources */,
 				DBCED57409B1BED707B4C241 /* PostEditorView.swift in Sources */,
 				5AAA822D4B02C7A108D44444 /* PostIndexer.swift in Sources */,
 				633DD8EEDED3F21FB1ABD50C /* PostListView.swift in Sources */,

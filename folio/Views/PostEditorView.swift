@@ -85,6 +85,10 @@ struct PostEditorView: View {
     @State private var previewBody: String = ""
     @State private var previewDebounceTask: Task<Void, Never>? = nil
     @State private var originalSnapshot: String = ""
+    /// Staging files queued for deletion on Reset or successful Publish.
+    @State private var pendingDeletion: [URL] = []
+    /// Paths in `pendingPost.photos` not currently referenced in `markdownBody`.
+    @State private var orphanedPaths: Set<String> = []
 
     private var availableCategories: [String] {
         settings.knownCategories.filter { !pendingPost.categories.contains($0) }
@@ -132,6 +136,8 @@ struct PostEditorView: View {
     var body: some View {
         VStack(spacing: 0) {
             headerSection
+            Divider().opacity(0.4)
+            photoStripSection
             Divider().opacity(0.4)
             editorSection
             Divider().opacity(0.4)
@@ -188,10 +194,22 @@ struct PostEditorView: View {
                     previewBody = newValue
                 } catch {}
             }
+            // Keep photo strip in sync: grey out thumbnails whose refs were manually removed.
+            let referenced = MarkdownGenerator.referencedPaths(in: newValue)
+            orphanedPaths = Set(pendingPost.photos.map(\.markdownPath)).subtracting(referenced)
         }
     }
 
     // MARK: - Sections
+
+    private var photoStripSection: some View {
+        PhotoStripView(
+            photos: pendingPost.photos,
+            orphanedPaths: orphanedPaths,
+            onRemove: removePhoto,
+            onAddPhoto: pickAndAddPhotos
+        )
+    }
 
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -669,6 +687,76 @@ struct PostEditorView: View {
 
     // MARK: - Logic
 
+    // MARK: Photo management
+
+    /// Removes a photo from the strip and its ref from the body.
+    /// The staging file is kept until Reset or Publish (deferred deletion).
+    private func removePhoto(_ photo: ExportedPhoto) {
+        pendingDeletion.append(photo.localURL)
+        pendingPost.photos.removeAll { $0.id == photo.id }
+        pendingPost.markdownBody = MarkdownGenerator.removePhotoRef(
+            photo: photo, from: pendingPost.markdownBody)
+    }
+
+    /// Deduplicates `newPhotos` against current photos, appends them, and
+    /// adds their refs to the markdown body.
+    private func addPhotos(_ newPhotos: [ExportedPhoto]) {
+        let existing = Set(pendingPost.photos.map(\.filename))
+        let fresh = newPhotos.filter { !existing.contains($0.filename) }
+        guard !fresh.isEmpty else { return }
+        pendingPost.photos.append(contentsOf: fresh)
+        for photo in fresh {
+            pendingPost.markdownBody = MarkdownGenerator.appendPhotoRef(
+                photo: photo, to: pendingPost.markdownBody)
+        }
+    }
+
+    /// Opens an NSOpenPanel so the user can pick photos/videos to add.
+    private func pickAndAddPhotos() {
+        let panel = NSOpenPanel()
+        panel.allowsMultipleSelection = true
+        panel.canChooseDirectories = false
+        panel.allowedContentTypes = [.image, .movie]
+        // Capture settings on the main thread before going async
+        let stagingDir = stagingDirectory
+        let urlPrefix = settings.imageURLPrefix
+        let imagesSubpath = settings.staticImagesSubpath
+        panel.begin { response in
+            guard response == .OK else { return }
+            let urls = panel.urls
+            guard !urls.isEmpty else { return }
+            DispatchQueue.global(qos: .userInitiated).async {
+                try? FileManager.default.createDirectory(
+                    at: stagingDir, withIntermediateDirectories: true)
+                var photos: [ExportedPhoto] = []
+                let videoExts: Set<String> = ["mp4", "mov", "webm"]
+                for url in urls {
+                    let exifDate = PhotoExporter.readDate(from: url)
+                    let filename = PhotoExporter.exportedFilename(
+                        originalName: url.lastPathComponent, date: exifDate)
+                    let dest = stagingDir.appendingPathComponent(filename)
+                    try? FileManager.default.removeItem(at: dest)
+                    try? FileManager.default.copyItem(at: url, to: dest)
+                    let resolvedPrefix = AppSettings.resolveSubpath(urlPrefix, for: exifDate)
+                    let slash = resolvedPrefix.hasSuffix("/") ? resolvedPrefix : resolvedPrefix + "/"
+                    let sub = AppSettings.resolveSubpath(imagesSubpath, for: exifDate)
+                    let mdPath: String
+                    if sub.isEmpty {
+                        mdPath = "\(slash)\(filename)"
+                    } else {
+                        let subSlash = sub.hasSuffix("/") ? sub : sub + "/"
+                        mdPath = "\(slash)\(subSlash)\(filename)"
+                    }
+                    let isVideo = videoExts.contains(url.pathExtension.lowercased())
+                    photos.append(ExportedPhoto(
+                        filename: filename, markdownPath: mdPath,
+                        localURL: dest, exifDate: exifDate, isVideo: isVideo))
+                }
+                DispatchQueue.main.async { addPhotos(photos) }
+            }
+        }
+    }
+
     private func previewInBrowser() {
         guard let profile = settings.activeProfile,
               !profile.blogRoot.isEmpty,
@@ -888,6 +976,9 @@ struct PostEditorView: View {
 
     private func deleteStagingFiles() {
         let fm = FileManager.default
+        // Delete files deferred from remove actions
+        for url in pendingDeletion { try? fm.removeItem(at: url) }
+        pendingDeletion = []
         for photo in pendingPost.photos {
             try? fm.removeItem(at: photo.localURL)
         }

@@ -139,7 +139,16 @@ struct ContentView: View {
             pendingPost.slug = f.string(from: date)
         }
 
-        pendingPost.markdownBody = MarkdownGenerator.initialBody(photos: allPhotos)
+        if pendingPost.markdownBody.isEmpty {
+            // First drop on the welcome screen — generate the full initial body.
+            pendingPost.markdownBody = MarkdownGenerator.initialBody(photos: allPhotos)
+        } else {
+            // Editor already open — append refs for new photos only to preserve edits.
+            for photo in newPhotos {
+                pendingPost.markdownBody = MarkdownGenerator.appendPhotoRef(
+                    photo: photo, to: pendingPost.markdownBody)
+            }
+        }
     }
 }
 

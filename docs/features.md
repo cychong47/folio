@@ -35,6 +35,10 @@ description: Full feature list for Folio — a native macOS app for creating Hug
 - **Sort by filename** — photos dropped in the same session are sorted by filename ascending, preserving capture sequence
 - **Duplicate photo prevention** — the same filename dropped twice is silently ignored
 - **Import progress overlay** — frosted-glass overlay with `x / y` counter and progress bar during photo import
+- **Photo strip in editor** — horizontal thumbnail strip above the markdown editor; shows all photos in the current post at a glance
+- **Add photos while editing** — drag more photos onto the editor window or click the `+` button to open a file picker; new refs appended to the body without overwriting edits
+- **Remove photos while editing** — hover a thumbnail and click × (or right-click → Remove Photo) to remove a photo; staging file is kept until Reset or Publish so `Cmd+Z` can restore the ref
+- **Orphaned photo indicator** — thumbnails whose refs were manually deleted from the markdown body are greyed out in the strip
 
 ---
 
