@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.18.2
+
+- Fix photo curation returning no results — PHAsset.fetchAssets now runs on the main thread; removed includeAssetSourceTypes filter that silently excluded photos on macOS
+
+---
+
 ### v1.18.1
 
 - Batch progress updates during photo ingestion — reduces main-thread hops from per-photo to per-10, keeping large date ranges (e.g. a full month) responsive
