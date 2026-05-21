@@ -4,6 +4,7 @@ import Photos
 struct WelcomeView: View {
     var isDragTargeted: Bool = false
     var onBrowse: (() -> Void)? = nil
+    var onCurate: (() -> Void)? = nil
     @EnvironmentObject var pendingPost: PendingPost
     @State private var showCancelConfirm = false
     @State private var photosStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
@@ -45,6 +46,12 @@ struct WelcomeView: View {
                                 .foregroundStyle(Theme.accent)
                                 .focusable(false)
                                 .keyboardShortcut("b", modifiers: .command)
+                            Text(" · ")
+                            Button("Curate Photos") { onCurate?() }
+                                .buttonStyle(.plain)
+                                .foregroundStyle(Theme.accent)
+                                .focusable(false)
+                                .keyboardShortcut("k", modifiers: .command)
                         }
                         .font(.callout)
                         .foregroundStyle(.secondary)

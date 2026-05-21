@@ -8,6 +8,8 @@ struct ContentView: View {
     @State private var importTotal: Int = 0
     @State private var importCompleted: Int = 0
     @State private var browsing = false
+    @State private var curating = false
+    @StateObject private var curationStore = CurationStore()
 
     private var isImporting: Bool { importTotal > 0 }
 
@@ -25,8 +27,11 @@ struct ContentView: View {
                         browsing = false
                     }
                 )
+            } else if curating {
+                PhotoCurationView(store: curationStore, onBack: { curating = false })
+                    .environmentObject(settings)
             } else {
-                WelcomeView(isDragTargeted: isDragTargeted, onBrowse: { browsing = true })
+                WelcomeView(isDragTargeted: isDragTargeted, onBrowse: { browsing = true }, onCurate: startCuration)
             }
 
             DropZone(
@@ -116,6 +121,20 @@ struct ContentView: View {
             }
         }
         return photos
+    }
+
+    private func startCuration() {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = false
+        panel.canChooseDirectories = true
+        panel.allowsMultipleSelection = false
+        panel.prompt = "Select Photo Folder"
+        panel.message = "Choose a folder containing vacation photos to curate"
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        curating = true
+        Task {
+            await curationStore.ingest(from: url)
+        }
     }
 
     private func handleDroppedPhotos(_ photos: [ExportedPhoto]) {

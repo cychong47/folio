@@ -30,8 +30,12 @@ enum GitHubPublisher {
             }
             let (data, response) = try await URLSession.shared.data(for: req)
             guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
-                let msg = (try? JSONSerialization.jsonObject(with: data) as? [String: Any])?["message"] as? String
-                    ?? "HTTP \((response as? HTTPURLResponse)?.statusCode ?? 0)"
+                let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
+                var msg = (try? JSONSerialization.jsonObject(with: data) as? [String: Any])?["message"] as? String
+                    ?? "HTTP \(statusCode)"
+                if statusCode == 403 || msg.contains("not accessible") || msg.contains("Resource not accessible") {
+                    msg += " — check that your token has 'Contents: Read and write' permission (fine-grained PAT) or the 'repo' scope (classic PAT)"
+                }
                 throw GitHubError(message: msg)
             }
             return (try? JSONSerialization.jsonObject(with: data) as? [String: Any]) ?? [:]

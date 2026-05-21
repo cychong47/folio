@@ -627,15 +627,27 @@ struct PostEditorView: View {
         HStack(spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 if let err = publishError {
-                    HStack(spacing: 4) {
+                    HStack(alignment: .top, spacing: 4) {
                         Image(systemName: "exclamationmark.circle.fill")
                             .foregroundStyle(.red)
                             .font(.callout)
+                            .padding(.top, 1)
                         Text(err)
                             .foregroundStyle(.red)
                             .font(.callout)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
+                            .textSelection(.enabled)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Button {
+                            NSPasteboard.general.clearContents()
+                            NSPasteboard.general.setString(err, forType: .string)
+                        } label: {
+                            Image(systemName: "doc.on.doc")
+                                .font(.caption)
+                                .foregroundStyle(.red.opacity(0.7))
+                        }
+                        .buttonStyle(.plain)
+                        .help("Copy error to clipboard")
+                        .padding(.top, 1)
                     }
                 }
                 if let status = gitStatus {

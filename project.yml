@@ -28,7 +28,7 @@ targets:
         CFBundleIdentifier: com.folio.app
         CFBundleName: Folio
         CFBundleDisplayName: Folio
-        CFBundleShortVersionString: "1.17.0"
+        CFBundleShortVersionString: "1.18.0"
         CFBundleVersion: "2"
         LSMinimumSystemVersion: "13.0"
         NSPrincipalClass: NSApplication
@@ -48,6 +48,8 @@ targets:
         com.apple.security.personal-information.photos-library: true
     dependencies:
       - sdk: Photos.framework
+      - sdk: CoreLocation.framework
+      - sdk: Vision.framework
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.folio.app
@@ -79,7 +81,7 @@ targets:
       path: FolioShareExtension/Info.plist
       properties:
         CFBundleDisplayName: Folio
-        CFBundleShortVersionString: "1.17.0"
+        CFBundleShortVersionString: "1.18.0"
         CFBundleVersion: "2"
         NSExtension:
           NSExtensionAttributes:

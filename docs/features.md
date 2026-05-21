@@ -25,6 +25,18 @@ description: Full feature list for Folio — a native macOS app for creating Hug
 
 ---
 
+## Photo Curation
+
+- **Photo Curation Workspace** — open a vacation photo folder with `⌘K`; photos are auto-grouped into timed events using spatio-temporal clustering (90-minute temporal gap or 500-metre spatial gap triggers a new event)
+- **Event navigator** — sidebar lists each event with its name, date, duration, and selected/total photo count
+- **Burst stack detection** — photos taken within 3 seconds of each other are grouped into a stack; the largest file (proxy for sharpest) is marked as the primary frame
+- **Grid selection UI** — 160×120 pt thumbnails with aspect-ratio fill; selected photos shown at full opacity with a blue border and checkmark; unselected photos dimmed to 50%
+- **Event rename** — double-click or use the Rename button to give events meaningful names (e.g. "Sunrise hike")
+- **Export to markdown** — exports selected photos to the configured static images directory with EXIF stripping and resize cap; generates a ready-to-paste markdown snippet with image references
+- **Keyboard shortcut** — `⌘K` opens the curation folder picker from the welcome screen; `⌘E` exports the active event
+
+---
+
 ## Photos & Image Import
 
 - **Drag & drop from Photos.app** — uses `NSFilePromiseReceiver` to handle Photos.app file promises
