@@ -12,6 +12,7 @@
 		2A81F58A8EE033C93D52E6EF /* PhotoExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929BADBC33145B54A87A0E45 /* PhotoExporter.swift */; };
 		2FCCD81F40D281BF14D53DCF /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D67E33935ACFB4FB8731A44 /* Photos.framework */; };
 		313DF552BB492C7E8D858206 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04EDB32DC6E392FFD022B877 /* SettingsView.swift */; };
+		34A4D45717F7422DA8BC276C /* DateRangePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAA52C148B2CE6DE3C748D9 /* DateRangePickerView.swift */; };
 		361C2FEB0151749F407F81C3 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EF95182775B100EB9796B1 /* CoreLocation.framework */; };
 		37FDF992791D42C004DA2994 /* ClusteringEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA69268592F92850BCDA2B5E /* ClusteringEngine.swift */; };
 		3E6C119E3BA766EF09C5C315 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE63791A87EDA02F57FF13E /* AppSettings.swift */; };
@@ -60,6 +61,7 @@
 		2762CB4A9006D2FBC1A6FF24 /* GitRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitRunner.swift; sourceTree = "<group>"; };
 		2D1573328390571F3C04B0D2 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		38BD7364DD0B9E44FD4227DE /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
+		3BAA52C148B2CE6DE3C748D9 /* DateRangePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRangePickerView.swift; sourceTree = "<group>"; };
 		3E2C8832A6F8D661FB89B544 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4A68A0F4EBFEB09E1A7DEB67 /* BlogProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogProfile.swift; sourceTree = "<group>"; };
 		4FFB191807DC943F715D2C6A /* CategoryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryScanner.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 		341B5EBDEF62DFD460E08FC9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3BAA52C148B2CE6DE3C748D9 /* DateRangePickerView.swift */,
 				D7A8E1EF808466E6467CAF2A /* DropTargetView.swift */,
 				DE6B5C13C58FBDD0B46344B5 /* PhotoCurationView.swift */,
 				5318355C96597587227B6474 /* PhotoStripView.swift */,
@@ -367,6 +370,7 @@
 				10F319EB9AB9927904D2E3FB /* ContentView.swift in Sources */,
 				41683CB3928FDCA670DFCB5F /* CurationAsset.swift in Sources */,
 				DC9B6695DF3F715341B8C48B /* CurationStore.swift in Sources */,
+				34A4D45717F7422DA8BC276C /* DateRangePickerView.swift in Sources */,
 				5CFB4EAE8D619559EBEEE962 /* DropTargetView.swift in Sources */,
 				CA5AB4936F8C3E8BD6F75627 /* EventCluster.swift in Sources */,
 				87DC42E3481BC5FBE5CDDBD6 /* FolioApp.swift in Sources */,

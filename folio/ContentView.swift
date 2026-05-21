@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var importCompleted: Int = 0
     @State private var browsing = false
     @State private var curating = false
+    @State private var showDatePicker = false
     @StateObject private var curationStore = CurationStore()
 
     private var isImporting: Bool { importTotal > 0 }
@@ -31,7 +32,7 @@ struct ContentView: View {
                 PhotoCurationView(store: curationStore, onBack: { curating = false })
                     .environmentObject(settings)
             } else {
-                WelcomeView(isDragTargeted: isDragTargeted, onBrowse: { browsing = true }, onCurate: startCuration)
+                WelcomeView(isDragTargeted: isDragTargeted, onBrowse: { browsing = true }, onCurate: { showDatePicker = true })
             }
 
             DropZone(
@@ -60,6 +61,12 @@ struct ContentView: View {
                 }
                 .padding(24)
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+            }
+        }
+        .sheet(isPresented: $showDatePicker) {
+            DateRangePickerView(isPresented: $showDatePicker) { start, end in
+                curating = true
+                Task { await curationStore.ingest(startDate: start, endDate: end) }
             }
         }
     }
@@ -121,20 +128,6 @@ struct ContentView: View {
             }
         }
         return photos
-    }
-
-    private func startCuration() {
-        let panel = NSOpenPanel()
-        panel.canChooseFiles = false
-        panel.canChooseDirectories = true
-        panel.allowsMultipleSelection = false
-        panel.prompt = "Select Photo Folder"
-        panel.message = "Choose a folder containing vacation photos to curate"
-        guard panel.runModal() == .OK, let url = panel.url else { return }
-        curating = true
-        Task {
-            await curationStore.ingest(from: url)
-        }
     }
 
     private func handleDroppedPhotos(_ photos: [ExportedPhoto]) {

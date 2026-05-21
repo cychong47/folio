@@ -3,6 +3,7 @@ import SwiftUI
 import AppKit
 import ImageIO
 import CoreImage
+import Photos
 
 @MainActor
 class CurationStore: ObservableObject {
@@ -16,7 +17,18 @@ class CurationStore: ObservableObject {
     @Published var exportedMarkdown: String? = nil
     @Published var isExporting: Bool = false
     @Published var exportError: String? = nil
-    @Published var sourceFolder: URL? = nil
+    @Published var dateRange: (start: Date, end: Date)? = nil
+
+    var dateRangeLabel: String {
+        guard let r = dateRange else { return "" }
+        let f = DateFormatter()
+        f.dateStyle = .medium
+        f.timeStyle = .none
+        if Calendar.current.isDate(r.start, inSameDayAs: r.end) {
+            return f.string(from: r.start)
+        }
+        return "\(f.string(from: r.start)) – \(f.string(from: r.end))"
+    }
 
     var activeCluster: EventCluster? {
         guard clusters.indices.contains(selectedClusterIndex) else { return nil }
@@ -30,11 +42,11 @@ class CurationStore: ObservableObject {
         return cluster.assets
     }
 
-    func ingest(from folder: URL) async {
+    func ingest(startDate: Date, endDate: Date) async {
         isIngesting = true
         ingestProgress = (0, 0)
-        sourceFolder = folder
-        let assets = await MetadataIngestionService.scan(folder: folder) { done, total in
+        dateRange = (start: startDate, end: endDate)
+        let assets = await MetadataIngestionService.scan(startDate: startDate, endDate: endDate) { done, total in
             self.ingestProgress = (done, total)
         }
         let clustered = ClusteringEngine.cluster(assets: assets)
@@ -110,21 +122,52 @@ class CurationStore: ObservableObject {
 
             for (i, asset) in selected.enumerated() {
                 let seq = String(format: "%02d", i + 1)
-                let ext = asset.url.pathExtension.lowercased() == "heic" ? "jpg" : asset.url.pathExtension.lowercased()
-                let filename = "\(dateStr)-\(eventSlug)-\(seq).\(ext)"
-                let destURL = base.appendingPathComponent(filename)
 
-                // Resize + strip EXIF
-                if let maxDim, let resized = resized(url: asset.url, maxLongEdge: maxDim) {
-                    let final = stripExif ? stripped(data: resized, url: asset.url) ?? resized : resized
-                    try final.write(to: destURL)
-                } else if stripExif, let s = stripped(url: asset.url) {
-                    try s.write(to: destURL)
-                } else {
-                    try FileManager.default.copyItem(at: asset.url, to: destURL)
+                if let phAsset = asset.phAsset {
+                    // PhotoKit path: write original to temp file, then process
+                    let resources = PHAssetResource.assetResources(for: phAsset)
+                    guard let resource = resources.first(where: { $0.type == .photo }) ?? resources.first else {
+                        continue
+                    }
+                    let originalExt = (resource.originalFilename as NSString).pathExtension.lowercased()
+                    let ext = originalExt == "heic" ? "jpg" : (originalExt.isEmpty ? "jpg" : originalExt)
+                    let filename = "\(dateStr)-\(eventSlug)-\(seq).\(ext)"
+                    let destURL = base.appendingPathComponent(filename)
+                    let tempURL = FileManager.default.temporaryDirectory
+                        .appendingPathComponent(UUID().uuidString + "." + originalExt)
+
+                    try await writePHAssetResource(resource, to: tempURL)
+
+                    defer { try? FileManager.default.removeItem(at: tempURL) }
+
+                    if let maxDim, let resized = resized(url: tempURL, maxLongEdge: maxDim) {
+                        let final = stripExif ? stripped(data: resized, url: tempURL) ?? resized : resized
+                        try final.write(to: destURL)
+                    } else if stripExif, let s = stripped(url: tempURL) {
+                        try s.write(to: destURL)
+                    } else {
+                        try FileManager.default.copyItem(at: tempURL, to: destURL)
+                    }
+
+                    lines.append("![](\(prefixWithSlash)\(filename))")
+
+                } else if let url = asset.url {
+                    // File system path
+                    let ext = url.pathExtension.lowercased() == "heic" ? "jpg" : url.pathExtension.lowercased()
+                    let filename = "\(dateStr)-\(eventSlug)-\(seq).\(ext)"
+                    let destURL = base.appendingPathComponent(filename)
+
+                    if let maxDim, let resized = resized(url: url, maxLongEdge: maxDim) {
+                        let final = stripExif ? stripped(data: resized, url: url) ?? resized : resized
+                        try final.write(to: destURL)
+                    } else if stripExif, let s = stripped(url: url) {
+                        try s.write(to: destURL)
+                    } else {
+                        try FileManager.default.copyItem(at: url, to: destURL)
+                    }
+
+                    lines.append("![](\(prefixWithSlash)\(filename))")
                 }
-
-                lines.append("![](\(prefixWithSlash)\(filename))")
             }
 
             exportedMarkdown = lines.joined(separator: "\n")
@@ -134,7 +177,21 @@ class CurationStore: ObservableObject {
         isExporting = false
     }
 
-    // MARK: - Private helpers (copied from PhotoExporter to avoid circular deps)
+    // MARK: - Private helpers
+
+    private func writePHAssetResource(_ resource: PHAssetResource, to url: URL) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
+            let options = PHAssetResourceRequestOptions()
+            options.isNetworkAccessAllowed = true
+            PHAssetResourceManager.default().writeData(for: resource, toFile: url, options: options) { error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            }
+        }
+    }
 
     private func stripped(data: Data, url: URL) -> Data? {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }

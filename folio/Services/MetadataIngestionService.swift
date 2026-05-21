@@ -2,6 +2,7 @@ import Foundation
 import ImageIO
 import CoreLocation
 import AppKit
+import Photos
 
 enum MetadataIngestionService {
     static let imageExtensions: Set<String> = ["jpg", "jpeg", "png", "heic", "heif", "raw", "cr2", "nef", "arw", "dng"]
@@ -35,10 +36,47 @@ enum MetadataIngestionService {
         return assets.sorted { $0.timestamp < $1.timestamp }
     }
 
+    /// Fetches PHAssets within the given date range from the system Photos library.
+    static func scan(startDate: Date, endDate: Date, progress: @escaping (Int, Int) -> Void) async -> [CurationAsset] {
+        // Expand endDate to end of day
+        let dayEnd = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: endDate) ?? endDate
+
+        let options = PHFetchOptions()
+        options.predicate = NSPredicate(
+            format: "creationDate >= %@ AND creationDate <= %@",
+            startDate as CVarArg, dayEnd as CVarArg
+        )
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        options.includeAssetSourceTypes = [.typeUserLibrary, .typeCloudShared, .typeiTunesSynced]
+
+        let result = PHAsset.fetchAssets(with: .image, options: options)
+        let total = result.count
+        var assets: [CurationAsset] = []
+        assets.reserveCapacity(total)
+
+        for i in 0 ..< total {
+            let ph = result.object(at: i)
+            let coord: CLLocationCoordinate2D? = ph.location.map {
+                CLLocationCoordinate2D(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude)
+            }
+            let asset = CurationAsset(
+                phAsset: ph,
+                url: nil,
+                timestamp: ph.creationDate ?? Date(),
+                coordinate: coord,
+                pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight)
+            )
+            assets.append(asset)
+            let done = i + 1
+            await MainActor.run { progress(done, total) }
+        }
+        return assets
+    }
+
     static func makeAsset(from url: URL) -> CurationAsset {
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
               let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else {
-            return CurationAsset(url: url, timestamp: fileDate(url), coordinate: nil, pixelSize: .zero)
+            return CurationAsset(phAsset: nil, url: url, timestamp: fileDate(url), coordinate: nil, pixelSize: .zero)
         }
 
         let timestamp = exifDate(from: props) ?? fileDate(url)
@@ -46,7 +84,7 @@ enum MetadataIngestionService {
         let w = props[kCGImagePropertyPixelWidth as String] as? CGFloat ?? 0
         let h = props[kCGImagePropertyPixelHeight as String] as? CGFloat ?? 0
 
-        return CurationAsset(url: url, timestamp: timestamp, coordinate: coordinate, pixelSize: CGSize(width: w, height: h))
+        return CurationAsset(phAsset: nil, url: url, timestamp: timestamp, coordinate: coordinate, pixelSize: CGSize(width: w, height: h))
     }
 
     private static func exifDate(from props: [String: Any]) -> Date? {

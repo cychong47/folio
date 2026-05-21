@@ -55,11 +55,19 @@ enum ClusteringEngine {
             }
             if burstGroup.count > 1 {
                 let stackID = UUID()
-                // primary = largest file (proxy for sharpest)
+                // primary = largest file (proxy for sharpest); for PhotoKit assets fall back to pixel area
                 let primaryIdx = burstGroup.max(by: { a, b in
-                    let sA = (try? FileManager.default.attributesOfItem(atPath: result[a].url.path)[.size] as? Int) ?? 0
-                    let sB = (try? FileManager.default.attributesOfItem(atPath: result[b].url.path)[.size] as? Int) ?? 0
-                    return sA < sB
+                    let assetA = result[a]
+                    let assetB = result[b]
+                    if let urlA = assetA.url, let urlB = assetB.url {
+                        let sA = (try? FileManager.default.attributesOfItem(atPath: urlA.path)[.size] as? Int) ?? 0
+                        let sB = (try? FileManager.default.attributesOfItem(atPath: urlB.path)[.size] as? Int) ?? 0
+                        return sA < sB
+                    }
+                    // PhotoKit: use pixel area as proxy
+                    let areaA = Int(assetA.pixelSize.width * assetA.pixelSize.height)
+                    let areaB = Int(assetB.pixelSize.width * assetB.pixelSize.height)
+                    return areaA < areaB
                 }) ?? burstGroup[0]
                 for idx in burstGroup {
                     result[idx].stackID = stackID

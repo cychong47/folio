@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import Photos
 
 struct PhotoCurationView: View {
     @ObservedObject var store: CurationStore
@@ -31,8 +32,8 @@ struct PhotoCurationView: View {
                 }
             }
             ToolbarItem(placement: .principal) {
-                if let folder = store.sourceFolder {
-                    Text(folder.lastPathComponent)
+                if !store.dateRangeLabel.isEmpty {
+                    Text(store.dateRangeLabel)
                         .font(.headline)
                         .foregroundStyle(.primary)
                 }
@@ -84,7 +85,7 @@ struct PhotoCurationView: View {
                 .foregroundStyle(.secondary)
             Text("No photos found")
                 .font(.title3.weight(.medium))
-            Text("Select a folder containing photos to begin curation.")
+            Text("Select a date range from your Photos library to begin curation.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
         }
@@ -256,18 +257,33 @@ private struct ThumbnailCell: View {
 
     private func loadThumb() {
         guard thumb == nil else { return }
-        let url = asset.url
-        DispatchQueue.global(qos: .userInitiated).async {
-            let options: [CFString: Any] = [
-                kCGImageSourceCreateThumbnailFromImageIfAbsent: true,
-                kCGImageSourceThumbnailMaxPixelSize: 320,
-                kCGImageSourceCreateThumbnailWithTransform: true
-            ]
-            guard let src = CGImageSourceCreateWithURL(url as CFURL, nil),
-                  let cgImg = CGImageSourceCreateThumbnailAtIndex(src, 0, options as CFDictionary)
-            else { return }
-            let img = NSImage(cgImage: cgImg, size: NSSize(width: cgImg.width, height: cgImg.height))
-            DispatchQueue.main.async { thumb = img }
+        if let phAsset = asset.phAsset {
+            let opts = PHImageRequestOptions()
+            opts.deliveryMode = .opportunistic
+            opts.resizeMode = .fast
+            opts.isNetworkAccessAllowed = true
+            PHImageManager.default().requestImage(
+                for: phAsset,
+                targetSize: CGSize(width: 320, height: 240),
+                contentMode: .aspectFill,
+                options: opts
+            ) { image, _ in
+                guard let image else { return }
+                DispatchQueue.main.async { self.thumb = image }
+            }
+        } else if let url = asset.url {
+            DispatchQueue.global(qos: .userInitiated).async {
+                let options: [CFString: Any] = [
+                    kCGImageSourceCreateThumbnailFromImageIfAbsent: true,
+                    kCGImageSourceThumbnailMaxPixelSize: 320,
+                    kCGImageSourceCreateThumbnailWithTransform: true
+                ]
+                guard let src = CGImageSourceCreateWithURL(url as CFURL, nil),
+                      let cgImg = CGImageSourceCreateThumbnailAtIndex(src, 0, options as CFDictionary)
+                else { return }
+                let img = NSImage(cgImage: cgImg, size: NSSize(width: cgImg.width, height: cgImg.height))
+                DispatchQueue.main.async { thumb = img }
+            }
         }
     }
 }
