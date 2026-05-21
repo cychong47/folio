@@ -30,7 +30,9 @@ enum MetadataIngestionService {
             let asset = makeAsset(from: url)
             assets.append(asset)
             let completed = i + 1
-            await MainActor.run { progress(completed, total) }
+            if completed % 10 == 0 || completed == total {
+                await MainActor.run { progress(completed, total) }
+            }
         }
 
         return assets.sorted { $0.timestamp < $1.timestamp }
@@ -68,7 +70,9 @@ enum MetadataIngestionService {
             )
             assets.append(asset)
             let done = i + 1
-            await MainActor.run { progress(done, total) }
+            if done % 10 == 0 || done == total {
+                await MainActor.run { progress(done, total) }
+            }
         }
         return assets
     }
