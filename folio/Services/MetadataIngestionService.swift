@@ -40,6 +40,12 @@ enum MetadataIngestionService {
 
     /// Fetches PHAssets within the given date range from the system Photos library.
     static func scan(startDate: Date, endDate: Date, progress: @escaping (Int, Int) -> Void) async -> [CurationAsset] {
+        let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        guard status == .authorized || status == .limited else {
+            print("[Folio] PhotoKit scan skipped — authorization status: \(status.rawValue)")
+            return []
+        }
+
         // Expand endDate to end of day
         let dayEnd = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: endDate) ?? endDate
 
@@ -49,9 +55,11 @@ enum MetadataIngestionService {
             startDate as CVarArg, dayEnd as CVarArg
         )
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-        options.includeAssetSourceTypes = [.typeUserLibrary, .typeCloudShared, .typeiTunesSynced]
+        // Do not set includeAssetSourceTypes — default covers all user library photos
 
-        let result = PHAsset.fetchAssets(with: .image, options: options)
+        // PHAsset.fetchAssets must run on the main thread
+        let result = await MainActor.run { PHAsset.fetchAssets(with: .image, options: options) }
+        print("[Folio] PhotoKit fetch: \(result.count) assets (\(startDate) → \(dayEnd))")
         let total = result.count
         var assets: [CurationAsset] = []
         assets.reserveCapacity(total)
