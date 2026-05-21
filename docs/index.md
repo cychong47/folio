@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.18.0
+
+- Photo Curation Workspace — scan a vacation photo folder; photos are auto-grouped into timed events using spatio-temporal clustering; keyboard-driven grid UI to select/deselect shots; export selected photos with markdown snippet for the blog
+
+---
+
 ### v1.17.0
 
 - Photo strip in editor — horizontal thumbnail row above the markdown editor; hover to reveal × remove button or right-click for context menu
