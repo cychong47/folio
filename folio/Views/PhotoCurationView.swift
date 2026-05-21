@@ -8,6 +8,7 @@ struct PhotoCurationView: View {
     var onBack: () -> Void
 
     @State private var columnVisibility = NavigationSplitViewVisibility.all
+    @State private var showDatePicker = false
 
     var body: some View {
         ZStack {
@@ -85,12 +86,22 @@ struct PhotoCurationView: View {
                 .foregroundStyle(.secondary)
             Text("No photos found")
                 .font(.title3.weight(.medium))
-            Text("Select a date range from your Photos library to begin curation.")
-                .font(.callout)
-                .foregroundStyle(.secondary)
+            if !store.dateRangeLabel.isEmpty {
+                Text("No photos in your library for \(store.dateRangeLabel).")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+            Button("Try Different Dates") { showDatePicker = true }
+                .buttonStyle(.borderedProminent)
+                .padding(.top, 4)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Theme.background)
+        .sheet(isPresented: $showDatePicker) {
+            DateRangePickerView(isPresented: $showDatePicker) { start, end in
+                Task { await store.ingest(startDate: start, endDate: end) }
+            }
+        }
     }
 }
 

@@ -46,13 +46,15 @@ enum MetadataIngestionService {
             return []
         }
 
-        // Expand endDate to end of day
-        let dayEnd = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: endDate) ?? endDate
+        let cal = Calendar.current
+        let dayStart = cal.startOfDay(for: startDate)
+        let dayEnd = cal.date(bySettingHour: 23, minute: 59, second: 59, of: endDate) ?? endDate
+        print("[Folio] Searching \(dayStart) → \(dayEnd)")
 
         let options = PHFetchOptions()
         options.predicate = NSPredicate(
             format: "creationDate >= %@ AND creationDate <= %@",
-            startDate as CVarArg, dayEnd as CVarArg
+            dayStart as CVarArg, dayEnd as CVarArg
         )
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
         // Do not set includeAssetSourceTypes — default covers all user library photos

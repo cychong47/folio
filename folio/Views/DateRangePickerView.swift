@@ -5,8 +5,10 @@ struct DateRangePickerView: View {
     @Binding var isPresented: Bool
     let onConfirm: (Date, Date) -> Void
 
-    @State private var startDate: Date = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
-    @State private var endDate: Date = Date()
+    @State private var startDate: Date = Calendar.current.startOfDay(
+        for: Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
+    )
+    @State private var endDate: Date = Calendar.current.startOfDay(for: Date())
     @State private var authStatus: PHAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
 
     var body: some View {
@@ -26,8 +28,10 @@ struct DateRangePickerView: View {
                     Button("Cancel") { isPresented = false }
                     Button("Load Photos") {
                         isPresented = false
-                        // Set endDate to include the full selected day
-                        onConfirm(startDate, endDate)
+                        onConfirm(
+                            Calendar.current.startOfDay(for: startDate),
+                            Calendar.current.startOfDay(for: endDate)
+                        )
                     }
                     .buttonStyle(.borderedProminent)
                     .keyboardShortcut(.defaultAction)

@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.18.3
+- Fix photo curation date range: dates are now normalised to start/end of day so photos early on the first day are not missed; default range widened to 30 days; empty state shows exactly which dates were searched and offers "Try Different Dates"
+
 ### v1.18.2
 - Fix photo curation returning no results — PHAsset.fetchAssets now runs on the main thread; removed includeAssetSourceTypes filter that silently excluded photos on macOS
 
