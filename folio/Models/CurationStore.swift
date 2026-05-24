@@ -21,7 +21,6 @@ class CurationStore: ObservableObject {
     @Published var lastFetchCount: Int = 0    // date-range count
     @Published var lastLibraryTotal: Int = 0  // total library count (no filter)
     @Published var lastAuthStatus: String = ""
-    @Published var lastLibraryURL: String = ""
 
     var dateRangeLabel: String {
         guard let r = dateRange else { return "" }
@@ -52,7 +51,6 @@ class CurationStore: ObservableObject {
         lastFetchCount = 0
         lastLibraryTotal = 0
         lastAuthStatus = ""
-        lastLibraryURL = ""
         dateRange = (start: startDate, end: endDate)
 
         // Check auth — all PhotoKit calls stay on the MainActor (avoids thread-hop issues)
@@ -77,21 +75,19 @@ class CurationStore: ObservableObject {
         // authorizationStatus: it opens the XPC session with photolibraryd. Skipping it
         // and using authorizationStatus alone leaves the session unopened, so fetchAssets
         // silently returns 0 even when TCC reports "Authorized".
-        let (libraryTotal, libraryURL, result): (Int, String, PHFetchResult<PHAsset>) =
+        let (libraryTotal, result): (Int, PHFetchResult<PHAsset>) =
             await withCheckedContinuation { cont in
                 DispatchQueue.global(qos: .userInitiated).async {
                     let sema = DispatchSemaphore(value: 0)
                     PHPhotoLibrary.requestAuthorization(for: .readWrite) { _ in sema.signal() }
                     sema.wait()
 
-                    let libURL = PHPhotoLibrary.shared().photoLibraryURL?.path ?? "unknown"
                     let all = PHAsset.fetchAssets(with: .image, options: nil)
                     let range = PHAsset.fetchAssets(with: .image, options: opts)
-                    cont.resume(returning: (all.count, libURL, range))
+                    cont.resume(returning: (all.count, range))
                 }
             }
         lastLibraryTotal = libraryTotal
-        lastLibraryURL = libraryURL
         let total = result.count
 
         // Build CurationAsset array; yield every 10 items so the progress bar updates

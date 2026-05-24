@@ -94,13 +94,7 @@ struct PhotoCurationView: View {
                     .font(.caption)
                     .foregroundStyle(.tertiary)
                     .textSelection(.enabled)
-                if !store.lastLibraryURL.isEmpty {
-                    Text("Library path: \(store.lastLibraryURL)")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                        .textSelection(.enabled)
-                        .padding(.bottom, 4)
-                }
+                    .padding(.bottom, 4)
                 if store.lastLibraryTotal == 0 && !store.lastAuthStatus.isEmpty {
                     Text("Your Photos library on this Mac is empty. Open Photos.app and let it sync from iCloud, or connect your iPhone to import photos first.")
                         .font(.caption)
