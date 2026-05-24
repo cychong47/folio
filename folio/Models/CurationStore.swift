@@ -18,7 +18,8 @@ class CurationStore: ObservableObject {
     @Published var isExporting: Bool = false
     @Published var exportError: String? = nil
     @Published var dateRange: (start: Date, end: Date)? = nil
-    @Published var lastFetchCount: Int = 0
+    @Published var lastFetchCount: Int = 0    // date-range count
+    @Published var lastLibraryTotal: Int = 0  // total library count (no filter)
     @Published var lastAuthStatus: String = ""
 
     var dateRangeLabel: String {
@@ -48,14 +49,16 @@ class CurationStore: ObservableObject {
         isIngesting = true
         ingestProgress = (0, 0)
         lastFetchCount = 0
+        lastLibraryTotal = 0
         lastAuthStatus = ""
         dateRange = (start: startDate, end: endDate)
-        let (assets, authStatus, fetchCount) = await MetadataIngestionService.scan(
+        let (assets, authStatus, libraryTotal) = await MetadataIngestionService.scan(
             startDate: startDate, endDate: endDate
         ) { done, total in
             self.ingestProgress = (done, total)
         }
-        lastFetchCount = fetchCount
+        lastLibraryTotal = libraryTotal
+        lastFetchCount = assets.count
         lastAuthStatus = authStatus
         let clustered = ClusteringEngine.cluster(assets: assets)
         clusters = clustered

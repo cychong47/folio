@@ -71,8 +71,13 @@ enum MetadataIngestionService {
         )
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
 
+        // Fetch without filter first to check total library size
+        let totalResult = await MainActor.run { PHAsset.fetchAssets(with: .image, options: nil) }
+        let libraryTotal = totalResult.count
+
         let result = await MainActor.run { PHAsset.fetchAssets(with: .image, options: options) }
         let total = result.count
+        print("[Folio] Library total=\(libraryTotal) range=\(total) (\(dayStart)→\(dayEnd))")
         var assets: [CurationAsset] = []
         assets.reserveCapacity(total)
 
@@ -94,7 +99,7 @@ enum MetadataIngestionService {
                 await MainActor.run { progress(done, total) }
             }
         }
-        return (assets, statusDesc, total)
+        return (assets, statusDesc, libraryTotal)
     }
 
     static func makeAsset(from url: URL) -> CurationAsset {

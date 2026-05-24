@@ -90,7 +90,7 @@ struct PhotoCurationView: View {
                 Text("Searched: \(store.dateRangeLabel)")
                     .font(.callout)
                     .foregroundStyle(.secondary)
-                Text("Authorization: \(store.lastAuthStatus)  ·  Assets found: \(store.lastFetchCount)")
+                Text("Auth: \(store.lastAuthStatus)  ·  Library: \(store.lastLibraryTotal) photos  ·  In range: \(store.lastFetchCount)")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
                     .padding(.bottom, 4)
