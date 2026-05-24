@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.18.7
+- Fix photo curation returning no results — move all PHAsset fetching onto the MainActor directly instead of via background thread + MainActor.run, which was silently returning empty results
+
 ### v1.18.6
 - Curation empty state: diagnostic text is now selectable; explains when Photos library is empty on this Mac
 

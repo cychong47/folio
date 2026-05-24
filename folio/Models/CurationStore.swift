@@ -52,19 +52,68 @@ class CurationStore: ObservableObject {
         lastLibraryTotal = 0
         lastAuthStatus = ""
         dateRange = (start: startDate, end: endDate)
-        let (assets, authStatus, libraryTotal) = await MetadataIngestionService.scan(
-            startDate: startDate, endDate: endDate
-        ) { done, total in
-            self.ingestProgress = (done, total)
+
+        // Check auth — all PhotoKit calls stay on the MainActor (avoids thread-hop issues)
+        let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        lastAuthStatus = authStatusLabel(status)
+        guard status == .authorized || status == .limited else {
+            isIngesting = false
+            return
         }
-        lastLibraryTotal = libraryTotal
+
+        // Unfiltered total
+        let allResult = PHAsset.fetchAssets(with: .image, options: nil)
+        lastLibraryTotal = allResult.count
+
+        // Date-range fetch
+        let cal = Calendar.current
+        let dayStart = cal.startOfDay(for: startDate)
+        let dayEnd = cal.date(bySettingHour: 23, minute: 59, second: 59, of: endDate) ?? endDate
+        let opts = PHFetchOptions()
+        opts.predicate = NSPredicate(
+            format: "creationDate >= %@ AND creationDate <= %@",
+            dayStart as CVarArg, dayEnd as CVarArg
+        )
+        opts.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        let result = PHAsset.fetchAssets(with: .image, options: opts)
+        let total = result.count
+
+        // Build CurationAsset array; yield every 10 items so the progress bar updates
+        var assets: [CurationAsset] = []
+        assets.reserveCapacity(total)
+        for i in 0 ..< total {
+            let ph = result.object(at: i)
+            let coord = ph.location.map {
+                CLLocationCoordinate2D(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude)
+            }
+            assets.append(CurationAsset(
+                phAsset: ph, url: nil,
+                timestamp: ph.creationDate ?? Date(),
+                coordinate: coord,
+                pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight)
+            ))
+            if (i + 1) % 10 == 0 || i == total - 1 {
+                ingestProgress = (i + 1, total)
+                await Task.yield()
+            }
+        }
+
         lastFetchCount = assets.count
-        lastAuthStatus = authStatus
-        let clustered = ClusteringEngine.cluster(assets: assets)
-        clusters = clustered
+        clusters = ClusteringEngine.cluster(assets: assets)
         selectedClusterIndex = 0
         focusedAssetIndex = 0
         isIngesting = false
+    }
+
+    private func authStatusLabel(_ status: PHAuthorizationStatus) -> String {
+        switch status {
+        case .authorized:    return "Authorized"
+        case .limited:       return "Limited"
+        case .denied:        return "Denied"
+        case .restricted:    return "Restricted"
+        case .notDetermined: return "Not Determined"
+        @unknown default:    return "Unknown (\(status.rawValue))"
+        }
     }
 
     func toggleSelection(assetID: UUID) {
