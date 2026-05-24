@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.18.8
+
+- Fix photo curation returning no results — PHAsset.fetchAssets now runs via Task.detached (off the Swift actor), matching the GCD context PhotoKit's XPC daemon requires; @MainActor context silently broke the photolibraryd connection
+
+---
+
 ### v1.18.7
 
 - Fix photo curation returning no results — move all PHAsset fetching onto the MainActor directly instead of via background thread + MainActor.run, which was silently returning empty results
