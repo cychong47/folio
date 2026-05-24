@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.18.9
+- Fix photo curation returning no results — PHAsset.fetchAssets now runs on an explicit DispatchQueue.global GCD thread; Swift cooperative thread pool (Task.detached) and @MainActor both silently return 0 because photolibraryd's XPC channel requires a real GCD-backed thread
+
 ### v1.18.8
 - Fix photo curation returning no results — PHAsset.fetchAssets now runs via Task.detached (off the Swift actor), matching the GCD context PhotoKit's XPC daemon requires; @MainActor context silently broke the photolibraryd connection
 

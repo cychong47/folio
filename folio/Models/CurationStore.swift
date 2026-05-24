@@ -61,10 +61,9 @@ class CurationStore: ObservableObject {
             return
         }
 
-        // Fetch on a background thread (Task.detached = not actor-isolated).
-        // PHAsset.fetchAssets talks to photolibraryd via XPC; it silently returns 0
-        // when called from a Swift actor context because the actor scheduler
-        // doesn't run a standard CFRunLoop that XPC expects.
+        // PHAsset.fetchAssets must run on a real GCD thread (DispatchQueue.global), not
+        // the Swift cooperative thread pool. Both Task.detached and @MainActor silently
+        // return 0 because photolibraryd's XPC channel requires a GCD-backed thread.
         let cal = Calendar.current
         let dayStart = cal.startOfDay(for: startDate)
         let dayEnd = cal.date(bySettingHour: 23, minute: 59, second: 59, of: endDate) ?? endDate
@@ -75,11 +74,13 @@ class CurationStore: ObservableObject {
         )
         opts.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
 
-        let (libraryTotal, result) = await Task.detached(priority: .userInitiated) {
-            let all = PHAsset.fetchAssets(with: .image, options: nil)
-            let range = PHAsset.fetchAssets(with: .image, options: opts)
-            return (all.count, range)
-        }.value
+        let (libraryTotal, result): (Int, PHFetchResult<PHAsset>) = await withCheckedContinuation { cont in
+            DispatchQueue.global(qos: .userInitiated).async {
+                let all = PHAsset.fetchAssets(with: .image, options: nil)
+                let range = PHAsset.fetchAssets(with: .image, options: opts)
+                cont.resume(returning: (all.count, range))
+            }
+        }
         lastLibraryTotal = libraryTotal
         let total = result.count
 
