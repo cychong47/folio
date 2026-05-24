@@ -39,17 +39,30 @@ enum MetadataIngestionService {
     }
 
     /// Fetches PHAssets within the given date range from the system Photos library.
-    static func scan(startDate: Date, endDate: Date, progress: @escaping (Int, Int) -> Void) async -> [CurationAsset] {
+    /// Returns (assets, authStatusDescription, rawFetchCount) for diagnostics.
+    static func scan(
+        startDate: Date,
+        endDate: Date,
+        progress: @escaping (Int, Int) -> Void
+    ) async -> (assets: [CurationAsset], authStatus: String, fetchCount: Int) {
         let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        let statusDesc: String
+        switch status {
+        case .authorized:    statusDesc = "Authorized"
+        case .limited:       statusDesc = "Limited"
+        case .denied:        statusDesc = "Denied"
+        case .restricted:    statusDesc = "Restricted"
+        case .notDetermined: statusDesc = "Not Determined"
+        @unknown default:    statusDesc = "Unknown (\(status.rawValue))"
+        }
+
         guard status == .authorized || status == .limited else {
-            print("[Folio] PhotoKit scan skipped — authorization status: \(status.rawValue)")
-            return []
+            return ([], statusDesc, 0)
         }
 
         let cal = Calendar.current
         let dayStart = cal.startOfDay(for: startDate)
         let dayEnd = cal.date(bySettingHour: 23, minute: 59, second: 59, of: endDate) ?? endDate
-        print("[Folio] Searching \(dayStart) → \(dayEnd)")
 
         let options = PHFetchOptions()
         options.predicate = NSPredicate(
@@ -57,11 +70,8 @@ enum MetadataIngestionService {
             dayStart as CVarArg, dayEnd as CVarArg
         )
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-        // Do not set includeAssetSourceTypes — default covers all user library photos
 
-        // PHAsset.fetchAssets must run on the main thread
         let result = await MainActor.run { PHAsset.fetchAssets(with: .image, options: options) }
-        print("[Folio] PhotoKit fetch: \(result.count) assets (\(startDate) → \(dayEnd))")
         let total = result.count
         var assets: [CurationAsset] = []
         assets.reserveCapacity(total)
@@ -84,7 +94,7 @@ enum MetadataIngestionService {
                 await MainActor.run { progress(done, total) }
             }
         }
-        return assets
+        return (assets, statusDesc, total)
     }
 
     static func makeAsset(from url: URL) -> CurationAsset {

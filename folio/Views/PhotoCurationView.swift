@@ -87,13 +87,16 @@ struct PhotoCurationView: View {
             Text("No photos found")
                 .font(.title3.weight(.medium))
             if !store.dateRangeLabel.isEmpty {
-                Text("No photos in your library for \(store.dateRangeLabel).")
+                Text("Searched: \(store.dateRangeLabel)")
                     .font(.callout)
                     .foregroundStyle(.secondary)
+                Text("Authorization: \(store.lastAuthStatus)  ·  Assets found: \(store.lastFetchCount)")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                    .padding(.bottom, 4)
             }
             Button("Try Different Dates") { showDatePicker = true }
                 .buttonStyle(.borderedProminent)
-                .padding(.top, 4)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Theme.background)
