@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.18.6
+
+- Curation empty state: diagnostic text is now selectable; explains when Photos library is empty on this Mac
+
+---
+
 ### v1.18.5
 
 - Curation empty state now shows total library photo count alongside date-range count to distinguish "wrong date range" from "Photos not accessible"
