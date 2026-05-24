@@ -42,6 +42,22 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             build
 
+      - name: Sign app with entitlements
+        run: |
+          APP_PATH=$(find build -name "Folio.app" -type d | head -1)
+          EXT="$APP_PATH/Contents/PlugIns/FolioShareExtension.appex"
+          # Sign nested bundles first, then the parent.
+          # Embedding entitlements (especially photos-library) is required so
+          # photolibraryd grants access — it checks the code signature, not just TCC.
+          if [ -e "$EXT" ]; then
+            codesign --force --sign - \
+              --entitlements FolioShareExtension/FolioShareExtension.entitlements \
+              "$EXT"
+          fi
+          codesign --force --sign - \
+            --entitlements folio/Folio.entitlements \
+            "$APP_PATH"
+
       - name: Package app
         run: |
           APP_PATH=$(find build -name "Folio.app" -type d | head -1)
