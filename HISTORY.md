@@ -4,6 +4,10 @@
 
 ## Released
 
+### v1.19.0
+- Fix photo curation returning no results — call PHPhotoLibrary.requestAuthorization inside the GCD fetch block to open the XPC session with photolibraryd before fetching; authorizationStatus alone does not establish the connection so fetchAssets silently returned 0
+- Curation empty state now shows Photos library path for easier debugging
+
 ### v1.18.9
 - Fix photo curation returning no results — PHAsset.fetchAssets now runs on an explicit DispatchQueue.global GCD thread; Swift cooperative thread pool (Task.detached) and @MainActor both silently return 0 because photolibraryd's XPC channel requires a real GCD-backed thread
 
