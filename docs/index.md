@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.18.5
+
+- Curation empty state now shows total library photo count alongside date-range count to distinguish "wrong date range" from "Photos not accessible"
+
+---
+
 ### v1.18.4
 
 - Photo curation empty state shows authorization status and raw asset count so the cause of "no photos found" is visible without Console.app
