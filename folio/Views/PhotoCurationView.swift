@@ -93,7 +93,15 @@ struct PhotoCurationView: View {
                 Text("Auth: \(store.lastAuthStatus)  ·  Library: \(store.lastLibraryTotal) photos  ·  In range: \(store.lastFetchCount)")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
+                    .textSelection(.enabled)
                     .padding(.bottom, 4)
+                if store.lastLibraryTotal == 0 && !store.lastAuthStatus.isEmpty {
+                    Text("Your Photos library on this Mac is empty. Open Photos.app and let it sync from iCloud, or connect your iPhone to import photos first.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: 380)
+                }
             }
             Button("Try Different Dates") { showDatePicker = true }
                 .buttonStyle(.borderedProminent)
