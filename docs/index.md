@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.19.1
+
+- Fix photo curation returning no results — CI now ad-hoc signs the app binary with the Photos entitlement embedded; photolibraryd checks the code signature (not just TCC) before serving assets, so an unsigned binary always got 0 results
+
+---
+
 ### v1.19.0
 
 - Fix photo curation returning no results — call PHPhotoLibrary.requestAuthorization inside the GCD fetch block to open the XPC session with photolibraryd before fetching; authorizationStatus alone does not establish the connection so fetchAssets silently returned 0
