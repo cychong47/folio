@@ -61,11 +61,10 @@ class CurationStore: ObservableObject {
             return
         }
 
-        // Unfiltered total
-        let allResult = PHAsset.fetchAssets(with: .image, options: nil)
-        lastLibraryTotal = allResult.count
-
-        // Date-range fetch
+        // Fetch on a background thread (Task.detached = not actor-isolated).
+        // PHAsset.fetchAssets talks to photolibraryd via XPC; it silently returns 0
+        // when called from a Swift actor context because the actor scheduler
+        // doesn't run a standard CFRunLoop that XPC expects.
         let cal = Calendar.current
         let dayStart = cal.startOfDay(for: startDate)
         let dayEnd = cal.date(bySettingHour: 23, minute: 59, second: 59, of: endDate) ?? endDate
@@ -75,7 +74,13 @@ class CurationStore: ObservableObject {
             dayStart as CVarArg, dayEnd as CVarArg
         )
         opts.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-        let result = PHAsset.fetchAssets(with: .image, options: opts)
+
+        let (libraryTotal, result) = await Task.detached(priority: .userInitiated) {
+            let all = PHAsset.fetchAssets(with: .image, options: nil)
+            let range = PHAsset.fetchAssets(with: .image, options: opts)
+            return (all.count, range)
+        }.value
+        lastLibraryTotal = libraryTotal
         let total = result.count
 
         // Build CurationAsset array; yield every 10 items so the progress bar updates
