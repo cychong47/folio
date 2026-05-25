@@ -248,10 +248,14 @@ private struct EventRow: View {
 private struct CurationGridPanel: View {
     @ObservedObject var store: CurationStore
 
-    private let columns = [GridItem(.adaptive(minimum: 160, maximum: 160), spacing: 8)]
+    @State private var thumbSize: CGFloat = 160
     @State private var isShowingDetail = false
     @State private var detailIndex = 0
     @State private var viewMode: ViewMode = .grid
+
+    private var columns: [GridItem] {
+        [GridItem(.adaptive(minimum: thumbSize, maximum: thumbSize), spacing: 8)]
+    }
 
     @State private var isSplitting = false
     @State private var splitMode: SplitMode = .time
@@ -296,6 +300,18 @@ private struct CurationGridPanel: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Spacer()
+                    // Thumbnail size slider
+                    HStack(spacing: 4) {
+                        Image(systemName: "photo")
+                            .font(.system(size: 9))
+                            .foregroundStyle(.secondary)
+                        Slider(value: $thumbSize, in: 100...320)
+                            .frame(width: 80)
+                            .help("Thumbnail size")
+                        Image(systemName: "photo")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.secondary)
+                    }
                     Picker("", selection: $viewMode) {
                         Image(systemName: "square.grid.2x2").tag(ViewMode.grid)
                         Image(systemName: "map").tag(ViewMode.map)
@@ -327,6 +343,7 @@ private struct CurationGridPanel: View {
                         ForEach(Array(store.visibleAssets.enumerated()), id: \.element.id) { idx, asset in
                             ThumbnailCell(
                                 asset: asset,
+                                thumbSize: thumbSize,
                                 splitGroupIndex: isSplitting ? splitAssignments[asset.id] : nil,
                                 onTap: { store.toggleSelection(assetID: asset.id) },
                                 onDoubleTap: { detailIndex = idx; isShowingDetail = true }
@@ -609,9 +626,12 @@ private struct PhotoPin: View {
 
 private struct ThumbnailCell: View {
     let asset: CurationAsset
+    var thumbSize: CGFloat = 160
     var splitGroupIndex: Int? = nil
     let onTap: () -> Void
     let onDoubleTap: () -> Void
+
+    private var thumbHeight: CGFloat { (thumbSize * 0.75).rounded() }
 
     @State private var thumb: NSImage? = nil
     @State private var geocodeResult: GeocodeResult? = nil
@@ -651,7 +671,7 @@ private struct ThumbnailCell: View {
                             )
                     }
                 }
-                .frame(width: 160, height: 120)
+                .frame(width: thumbSize, height: thumbHeight)
                 .clipped()
                 .overlay(alignment: .top) {
                     if let idx = splitGroupIndex {
@@ -717,7 +737,7 @@ private struct ThumbnailCell: View {
             }
             .padding(.horizontal, 6)
             .padding(.vertical, 4)
-            .frame(width: 160, alignment: .leading)
+            .frame(width: thumbSize, alignment: .leading)
         }
         .onTapGesture(count: 2) { onDoubleTap() }
         .onTapGesture { onTap() }

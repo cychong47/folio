@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.20.4
+- Adjustable thumbnail size in curation grid — small↔large photo icon slider in the action bar scales thumbnails from 100 px to 320 px; grid reflows automatically
+
 ### v1.20.3
 - Fix exported photos rotated 90° — curation export now bakes EXIF orientation into pixel data (via CIImage.oriented) before stripping metadata or resizing, matching the fix already present in the regular drag-and-drop export path
 
