@@ -1,6 +1,7 @@
 import SwiftUI
 import AppKit
 import Photos
+import CoreLocation
 
 struct PhotoCurationView: View {
     @ObservedObject var store: CurationStore
@@ -171,7 +172,7 @@ private struct EventRow: View {
 private struct CurationGridPanel: View {
     @ObservedObject var store: CurationStore
 
-    private let columns = [GridItem(.adaptive(minimum: 160, maximum: 200), spacing: 8)]
+    private let columns = [GridItem(.adaptive(minimum: 160, maximum: 160), spacing: 8)]
 
     var body: some View {
         VStack(spacing: 0) {
@@ -227,54 +228,96 @@ private struct ThumbnailCell: View {
     let onTap: () -> Void
 
     @State private var thumb: NSImage? = nil
+    @State private var locationName: String? = nil
+
+    private var locationText: String {
+        if asset.isScreenshot { return "Screenshot" }
+        if let name = locationName { return name }
+        if asset.coordinate != nil { return "…" }
+        return "No GPS"
+    }
+
+    private var locationIcon: String {
+        if asset.isScreenshot { return "camera.viewfinder" }
+        if asset.coordinate != nil { return "location.fill" }
+        return "location.slash"
+    }
 
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            Group {
-                if let img = thumb {
-                    Image(nsImage: img)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } else {
-                    Rectangle()
-                        .fill(Theme.panel)
-                        .overlay(
-                            Image(systemName: "photo")
-                                .foregroundStyle(.tertiary)
+        VStack(alignment: .leading, spacing: 0) {
+            ZStack(alignment: .topTrailing) {
+                Group {
+                    if let img = thumb {
+                        Image(nsImage: img)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    } else {
+                        Rectangle()
+                            .fill(Theme.panel)
+                            .overlay(
+                                Image(systemName: "photo")
+                                    .foregroundStyle(.tertiary)
+                            )
+                    }
+                }
+                .frame(width: 160, height: 120)
+                .clipped()
+                .opacity(asset.isSelected ? 1.0 : 0.5)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .strokeBorder(
+                            asset.isSelected ? Theme.accent : Color.clear,
+                            lineWidth: 2.5
                         )
+                )
+                .cornerRadius(6)
+
+                if asset.isSelected {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 16))
+                        .foregroundStyle(.white, Theme.accent)
+                        .padding(4)
+                }
+
+                if asset.stackID != nil && !asset.isStackPrimary {
+                    Image(systemName: "square.stack")
+                        .font(.caption2)
+                        .foregroundStyle(.white)
+                        .padding(4)
+                        .background(Color.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 4))
+                        .padding(4)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
                 }
             }
-            .frame(width: 160, height: 120)
-            .clipped()
-            .opacity(asset.isSelected ? 1.0 : 0.5)
-            .overlay(
-                RoundedRectangle(cornerRadius: 6)
-                    .strokeBorder(
-                        asset.isSelected ? Theme.accent : Color.clear,
-                        lineWidth: 2.5
-                    )
-            )
-            .cornerRadius(6)
 
-            if asset.isSelected {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 16))
-                    .foregroundStyle(.white, Theme.accent)
-                    .padding(4)
-            }
+            // Metadata row
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 3) {
+                    Image(systemName: "clock")
+                        .font(.system(size: 9))
+                    Text(asset.timestamp, format: .dateTime.hour().minute())
+                        .font(.system(size: 10))
+                }
+                .foregroundStyle(.secondary)
 
-            if asset.stackID != nil && !asset.isStackPrimary {
-                Image(systemName: "square.stack")
-                    .font(.caption2)
-                    .foregroundStyle(.white)
-                    .padding(4)
-                    .background(Color.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 4))
-                    .padding(4)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+                HStack(spacing: 3) {
+                    Image(systemName: locationIcon)
+                        .font(.system(size: 9))
+                    Text(locationText)
+                        .font(.system(size: 10))
+                        .lineLimit(1)
+                }
+                .foregroundStyle(asset.coordinate != nil || asset.isScreenshot ? .secondary : .tertiary)
             }
+            .padding(.horizontal, 6)
+            .padding(.vertical, 4)
+            .frame(width: 160, alignment: .leading)
         }
         .onTapGesture { onTap() }
-        .onAppear { loadThumb() }
+        .onAppear {
+            loadThumb()
+            loadLocationName()
+        }
     }
 
     private func loadThumb() {
@@ -305,6 +348,24 @@ private struct ThumbnailCell: View {
                 else { return }
                 let img = NSImage(cgImage: cgImg, size: NSSize(width: cgImg.width, height: cgImg.height))
                 DispatchQueue.main.async { thumb = img }
+            }
+        }
+    }
+
+    private func loadLocationName() {
+        guard !asset.isScreenshot, locationName == nil, let coord = asset.coordinate else { return }
+        Task {
+            let location = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
+            if let placemarks = try? await CLGeocoder().reverseGeocodeLocation(location),
+               let pm = placemarks.first {
+                let parts = [pm.locality, pm.administrativeArea]
+                    .compactMap { $0 }
+                    .filter { !$0.isEmpty }
+                locationName = parts.isEmpty
+                    ? String(format: "%.3f°, %.3f°", coord.latitude, coord.longitude)
+                    : parts.joined(separator: ", ")
+            } else {
+                locationName = String(format: "%.3f°, %.3f°", coord.latitude, coord.longitude)
             }
         }
     }

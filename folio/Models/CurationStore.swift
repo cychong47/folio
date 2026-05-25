@@ -102,7 +102,8 @@ class CurationStore: ObservableObject {
                 phAsset: ph, url: nil,
                 timestamp: ph.creationDate ?? Date(),
                 coordinate: coord,
-                pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight)
+                pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight),
+                isScreenshot: ph.mediaSubtypes.contains(.photoScreenshot)
             ))
             if (i + 1) % 10 == 0 || i == total - 1 {
                 ingestProgress = (i + 1, total)

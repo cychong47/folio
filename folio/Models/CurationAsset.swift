@@ -11,6 +11,7 @@ struct CurationAsset: Identifiable, Hashable {
     var coordinate: CLLocationCoordinate2D?
     var pixelSize: CGSize
     var isSelected: Bool = false
+    var isScreenshot: Bool = false
     var stackID: UUID?        // non-nil = part of a burst/near-duplicate stack
     var isStackPrimary: Bool = false  // the frame shown when stack is collapsed
 

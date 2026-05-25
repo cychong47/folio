@@ -4,6 +4,11 @@
 
 ## Released
 
+### v1.19.2
+- Screenshots now split into separate events from regular photos — clustering partitions by media type before grouping by time + location
+- Screenshot events are clustered by time only (no GPS) and labelled "Screenshots" in the event list
+- Each photo thumbnail now shows its timestamp and reverse-geocoded location (city, region) below the image; screenshots show a "Screenshot" label instead
+
 ### v1.19.1
 - Fix photo curation returning no results — CI now ad-hoc signs the app binary with the Photos entitlement embedded; photolibraryd checks the code signature (not just TCC) before serving assets, so an unsigned binary always got 0 results
 
