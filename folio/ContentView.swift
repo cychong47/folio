@@ -29,8 +29,22 @@ struct ContentView: View {
                     }
                 )
             } else if curating {
-                PhotoCurationView(store: curationStore, onBack: { curating = false })
-                    .environmentObject(settings)
+                PhotoCurationView(
+                    store: curationStore,
+                    onBack: { curating = false },
+                    onCreatePost: { markdown, date in
+                        let photos = resolvedPhotos(from: markdown, postDate: date)
+                        pendingPost.clear()
+                        pendingPost.lastPublished = nil
+                        pendingPost.photos = photos
+                        pendingPost.markdownBody = markdown
+                        let f = DateFormatter()
+                        f.dateFormat = "yyyy-MM-dd"
+                        pendingPost.slug = f.string(from: date)
+                        curating = false
+                    }
+                )
+                .environmentObject(settings)
             } else {
                 WelcomeView(isDragTargeted: isDragTargeted, onBrowse: { browsing = true }, onCurate: { showDatePicker = true })
             }

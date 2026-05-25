@@ -4,6 +4,10 @@
 
 ## Released
 
+### v1.20.0
+- Create New Post from curation — after exporting, the "Create New Post" button opens the post editor with the exported photos pre-loaded and image refs already in the markdown body
+- Fix map pin tumbling — pins are now cached in @State and only rebuilt when the cluster changes (not on every selection toggle); PhotoPin is fully static with no dynamic state, which prevents MapKit from re-presenting annotations
+
 ### v1.19.9
 - Fix map pin tumbling repeatedly — icon name no longer swaps between camera.fill and checkmark (selection shown by fill color instead); `.transaction { animation = nil }` suppresses all animation on the pin, including MapKit re-presentation
 - Split panel: sub-event legend now shows a colored rectangle chip with photo count per group (e.g. "32 photos") so it's clear which colored strip on the thumbnails maps to which sub-event

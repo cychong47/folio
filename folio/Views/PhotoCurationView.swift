@@ -63,13 +63,13 @@ private struct AssetPin: Identifiable {
     let id: UUID
     let index: Int          // position in store.visibleAssets
     let coordinate: CLLocationCoordinate2D
-    let asset: CurationAsset
 }
 
 struct PhotoCurationView: View {
     @ObservedObject var store: CurationStore
     @EnvironmentObject var settings: AppSettings
     var onBack: () -> Void
+    var onCreatePost: ((String, Date) -> Void)? = nil
 
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var showDatePicker = false
@@ -115,10 +115,12 @@ struct PhotoCurationView: View {
             RenameSheet(store: store)
         }
         .sheet(item: Binding(
-            get: { store.exportedMarkdown.map { ExportResult(markdown: $0) } },
+            get: { store.exportedMarkdown.map {
+                ExportResult(markdown: $0, date: store.activeCluster?.startDate ?? Date())
+            } },
             set: { if $0 == nil { store.exportedMarkdown = nil } }
         )) { result in
-            ExportSheet(markdown: result.markdown)
+            ExportSheet(markdown: result.markdown, date: result.date, onCreatePost: onCreatePost)
         }
         .alert("Export Error", isPresented: Binding(
             get: { store.exportError != nil },
@@ -507,16 +509,14 @@ private struct CurationMapView: View {
         center: CLLocationCoordinate2D(latitude: 37, longitude: -100),
         span: MKCoordinateSpan(latitudeDelta: 60, longitudeDelta: 80)
     )
-
-    private var pins: [AssetPin] {
-        store.visibleAssets.enumerated().compactMap { idx, asset in
-            guard let coord = asset.coordinate else { return nil }
-            return AssetPin(id: asset.id, index: idx, coordinate: coord, asset: asset)
-        }
-    }
+    // Cached — only rebuilt when cluster changes, NOT on every store publish.
+    // This prevents MapKit from re-presenting annotations (and tumbling) on
+    // unrelated state changes like selection toggles.
+    @State private var cachedPins: [AssetPin] = []
+    @State private var noGPSCount: Int = 0
 
     var body: some View {
-        if pins.isEmpty {
+        if cachedPins.isEmpty && noGPSCount == 0 {
             VStack(spacing: 12) {
                 Image(systemName: "location.slash")
                     .font(.system(size: 40, weight: .light))
@@ -529,17 +529,17 @@ private struct CurationMapView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Theme.background)
+            .onAppear { buildPins() }
         } else {
             ZStack(alignment: .bottomTrailing) {
-                Map(coordinateRegion: $region, annotationItems: pins) { pin in
+                Map(coordinateRegion: $region, annotationItems: cachedPins) { pin in
                     MapAnnotation(coordinate: pin.coordinate) {
-                        PhotoPin(pin: pin) { onSelectAsset(pin.index) }
+                        PhotoPin { onSelectAsset(pin.index) }
                     }
                 }
 
-                let noGPS = store.visibleAssets.count - pins.count
-                if noGPS > 0 {
-                    Text("\(noGPS) photo\(noGPS == 1 ? "" : "s") without GPS not shown")
+                if noGPSCount > 0 {
+                    Text("\(noGPSCount) photo\(noGPSCount == 1 ? "" : "s") without GPS not shown")
                         .font(.caption)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
@@ -547,13 +547,23 @@ private struct CurationMapView: View {
                         .padding(12)
                 }
             }
-            .onAppear { fitRegion() }
-            .onChange(of: store.selectedClusterIndex) { _ in fitRegion() }
+            .onAppear { buildPins() }
+            .onChange(of: store.selectedClusterIndex) { _ in buildPins() }
         }
     }
 
+    private func buildPins() {
+        let assets = store.visibleAssets
+        cachedPins = assets.enumerated().compactMap { idx, asset in
+            guard let coord = asset.coordinate else { return nil }
+            return AssetPin(id: asset.id, index: idx, coordinate: coord)
+        }
+        noGPSCount = assets.count - cachedPins.count
+        fitRegion()
+    }
+
     private func fitRegion() {
-        let coords = pins.map(\.coordinate)
+        let coords = cachedPins.map(\.coordinate)
         guard !coords.isEmpty else { return }
         let lats = coords.map(\.latitude)
         let lons = coords.map(\.longitude)
@@ -570,26 +580,22 @@ private struct CurationMapView: View {
 }
 
 private struct PhotoPin: View {
-    let pin: AssetPin
     let onTap: () -> Void
 
     var body: some View {
         Button(action: onTap) {
             ZStack {
                 Circle()
-                    .fill(pin.asset.isSelected ? Theme.accent : Color.white)
+                    .fill(Color.white)
                     .frame(width: 26, height: 26)
                     .overlay(Circle().stroke(Theme.accent, lineWidth: 2))
                     .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 1)
                 Image(systemName: "camera.fill")
                     .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(pin.asset.isSelected ? Color.white : Theme.accent)
+                    .foregroundStyle(Theme.accent)
             }
         }
         .buttonStyle(.plain)
-        // Suppress all animation on the pin — symbol swaps and MapKit
-        // re-presentation both trigger implicit rotation without this.
-        .transaction { $0.animation = nil }
     }
 }
 
@@ -943,10 +949,13 @@ private struct RenameSheet: View {
 private struct ExportResult: Identifiable {
     let id = UUID()
     let markdown: String
+    let date: Date
 }
 
 private struct ExportSheet: View {
     let markdown: String
+    let date: Date
+    var onCreatePost: ((String, Date) -> Void)? = nil
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -962,10 +971,14 @@ private struct ExportSheet: View {
             .frame(height: 240)
             .background(Theme.panel, in: RoundedRectangle(cornerRadius: 8))
             HStack {
-                Spacer()
-                Button("Copy & Close") {
+                Button("Copy Markdown") {
                     NSPasteboard.general.clearContents()
                     NSPasteboard.general.setString(markdown, forType: .string)
+                    dismiss()
+                }
+                Spacer()
+                Button("Create New Post") {
+                    onCreatePost?(markdown, date)
                     dismiss()
                 }
                 .buttonStyle(.borderedProminent)
