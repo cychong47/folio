@@ -173,6 +173,8 @@ private struct CurationGridPanel: View {
     @ObservedObject var store: CurationStore
 
     private let columns = [GridItem(.adaptive(minimum: 160, maximum: 160), spacing: 8)]
+    @State private var isShowingDetail = false
+    @State private var detailIndex = 0
 
     var body: some View {
         VStack(spacing: 0) {
@@ -195,10 +197,11 @@ private struct CurationGridPanel: View {
 
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 8) {
-                    ForEach(store.visibleAssets) { asset in
-                        ThumbnailCell(asset: asset) {
-                            store.toggleSelection(assetID: asset.id)
-                        }
+                    ForEach(Array(store.visibleAssets.enumerated()), id: \.element.id) { idx, asset in
+                        ThumbnailCell(asset: asset,
+                            onTap: { store.toggleSelection(assetID: asset.id) },
+                            onDoubleTap: { detailIndex = idx; isShowingDetail = true }
+                        )
                     }
                 }
                 .padding(12)
@@ -218,6 +221,9 @@ private struct CurationGridPanel: View {
                 .padding(.bottom, 12)
             }
         }
+        .sheet(isPresented: $isShowingDetail) {
+            PhotoDetailSheet(store: store, currentIndex: $detailIndex)
+        }
     }
 }
 
@@ -226,6 +232,7 @@ private struct CurationGridPanel: View {
 private struct ThumbnailCell: View {
     let asset: CurationAsset
     let onTap: () -> Void
+    let onDoubleTap: () -> Void
 
     @State private var thumb: NSImage? = nil
     @State private var locationName: String? = nil
@@ -288,6 +295,16 @@ private struct ThumbnailCell: View {
                         .padding(4)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
                 }
+
+                if asset.isFavorite {
+                    Image(systemName: "heart.fill")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.red)
+                        .padding(4)
+                        .background(Color.black.opacity(0.45), in: Circle())
+                        .padding(4)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                }
             }
 
             // Metadata row
@@ -313,6 +330,7 @@ private struct ThumbnailCell: View {
             .padding(.vertical, 4)
             .frame(width: 160, alignment: .leading)
         }
+        .onTapGesture(count: 2) { onDoubleTap() }
         .onTapGesture { onTap() }
         .onAppear {
             loadThumb()
@@ -366,6 +384,157 @@ private struct ThumbnailCell: View {
                     : parts.joined(separator: ", ")
             } else {
                 locationName = String(format: "%.3f°, %.3f°", coord.latitude, coord.longitude)
+            }
+        }
+    }
+}
+
+// MARK: - Photo Detail Sheet
+
+private struct PhotoDetailSheet: View {
+    @ObservedObject var store: CurationStore
+    @Binding var currentIndex: Int
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var fullImage: NSImage? = nil
+
+    private var assets: [CurationAsset] { store.visibleAssets }
+    private var asset: CurationAsset? {
+        assets.indices.contains(currentIndex) ? assets[currentIndex] : nil
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            // Top bar
+            HStack(spacing: 16) {
+                Button { dismiss() } label: {
+                    Image(systemName: "xmark")
+                        .font(.title3)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(.secondary)
+
+                Spacer()
+
+                if let asset {
+                    VStack(spacing: 2) {
+                        Text(asset.timestamp,
+                             format: .dateTime.weekday(.abbreviated).month(.abbreviated).day().hour().minute())
+                            .font(.callout.weight(.medium))
+                        Text(asset.filename)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                Spacer()
+
+                // Favourite toggle (PHAsset only — can't write to Photos for file URLs)
+                if let asset, asset.phAsset != nil {
+                    Button {
+                        Task { await store.toggleFavorite(assetID: asset.id) }
+                    } label: {
+                        Image(systemName: asset.isFavorite ? "heart.fill" : "heart")
+                            .font(.title3)
+                            .foregroundStyle(asset.isFavorite ? Color.red : Color.secondary)
+                    }
+                    .buttonStyle(.plain)
+                    .help(asset.isFavorite ? "Remove from Favorites" : "Add to Favorites")
+                    .keyboardShortcut("f", modifiers: [])
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+            .background(Theme.panel)
+
+            // Image area
+            ZStack {
+                Color.black.ignoresSafeArea()
+                if let img = fullImage {
+                    Image(nsImage: img)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(8)
+                } else {
+                    VStack(spacing: 10) {
+                        ProgressView()
+                        Text("Loading…")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            // Bottom navigation bar
+            HStack(spacing: 16) {
+                Button {
+                    guard currentIndex > 0 else { return }
+                    currentIndex -= 1
+                } label: {
+                    Label("Previous", systemImage: "chevron.left")
+                }
+                .keyboardShortcut(.leftArrow, modifiers: [])
+                .disabled(currentIndex == 0)
+
+                Spacer()
+
+                if let asset {
+                    Text("\(currentIndex + 1) / \(assets.count)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Button {
+                        store.toggleSelection(assetID: asset.id)
+                    } label: {
+                        Label(
+                            asset.isSelected ? "Deselect" : "Select for Export",
+                            systemImage: asset.isSelected ? "checkmark.circle.fill" : "circle"
+                        )
+                        .foregroundStyle(asset.isSelected ? Theme.accent : Color.secondary)
+                    }
+                    .keyboardShortcut("s", modifiers: [])
+                }
+
+                Spacer()
+
+                Button {
+                    guard currentIndex < assets.count - 1 else { return }
+                    currentIndex += 1
+                } label: {
+                    Label("Next", systemImage: "chevron.right")
+                }
+                .keyboardShortcut(.rightArrow, modifiers: [])
+                .disabled(currentIndex >= assets.count - 1)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+            .background(Theme.panel)
+        }
+        .frame(minWidth: 720, minHeight: 560)
+        .onAppear { loadFullImage() }
+        .onChange(of: currentIndex) { _ in loadFullImage() }
+    }
+
+    private func loadFullImage() {
+        fullImage = nil
+        if let phAsset = asset?.phAsset {
+            let opts = PHImageRequestOptions()
+            opts.deliveryMode = .opportunistic
+            opts.isNetworkAccessAllowed = true
+            PHImageManager.default().requestImage(
+                for: phAsset,
+                targetSize: CGSize(width: 2400, height: 2400),
+                contentMode: .aspectFit,
+                options: opts
+            ) { image, _ in
+                guard let image else { return }
+                DispatchQueue.main.async { self.fullImage = image }
+            }
+        } else if let url = asset?.url {
+            DispatchQueue.global(qos: .userInitiated).async {
+                guard let img = NSImage(contentsOf: url) else { return }
+                DispatchQueue.main.async { self.fullImage = img }
             }
         }
     }

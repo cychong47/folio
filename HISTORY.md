@@ -4,6 +4,10 @@
 
 ## Released
 
+### v1.19.3
+- Double-click a photo to open it full-size — sheet shows the photo at up to 2400 px with ←/→ keyboard navigation and S to toggle export selection
+- Favorite toggle in the detail sheet — heart button marks/unmarks the photo in Photos.app via PHPhotoLibrary; F key shortcut; heart badge overlaid on thumbnail for already-favourited photos
+
 ### v1.19.2
 - Screenshots now split into separate events from regular photos — clustering partitions by media type before grouping by time + location
 - Screenshot events are clustered by time only (no GPS) and labelled "Screenshots" in the event list

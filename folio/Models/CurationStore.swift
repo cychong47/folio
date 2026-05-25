@@ -103,7 +103,8 @@ class CurationStore: ObservableObject {
                 timestamp: ph.creationDate ?? Date(),
                 coordinate: coord,
                 pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight),
-                isScreenshot: ph.mediaSubtypes.contains(.photoScreenshot)
+                isScreenshot: ph.mediaSubtypes.contains(.photoScreenshot),
+                isFavorite: ph.isFavorite
             ))
             if (i + 1) % 10 == 0 || i == total - 1 {
                 ingestProgress = (i + 1, total)
@@ -157,6 +158,30 @@ class CurationStore: ObservableObject {
         }
         clusters[selectedClusterIndex].name = trimmed
         isRenaming = false
+    }
+
+    func toggleFavorite(assetID: UUID) async {
+        guard let (ci, ai) = findAsset(id: assetID),
+              let phAsset = clusters[ci].assets[ai].phAsset else { return }
+        let newValue = !clusters[ci].assets[ai].isFavorite
+        await withCheckedContinuation { cont in
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest(for: phAsset).isFavorite = newValue
+            }) { _, _ in cont.resume() }
+        }
+        // Re-locate in case clusters mutated during the await
+        if let (ci2, ai2) = findAsset(id: assetID) {
+            clusters[ci2].assets[ai2].isFavorite = newValue
+        }
+    }
+
+    private func findAsset(id: UUID) -> (Int, Int)? {
+        for (ci, cluster) in clusters.enumerated() {
+            if let ai = cluster.assets.firstIndex(where: { $0.id == id }) {
+                return (ci, ai)
+            }
+        }
+        return nil
     }
 
     func export(settings: AppSettings) async {
