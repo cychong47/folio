@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.19.4
+
+- Fix curation grid: photos no longer appear dimmed — removed 50% opacity on unselected thumbnails; selection is indicated by the accent border and checkmark alone
+
+---
+
 ### v1.19.3
 
 - Double-click a photo to open it full-size — sheet shows the photo at up to 2400 px with ←/→ keyboard navigation and S to toggle export selection
