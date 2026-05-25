@@ -17,6 +17,13 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.19.9
+
+- Fix map pin tumbling repeatedly — icon name no longer swaps between camera.fill and checkmark (selection shown by fill color instead); `.transaction { animation = nil }` suppresses all animation on the pin, including MapKit re-presentation
+- Split panel: sub-event legend now shows a colored rectangle chip with photo count per group (e.g. "32 photos") so it's clear which colored strip on the thumbnails maps to which sub-event
+
+---
+
 ### v1.19.8
 
 - Split Event — "Split Event" button in the curation action bar opens a panel with Time / Location / Both mode selector and live sliders; photos are color-coded by sub-event in real time as thresholds are adjusted; "Apply Split" breaks the cluster into separately-named events
