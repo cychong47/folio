@@ -239,14 +239,6 @@ class CurationStore: ObservableObject {
         }
 
         do {
-            let eventSlug = cluster.name
-                .lowercased()
-                .components(separatedBy: CharacterSet.alphanumerics.union(.init(charactersIn: "-")).inverted)
-                .joined(separator: "-")
-                .components(separatedBy: "-")
-                .filter { !$0.isEmpty }
-                .joined(separator: "-")
-
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd"
             let dateStr = formatter.string(from: cluster.startDate)
@@ -261,18 +253,19 @@ class CurationStore: ObservableObject {
 
             try FileManager.default.createDirectory(at: base, withIntermediateDirectories: true)
 
-            for (i, asset) in selected.enumerated() {
-                let seq = String(format: "%02d", i + 1)
-
+            for asset in selected {
                 if let phAsset = asset.phAsset {
                     // PhotoKit path: write original to temp file, then process
                     let resources = PHAssetResource.assetResources(for: phAsset)
                     guard let resource = resources.first(where: { $0.type == .photo }) ?? resources.first else {
                         continue
                     }
-                    let originalExt = (resource.originalFilename as NSString).pathExtension.lowercased()
+                    let originalFilename = resource.originalFilename
+                    let originalExt = (originalFilename as NSString).pathExtension.lowercased()
                     let ext = originalExt == "heic" ? "jpg" : (originalExt.isEmpty ? "jpg" : originalExt)
-                    let filename = "\(dateStr)-\(eventSlug)-\(seq).\(ext)"
+                    // Preserve original filename; only swap extension when HEIC→JPEG
+                    let baseName = (originalFilename as NSString).deletingPathExtension
+                    let filename = "\(baseName).\(ext)"
                     let destURL = base.appendingPathComponent(filename)
                     let tempURL = FileManager.default.temporaryDirectory
                         .appendingPathComponent(UUID().uuidString + "." + originalExt)
@@ -293,9 +286,11 @@ class CurationStore: ObservableObject {
                     lines.append("![](\(prefixWithSlash)\(filename))")
 
                 } else if let url = asset.url {
-                    // File system path
-                    let ext = url.pathExtension.lowercased() == "heic" ? "jpg" : url.pathExtension.lowercased()
-                    let filename = "\(dateStr)-\(eventSlug)-\(seq).\(ext)"
+                    // File system path — use original filename, swap ext only for HEIC
+                    let originalExt = url.pathExtension.lowercased()
+                    let ext = originalExt == "heic" ? "jpg" : (originalExt.isEmpty ? "jpg" : originalExt)
+                    let baseName = url.deletingPathExtension().lastPathComponent
+                    let filename = "\(baseName).\(ext)"
                     let destURL = base.appendingPathComponent(filename)
 
                     if let maxDim, let resized = resized(url: url, maxLongEdge: maxDim) {

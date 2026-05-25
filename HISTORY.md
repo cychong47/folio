@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.20.2
+- Preserve original filename on export — exported images now keep their camera-roll name (e.g. IMG_1234.jpg) instead of being renamed to date-event-seq.jpg; only the extension changes when HEIC is converted to JPEG
+
 ### v1.20.1
 - Fix export failing with "volume is read only" — upfront guard now catches an empty or system-volume path before attempting any writes; error alert includes an "Open Settings" button to fix the path immediately
 
