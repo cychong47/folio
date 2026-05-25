@@ -251,9 +251,14 @@ private struct CurationGridPanel: View {
     @State private var splitSpatialMeters: Double = 500
     @State private var splitAssignments: [UUID: Int] = [:]
 
-    private var splitGroupCount: Int {
-        guard !splitAssignments.isEmpty else { return 1 }
-        return (splitAssignments.values.max() ?? 0) + 1
+    private var groupCounts: [Int] {
+        guard let cluster = store.activeCluster, !splitAssignments.isEmpty else { return [] }
+        let n = (splitAssignments.values.max() ?? 0) + 1
+        var counts = Array(repeating: 0, count: n)
+        for asset in cluster.assets {
+            if let g = splitAssignments[asset.id] { counts[g] += 1 }
+        }
+        return counts
     }
 
     private func updateSplitAssignments() {
@@ -348,7 +353,7 @@ private struct CurationGridPanel: View {
                         splitMode: $splitMode,
                         temporalMinutes: $splitTemporalMinutes,
                         spatialMeters: $splitSpatialMeters,
-                        groupCount: splitGroupCount,
+                        groupCounts: groupCounts,
                         onApply: {
                             store.applySplit(
                                 at: store.selectedClusterIndex,
@@ -386,9 +391,11 @@ private struct SplitEventPanel: View {
     @Binding var splitMode: SplitMode
     @Binding var temporalMinutes: Double
     @Binding var spatialMeters: Double
-    let groupCount: Int
+    let groupCounts: [Int]   // per-group photo count; groupCounts.count == number of sub-events
     let onApply: () -> Void
     let onCancel: () -> Void
+
+    private var groupCount: Int { groupCounts.count }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -440,22 +447,31 @@ private struct SplitEventPanel: View {
                 }
             }
 
+            // Sub-event legend — color chip + photo count per group
+            if groupCount > 1 {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 6) {
+                        ForEach(0 ..< groupCounts.count, id: \.self) { i in
+                            HStack(spacing: 4) {
+                                RoundedRectangle(cornerRadius: 2)
+                                    .fill(splitPalette[i % splitPalette.count])
+                                    .frame(width: 10, height: 10)
+                                Text("\(groupCounts[i]) photos")
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 3)
+                            .background(splitPalette[i % splitPalette.count].opacity(0.10),
+                                        in: RoundedRectangle(cornerRadius: 5))
+                        }
+                    }
+                }
+            }
+
             HStack {
                 Button("Cancel", action: onCancel)
                     .buttonStyle(.bordered)
-                Spacer()
-                HStack(spacing: 6) {
-                    ForEach(0 ..< min(groupCount, splitPalette.count), id: \.self) { i in
-                        Circle()
-                            .fill(splitPalette[i])
-                            .frame(width: 10, height: 10)
-                    }
-                    if groupCount > splitPalette.count {
-                        Text("+\(groupCount - splitPalette.count)")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-                }
                 Spacer()
                 Button("Apply Split", action: onApply)
                     .buttonStyle(.borderedProminent)
@@ -562,16 +578,18 @@ private struct PhotoPin: View {
             ZStack {
                 Circle()
                     .fill(pin.asset.isSelected ? Theme.accent : Color.white)
-                    .frame(width: 24, height: 24)
-                    .overlay(Circle().stroke(pin.asset.isSelected ? Color.white : Theme.accent, lineWidth: 2))
-                    .shadow(color: .black.opacity(0.25), radius: 3, x: 0, y: 1)
-                Image(systemName: pin.asset.isSelected ? "checkmark" : "camera.fill")
-                    .font(.system(size: pin.asset.isSelected ? 11 : 9, weight: .bold))
+                    .frame(width: 26, height: 26)
+                    .overlay(Circle().stroke(Theme.accent, lineWidth: 2))
+                    .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 1)
+                Image(systemName: "camera.fill")
+                    .font(.system(size: 10, weight: .bold))
                     .foregroundStyle(pin.asset.isSelected ? Color.white : Theme.accent)
             }
         }
         .buttonStyle(.plain)
-        .animation(.none, value: pin.asset.isSelected)
+        // Suppress all animation on the pin — symbol swaps and MapKit
+        // re-presentation both trigger implicit rotation without this.
+        .transaction { $0.animation = nil }
     }
 }
 
