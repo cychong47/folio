@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.19.8
+
+- Split Event — "Split Event" button in the curation action bar opens a panel with Time / Location / Both mode selector and live sliders; photos are color-coded by sub-event in real time as thresholds are adjusted; "Apply Split" breaks the cluster into separately-named events
+
+---
+
 ### v1.19.7
 
 - Fix map view camera icon tumbling repeatedly — removed withAnimation from region update; MapKit animates region changes itself, and the implicit animation was bleeding into MapAnnotation content and spinning the icon
