@@ -151,6 +151,33 @@ class CurationStore: ObservableObject {
         isRenaming = true
     }
 
+    func applySplit(at clusterIndex: Int, temporalThreshold: TimeInterval, spatialThreshold: Double, mode: SplitMode) {
+        guard clusters.indices.contains(clusterIndex) else { return }
+        let original = clusters[clusterIndex]
+        let groups = ClusteringEngine.splitIntoGroups(
+            assets: original.assets,
+            temporalThreshold: temporalThreshold,
+            spatialThreshold: spatialThreshold,
+            mode: mode
+        )
+        guard groups.count > 1 else { return }
+        let newClusters = groups.enumerated().map { (i, group) -> EventCluster in
+            let dates = group.map(\.timestamp)
+            return EventCluster(
+                name: "\(original.name) – \(i + 1)",
+                assets: group,
+                startDate: dates.min() ?? Date(),
+                endDate: dates.max() ?? Date()
+            )
+        }
+        clusters.remove(at: clusterIndex)
+        clusters.insert(contentsOf: newClusters, at: min(clusterIndex, clusters.count))
+        clusters.sort { $0.startDate < $1.startDate }
+        if let firstIdx = clusters.firstIndex(where: { $0.id == newClusters[0].id }) {
+            selectedClusterIndex = firstIdx
+        }
+    }
+
     func commitRename() {
         let trimmed = pendingRename.trimmingCharacters(in: .whitespaces)
         guard clusters.indices.contains(selectedClusterIndex), !trimmed.isEmpty else {

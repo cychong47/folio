@@ -1,6 +1,12 @@
 import Foundation
 import CoreLocation
 
+enum SplitMode: String, CaseIterable {
+    case time = "Time"
+    case location = "Location"
+    case both = "Both"
+}
+
 enum ClusteringEngine {
     static let defaultTemporalThreshold: TimeInterval = 5400  // 90 min
     static let defaultSpatialThreshold: Double = 500          // metres
@@ -57,6 +63,43 @@ enum ClusteringEngine {
         return clusters
     }
 
+    // MARK: - Public split API
+
+    /// Returns a group index for each asset (same order as `assets`).
+    static func computeGroupAssignments(
+        assets: [CurationAsset],
+        temporalThreshold: TimeInterval,
+        spatialThreshold: Double,
+        mode: SplitMode
+    ) -> [Int] {
+        let groups = splitIntoGroups(assets: assets, temporalThreshold: temporalThreshold,
+                                     spatialThreshold: spatialThreshold, mode: mode)
+        var groupForID: [UUID: Int] = [:]
+        for (gi, group) in groups.enumerated() {
+            for asset in group { groupForID[asset.id] = gi }
+        }
+        return assets.map { groupForID[$0.id] ?? 0 }
+    }
+
+    /// Returns the sub-groups — used when actually applying a split.
+    static func splitIntoGroups(
+        assets: [CurationAsset],
+        temporalThreshold: TimeInterval,
+        spatialThreshold: Double,
+        mode: SplitMode
+    ) -> [[CurationAsset]] {
+        guard !assets.isEmpty else { return [] }
+        switch mode {
+        case .time:
+            return clusterByTimeOnly(assets, temporalThreshold: temporalThreshold)
+        case .location:
+            return clusterByLocationOnly(assets, spatialThreshold: spatialThreshold)
+        case .both:
+            return clusterByTimeAndLocation(assets, temporalThreshold: temporalThreshold,
+                                            spatialThreshold: spatialThreshold)
+        }
+    }
+
     // MARK: - Grouping strategies
 
     private static func clusterByTimeAndLocation(
@@ -99,6 +142,28 @@ enum ClusteringEngine {
                 groups.append([sorted[i]])
             } else {
                 groups[groups.count - 1].append(sorted[i])
+            }
+        }
+        return groups
+    }
+
+    private static func clusterByLocationOnly(
+        _ assets: [CurationAsset],
+        spatialThreshold: Double
+    ) -> [[CurationAsset]] {
+        guard !assets.isEmpty else { return [] }
+        let sorted = assets.sorted { $0.timestamp < $1.timestamp }
+        var groups: [[CurationAsset]] = [[sorted[0]]]
+        for i in 1 ..< sorted.count {
+            let prev = sorted[i - 1], curr = sorted[i]
+            let dd: Double = {
+                guard let a = prev.coordinate, let b = curr.coordinate else { return 0 }
+                return haversine(a, b)
+            }()
+            if dd > spatialThreshold {
+                groups.append([curr])
+            } else {
+                groups[groups.count - 1].append(curr)
             }
         }
         return groups

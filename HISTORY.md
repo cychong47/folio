@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.19.8
+- Split Event — "Split Event" button in the curation action bar opens a panel with Time / Location / Both mode selector and live sliders; photos are color-coded by sub-event in real time as thresholds are adjusted; "Apply Split" breaks the cluster into separately-named events
+
 ### v1.19.7
 - Fix map view camera icon tumbling repeatedly — removed withAnimation from region update; MapKit animates region changes itself, and the implicit animation was bleeding into MapAnnotation content and spinning the icon
 - Event sidebar now shows total photo count ("278 photos") as primary info; selected count appears in accent colour only when photos are selected

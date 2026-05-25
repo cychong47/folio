@@ -48,6 +48,17 @@ private func photoLocalTime(_ date: Date, timeZone: TimeZone?, dateStyle: DateFo
 
 private enum ViewMode: Hashable { case grid, map }
 
+private let splitPalette: [Color] = [
+    Color(red: 0.96, green: 0.33, blue: 0.33),
+    Color(red: 0.20, green: 0.60, blue: 0.86),
+    Color(red: 0.18, green: 0.76, blue: 0.56),
+    Color(red: 0.94, green: 0.65, blue: 0.14),
+    Color(red: 0.65, green: 0.35, blue: 0.94),
+    Color(red: 0.24, green: 0.72, blue: 0.29),
+    Color(red: 0.96, green: 0.43, blue: 0.72),
+    Color(red: 0.45, green: 0.67, blue: 0.89),
+]
+
 private struct AssetPin: Identifiable {
     let id: UUID
     let index: Int          // position in store.visibleAssets
@@ -234,6 +245,33 @@ private struct CurationGridPanel: View {
     @State private var detailIndex = 0
     @State private var viewMode: ViewMode = .grid
 
+    @State private var isSplitting = false
+    @State private var splitMode: SplitMode = .time
+    @State private var splitTemporalMinutes: Double = 90
+    @State private var splitSpatialMeters: Double = 500
+    @State private var splitAssignments: [UUID: Int] = [:]
+
+    private var splitGroupCount: Int {
+        guard !splitAssignments.isEmpty else { return 1 }
+        return (splitAssignments.values.max() ?? 0) + 1
+    }
+
+    private func updateSplitAssignments() {
+        guard let cluster = store.activeCluster, !cluster.assets.isEmpty else {
+            splitAssignments = [:]
+            return
+        }
+        let indices = ClusteringEngine.computeGroupAssignments(
+            assets: cluster.assets,
+            temporalThreshold: splitTemporalMinutes * 60,
+            spatialThreshold: splitSpatialMeters,
+            mode: splitMode
+        )
+        var dict: [UUID: Int] = [:]
+        for (i, asset) in cluster.assets.enumerated() { dict[asset.id] = indices[i] }
+        splitAssignments = dict
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // Status / action bar
@@ -254,6 +292,16 @@ private struct CurationGridPanel: View {
                     .help(viewMode == .grid ? "Switch to Map" : "Switch to Grid")
                     Button("Rename Event") { store.beginRename() }
                         .font(.caption)
+                    Button(isSplitting ? "Cancel Split" : "Split Event") {
+                        if isSplitting {
+                            isSplitting = false
+                            splitAssignments = [:]
+                        } else {
+                            isSplitting = true
+                        }
+                    }
+                    .font(.caption)
+                    .foregroundStyle(isSplitting ? Theme.accent : .primary)
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
@@ -264,7 +312,9 @@ private struct CurationGridPanel: View {
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 8) {
                         ForEach(Array(store.visibleAssets.enumerated()), id: \.element.id) { idx, asset in
-                            ThumbnailCell(asset: asset,
+                            ThumbnailCell(
+                                asset: asset,
+                                splitGroupIndex: isSplitting ? splitAssignments[asset.id] : nil,
                                 onTap: { store.toggleSelection(assetID: asset.id) },
                                 onDoubleTap: { detailIndex = idx; isShowingDetail = true }
                             )
@@ -281,21 +331,153 @@ private struct CurationGridPanel: View {
             }
         }
         .overlay(alignment: .bottom) {
-            if store.isExporting {
-                HStack(spacing: 8) {
-                    ProgressView().scaleEffect(0.7)
-                    Text("Exporting...")
-                        .font(.caption)
+            VStack(spacing: 0) {
+                if store.isExporting {
+                    HStack(spacing: 8) {
+                        ProgressView().scaleEffect(0.7)
+                        Text("Exporting...")
+                            .font(.caption)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(.ultraThinMaterial, in: Capsule())
+                    .padding(.vertical, 8)
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(.ultraThinMaterial, in: Capsule())
-                .padding(.bottom, 12)
+                if isSplitting {
+                    SplitEventPanel(
+                        splitMode: $splitMode,
+                        temporalMinutes: $splitTemporalMinutes,
+                        spatialMeters: $splitSpatialMeters,
+                        groupCount: splitGroupCount,
+                        onApply: {
+                            store.applySplit(
+                                at: store.selectedClusterIndex,
+                                temporalThreshold: splitTemporalMinutes * 60,
+                                spatialThreshold: splitSpatialMeters,
+                                mode: splitMode
+                            )
+                            isSplitting = false
+                            splitAssignments = [:]
+                        },
+                        onCancel: {
+                            isSplitting = false
+                            splitAssignments = [:]
+                        }
+                    )
+                }
             }
         }
+        .onChange(of: isSplitting) { val in
+            if val { updateSplitAssignments() } else { splitAssignments = [:] }
+        }
+        .onChange(of: splitMode) { _ in if isSplitting { updateSplitAssignments() } }
+        .onChange(of: splitTemporalMinutes) { _ in if isSplitting { updateSplitAssignments() } }
+        .onChange(of: splitSpatialMeters) { _ in if isSplitting { updateSplitAssignments() } }
+        .onChange(of: store.selectedClusterIndex) { _ in isSplitting = false; splitAssignments = [:] }
         .sheet(isPresented: $isShowingDetail) {
             PhotoDetailSheet(store: store, currentIndex: $detailIndex)
         }
+    }
+}
+
+// MARK: - Split Event Panel
+
+private struct SplitEventPanel: View {
+    @Binding var splitMode: SplitMode
+    @Binding var temporalMinutes: Double
+    @Binding var spatialMeters: Double
+    let groupCount: Int
+    let onApply: () -> Void
+    let onCancel: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Split Event")
+                    .font(.subheadline.weight(.semibold))
+                Spacer()
+                Text(groupCount > 1 ? "\(groupCount) sub-events" : "No split")
+                    .font(.caption)
+                    .foregroundStyle(groupCount > 1 ? Theme.accent : .secondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background(
+                        groupCount > 1 ? Theme.accent.opacity(0.12) : Color.secondary.opacity(0.1),
+                        in: Capsule()
+                    )
+            }
+
+            Picker("", selection: $splitMode) {
+                ForEach(SplitMode.allCases, id: \.self) { mode in
+                    Text(mode.rawValue).tag(mode)
+                }
+            }
+            .pickerStyle(.segmented)
+
+            if splitMode == .time || splitMode == .both {
+                HStack(spacing: 8) {
+                    Text("Time gap:")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(width: 68, alignment: .leading)
+                    Slider(value: $temporalMinutes, in: 5...360)
+                    Text(formatMinutes(Int(temporalMinutes.rounded())))
+                        .font(.caption.monospacedDigit())
+                        .frame(width: 56, alignment: .trailing)
+                }
+            }
+
+            if splitMode == .location || splitMode == .both {
+                HStack(spacing: 8) {
+                    Text("Distance:")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(width: 68, alignment: .leading)
+                    Slider(value: $spatialMeters, in: 100...20000)
+                    Text(formatMeters(spatialMeters))
+                        .font(.caption.monospacedDigit())
+                        .frame(width: 56, alignment: .trailing)
+                }
+            }
+
+            HStack {
+                Button("Cancel", action: onCancel)
+                    .buttonStyle(.bordered)
+                Spacer()
+                HStack(spacing: 6) {
+                    ForEach(0 ..< min(groupCount, splitPalette.count), id: \.self) { i in
+                        Circle()
+                            .fill(splitPalette[i])
+                            .frame(width: 10, height: 10)
+                    }
+                    if groupCount > splitPalette.count {
+                        Text("+\(groupCount - splitPalette.count)")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                Spacer()
+                Button("Apply Split", action: onApply)
+                    .buttonStyle(.borderedProminent)
+                    .disabled(groupCount <= 1)
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.top, 10)
+        .padding(.bottom, 12)
+        .background(.ultraThinMaterial)
+        .overlay(Rectangle().frame(height: 1).foregroundStyle(Color.gray.opacity(0.2)), alignment: .top)
+    }
+
+    private func formatMinutes(_ m: Int) -> String {
+        if m < 60 { return "\(m) min" }
+        let h = m / 60, r = m % 60
+        return r > 0 ? "\(h) h \(r) m" : "\(h) h"
+    }
+
+    private func formatMeters(_ m: Double) -> String {
+        if m < 1000 { return "\(Int(m.rounded())) m" }
+        return String(format: "%.1f km", m / 1000)
     }
 }
 
@@ -397,6 +579,7 @@ private struct PhotoPin: View {
 
 private struct ThumbnailCell: View {
     let asset: CurationAsset
+    var splitGroupIndex: Int? = nil
     let onTap: () -> Void
     let onDoubleTap: () -> Void
 
@@ -440,6 +623,12 @@ private struct ThumbnailCell: View {
                 }
                 .frame(width: 160, height: 120)
                 .clipped()
+                .overlay(alignment: .top) {
+                    if let idx = splitGroupIndex {
+                        splitPalette[idx % splitPalette.count]
+                            .frame(height: 5)
+                    }
+                }
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)
                         .strokeBorder(
