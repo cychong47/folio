@@ -210,9 +210,14 @@ private struct EventRow: View {
                 Image(systemName: "photo")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
-                Text("\(cluster.selectedCount)/\(cluster.totalCount) selected")
+                Text("\(cluster.totalCount) photos")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
+                if cluster.selectedCount > 0 {
+                    Text("· \(cluster.selectedCount) selected")
+                        .font(.caption2)
+                        .foregroundStyle(Theme.accent)
+                }
             }
         }
         .padding(.vertical, 4)
@@ -362,7 +367,7 @@ private struct CurationMapView: View {
             latitudeDelta: max(0.005, (lats.max()! - lats.min()!) * 1.5),
             longitudeDelta: max(0.005, (lons.max()! - lons.min()!) * 1.5)
         )
-        withAnimation { region = MKCoordinateRegion(center: center, span: span) }
+        region = MKCoordinateRegion(center: center, span: span)
     }
 }
 
@@ -384,6 +389,7 @@ private struct PhotoPin: View {
             }
         }
         .buttonStyle(.plain)
+        .animation(.none, value: pin.asset.isSelected)
     }
 }
 

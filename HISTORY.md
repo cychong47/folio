@@ -4,6 +4,10 @@
 
 ## Released
 
+### v1.19.7
+- Fix map view camera icon tumbling repeatedly — removed withAnimation from region update; MapKit animates region changes itself, and the implicit animation was bleeding into MapAnnotation content and spinning the icon
+- Event sidebar now shows total photo count ("278 photos") as primary info; selected count appears in accent colour only when photos are selected
+
 ### v1.19.6
 - Map view in photo curation — grid/map toggle in the event action bar; photos with GPS appear as pins on a MapKit map; tapping a pin opens the full-size detail sheet; map auto-fits to the event bounding box; photos without GPS show a count badge
 
