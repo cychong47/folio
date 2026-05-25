@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.20.1
+
+- Fix export failing with "volume is read only" — upfront guard now catches an empty or system-volume path before attempting any writes; error alert includes an "Open Settings" button to fix the path immediately
+
+---
+
 ### v1.20.0
 
 - Create New Post from curation — after exporting, the "Create New Post" button opens the post editor with the exported photos pre-loaded and image refs already in the markdown body
