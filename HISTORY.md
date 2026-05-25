@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.19.6
+- Map view in photo curation — grid/map toggle in the event action bar; photos with GPS appear as pins on a MapKit map; tapping a pin opens the full-size detail sheet; map auto-fits to the event bounding box; photos without GPS show a count badge
+
 ### v1.19.5
 - Fix photo timestamps showing in device timezone (KST) instead of where the photo was taken — reverse-geocoding now also captures CLPlacemark.timeZone and uses it to format timestamps in the grid and detail sheet; photos without GPS continue to show device-local time
 

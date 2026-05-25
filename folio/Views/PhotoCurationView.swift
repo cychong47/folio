@@ -2,6 +2,7 @@ import SwiftUI
 import AppKit
 import Photos
 import CoreLocation
+import MapKit
 
 // MARK: - Geocode cache (shared across all thumbnail cells and detail sheets)
 
@@ -43,6 +44,15 @@ private func photoLocalTime(_ date: Date, timeZone: TimeZone?, dateStyle: DateFo
     f.timeStyle = timeStyle
     f.timeZone = timeZone ?? .current
     return f.string(from: date)
+}
+
+private enum ViewMode: Hashable { case grid, map }
+
+private struct AssetPin: Identifiable {
+    let id: UUID
+    let index: Int          // position in store.visibleAssets
+    let coordinate: CLLocationCoordinate2D
+    let asset: CurationAsset
 }
 
 struct PhotoCurationView: View {
@@ -217,6 +227,7 @@ private struct CurationGridPanel: View {
     private let columns = [GridItem(.adaptive(minimum: 160, maximum: 160), spacing: 8)]
     @State private var isShowingDetail = false
     @State private var detailIndex = 0
+    @State private var viewMode: ViewMode = .grid
 
     var body: some View {
         VStack(spacing: 0) {
@@ -229,6 +240,13 @@ private struct CurationGridPanel: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Spacer()
+                    Picker("", selection: $viewMode) {
+                        Image(systemName: "square.grid.2x2").tag(ViewMode.grid)
+                        Image(systemName: "map").tag(ViewMode.map)
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(width: 64)
+                    .help(viewMode == .grid ? "Switch to Map" : "Switch to Grid")
                     Button("Rename Event") { store.beginRename() }
                         .font(.caption)
                 }
@@ -237,18 +255,25 @@ private struct CurationGridPanel: View {
                 .background(Theme.panel)
             }
 
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 8) {
-                    ForEach(Array(store.visibleAssets.enumerated()), id: \.element.id) { idx, asset in
-                        ThumbnailCell(asset: asset,
-                            onTap: { store.toggleSelection(assetID: asset.id) },
-                            onDoubleTap: { detailIndex = idx; isShowingDetail = true }
-                        )
+            if viewMode == .grid {
+                ScrollView {
+                    LazyVGrid(columns: columns, spacing: 8) {
+                        ForEach(Array(store.visibleAssets.enumerated()), id: \.element.id) { idx, asset in
+                            ThumbnailCell(asset: asset,
+                                onTap: { store.toggleSelection(assetID: asset.id) },
+                                onDoubleTap: { detailIndex = idx; isShowingDetail = true }
+                            )
+                        }
                     }
+                    .padding(12)
                 }
-                .padding(12)
+                .background(Theme.background)
+            } else {
+                CurationMapView(store: store) { idx in
+                    detailIndex = idx
+                    isShowingDetail = true
+                }
             }
-            .background(Theme.background)
         }
         .overlay(alignment: .bottom) {
             if store.isExporting {
@@ -266,6 +291,99 @@ private struct CurationGridPanel: View {
         .sheet(isPresented: $isShowingDetail) {
             PhotoDetailSheet(store: store, currentIndex: $detailIndex)
         }
+    }
+}
+
+// MARK: - Map View
+
+private struct CurationMapView: View {
+    @ObservedObject var store: CurationStore
+    let onSelectAsset: (Int) -> Void
+
+    @State private var region = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 37, longitude: -100),
+        span: MKCoordinateSpan(latitudeDelta: 60, longitudeDelta: 80)
+    )
+
+    private var pins: [AssetPin] {
+        store.visibleAssets.enumerated().compactMap { idx, asset in
+            guard let coord = asset.coordinate else { return nil }
+            return AssetPin(id: asset.id, index: idx, coordinate: coord, asset: asset)
+        }
+    }
+
+    var body: some View {
+        if pins.isEmpty {
+            VStack(spacing: 12) {
+                Image(systemName: "location.slash")
+                    .font(.system(size: 40, weight: .light))
+                    .foregroundStyle(.secondary)
+                Text("No location data")
+                    .font(.title3.weight(.medium))
+                Text("Photos in this event have no GPS coordinates.")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Theme.background)
+        } else {
+            ZStack(alignment: .bottomTrailing) {
+                Map(coordinateRegion: $region, annotationItems: pins) { pin in
+                    MapAnnotation(coordinate: pin.coordinate) {
+                        PhotoPin(pin: pin) { onSelectAsset(pin.index) }
+                    }
+                }
+
+                let noGPS = store.visibleAssets.count - pins.count
+                if noGPS > 0 {
+                    Text("\(noGPS) photo\(noGPS == 1 ? "" : "s") without GPS not shown")
+                        .font(.caption)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(.ultraThinMaterial, in: Capsule())
+                        .padding(12)
+                }
+            }
+            .onAppear { fitRegion() }
+            .onChange(of: store.selectedClusterIndex) { _ in fitRegion() }
+        }
+    }
+
+    private func fitRegion() {
+        let coords = pins.map(\.coordinate)
+        guard !coords.isEmpty else { return }
+        let lats = coords.map(\.latitude)
+        let lons = coords.map(\.longitude)
+        let center = CLLocationCoordinate2D(
+            latitude: (lats.min()! + lats.max()!) / 2,
+            longitude: (lons.min()! + lons.max()!) / 2
+        )
+        let span = MKCoordinateSpan(
+            latitudeDelta: max(0.005, (lats.max()! - lats.min()!) * 1.5),
+            longitudeDelta: max(0.005, (lons.max()! - lons.min()!) * 1.5)
+        )
+        withAnimation { region = MKCoordinateRegion(center: center, span: span) }
+    }
+}
+
+private struct PhotoPin: View {
+    let pin: AssetPin
+    let onTap: () -> Void
+
+    var body: some View {
+        Button(action: onTap) {
+            ZStack {
+                Circle()
+                    .fill(pin.asset.isSelected ? Theme.accent : Color.white)
+                    .frame(width: 24, height: 24)
+                    .overlay(Circle().stroke(pin.asset.isSelected ? Color.white : Theme.accent, lineWidth: 2))
+                    .shadow(color: .black.opacity(0.25), radius: 3, x: 0, y: 1)
+                Image(systemName: pin.asset.isSelected ? "checkmark" : "camera.fill")
+                    .font(.system(size: pin.asset.isSelected ? 11 : 9, weight: .bold))
+                    .foregroundStyle(pin.asset.isSelected ? Color.white : Theme.accent)
+            }
+        }
+        .buttonStyle(.plain)
     }
 }
 
