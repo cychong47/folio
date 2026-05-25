@@ -3,6 +3,48 @@ import AppKit
 import Photos
 import CoreLocation
 
+// MARK: - Geocode cache (shared across all thumbnail cells and detail sheets)
+
+private struct GeocodeResult {
+    let locationName: String
+    let timeZone: TimeZone?
+}
+
+// Key = lat/lon rounded to ~1 km — good enough for timezone lookup
+private var _geocodeCache: [String: GeocodeResult] = [:]
+
+private func reverseGeocode(coordinate: CLLocationCoordinate2D) async -> GeocodeResult {
+    let key = String(format: "%.2f,%.2f", coordinate.latitude, coordinate.longitude)
+    if let cached = _geocodeCache[key] { return cached }
+
+    let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+    if let pms = try? await CLGeocoder().reverseGeocodeLocation(location), let pm = pms.first {
+        let parts = [pm.locality, pm.administrativeArea].compactMap { $0 }.filter { !$0.isEmpty }
+        let name = parts.isEmpty
+            ? String(format: "%.3f°, %.3f°", coordinate.latitude, coordinate.longitude)
+            : parts.joined(separator: ", ")
+        let result = GeocodeResult(locationName: name, timeZone: pm.timeZone)
+        _geocodeCache[key] = result
+        return result
+    }
+    let fallback = GeocodeResult(
+        locationName: String(format: "%.3f°, %.3f°", coordinate.latitude, coordinate.longitude),
+        timeZone: nil
+    )
+    _geocodeCache[key] = fallback
+    return fallback
+}
+
+/// Format a date in the timezone where the photo was taken (falls back to device timezone).
+private func photoLocalTime(_ date: Date, timeZone: TimeZone?, dateStyle: DateFormatter.Style = .none,
+                             timeStyle: DateFormatter.Style = .short) -> String {
+    let f = DateFormatter()
+    f.dateStyle = dateStyle
+    f.timeStyle = timeStyle
+    f.timeZone = timeZone ?? .current
+    return f.string(from: date)
+}
+
 struct PhotoCurationView: View {
     @ObservedObject var store: CurationStore
     @EnvironmentObject var settings: AppSettings
@@ -235,11 +277,11 @@ private struct ThumbnailCell: View {
     let onDoubleTap: () -> Void
 
     @State private var thumb: NSImage? = nil
-    @State private var locationName: String? = nil
+    @State private var geocodeResult: GeocodeResult? = nil
 
     private var locationText: String {
         if asset.isScreenshot { return "Screenshot" }
-        if let name = locationName { return name }
+        if let name = geocodeResult?.locationName { return name }
         if asset.coordinate != nil { return "…" }
         return "No GPS"
     }
@@ -248,6 +290,11 @@ private struct ThumbnailCell: View {
         if asset.isScreenshot { return "camera.viewfinder" }
         if asset.coordinate != nil { return "location.fill" }
         return "location.slash"
+    }
+
+    // Format in photo's local timezone so a SF photo shows PST, not KST
+    private var timestampText: String {
+        photoLocalTime(asset.timestamp, timeZone: geocodeResult?.timeZone)
     }
 
     var body: some View {
@@ -311,7 +358,7 @@ private struct ThumbnailCell: View {
                 HStack(spacing: 3) {
                     Image(systemName: "clock")
                         .font(.system(size: 9))
-                    Text(asset.timestamp, format: .dateTime.hour().minute())
+                    Text(timestampText)
                         .font(.system(size: 10))
                 }
                 .foregroundStyle(.secondary)
@@ -370,20 +417,9 @@ private struct ThumbnailCell: View {
     }
 
     private func loadLocationName() {
-        guard !asset.isScreenshot, locationName == nil, let coord = asset.coordinate else { return }
+        guard !asset.isScreenshot, geocodeResult == nil, let coord = asset.coordinate else { return }
         Task {
-            let location = CLLocation(latitude: coord.latitude, longitude: coord.longitude)
-            if let placemarks = try? await CLGeocoder().reverseGeocodeLocation(location),
-               let pm = placemarks.first {
-                let parts = [pm.locality, pm.administrativeArea]
-                    .compactMap { $0 }
-                    .filter { !$0.isEmpty }
-                locationName = parts.isEmpty
-                    ? String(format: "%.3f°, %.3f°", coord.latitude, coord.longitude)
-                    : parts.joined(separator: ", ")
-            } else {
-                locationName = String(format: "%.3f°, %.3f°", coord.latitude, coord.longitude)
-            }
+            geocodeResult = await reverseGeocode(coordinate: coord)
         }
     }
 }
@@ -396,6 +432,7 @@ private struct PhotoDetailSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var fullImage: NSImage? = nil
+    @State private var geocodeResult: GeocodeResult? = nil
 
     private var assets: [CurationAsset] { store.visibleAssets }
     private var asset: CurationAsset? {
@@ -417,8 +454,8 @@ private struct PhotoDetailSheet: View {
 
                 if let asset {
                     VStack(spacing: 2) {
-                        Text(asset.timestamp,
-                             format: .dateTime.weekday(.abbreviated).month(.abbreviated).day().hour().minute())
+                        Text(photoLocalTime(asset.timestamp, timeZone: geocodeResult?.timeZone,
+                                            dateStyle: .medium, timeStyle: .short))
                             .font(.callout.weight(.medium))
                         Text(asset.filename)
                             .font(.caption)
@@ -511,8 +548,8 @@ private struct PhotoDetailSheet: View {
             .background(Theme.panel)
         }
         .frame(minWidth: 720, minHeight: 560)
-        .onAppear { loadFullImage() }
-        .onChange(of: currentIndex) { _ in loadFullImage() }
+        .onAppear { loadFullImage(); loadGeocode() }
+        .onChange(of: currentIndex) { _ in loadFullImage(); loadGeocode() }
     }
 
     private func loadFullImage() {
@@ -535,6 +572,14 @@ private struct PhotoDetailSheet: View {
                 guard let img = NSImage(contentsOf: url) else { return }
                 DispatchQueue.main.async { self.fullImage = img }
             }
+        }
+    }
+
+    private func loadGeocode() {
+        geocodeResult = nil
+        guard let coord = asset?.coordinate else { return }
+        Task {
+            geocodeResult = await reverseGeocode(coordinate: coord)
         }
     }
 }
