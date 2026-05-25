@@ -222,6 +222,22 @@ class CurationStore: ObservableObject {
             return
         }
 
+        let rawPath = settings.staticImagesPath
+        guard !rawPath.isEmpty else {
+            exportError = "No Static Images Path is configured. Open Settings → Blog and set the path to your Hugo static/images directory."
+            isExporting = false
+            return
+        }
+        // Reject paths that are clearly on the read-only system volume
+        // (e.g. "/images" instead of "/Users/…/blog/static/images").
+        let resolvedPath = (rawPath as NSString).expandingTildeInPath
+        guard resolvedPath.hasPrefix("/Users") || resolvedPath.hasPrefix("/Volumes") ||
+              resolvedPath.hasPrefix("/tmp") || resolvedPath.hasPrefix("/private/tmp") else {
+            exportError = "Static Images Path \"\(rawPath)\" looks like a system path. It should point to a folder inside /Users/… — please check Settings \u{2192} Blog."
+            isExporting = false
+            return
+        }
+
         do {
             let eventSlug = cluster.name
                 .lowercased()

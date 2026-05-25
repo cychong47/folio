@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.20.1
+- Fix export failing with "volume is read only" — upfront guard now catches an empty or system-volume path before attempting any writes; error alert includes an "Open Settings" button to fix the path immediately
+
 ### v1.20.0
 - Create New Post from curation — after exporting, the "Create New Post" button opens the post editor with the exported photos pre-loaded and image refs already in the markdown body
 - Fix map pin tumbling — pins are now cached in @State and only rebuilt when the cluster changes (not on every selection toggle); PhotoPin is fully static with no dynamic state, which prevents MapKit from re-presenting annotations

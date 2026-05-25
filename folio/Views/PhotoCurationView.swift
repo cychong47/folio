@@ -127,6 +127,12 @@ struct PhotoCurationView: View {
             set: { if !$0 { store.exportError = nil } }
         )) {
             Button("OK") { store.exportError = nil }
+            if store.exportError?.contains("Settings") == true {
+                Button("Open Settings") {
+                    store.exportError = nil
+                    NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                }
+            }
         } message: {
             Text(store.exportError ?? "")
         }
