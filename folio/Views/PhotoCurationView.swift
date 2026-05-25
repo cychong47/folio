@@ -269,7 +269,6 @@ private struct ThumbnailCell: View {
                 }
                 .frame(width: 160, height: 120)
                 .clipped()
-                .opacity(asset.isSelected ? 1.0 : 0.5)
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)
                         .strokeBorder(

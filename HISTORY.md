@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.19.4
+- Fix curation grid: photos no longer appear dimmed — removed 50% opacity on unselected thumbnails; selection is indicated by the accent border and checkmark alone
+
 ### v1.19.3
 - Double-click a photo to open it full-size — sheet shows the photo at up to 2400 px with ←/→ keyboard navigation and S to toggle export selection
 - Favorite toggle in the detail sheet — heart button marks/unmarks the photo in Photos.app via PHPhotoLibrary; F key shortcut; heart badge overlaid on thumbnail for already-favourited photos
