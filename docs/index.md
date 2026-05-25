@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.19.5
+
+- Fix photo timestamps showing in device timezone (KST) instead of where the photo was taken — reverse-geocoding now also captures CLPlacemark.timeZone and uses it to format timestamps in the grid and detail sheet; photos without GPS continue to show device-local time
+
+---
+
 ### v1.19.4
 
 - Fix curation grid: photos no longer appear dimmed — removed 50% opacity on unselected thumbnails; selection is indicated by the accent border and checkmark alone
