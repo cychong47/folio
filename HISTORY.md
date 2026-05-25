@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.20.3
+- Fix exported photos rotated 90° — curation export now bakes EXIF orientation into pixel data (via CIImage.oriented) before stripping metadata or resizing, matching the fix already present in the regular drag-and-drop export path
+
 ### v1.20.2
 - Preserve original filename on export — exported images now keep their camera-roll name (e.g. IMG_1234.jpg) instead of being renamed to date-event-seq.jpg; only the extension changes when HEIC is converted to JPEG
 

@@ -339,12 +339,25 @@ class CurationStore: ObservableObject {
         return reEncode(source: source, url: url)
     }
 
+    /// Bakes EXIF orientation into pixel data using CIImage so the tag can be
+    /// safely dropped when re-encoding. Mirrors PhotoExporter.orientationCorrected.
+    private func orientationCorrected(_ cgImage: CGImage, from source: CGImageSource) -> CGImage {
+        guard let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
+              let raw = props[kCGImagePropertyOrientation as String] as? UInt32,
+              let orientation = CGImagePropertyOrientation(rawValue: raw),
+              orientation != .up else { return cgImage }
+        let ci = CIImage(cgImage: cgImage).oriented(orientation)
+        let ctx = CIContext(options: [.useSoftwareRenderer: false])
+        return ctx.createCGImage(ci, from: ci.extent) ?? cgImage
+    }
+
     private func reEncode(source: CGImageSource, url: URL) -> Data? {
         guard let raw = CGImageSourceCreateImageAtIndex(source, 0, nil) else { return nil }
+        let cgImage = orientationCorrected(raw, from: source)
         let uti: CFString = (url.pathExtension.lowercased() == "png" ? "public.png" : "public.jpeg") as CFString
         let out = NSMutableData()
         guard let dest = CGImageDestinationCreateWithData(out, uti, 1, nil) else { return nil }
-        CGImageDestinationAddImage(dest, raw, [
+        CGImageDestinationAddImage(dest, cgImage, [
             kCGImageDestinationLossyCompressionQuality: 0.92,
             kCGImageMetadataShouldExcludeGPS: true
         ] as CFDictionary)
@@ -355,7 +368,9 @@ class CurationStore: ObservableObject {
     private func resized(url: URL, maxLongEdge: Int) -> Data? {
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
               let raw = CGImageSourceCreateImageAtIndex(source, 0, nil) else { return nil }
-        let w = raw.width, h = raw.height
+        // Bake orientation before measuring — a 90°-rotated source has swapped w/h
+        let cgImage = orientationCorrected(raw, from: source)
+        let w = cgImage.width, h = cgImage.height
         guard max(w, h) > maxLongEdge else { return nil }
         let scale = CGFloat(maxLongEdge) / CGFloat(max(w, h))
         let nw = Int((CGFloat(w) * scale).rounded())
@@ -363,7 +378,7 @@ class CurationStore: ObservableObject {
         guard let ctx = CGContext(data: nil, width: nw, height: nh, bitsPerComponent: 8, bytesPerRow: 0,
                                   space: CGColorSpaceCreateDeviceRGB(),
                                   bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue) else { return nil }
-        ctx.draw(raw, in: CGRect(x: 0, y: 0, width: nw, height: nh))
+        ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: nw, height: nh))
         guard let out = ctx.makeImage() else { return nil }
         let data = NSMutableData()
         let uti: CFString = (url.pathExtension.lowercased() == "png" ? "public.png" : "public.jpeg") as CFString
