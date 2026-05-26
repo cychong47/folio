@@ -265,6 +265,7 @@ class CurationStore: ObservableObject {
                     let ext = originalExt == "heic" ? "jpg" : (originalExt.isEmpty ? "jpg" : originalExt)
                     // Preserve original filename; only swap extension when HEIC→JPEG
                     let baseName = (originalFilename as NSString).deletingPathExtension
+                        .replacingOccurrences(of: " ", with: "_")
                     let filename = "\(baseName).\(ext)"
                     let destURL = base.appendingPathComponent(filename)
                     let tempURL = FileManager.default.temporaryDirectory
@@ -290,6 +291,7 @@ class CurationStore: ObservableObject {
                     let originalExt = url.pathExtension.lowercased()
                     let ext = originalExt == "heic" ? "jpg" : (originalExt.isEmpty ? "jpg" : originalExt)
                     let baseName = url.deletingPathExtension().lastPathComponent
+                        .replacingOccurrences(of: " ", with: "_")
                     let filename = "\(baseName).\(ext)"
                     let destURL = base.appendingPathComponent(filename)
 

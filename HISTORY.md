@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.20.6
+- Replace spaces with underscores in exported filenames — photos with spaces in their camera-roll name (e.g. "Photo 2026-03-15.jpg") are saved as "Photo_2026-03-15.jpg" so filenames are URL-safe in the blog
+
 ### v1.20.5
 - Export button in curation action bar — "Export" button alongside the keyboard shortcut so selection can be exported without memorising the hotkey; curation view stays open after export so you can select different photos and create another post without re-opening the date picker
 
