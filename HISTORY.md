@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.20.5
+- Export button in curation action bar — "Export" button alongside the keyboard shortcut so selection can be exported without memorising the hotkey; curation view stays open after export so you can select different photos and create another post without re-opening the date picker
+
 ### v1.20.4
 - Adjustable thumbnail size in curation grid — small↔large photo icon slider in the action bar scales thumbnails from 100 px to 320 px; grid reflows automatically
 

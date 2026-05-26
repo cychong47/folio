@@ -247,6 +247,7 @@ private struct EventRow: View {
 
 private struct CurationGridPanel: View {
     @ObservedObject var store: CurationStore
+    @EnvironmentObject var settings: AppSettings
 
     @State private var thumbSize: CGFloat = 160
     @State private var isShowingDetail = false
@@ -299,6 +300,14 @@ private struct CurationGridPanel: View {
                     Text("\(cluster.selectedCount) of \(cluster.totalCount) selected")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                    Button {
+                        Task { await store.export(settings: settings) }
+                    } label: {
+                        Label("Export", systemImage: "square.and.arrow.up")
+                            .font(.caption)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(cluster.selectedCount == 0 || store.isExporting)
                     Spacer()
                     // Thumbnail size slider
                     HStack(spacing: 4) {

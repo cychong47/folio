@@ -420,6 +420,8 @@
 				CODE_SIGN_ENTITLEMENTS = folio/Folio.entitlements;
 				INFOPLIST_FILE = folio/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.folio.app;
+				PRODUCT_MODULE_NAME = Folio;
+				PRODUCT_NAME = Folio;
 			};
 			name = Release;
 		};
@@ -429,6 +431,8 @@
 				CODE_SIGN_ENTITLEMENTS = FolioShareExtension/FolioShareExtension.entitlements;
 				INFOPLIST_FILE = FolioShareExtension/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.folio.app.ShareExtension;
+				PRODUCT_MODULE_NAME = FolioShareExtension;
+				PRODUCT_NAME = FolioShareExtension;
 			};
 			name = Release;
 		};
@@ -438,6 +442,8 @@
 				CODE_SIGN_ENTITLEMENTS = FolioShareExtension/FolioShareExtension.entitlements;
 				INFOPLIST_FILE = FolioShareExtension/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.folio.app.ShareExtension;
+				PRODUCT_MODULE_NAME = FolioShareExtension;
+				PRODUCT_NAME = FolioShareExtension;
 			};
 			name = Debug;
 		};
@@ -459,6 +465,8 @@
 				CODE_SIGN_ENTITLEMENTS = folio/Folio.entitlements;
 				INFOPLIST_FILE = folio/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = com.folio.app;
+				PRODUCT_MODULE_NAME = Folio;
+				PRODUCT_NAME = Folio;
 			};
 			name = Debug;
 		};

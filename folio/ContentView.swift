@@ -41,12 +41,22 @@ struct ContentView: View {
                         let f = DateFormatter()
                         f.dateFormat = "yyyy-MM-dd"
                         pendingPost.slug = f.string(from: date)
-                        curating = false
+                        // curating stays true — PostEditorView shows because pendingPost
+                        // is non-empty (takes priority in the if/else chain). When the
+                        // post is saved or discarded, pendingPost clears and the app
+                        // returns here automatically.
                     }
                 )
                 .environmentObject(settings)
             } else {
-                WelcomeView(isDragTargeted: isDragTargeted, onBrowse: { browsing = true }, onCurate: { showDatePicker = true })
+                WelcomeView(
+                    isDragTargeted: isDragTargeted,
+                    onBrowse: { browsing = true },
+                    // Skip the date picker if photos are already loaded
+                    onCurate: {
+                        if curationStore.clusters.isEmpty { showDatePicker = true } else { curating = true }
+                    }
+                )
             }
 
             DropZone(
