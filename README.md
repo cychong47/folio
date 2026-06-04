@@ -1,4 +1,4 @@
-# Folio
+# Photolog
 
 A native macOS app for creating [Hugo](https://gohugo.io/) blog posts from photos.
 Drag photos from Photos.app or Finder, write a post in the split-view editor, and publish directly to your Hugo site.
@@ -8,6 +8,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 ## Features
 
 - **Drag & drop from Photos.app or Finder** — uses `NSFilePromiseReceiver` to handle Photos.app drags
+- **Photolog branding** — app display name, build artifact, and release packaging use the Photolog name
 - **Video file support** — drag `.mp4`, `.mov`, or `.webm` files from Finder; inserts a Hugo `{{< video >}}` shortcode and copies the file to the static directory on save
 - **EXIF date prefix** — filenames derived from `DateTimeOriginal` (e.g. `2026-03-05-IMG_1234.jpg`)
 - **Split-view post editor** — markdown editor on the left, live text+image preview on the right showing content in document order
@@ -32,9 +33,10 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Post list view** — "Browse Posts" on the welcome screen lists all existing posts in the content directory sorted by date; select any post to re-edit its title, body, frontmatter, or metadata
 - **Auto git commit on Save** — per-profile toggle in Settings; runs `git add -A && git commit && git push` in the blog root after each Save; commit message template supports `{{title}}`
 - **Taxonomy manager** — Settings → General → Manage…; lists all categories, tags, and series with post counts; rename a term or merge two terms across every post in the content directory
-- **Photo Curation Workspace** — scan a vacation photo folder (`⌘K`); photos are auto-grouped into events by time and location using spatio-temporal clustering; grid UI to select shots; exports selected photos with a markdown snippet ready to paste into a blog post
+- **Photo Curation Workspace** — scan a vacation photo folder (`⌘K`); photos are auto-grouped into events by time and location using centroid-anchored spatio-temporal clustering; grid UI to select shots; exports selected photos with a markdown snippet ready to paste into a blog post
+- **Smarter event suggestions** — event generation compares GPS movement against each event's running location center, and manual Both-mode splits require both a time gap and movement
 - **Keyboard shortcuts** — `⌘N` New Post, `⌘B` Browse Posts, `⌘K` Curate Photos, `⌘S` Save, `⌘⇧U` Publish
-- **Check for Updates** — Folio menu bar item; shows a popup with update status and a one-click Download button when a new version is available
+- **Check for Updates** — Photolog menu bar item; shows a popup with update status and a one-click Download button when a new version is available
 - **OTA updates** — Settings → Updates checks GitHub releases; one-click download and install via Archive Utility
 - **What's New sheet** — shown automatically on first launch of each new version; lists changes since the last-seen version
 
@@ -66,7 +68,7 @@ The image URL prefix (used in markdown `![]()` references) is automatically deri
 
 **Transferring settings to another Mac:**
 
-- **Export Settings…** — saves all profiles to a `folio-settings.json` file you can copy anywhere.
+- **Export Settings…** — saves all profiles to a `photolog-settings.json` file you can copy anywhere.
 - **Import Settings…** — restores all profiles from a previously exported JSON file.
 
 ---
@@ -162,13 +164,13 @@ The project uses [xcodegen](https://github.com/yonaskolb/XcodeGen) to generate t
 
 ### GitHub Actions (recommended)
 
-Push to `main` — the [build workflow](.github/workflows/build.yml) runs automatically on a macOS runner, builds the app unsigned, and uploads `Folio.zip` as a downloadable artifact.
+Push to `main` — the [build workflow](.github/workflows/build.yml) runs automatically on a macOS runner, builds the app unsigned, and uploads `Photolog.zip` as a downloadable artifact.
 
-1. Go to **Actions** → latest **Build Folio** run → **Artifacts** → download `Folio.zip`
-2. Unzip and move `Folio.app` to `/Applications`
+1. Go to **Actions** → latest **Build Photolog** run → **Artifacts** → download `Photolog.zip`
+2. Unzip and move `Photolog.app` to `/Applications`
 3. On first launch macOS may block the app. Go to **System Settings → Privacy & Security** and click **Open Anyway**, or run:
    ```bash
-   xattr -dr com.apple.quarantine /Applications/Folio.app
+   xattr -dr com.apple.quarantine /Applications/Photolog.app
    ```
 
 ### Local (no Xcode required)
@@ -182,7 +184,7 @@ unzip /tmp/xcodegen.zip -d /tmp/xcodegen_bin
 
 # Generate project and build
 /tmp/xcodegen_bin/xcodegen/bin/xcodegen generate
-xcodebuild -project Folio.xcodeproj -scheme Folio \
+xcodebuild -project Photolog.xcodeproj -scheme Photolog \
   -configuration Release CODE_SIGNING_ALLOWED=NO \
   -derivedDataPath build
 ```

@@ -64,7 +64,7 @@ struct FolioApp: App {
         }
         .commands {
             CommandGroup(replacing: .appInfo) {
-                Button("About Folio") {
+                Button("About Photolog") {
                     let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
                     NSApp.orderFrontStandardAboutPanel(options: [
                         .applicationVersion: version,
@@ -111,7 +111,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 post.markdownBody = MarkdownGenerator.initialBody(photos: photos)
             }
         } catch {
-            print("[Folio] Failed to load pending post: \(error)")
+            print("[Photolog] Failed to load pending post: \(error)")
         }
     }
 }

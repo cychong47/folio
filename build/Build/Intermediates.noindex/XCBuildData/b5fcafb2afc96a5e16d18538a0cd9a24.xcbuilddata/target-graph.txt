@@ -1,0 +1,3 @@
+Target dependency graph (2 targets)
+Target 'FolioShareExtension' in project 'Photolog' (no dependencies)
+Target 'Photolog' in project 'Photolog' (no dependencies)

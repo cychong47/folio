@@ -1,0 +1,399 @@
+{
+  "" : {
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Folio-primary.dia",
+    "emit-module-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Folio-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Folio-primary-emit-module.dia",
+    "pch" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Folio-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Folio-primary.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/blogger/Shared/Constants.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Constants.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Constants.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Constants.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Constants.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Constants.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Constants.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Constants.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Constants~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/BuildInfo.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BuildInfo.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BuildInfo.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BuildInfo.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BuildInfo.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BuildInfo.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BuildInfo.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BuildInfo.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BuildInfo~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/ContentView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/FolioApp.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/FolioApp.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/FolioApp.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/FolioApp.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/FolioApp.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/FolioApp.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/FolioApp.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/FolioApp.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/FolioApp~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Models/AppSettings.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/AppSettings.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/AppSettings.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/AppSettings.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/AppSettings.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/AppSettings.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/AppSettings.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/AppSettings.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/AppSettings~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Models/BlogProfile.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BlogProfile.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BlogProfile.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BlogProfile.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BlogProfile.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BlogProfile.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BlogProfile.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BlogProfile.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/BlogProfile~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Models/CurationAsset.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Models/CurationStore.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Models/EventCluster.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/EventCluster.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/EventCluster.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/EventCluster.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/EventCluster.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/EventCluster.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/EventCluster.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/EventCluster.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/EventCluster~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Models/PendingPost.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PendingPost.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PendingPost.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PendingPost.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PendingPost.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PendingPost.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PendingPost.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PendingPost.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PendingPost~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Models/PostSummary.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostSummary.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostSummary.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostSummary.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostSummary.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostSummary.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostSummary.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostSummary.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostSummary~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/CategoryScanner.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CategoryScanner.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CategoryScanner.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CategoryScanner.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CategoryScanner.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CategoryScanner.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CategoryScanner.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CategoryScanner.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CategoryScanner~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/ClusteringEngine.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ClusteringEngine.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ClusteringEngine.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ClusteringEngine.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ClusteringEngine.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ClusteringEngine.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ClusteringEngine.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ClusteringEngine.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ClusteringEngine~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/GitHubPublisher.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitHubPublisher.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitHubPublisher.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitHubPublisher.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitHubPublisher.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitHubPublisher.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitHubPublisher.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitHubPublisher.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitHubPublisher~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/GitRunner.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitRunner.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitRunner.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitRunner.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitRunner.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitRunner.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitRunner.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitRunner.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/GitRunner~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/HugoConfigReader.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoConfigReader.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoConfigReader.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoConfigReader.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoConfigReader.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoConfigReader.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoConfigReader.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoConfigReader.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoConfigReader~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/HugoServerManager.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoServerManager.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoServerManager.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoServerManager.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoServerManager.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoServerManager.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoServerManager.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoServerManager.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/HugoServerManager~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/MarkdownGenerator.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MarkdownGenerator.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MarkdownGenerator.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MarkdownGenerator.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MarkdownGenerator.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MarkdownGenerator.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MarkdownGenerator.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MarkdownGenerator.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MarkdownGenerator~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/MetadataIngestionService.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MetadataIngestionService.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MetadataIngestionService.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MetadataIngestionService.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MetadataIngestionService.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MetadataIngestionService.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MetadataIngestionService.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MetadataIngestionService.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/MetadataIngestionService~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/PhotoExporter.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoExporter.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoExporter.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoExporter.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoExporter.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoExporter.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoExporter.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoExporter.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoExporter~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/PhotoLibraryDate.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoLibraryDate.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoLibraryDate.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoLibraryDate.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoLibraryDate.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoLibraryDate.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoLibraryDate.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoLibraryDate.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoLibraryDate~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/PostIndexer.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostIndexer.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostIndexer.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostIndexer.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostIndexer.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostIndexer.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostIndexer.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostIndexer.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostIndexer~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/SharedContainerService.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SharedContainerService.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SharedContainerService.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SharedContainerService.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SharedContainerService.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SharedContainerService.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SharedContainerService.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SharedContainerService.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SharedContainerService~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/SlugGenerator.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SlugGenerator.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SlugGenerator.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SlugGenerator.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SlugGenerator.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SlugGenerator.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SlugGenerator.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SlugGenerator.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SlugGenerator~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/TaxonomyManager.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManager.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManager.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManager.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManager.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManager.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManager.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManager.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManager~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Services/UpdateChecker.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdateChecker.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdateChecker.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdateChecker.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdateChecker.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdateChecker.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdateChecker.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdateChecker.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdateChecker~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Views/DateRangePickerView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DateRangePickerView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DateRangePickerView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DateRangePickerView.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DateRangePickerView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DateRangePickerView.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DateRangePickerView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DateRangePickerView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DateRangePickerView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Views/DropTargetView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DropTargetView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DropTargetView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DropTargetView.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DropTargetView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DropTargetView.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DropTargetView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DropTargetView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/DropTargetView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Views/PhotoCurationView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoCurationView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoCurationView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoCurationView.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoCurationView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoCurationView.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoCurationView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoCurationView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoCurationView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Views/PhotoStripView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoStripView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoStripView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoStripView.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoStripView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoStripView.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoStripView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoStripView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PhotoStripView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Views/PostEditorView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostEditorView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostEditorView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostEditorView.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostEditorView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostEditorView.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostEditorView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostEditorView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostEditorView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Views/PostListView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostListView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostListView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostListView.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostListView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostListView.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostListView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostListView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/PostListView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Views/SettingsView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SettingsView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SettingsView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SettingsView.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SettingsView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SettingsView.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SettingsView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SettingsView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/SettingsView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Views/TaxonomyManagerView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManagerView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManagerView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManagerView.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManagerView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManagerView.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManagerView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManagerView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/TaxonomyManagerView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Views/Theme.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Theme.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Theme.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Theme.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Theme.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Theme.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Theme.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Theme.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/Theme~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Views/UpdatePopupView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdatePopupView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdatePopupView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdatePopupView.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdatePopupView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdatePopupView.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdatePopupView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdatePopupView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/UpdatePopupView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Views/WelcomeView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WelcomeView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WelcomeView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WelcomeView.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WelcomeView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WelcomeView.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WelcomeView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WelcomeView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WelcomeView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Views/WhatsNewView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WhatsNewView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WhatsNewView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WhatsNewView.dia",
+    "index-unit-output-path" : "/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WhatsNewView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WhatsNewView.bc",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WhatsNewView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WhatsNewView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/WhatsNewView~partial.swiftmodule"
+  }
+}

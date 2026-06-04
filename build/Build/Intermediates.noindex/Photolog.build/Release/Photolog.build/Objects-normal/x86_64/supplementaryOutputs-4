@@ -1,0 +1,23 @@
+{
+  "/Users/cychong/Workspace/builder/storyline/folio/Models/EventCluster.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/EventCluster.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/EventCluster.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/EventCluster.dia",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/EventCluster.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/EventCluster.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/DateRangePickerView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/DateRangePickerView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/DateRangePickerView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/DateRangePickerView.dia",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/DateRangePickerView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/DateRangePickerView.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/DropTargetView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/DropTargetView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/DropTargetView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/DropTargetView.dia",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/DropTargetView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/DropTargetView.swiftdeps"
+  }
+}

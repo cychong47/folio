@@ -1,4 +1,4 @@
-name: Folio
+name: Photolog
 
 options:
   bundleIdPrefix: com.folio
@@ -15,7 +15,7 @@ settings:
     DEVELOPMENT_TEAM: ""  # Fill in your Team ID
 
 targets:
-  Folio:
+  Photolog:
     type: application
     platform: macOS
     sources:
@@ -26,9 +26,9 @@ targets:
       path: folio/Info.plist
       properties:
         CFBundleIdentifier: com.folio.app
-        CFBundleName: Folio
-        CFBundleDisplayName: Folio
-        CFBundleShortVersionString: "1.20.6"
+        CFBundleName: Photolog
+        CFBundleDisplayName: Photolog
+        CFBundleShortVersionString: "1.20.8"
         CFBundleVersion: "2"
         LSMinimumSystemVersion: "13.0"
         NSPrincipalClass: NSApplication
@@ -36,7 +36,7 @@ targets:
           - CFBundleURLName: com.folio.app
             CFBundleURLSchemes:
               - folio
-        NSPhotoLibraryUsageDescription: "Folio reads photo dates to set the correct date on your blog posts."
+        NSPhotoLibraryUsageDescription: "Photolog reads photo dates to set the correct date on your blog posts."
     entitlements:
       path: folio/Folio.entitlements
       properties:
@@ -53,8 +53,8 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.folio.app
-        PRODUCT_NAME: Folio
-        PRODUCT_MODULE_NAME: Folio
+        PRODUCT_NAME: Photolog
+        PRODUCT_MODULE_NAME: Photolog
         INFOPLIST_FILE: folio/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     preBuildScripts:
@@ -82,8 +82,8 @@ targets:
     info:
       path: FolioShareExtension/Info.plist
       properties:
-        CFBundleDisplayName: Folio
-        CFBundleShortVersionString: "1.20.6"
+        CFBundleDisplayName: Photolog
+        CFBundleShortVersionString: "1.20.8"
         CFBundleVersion: "2"
         NSExtension:
           NSExtensionAttributes:
@@ -101,17 +101,17 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.folio.app.ShareExtension
-        PRODUCT_NAME: FolioShareExtension
-        PRODUCT_MODULE_NAME: FolioShareExtension
+        PRODUCT_NAME: PhotologShareExtension
+        PRODUCT_MODULE_NAME: PhotologShareExtension
         INFOPLIST_FILE: FolioShareExtension/Info.plist
     dependencies:
       - sdk: ImageIO.framework
 
 schemes:
-  Folio:
+  Photolog:
     build:
       targets:
-        Folio: all
+        Photolog: all
         FolioShareExtension: all
     run:
       config: Debug

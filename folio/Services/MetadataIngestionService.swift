@@ -77,7 +77,7 @@ enum MetadataIngestionService {
 
         let result = await MainActor.run { PHAsset.fetchAssets(with: .image, options: options) }
         let total = result.count
-        print("[Folio] Library total=\(libraryTotal) range=\(total) (\(dayStart)→\(dayEnd))")
+        print("[Photolog] Library total=\(libraryTotal) range=\(total) (\(dayStart)→\(dayEnd))")
         var assets: [CurationAsset] = []
         assets.reserveCapacity(total)
 

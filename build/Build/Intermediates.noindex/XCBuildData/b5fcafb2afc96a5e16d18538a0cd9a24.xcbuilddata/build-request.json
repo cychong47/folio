@@ -1,0 +1,67 @@
+{
+  "buildCommand" : {
+    "command" : "build",
+    "skipDependencies" : false,
+    "style" : "buildOnly"
+  },
+  "configuredTargets" : [
+    {
+      "guid" : "619c6538453edc7044ce5001312f34395227ac2411da6344e17e833d511b569d"
+    },
+    {
+      "guid" : "619c6538453edc7044ce5001312f34390154f46893d8d265f952183b68a4d37a"
+    }
+  ],
+  "containerPath" : "/Users/cychong/Workspace/builder/storyline/Photolog.xcodeproj",
+  "continueBuildingAfterErrors" : false,
+  "dependencyScope" : "workspace",
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "build",
+    "activeArchitecture" : "arm64",
+    "activeRunDestination" : {
+      "disableOnlyActiveArch" : false,
+      "hostTargetedPlatform" : null,
+      "platform" : "macosx",
+      "sdk" : "macosx26.5",
+      "sdkVariant" : "macos",
+      "supportedArchitectures" : [
+        "arm64e",
+        "arm64",
+        "x86_64"
+      ],
+      "targetArchitecture" : "arm64"
+    },
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex",
+      "buildProductsPath" : "/Users/cychong/Workspace/builder/storyline/build/Build/Products",
+      "derivedDataPath" : "/Users/cychong/Workspace/builder/storyline/build",
+      "indexDataStoreFolderPath" : "/Users/cychong/Workspace/builder/storyline/build/Index.noindex/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/cychong/Workspace/builder/storyline/build/Index.noindex/PrecompiledHeaders",
+      "pchPath" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/PrecompiledHeaders"
+    },
+    "configurationName" : "Release",
+    "overrides" : {
+      "commandLine" : {
+        "table" : {
+          "CODE_SIGNING_ALLOWED" : "NO"
+        }
+      },
+      "synthesized" : {
+        "table" : {
+          "ACTION" : "build",
+          "ENABLE_PREVIEWS" : "NO",
+          "ENABLE_XOJIT_PREVIEWS" : "YES"
+        }
+      }
+    }
+  },
+  "schemeCommand" : "launch",
+  "showNonLoggedProgress" : true,
+  "useDryRun" : false,
+  "useImplicitDependencies" : true,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : true
+}

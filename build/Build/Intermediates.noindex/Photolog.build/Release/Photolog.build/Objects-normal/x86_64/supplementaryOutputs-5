@@ -1,0 +1,23 @@
+{
+  "/Users/cychong/Workspace/builder/storyline/folio/FolioApp.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/FolioApp.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/FolioApp.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/FolioApp.dia",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/FolioApp.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/FolioApp.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/GitHubPublisher.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/GitHubPublisher.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/GitHubPublisher.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/GitHubPublisher.dia",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/GitHubPublisher.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/GitHubPublisher.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/GitRunner.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/GitRunner.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/GitRunner.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/GitRunner.dia",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/GitRunner.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/x86_64/GitRunner.swiftdeps"
+  }
+}

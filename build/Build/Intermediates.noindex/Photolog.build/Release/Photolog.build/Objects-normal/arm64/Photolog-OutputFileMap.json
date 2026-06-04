@@ -1,0 +1,399 @@
+{
+  "" : {
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Photolog-primary.dia",
+    "emit-module-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Photolog-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Photolog-primary-emit-module.dia",
+    "pch" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Photolog-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Photolog-primary.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/storyline/Shared/Constants.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Constants.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Constants.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Constants.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Constants.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Constants.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Constants.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Constants.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Constants~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/BuildInfo.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BuildInfo.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BuildInfo.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BuildInfo.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BuildInfo.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BuildInfo.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BuildInfo.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BuildInfo.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BuildInfo~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/ContentView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ContentView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ContentView.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ContentView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ContentView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/FolioApp.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/FolioApp.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/FolioApp.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/FolioApp.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/FolioApp.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/FolioApp.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/FolioApp.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/FolioApp.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/FolioApp~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Models/AppSettings.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/AppSettings.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/AppSettings.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/AppSettings.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/AppSettings.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/AppSettings.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/AppSettings.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/AppSettings.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/AppSettings~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Models/BlogProfile.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BlogProfile.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BlogProfile.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BlogProfile.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BlogProfile.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BlogProfile.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BlogProfile.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BlogProfile.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/BlogProfile~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Models/CurationAsset.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationAsset.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationAsset.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationAsset.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationAsset.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationAsset.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationAsset.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationAsset.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationAsset~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Models/CurationStore.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationStore.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationStore.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationStore.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationStore.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationStore.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationStore.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationStore.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CurationStore~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Models/EventCluster.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/EventCluster.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/EventCluster.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/EventCluster.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/EventCluster.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/EventCluster.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/EventCluster.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/EventCluster.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/EventCluster~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Models/PendingPost.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PendingPost.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PendingPost.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PendingPost.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PendingPost.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PendingPost.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PendingPost.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PendingPost.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PendingPost~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Models/PostSummary.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostSummary.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostSummary.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostSummary.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostSummary.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostSummary.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostSummary.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostSummary.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostSummary~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/CategoryScanner.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CategoryScanner.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CategoryScanner.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CategoryScanner.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CategoryScanner.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CategoryScanner.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CategoryScanner.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CategoryScanner.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/CategoryScanner~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/ClusteringEngine.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ClusteringEngine.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ClusteringEngine.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ClusteringEngine.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ClusteringEngine.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ClusteringEngine.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ClusteringEngine.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ClusteringEngine.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/ClusteringEngine~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/GitHubPublisher.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitHubPublisher.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitHubPublisher.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitHubPublisher.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitHubPublisher.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitHubPublisher.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitHubPublisher.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitHubPublisher.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitHubPublisher~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/GitRunner.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitRunner.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitRunner.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitRunner.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitRunner.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitRunner.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitRunner.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitRunner.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/GitRunner~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/HugoConfigReader.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoConfigReader.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoConfigReader.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoConfigReader.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoConfigReader.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoConfigReader.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoConfigReader.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoConfigReader.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoConfigReader~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/HugoServerManager.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoServerManager.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoServerManager.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoServerManager.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoServerManager.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoServerManager.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoServerManager.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoServerManager.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/HugoServerManager~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/MarkdownGenerator.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MarkdownGenerator.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MarkdownGenerator.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MarkdownGenerator.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MarkdownGenerator.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MarkdownGenerator.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MarkdownGenerator.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MarkdownGenerator.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MarkdownGenerator~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/MetadataIngestionService.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MetadataIngestionService.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MetadataIngestionService.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MetadataIngestionService.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MetadataIngestionService.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MetadataIngestionService.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MetadataIngestionService.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MetadataIngestionService.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/MetadataIngestionService~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/PhotoExporter.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoExporter.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoExporter.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoExporter.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoExporter.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoExporter.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoExporter.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoExporter.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoExporter~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/PhotoLibraryDate.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoLibraryDate.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoLibraryDate.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoLibraryDate.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoLibraryDate.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoLibraryDate.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoLibraryDate.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoLibraryDate.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoLibraryDate~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/PostIndexer.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostIndexer.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostIndexer.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostIndexer.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostIndexer.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostIndexer.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostIndexer.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostIndexer.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostIndexer~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/SharedContainerService.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SharedContainerService.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SharedContainerService.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SharedContainerService.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SharedContainerService.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SharedContainerService.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SharedContainerService.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SharedContainerService.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SharedContainerService~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/SlugGenerator.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SlugGenerator.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SlugGenerator.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SlugGenerator.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SlugGenerator.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SlugGenerator.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SlugGenerator.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SlugGenerator.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SlugGenerator~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/TaxonomyManager.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManager.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManager.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManager.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManager.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManager.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManager.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManager.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManager~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/UpdateChecker.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdateChecker.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdateChecker.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdateChecker.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdateChecker.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdateChecker.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdateChecker.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdateChecker.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdateChecker~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/DateRangePickerView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DateRangePickerView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DateRangePickerView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DateRangePickerView.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DateRangePickerView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DateRangePickerView.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DateRangePickerView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DateRangePickerView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DateRangePickerView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/DropTargetView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DropTargetView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DropTargetView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DropTargetView.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DropTargetView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DropTargetView.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DropTargetView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DropTargetView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/DropTargetView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/PhotoCurationView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoCurationView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoCurationView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoCurationView.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoCurationView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoCurationView.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoCurationView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoCurationView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoCurationView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/PhotoStripView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoStripView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoStripView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoStripView.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoStripView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoStripView.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoStripView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoStripView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PhotoStripView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/PostEditorView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostEditorView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostEditorView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostEditorView.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostEditorView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostEditorView.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostEditorView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostEditorView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostEditorView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/PostListView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostListView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostListView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostListView.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostListView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostListView.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostListView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostListView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/PostListView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/SettingsView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SettingsView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SettingsView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SettingsView.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SettingsView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SettingsView.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SettingsView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SettingsView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/SettingsView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/TaxonomyManagerView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManagerView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManagerView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManagerView.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManagerView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManagerView.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManagerView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManagerView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/TaxonomyManagerView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/Theme.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Theme.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Theme.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Theme.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Theme.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Theme.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Theme.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Theme.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/Theme~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/UpdatePopupView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdatePopupView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdatePopupView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdatePopupView.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdatePopupView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdatePopupView.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdatePopupView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdatePopupView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/UpdatePopupView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/WelcomeView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WelcomeView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WelcomeView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WelcomeView.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WelcomeView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WelcomeView.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WelcomeView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WelcomeView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WelcomeView~partial.swiftmodule"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/WhatsNewView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WhatsNewView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WhatsNewView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WhatsNewView.dia",
+    "index-unit-output-path" : "/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WhatsNewView.o",
+    "llvm-bc" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WhatsNewView.bc",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WhatsNewView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WhatsNewView.swiftdeps",
+    "swiftmodule" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Release/Photolog.build/Objects-normal/arm64/WhatsNewView~partial.swiftmodule"
+  }
+}

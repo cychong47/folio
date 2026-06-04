@@ -1,0 +1,650 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		06B36660B1393D2D5132F749 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AF1C70C0633BC507F18D1DF /* ImageIO.framework */; };
+		0A7392243764440A496417F7 /* PostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F3B552995A664883E7BEB9 /* PostListView.swift */; };
+		0D3033F18E28EDADA7DFC987 /* PostEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60965A441D6FD363B2D8ACC6 /* PostEditorView.swift */; };
+		16ABCDBB17DA3AA04706AB0E /* ClusteringEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE01D6BC67BACECD8D1651 /* ClusteringEngine.swift */; };
+		18C9E37F446405718ABEE4A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9E95163A251F43C9FDACF8F /* Assets.xcassets */; };
+		1BF58F258850F7D931BEECD3 /* HugoServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66DD383BFB1DF6D69917EC0 /* HugoServerManager.swift */; };
+		21A0099820A924D314126F67 /* GitHubPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D56F102BF7775E8874D16C /* GitHubPublisher.swift */; };
+		228062ED9DEB41AAC1F13CEF /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A63C503CD4EE2587F9555E53 /* Vision.framework */; };
+		294C66BB40843AB4581871F4 /* PostSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C57FBBB7E561FD6D0FEBDB9 /* PostSummary.swift */; };
+		2A4D9C4D72F8BCF7423350E2 /* PhotoCurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED8F85EEDCDE827BC9849EA /* PhotoCurationView.swift */; };
+		357D77E228CF1CD6824DA597 /* GitRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A3D3F2D3CE36699F1B4FEEA /* GitRunner.swift */; };
+		37F30C436DDDDF87E7C3B361 /* CurationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF44C7511EBADF43BA4F6C5E /* CurationStore.swift */; };
+		3A55BDF76D6A8FA6D007A471 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C67143EEA23DF166A9C75 /* ContentView.swift */; };
+		51D95A1F27DA333F27D945E5 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A8AFF3ADA9F600D0D840A1 /* WelcomeView.swift */; };
+		584E130CF3772C06E9CE8B45 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD30B5BA80F037090A0D61A2 /* Constants.swift */; };
+		5DBBCC82E16A674DE8B68DE9 /* PendingPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268845472ABC1740FC1598BE /* PendingPost.swift */; };
+		600640FB327420FD590E56D3 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B230CE21ED74A96268EE95 /* Theme.swift */; };
+		690B7ADF10E64AE1AB65138E /* UpdatePopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF750207707E38843A6119B0 /* UpdatePopupView.swift */; };
+		6A01C7665628D2D16C081962 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B84007A366F8AA80FB25B94B /* CoreLocation.framework */; };
+		6C6F134AD9AE273D2543558E /* CategoryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7D097A371C70C4CBC1E593 /* CategoryScanner.swift */; };
+		735018C258C8712391F96EE9 /* DateRangePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C84621F2CDE7AFFB1B552AB /* DateRangePickerView.swift */; };
+		74B934171FFC9297CCA785EE /* PostIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EF8BF2401EF1B9AB1FA693 /* PostIndexer.swift */; };
+		76BBD91EED7FBB16912BB5A4 /* DropTargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752EDDDD23A9A5AEF32F98A /* DropTargetView.swift */; };
+		7C27C094788D6B114D9F7F5E /* CurationAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC6841DF0682D9E11F013BE /* CurationAsset.swift */; };
+		856FBBDA4437BB1CA6702196 /* MarkdownGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460680A1E7BCEB87EC38DF20 /* MarkdownGenerator.swift */; };
+		863D91AC46C5831B0A61E90F /* BlogProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD9081EA7674BA2004834C /* BlogProfile.swift */; };
+		8655A6E16252422A9143D0DC /* TaxonomyManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760C9031D528EC24C90F0CD2 /* TaxonomyManagerView.swift */; };
+		8ABE7F2912264DA34C23CF5F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A5000DD6608801D86733D /* SettingsView.swift */; };
+		9686D2C010CFD7331E5A4FA6 /* PhotoExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743D8A890F966B79334440BB /* PhotoExporter.swift */; };
+		9C91926C5243CEDAB3F98795 /* SharedContainerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1439E6A443FD16ED4B98FBD5 /* SharedContainerService.swift */; };
+		A6FD688A6A15416CF57741BC /* HugoConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964EEE3A6800F4D4524D1A90 /* HugoConfigReader.swift */; };
+		AA9A6B0CBA8A5241339A1189 /* FolioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F63BD90F093F00EA8F5532 /* FolioApp.swift */; };
+		AC4B0BF9B1FBF2B0EBAC594F /* PhotoStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B342D008C3E49EFB58A457A6 /* PhotoStripView.swift */; };
+		AED3AC7D7A1CD0B8F59641A5 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE00A927414153A0DE14E83C /* Photos.framework */; };
+		B4EE67767B38199595A2261B /* TaxonomyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F59762BF945E9692952F6 /* TaxonomyManager.swift */; };
+		C24BCB37D782ED3AECB95ED4 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1FA5A8E7688AA874A3A378E /* ShareViewController.swift */; };
+		CE4FA9FFB4693FADAEED9E88 /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F821DE7FE5DA95974D89AE2 /* WhatsNewView.swift */; };
+		DA60B977A9B3E1B520B4BDD9 /* PhotoLibraryDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D69EBD5ACE0B2CE1E447E1 /* PhotoLibraryDate.swift */; };
+		DFD3B01DC92B7711D1D12418 /* EventCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF94CF509FD2FD1670BF151 /* EventCluster.swift */; };
+		E9645DC87E04480C5855B4FA /* SlugGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1971F8472C8DA3DB76B949 /* SlugGenerator.swift */; };
+		EB43046D84C60851EEC040E1 /* MetadataIngestionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B9104DCD621F058D193F5E /* MetadataIngestionService.swift */; };
+		F6458974C0B607E6A6A275EC /* BuildInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE7E2EC2577AC42A7FF18CB /* BuildInfo.swift */; };
+		F7EDC3C39D98B871116F8308 /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6939C5D9535E787E9FF979D7 /* UpdateChecker.swift */; };
+		FEF1CF6BAB596F686224AA0E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F1438295A4EEC960427C30 /* AppSettings.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0C57FBBB7E561FD6D0FEBDB9 /* PostSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSummary.swift; sourceTree = "<group>"; };
+		0DDACFA16152026E44438844 /* FolioShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FolioShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FAE42F314747ED03B6BDCA3 /* Photolog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Photolog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1439E6A443FD16ED4B98FBD5 /* SharedContainerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContainerService.swift; sourceTree = "<group>"; };
+		1C84621F2CDE7AFFB1B552AB /* DateRangePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRangePickerView.swift; sourceTree = "<group>"; };
+		268845472ABC1740FC1598BE /* PendingPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingPost.swift; sourceTree = "<group>"; };
+		2AF1C70C0633BC507F18D1DF /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		2FF94CF509FD2FD1670BF151 /* EventCluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCluster.swift; sourceTree = "<group>"; };
+		40F1438295A4EEC960427C30 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		437A5000DD6608801D86733D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		460680A1E7BCEB87EC38DF20 /* MarkdownGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownGenerator.swift; sourceTree = "<group>"; };
+		46B230CE21ED74A96268EE95 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		4A3D3F2D3CE36699F1B4FEEA /* GitRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitRunner.swift; sourceTree = "<group>"; };
+		4C4F59762BF945E9692952F6 /* TaxonomyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxonomyManager.swift; sourceTree = "<group>"; };
+		55DD9081EA7674BA2004834C /* BlogProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlogProfile.swift; sourceTree = "<group>"; };
+		5CE7E2EC2577AC42A7FF18CB /* BuildInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildInfo.swift; sourceTree = "<group>"; };
+		60965A441D6FD363B2D8ACC6 /* PostEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEditorView.swift; sourceTree = "<group>"; };
+		612C5C248F322260349EF652 /* FolioShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FolioShareExtension.entitlements; sourceTree = "<group>"; };
+		6939C5D9535E787E9FF979D7 /* UpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChecker.swift; sourceTree = "<group>"; };
+		743D8A890F966B79334440BB /* PhotoExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoExporter.swift; sourceTree = "<group>"; };
+		760C9031D528EC24C90F0CD2 /* TaxonomyManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxonomyManagerView.swift; sourceTree = "<group>"; };
+		78A8AFF3ADA9F600D0D840A1 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		7A5F6A29732582E659146537 /* Folio.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Folio.entitlements; sourceTree = "<group>"; };
+		7F821DE7FE5DA95974D89AE2 /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
+		82F63BD90F093F00EA8F5532 /* FolioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolioApp.swift; sourceTree = "<group>"; };
+		964EEE3A6800F4D4524D1A90 /* HugoConfigReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HugoConfigReader.swift; sourceTree = "<group>"; };
+		9B1971F8472C8DA3DB76B949 /* SlugGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlugGenerator.swift; sourceTree = "<group>"; };
+		A1FA5A8E7688AA874A3A378E /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		A3B9104DCD621F058D193F5E /* MetadataIngestionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataIngestionService.swift; sourceTree = "<group>"; };
+		A63C503CD4EE2587F9555E53 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
+		A9E95163A251F43C9FDACF8F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AC7D097A371C70C4CBC1E593 /* CategoryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryScanner.swift; sourceTree = "<group>"; };
+		AF44C7511EBADF43BA4F6C5E /* CurationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurationStore.swift; sourceTree = "<group>"; };
+		B2F3B552995A664883E7BEB9 /* PostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListView.swift; sourceTree = "<group>"; };
+		B342D008C3E49EFB58A457A6 /* PhotoStripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStripView.swift; sourceTree = "<group>"; };
+		B4D69EBD5ACE0B2CE1E447E1 /* PhotoLibraryDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryDate.swift; sourceTree = "<group>"; };
+		B84007A366F8AA80FB25B94B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		CC4E6884E05041E736292F05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D62C67143EEA23DF166A9C75 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D66DD383BFB1DF6D69917EC0 /* HugoServerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HugoServerManager.swift; sourceTree = "<group>"; };
+		DABE01D6BC67BACECD8D1651 /* ClusteringEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusteringEngine.swift; sourceTree = "<group>"; };
+		DD30B5BA80F037090A0D61A2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		DDC6841DF0682D9E11F013BE /* CurationAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurationAsset.swift; sourceTree = "<group>"; };
+		DF6FC8A1B2C80D2DE63115D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		DF750207707E38843A6119B0 /* UpdatePopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePopupView.swift; sourceTree = "<group>"; };
+		E1EF8BF2401EF1B9AB1FA693 /* PostIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostIndexer.swift; sourceTree = "<group>"; };
+		E2D56F102BF7775E8874D16C /* GitHubPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubPublisher.swift; sourceTree = "<group>"; };
+		EED8F85EEDCDE827BC9849EA /* PhotoCurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCurationView.swift; sourceTree = "<group>"; };
+		F752EDDDD23A9A5AEF32F98A /* DropTargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropTargetView.swift; sourceTree = "<group>"; };
+		FE00A927414153A0DE14E83C /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0521264E5F4AFCD49D456997 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				06B36660B1393D2D5132F749 /* ImageIO.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA43DD0DC7CBC69DEDCA1B43 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AED3AC7D7A1CD0B8F59641A5 /* Photos.framework in Frameworks */,
+				6A01C7665628D2D16C081962 /* CoreLocation.framework in Frameworks */,
+				228062ED9DEB41AAC1F13CEF /* Vision.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		083A771BF7C7A19F7420D26E = {
+			isa = PBXGroup;
+			children = (
+				53802D1748BC893E20023E3B /* folio */,
+				EDC531E60286B9A64FA3AB01 /* FolioShareExtension */,
+				65DED613572D4F0DFF1DAF42 /* Shared */,
+				440FA0F69D246AB9D9008CA7 /* Frameworks */,
+				93D5872E87FD26E8F0C4C4D1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		440FA0F69D246AB9D9008CA7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B84007A366F8AA80FB25B94B /* CoreLocation.framework */,
+				2AF1C70C0633BC507F18D1DF /* ImageIO.framework */,
+				FE00A927414153A0DE14E83C /* Photos.framework */,
+				A63C503CD4EE2587F9555E53 /* Vision.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		53802D1748BC893E20023E3B /* folio */ = {
+			isa = PBXGroup;
+			children = (
+				A9E95163A251F43C9FDACF8F /* Assets.xcassets */,
+				5CE7E2EC2577AC42A7FF18CB /* BuildInfo.swift */,
+				D62C67143EEA23DF166A9C75 /* ContentView.swift */,
+				7A5F6A29732582E659146537 /* Folio.entitlements */,
+				82F63BD90F093F00EA8F5532 /* FolioApp.swift */,
+				CC4E6884E05041E736292F05 /* Info.plist */,
+				E5C76D73D294B84C8FD73868 /* Models */,
+				76FB7D67BF5FDDFF3B69DD36 /* Services */,
+				AD5ADD9D1F78B79C92BEC1A7 /* Views */,
+			);
+			path = folio;
+			sourceTree = "<group>";
+		};
+		65DED613572D4F0DFF1DAF42 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				DD30B5BA80F037090A0D61A2 /* Constants.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		76FB7D67BF5FDDFF3B69DD36 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AC7D097A371C70C4CBC1E593 /* CategoryScanner.swift */,
+				DABE01D6BC67BACECD8D1651 /* ClusteringEngine.swift */,
+				E2D56F102BF7775E8874D16C /* GitHubPublisher.swift */,
+				4A3D3F2D3CE36699F1B4FEEA /* GitRunner.swift */,
+				964EEE3A6800F4D4524D1A90 /* HugoConfigReader.swift */,
+				D66DD383BFB1DF6D69917EC0 /* HugoServerManager.swift */,
+				460680A1E7BCEB87EC38DF20 /* MarkdownGenerator.swift */,
+				A3B9104DCD621F058D193F5E /* MetadataIngestionService.swift */,
+				743D8A890F966B79334440BB /* PhotoExporter.swift */,
+				B4D69EBD5ACE0B2CE1E447E1 /* PhotoLibraryDate.swift */,
+				E1EF8BF2401EF1B9AB1FA693 /* PostIndexer.swift */,
+				1439E6A443FD16ED4B98FBD5 /* SharedContainerService.swift */,
+				9B1971F8472C8DA3DB76B949 /* SlugGenerator.swift */,
+				4C4F59762BF945E9692952F6 /* TaxonomyManager.swift */,
+				6939C5D9535E787E9FF979D7 /* UpdateChecker.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		93D5872E87FD26E8F0C4C4D1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0DDACFA16152026E44438844 /* FolioShareExtension.appex */,
+				0FAE42F314747ED03B6BDCA3 /* Photolog.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AD5ADD9D1F78B79C92BEC1A7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1C84621F2CDE7AFFB1B552AB /* DateRangePickerView.swift */,
+				F752EDDDD23A9A5AEF32F98A /* DropTargetView.swift */,
+				EED8F85EEDCDE827BC9849EA /* PhotoCurationView.swift */,
+				B342D008C3E49EFB58A457A6 /* PhotoStripView.swift */,
+				60965A441D6FD363B2D8ACC6 /* PostEditorView.swift */,
+				B2F3B552995A664883E7BEB9 /* PostListView.swift */,
+				437A5000DD6608801D86733D /* SettingsView.swift */,
+				760C9031D528EC24C90F0CD2 /* TaxonomyManagerView.swift */,
+				46B230CE21ED74A96268EE95 /* Theme.swift */,
+				DF750207707E38843A6119B0 /* UpdatePopupView.swift */,
+				78A8AFF3ADA9F600D0D840A1 /* WelcomeView.swift */,
+				7F821DE7FE5DA95974D89AE2 /* WhatsNewView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E5C76D73D294B84C8FD73868 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				40F1438295A4EEC960427C30 /* AppSettings.swift */,
+				55DD9081EA7674BA2004834C /* BlogProfile.swift */,
+				DDC6841DF0682D9E11F013BE /* CurationAsset.swift */,
+				AF44C7511EBADF43BA4F6C5E /* CurationStore.swift */,
+				2FF94CF509FD2FD1670BF151 /* EventCluster.swift */,
+				268845472ABC1740FC1598BE /* PendingPost.swift */,
+				0C57FBBB7E561FD6D0FEBDB9 /* PostSummary.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		EDC531E60286B9A64FA3AB01 /* FolioShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				612C5C248F322260349EF652 /* FolioShareExtension.entitlements */,
+				DF6FC8A1B2C80D2DE63115D1 /* Info.plist */,
+				A1FA5A8E7688AA874A3A378E /* ShareViewController.swift */,
+			);
+			path = FolioShareExtension;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		39465526D5E30F63144E6F97 /* Photolog */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 424A17D32B37A3832E335811 /* Build configuration list for PBXNativeTarget "Photolog" */;
+			buildPhases = (
+				B4E3C1D1882652A5E475B59B /* Generate BuildInfo */,
+				2340D5524E8030E5EF29BAD9 /* Sources */,
+				0D17C464E5CE32B2A12238B4 /* Resources */,
+				AA43DD0DC7CBC69DEDCA1B43 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Photolog;
+			packageProductDependencies = (
+			);
+			productName = Photolog;
+			productReference = 0FAE42F314747ED03B6BDCA3 /* Photolog.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B4D18E78775C4D71F2C533A5 /* FolioShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 72D2EDBCA7DE65554A766EE4 /* Build configuration list for PBXNativeTarget "FolioShareExtension" */;
+			buildPhases = (
+				40D03CCE9735024F1D785BF7 /* Sources */,
+				0521264E5F4AFCD49D456997 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FolioShareExtension;
+			packageProductDependencies = (
+			);
+			productName = FolioShareExtension;
+			productReference = 0DDACFA16152026E44438844 /* FolioShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		80FA8B1F9DC96C5DCC5C48F1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					39465526D5E30F63144E6F97 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					B4D18E78775C4D71F2C533A5 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 382ADAE5897DA226709E6C24 /* Build configuration list for PBXProject "Photolog" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 083A771BF7C7A19F7420D26E;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 93D5872E87FD26E8F0C4C4D1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B4D18E78775C4D71F2C533A5 /* FolioShareExtension */,
+				39465526D5E30F63144E6F97 /* Photolog */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0D17C464E5CE32B2A12238B4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18C9E37F446405718ABEE4A9 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B4E3C1D1882652A5E475B59B /* Generate BuildInfo */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.git/HEAD",
+			);
+			name = "Generate BuildInfo";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/folio/BuildInfo.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "COMMIT=$(git -C \"$SRCROOT\" log -1 --format=\"%h\" 2>/dev/null || echo \"unknown\")\nDATE=$(git -C \"$SRCROOT\" log -1 --format=\"%cd\" --date=short 2>/dev/null || date +%Y-%m-%d)\ncat > \"$SRCROOT/folio/BuildInfo.swift\" << EOF\n// Auto-generated by build phase — do not edit manually\nenum BuildInfo {\n    static let commitDate = \"$DATE\"\n    static let commitHash = \"$COMMIT\"\n}\nEOF\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2340D5524E8030E5EF29BAD9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FEF1CF6BAB596F686224AA0E /* AppSettings.swift in Sources */,
+				863D91AC46C5831B0A61E90F /* BlogProfile.swift in Sources */,
+				F6458974C0B607E6A6A275EC /* BuildInfo.swift in Sources */,
+				6C6F134AD9AE273D2543558E /* CategoryScanner.swift in Sources */,
+				16ABCDBB17DA3AA04706AB0E /* ClusteringEngine.swift in Sources */,
+				584E130CF3772C06E9CE8B45 /* Constants.swift in Sources */,
+				3A55BDF76D6A8FA6D007A471 /* ContentView.swift in Sources */,
+				7C27C094788D6B114D9F7F5E /* CurationAsset.swift in Sources */,
+				37F30C436DDDDF87E7C3B361 /* CurationStore.swift in Sources */,
+				735018C258C8712391F96EE9 /* DateRangePickerView.swift in Sources */,
+				76BBD91EED7FBB16912BB5A4 /* DropTargetView.swift in Sources */,
+				DFD3B01DC92B7711D1D12418 /* EventCluster.swift in Sources */,
+				AA9A6B0CBA8A5241339A1189 /* FolioApp.swift in Sources */,
+				21A0099820A924D314126F67 /* GitHubPublisher.swift in Sources */,
+				357D77E228CF1CD6824DA597 /* GitRunner.swift in Sources */,
+				A6FD688A6A15416CF57741BC /* HugoConfigReader.swift in Sources */,
+				1BF58F258850F7D931BEECD3 /* HugoServerManager.swift in Sources */,
+				856FBBDA4437BB1CA6702196 /* MarkdownGenerator.swift in Sources */,
+				EB43046D84C60851EEC040E1 /* MetadataIngestionService.swift in Sources */,
+				5DBBCC82E16A674DE8B68DE9 /* PendingPost.swift in Sources */,
+				2A4D9C4D72F8BCF7423350E2 /* PhotoCurationView.swift in Sources */,
+				9686D2C010CFD7331E5A4FA6 /* PhotoExporter.swift in Sources */,
+				DA60B977A9B3E1B520B4BDD9 /* PhotoLibraryDate.swift in Sources */,
+				AC4B0BF9B1FBF2B0EBAC594F /* PhotoStripView.swift in Sources */,
+				0D3033F18E28EDADA7DFC987 /* PostEditorView.swift in Sources */,
+				74B934171FFC9297CCA785EE /* PostIndexer.swift in Sources */,
+				0A7392243764440A496417F7 /* PostListView.swift in Sources */,
+				294C66BB40843AB4581871F4 /* PostSummary.swift in Sources */,
+				8ABE7F2912264DA34C23CF5F /* SettingsView.swift in Sources */,
+				9C91926C5243CEDAB3F98795 /* SharedContainerService.swift in Sources */,
+				E9645DC87E04480C5855B4FA /* SlugGenerator.swift in Sources */,
+				B4EE67767B38199595A2261B /* TaxonomyManager.swift in Sources */,
+				8655A6E16252422A9143D0DC /* TaxonomyManagerView.swift in Sources */,
+				600640FB327420FD590E56D3 /* Theme.swift in Sources */,
+				F7EDC3C39D98B871116F8308 /* UpdateChecker.swift in Sources */,
+				690B7ADF10E64AE1AB65138E /* UpdatePopupView.swift in Sources */,
+				51D95A1F27DA333F27D945E5 /* WelcomeView.swift in Sources */,
+				CE4FA9FFB4693FADAEED9E88 /* WhatsNewView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		40D03CCE9735024F1D785BF7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C24BCB37D782ED3AECB95ED4 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7ED1F8CF8E401A274846007B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = folio/Folio.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = folio/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.folio.app;
+				PRODUCT_MODULE_NAME = Photolog;
+				PRODUCT_NAME = Photolog;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		9703156802AC19B1829BA6FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		A149DED17A102C2D38C32EDF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FolioShareExtension/FolioShareExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = FolioShareExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.folio.app.ShareExtension;
+				PRODUCT_MODULE_NAME = PhotologShareExtension;
+				PRODUCT_NAME = PhotologShareExtension;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		C3E076E385A2F20581BD1545 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		C5F039664F141655B0E52F9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = folio/Folio.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = folio/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.folio.app;
+				PRODUCT_MODULE_NAME = Photolog;
+				PRODUCT_NAME = Photolog;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		D104B7A1CF81F137CD645C64 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FolioShareExtension/FolioShareExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = FolioShareExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.folio.app.ShareExtension;
+				PRODUCT_MODULE_NAME = PhotologShareExtension;
+				PRODUCT_NAME = PhotologShareExtension;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		382ADAE5897DA226709E6C24 /* Build configuration list for PBXProject "Photolog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9703156802AC19B1829BA6FB /* Debug */,
+				C3E076E385A2F20581BD1545 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		424A17D32B37A3832E335811 /* Build configuration list for PBXNativeTarget "Photolog" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7ED1F8CF8E401A274846007B /* Debug */,
+				C5F039664F141655B0E52F9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		72D2EDBCA7DE65554A766EE4 /* Build configuration list for PBXNativeTarget "FolioShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A149DED17A102C2D38C32EDF /* Debug */,
+				D104B7A1CF81F137CD645C64 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 80FA8B1F9DC96C5DCC5C48F1 /* Project object */;
+}

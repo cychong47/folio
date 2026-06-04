@@ -35,7 +35,7 @@ struct UpdatePopupView: View {
             HStack(spacing: 8) {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(.green)
-                Text("Folio is up to date.")
+                Text("Photolog is up to date.")
             }
 
         case .available(let tagName, let downloadURL):
@@ -75,7 +75,7 @@ struct UpdatePopupView: View {
                     Text("Update ready to install")
                         .fontWeight(.medium)
                 }
-                Text("Folio will quit, replace itself with the new version, and reopen automatically.")
+                Text("Photolog will quit, replace itself with the new version, and reopen automatically.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

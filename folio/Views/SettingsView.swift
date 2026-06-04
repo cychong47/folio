@@ -104,7 +104,7 @@ private struct GeneralTab: View {
         guard let data = try? JSONEncoder().encode(snapshot) else { return }
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.json]
-        panel.nameFieldStringValue = "folio-settings.json"
+        panel.nameFieldStringValue = "photolog-settings.json"
         panel.prompt = "Export"
         if panel.runModal() == .OK, let url = panel.url {
             try? data.write(to: url)
@@ -807,7 +807,7 @@ private struct UpdatesTab: View {
         case .upToDate:
             HStack(spacing: 8) {
                 Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                Text("Folio is up to date.")
+                Text("Photolog is up to date.")
                 Button("Check Again") { checker.checkForUpdates() }
                     .buttonStyle(.plain)
                     .foregroundStyle(Theme.accent)
@@ -843,7 +843,7 @@ private struct UpdatesTab: View {
                     Image(systemName: "checkmark.circle.fill").foregroundStyle(Theme.accent)
                     Text("Update ready to install").fontWeight(.medium)
                 }
-                Text("Folio will quit, replace itself, and reopen automatically.")
+                Text("Photolog will quit, replace itself, and reopen automatically.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

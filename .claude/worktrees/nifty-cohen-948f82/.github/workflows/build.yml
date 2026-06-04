@@ -1,0 +1,119 @@
+name: Build Folio
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # allows manual trigger from GitHub UI
+
+jobs:
+  build:
+    runs-on: macos-15
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install xcodegen
+        run: |
+          curl -sL https://github.com/yonaskolb/XcodeGen/releases/download/2.45.2/xcodegen.zip \
+            -o /tmp/xcodegen.zip
+          unzip -q /tmp/xcodegen.zip -d /tmp/xcodegen_bin
+          chmod +x /tmp/xcodegen_bin/xcodegen/bin/xcodegen
+
+      - name: Generate Xcode project
+        run: /tmp/xcodegen_bin/xcodegen/bin/xcodegen generate --spec project.yml
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -project Folio.xcodeproj \
+            -scheme Folio \
+            -configuration Release \
+            -derivedDataPath build \
+            -destination "platform=macOS" \
+            ONLY_ACTIVE_ARCH=NO \
+            ARCHS="x86_64 arm64" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build
+
+      - name: Package app
+        run: |
+          APP_PATH=$(find build -name "Folio.app" -type d | head -1)
+          echo "Found: $APP_PATH"
+          ditto -c -k --keepParent "$APP_PATH" Folio.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Folio-macOS
+          path: Folio.zip
+          retention-days: 30
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(grep 'CFBundleShortVersionString' project.yml | head -1 | sed 's/.*"\(.*\)".*/\1/')
+          TAG="v${VERSION}"
+          if gh release view "$TAG" &>/dev/null; then
+            gh release upload "$TAG" Folio.zip --clobber
+          else
+            gh release create "$TAG" Folio.zip \
+              --title "Folio ${TAG}" \
+              --notes "Release ${TAG}" \
+              --latest
+          fi
+
+      - name: Update release notes page
+        run: |
+          python3 - <<'PYEOF'
+          import re
+
+          with open("HISTORY.md") as f:
+              content = f.read()
+
+          # Extract the Released section
+          m = re.search(r'## Released\n\n(.*?)(?=\n---\n|\n## Upcoming|$)', content, re.DOTALL)
+          released = m.group(1).strip() if m else ""
+
+          # Parse each ### vX.Y block
+          blocks = re.split(r'\n(?=### v)', released)
+          sections = []
+          for block in blocks:
+              block = block.strip()
+              if not block:
+                  continue
+              lines = block.split('\n')
+              heading = lines[0]          # e.g. "### v1.7"
+              body = '\n'.join(lines[1:]).strip()
+              sections.append(f"{heading}\n\n{body}")
+
+          releases_md = "\n\n---\n\n".join(sections)
+
+          # Read the static header (everything up to and including the AUTO-GENERATED comment)
+          with open("docs/index.md") as f:
+              header = f.read()
+          header = re.sub(r'\n<!-- AUTO-GENERATED.*', '', header, flags=re.DOTALL).rstrip()
+
+          page = header + "\n\n<!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->\n\n" + releases_md + "\n"
+
+          with open("docs/index.md", "w") as f:
+              f.write(page)
+          PYEOF
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/index.md
+          if git diff --cached --quiet; then
+            echo "Release notes unchanged, skipping commit"
+          else
+            git commit -m "Update release notes page [skip ci]"
+            git pull --rebase --autostash origin main
+            git push
+          fi

@@ -1,4 +1,4 @@
-name: Build Folio
+name: Build Photolog
 
 on:
   push:
@@ -30,8 +30,8 @@ jobs:
       - name: Build
         run: |
           xcodebuild \
-            -project Folio.xcodeproj \
-            -scheme Folio \
+            -project Photolog.xcodeproj \
+            -scheme Photolog \
             -configuration Release \
             -derivedDataPath build \
             -destination "platform=macOS" \
@@ -44,8 +44,8 @@ jobs:
 
       - name: Sign app with entitlements
         run: |
-          APP_PATH=$(find build -name "Folio.app" -type d | head -1)
-          EXT="$APP_PATH/Contents/PlugIns/FolioShareExtension.appex"
+          APP_PATH=$(find build -name "Photolog.app" -type d | head -1)
+          EXT="$APP_PATH/Contents/PlugIns/PhotologShareExtension.appex"
           # Sign nested bundles first, then the parent.
           # Embedding entitlements (especially photos-library) is required so
           # photolibraryd grants access — it checks the code signature, not just TCC.
@@ -60,15 +60,15 @@ jobs:
 
       - name: Package app
         run: |
-          APP_PATH=$(find build -name "Folio.app" -type d | head -1)
+          APP_PATH=$(find build -name "Photolog.app" -type d | head -1)
           echo "Found: $APP_PATH"
-          ditto -c -k --keepParent "$APP_PATH" Folio.zip
+          ditto -c -k --keepParent "$APP_PATH" Photolog.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Folio-macOS
-          path: Folio.zip
+          name: Photolog-macOS
+          path: Photolog.zip
           retention-days: 30
 
       - name: Publish GitHub Release
@@ -78,10 +78,10 @@ jobs:
           VERSION=$(grep 'CFBundleShortVersionString' project.yml | head -1 | sed 's/.*"\(.*\)".*/\1/')
           TAG="v${VERSION}"
           if gh release view "$TAG" &>/dev/null; then
-            gh release upload "$TAG" Folio.zip --clobber
+            gh release upload "$TAG" Photolog.zip --clobber
           else
-            gh release create "$TAG" Folio.zip \
-              --title "Folio ${TAG}" \
+            gh release create "$TAG" Photolog.zip \
+              --title "Photolog ${TAG}" \
               --notes "Release ${TAG}" \
               --latest
           fi

@@ -116,12 +116,12 @@ class AppSettings: ObservableObject {
 
         // Load from new multi-blog format
         let rawData = defaults.data(forKey: Constants.UserDefaultsKeys.blogProfiles)
-        NSLog("[Folio] suite=%@ blogProfiles=%@", Constants.appGroupID, rawData.map { "\($0.count) bytes" } ?? "nil")
+        NSLog("[Photolog] suite=%@ blogProfiles=%@", Constants.appGroupID, rawData.map { "\($0.count) bytes" } ?? "nil")
         if let data = rawData {
             if let decoded = try? JSONDecoder().decode([BlogProfile].self, from: data) {
-                NSLog("[Folio] decode OK — %d profile(s), first=%@", decoded.count, decoded.first?.name ?? "?")
+                NSLog("[Photolog] decode OK — %d profile(s), first=%@", decoded.count, decoded.first?.name ?? "?")
             } else {
-                NSLog("[Folio] decode FAILED — json=%@", String(data: data, encoding: .utf8) ?? "unreadable")
+                NSLog("[Photolog] decode FAILED — json=%@", String(data: data, encoding: .utf8) ?? "unreadable")
             }
         }
         if let data = defaults.data(forKey: Constants.UserDefaultsKeys.blogProfiles),

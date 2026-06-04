@@ -1,0 +1,23 @@
+{
+  "/Users/cychong/Workspace/builder/storyline/folio/Models/PendingPost.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/PendingPost.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/PendingPost.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/PendingPost.dia",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/PendingPost.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/PendingPost.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Services/MetadataIngestionService.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/MetadataIngestionService.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/MetadataIngestionService.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/MetadataIngestionService.dia",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/MetadataIngestionService.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/MetadataIngestionService.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/PhotoCurationView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/PhotoCurationView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/PhotoCurationView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/PhotoCurationView.dia",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/PhotoCurationView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/PhotoCurationView.swiftdeps"
+  }
+}

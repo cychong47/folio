@@ -1,0 +1,23 @@
+{
+  "/Users/cychong/Workspace/builder/blogger/folio/ContentView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView.dia",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/ContentView.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Models/CurationAsset.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset.dia",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationAsset.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Models/CurationStore.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore.dia",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/x86_64/CurationStore.swiftdeps"
+  }
+}

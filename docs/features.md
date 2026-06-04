@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Features
-description: Full feature list for Folio — a native macOS app for creating Hugo blog posts from photos
+description: Full feature list for Photolog — a native macOS app for creating Hugo blog posts from photos
 ---
 
 # Features
@@ -14,7 +14,7 @@ description: Full feature list for Folio — a native macOS app for creating Hug
 
 - **Post list view** — "Browse Posts" opens a full list of every `.md` file in the content directory, sorted by date descending; each row shows title, date, categories, and a Draft badge; select any post to open it for re-editing
 - **Split-view post editor** — monospaced markdown editor on the left; text + image preview on the right showing content in document order
-- **External editor live reload** — body text in the editor refreshes automatically when the post file is modified by an external editor (VSCode, Neovim, etc.); changes made by Folio's own Save are excluded
+- **External editor live reload** — body text in the editor refreshes automatically when the post file is modified by an external editor (VSCode, Neovim, etc.); changes made by Photolog's own Save are excluded
 - **Live text + image preview** — typed text and photos rendered in sequence so you can see how captions relate to photos before publishing
 - **Hugo frontmatter auto-generation** — title, date (with time and timezone offset), categories, tags, and series written automatically at Save time
 - **Custom frontmatter fields** — define extra key/value pairs per profile (e.g. `author`, `description`, `og_image`) appended to every post's frontmatter
@@ -27,7 +27,8 @@ description: Full feature list for Folio — a native macOS app for creating Hug
 
 ## Photo Curation
 
-- **Photo Curation Workspace** — open a vacation photo folder with `⌘K`; photos are auto-grouped into timed events using spatio-temporal clustering (90-minute temporal gap or 500-metre spatial gap triggers a new event)
+- **Photo Curation Workspace** — open a vacation photo folder with `⌘K`; photos are auto-grouped into timed events using centroid-anchored spatio-temporal clustering (90-minute temporal gap or 500-metre movement from the event center triggers a new event)
+- **Smarter event suggestions** — GPS movement is compared against each event's running location center, reducing accidental bridging between nearby places; manual Both-mode splits require both a time gap and movement
 - **Event navigator** — sidebar lists each event with its name, date, duration, and selected/total photo count
 - **Burst stack detection** — photos taken within 3 seconds of each other are grouped into a stack; the largest file (proxy for sharpest) is marked as the primary frame
 - **Grid selection UI** — 160×120 pt thumbnails with aspect-ratio fill; selected photos shown at full opacity with a blue border and checkmark; unselected photos dimmed to 50%
@@ -99,12 +100,13 @@ description: Full feature list for Folio — a native macOS app for creating Hug
 - **`⌘B` — Browse Posts** — open the post list from the welcome screen
 - **`⌘S` — Save** — save the current post (available in the editor)
 - **`⌘⇧U` — Publish** — publish the current post to GitHub (available in the editor when a saved post exists)
-- **Check for Updates** — Folio menu bar item; shows a popup with update status and a Download button when a new version is available
+- **Check for Updates** — Photolog menu bar item; shows a popup with update status and a Download button when a new version is available
 
 ---
 
 ## App & Distribution
 
+- **Photolog branding** — app display name, build artifact, release packaging, and public documentation use the Photolog name
 - **OTA updates** — Settings → Updates checks GitHub Releases; one-click download and install via Archive Utility
 - **Release Notes** — Settings → Updates links to the release notes page
 - **What's New sheet** — shown automatically on first launch of each new version; lists all changes since the last-seen version

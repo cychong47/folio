@@ -45,7 +45,7 @@ final class UpdateChecker: ObservableObject {
         // POSIX single-quote escape: ' → '\''
         func esc(_ s: String) -> String { s.replacingOccurrences(of: "'", with: "'\\''") }
 
-        // Write the update steps to a script file so they survive after Folio exits.
+        // Write the update steps to a script file so they survive after Photolog exits.
         let scriptPath = (NSTemporaryDirectory() as NSString)
             .appendingPathComponent("folio_update.sh")
         let logPath = (NSTemporaryDirectory() as NSString)
@@ -125,7 +125,7 @@ final class UpdateChecker: ObservableObject {
 
             // Extract on a background thread so the main thread stays free
             let extractDir = FileManager.default.temporaryDirectory
-                .appendingPathComponent("FolioUpdateExtract", isDirectory: true)
+                .appendingPathComponent("PhotologUpdateExtract", isDirectory: true)
 
             let appURL: URL? = await Task.detached {
                 try? FileManager.default.removeItem(at: extractDir)

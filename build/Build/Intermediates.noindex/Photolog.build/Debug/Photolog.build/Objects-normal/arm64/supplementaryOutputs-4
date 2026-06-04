@@ -1,0 +1,23 @@
+{
+  "/Users/cychong/Workspace/builder/storyline/folio/Models/EventCluster.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/EventCluster.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/EventCluster.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/EventCluster.dia",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/EventCluster.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/EventCluster.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/DateRangePickerView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/DateRangePickerView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/DateRangePickerView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/DateRangePickerView.dia",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/DateRangePickerView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/DateRangePickerView.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/storyline/folio/Views/DropTargetView.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/DropTargetView.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/DropTargetView.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/DropTargetView.dia",
+    "object" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/DropTargetView.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/storyline/build/Build/Intermediates.noindex/Photolog.build/Debug/Photolog.build/Objects-normal/arm64/DropTargetView.swiftdeps"
+  }
+}

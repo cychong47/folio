@@ -1,0 +1,23 @@
+{
+  "/Users/cychong/Workspace/builder/blogger/folio/BuildInfo.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/BuildInfo.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/BuildInfo.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/BuildInfo.dia",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/BuildInfo.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/BuildInfo.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Models/AppSettings.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/AppSettings.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/AppSettings.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/AppSettings.dia",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/AppSettings.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/AppSettings.swiftdeps"
+  },
+  "/Users/cychong/Workspace/builder/blogger/folio/Models/BlogProfile.swift" : {
+    "const-values" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/BlogProfile.swiftconstvalues",
+    "dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/BlogProfile.d",
+    "diagnostics" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/BlogProfile.dia",
+    "object" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/BlogProfile.o",
+    "swift-dependencies" : "/Users/cychong/Workspace/builder/blogger/build/Folio.build/Debug/Folio.build/Objects-normal/arm64/BlogProfile.swiftdeps"
+  }
+}

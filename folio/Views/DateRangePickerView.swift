@@ -44,7 +44,7 @@ struct DateRangePickerView: View {
                         .foregroundStyle(.secondary)
                     Text("Photos Access Required")
                         .font(.headline)
-                    Text("Folio needs access to your photo library to curate photos by date.")
+                    Text("Photolog needs access to your photo library to curate photos by date.")
                         .font(.callout)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)

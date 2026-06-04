@@ -12,6 +12,11 @@ enum ClusteringEngine {
     static let defaultSpatialThreshold: Double = 500          // metres
     static let burstThreshold: TimeInterval = 3               // seconds
 
+    private enum TimeLocationSplitRule {
+        case timeOrLocation
+        case timeAndLocation
+    }
+
     static func cluster(
         assets: [CurationAsset],
         temporalThreshold: TimeInterval = defaultTemporalThreshold,
@@ -96,7 +101,8 @@ enum ClusteringEngine {
             return clusterByLocationOnly(assets, spatialThreshold: spatialThreshold)
         case .both:
             return clusterByTimeAndLocation(assets, temporalThreshold: temporalThreshold,
-                                            spatialThreshold: spatialThreshold)
+                                            spatialThreshold: spatialThreshold,
+                                            splitRule: .timeAndLocation)
         }
     }
 
@@ -105,24 +111,40 @@ enum ClusteringEngine {
     private static func clusterByTimeAndLocation(
         _ assets: [CurationAsset],
         temporalThreshold: TimeInterval,
-        spatialThreshold: Double
+        spatialThreshold: Double,
+        splitRule: TimeLocationSplitRule = .timeOrLocation
     ) -> [[CurationAsset]] {
         guard !assets.isEmpty else { return [] }
         let sorted = assets.sorted { $0.timestamp < $1.timestamp }
         var groups: [[CurationAsset]] = [[sorted[0]]]
+        var currentCentroid = RunningCoordinateCentroid(first: sorted[0].coordinate)
 
         for i in 1 ..< sorted.count {
             let prev = sorted[i - 1]
             let curr = sorted[i]
             let dt = curr.timestamp.timeIntervalSince(prev.timestamp)
-            let dd: Double = {
-                guard let a = prev.coordinate, let b = curr.coordinate else { return 0 }
-                return haversine(a, b)
+            let isSpatialJump: Bool = {
+                guard dt > 60,
+                      let currCoordinate = curr.coordinate,
+                      let centroid = currentCentroid.coordinate
+                else { return false }
+                return haversine(centroid, currCoordinate) > spatialThreshold
             }()
-            if dt > temporalThreshold || (dd > spatialThreshold && dt > 60) {
+            let isTimeGap = dt > temporalThreshold
+            let shouldSplit: Bool
+            switch splitRule {
+            case .timeOrLocation:
+                shouldSplit = isTimeGap || isSpatialJump
+            case .timeAndLocation:
+                shouldSplit = isTimeGap && isSpatialJump
+            }
+
+            if shouldSplit {
                 groups.append([curr])
+                currentCentroid = RunningCoordinateCentroid(first: curr.coordinate)
             } else {
                 groups[groups.count - 1].append(curr)
+                currentCentroid.add(curr.coordinate)
             }
         }
         return groups
@@ -154,16 +176,21 @@ enum ClusteringEngine {
         guard !assets.isEmpty else { return [] }
         let sorted = assets.sorted { $0.timestamp < $1.timestamp }
         var groups: [[CurationAsset]] = [[sorted[0]]]
+        var currentCentroid = RunningCoordinateCentroid(first: sorted[0].coordinate)
         for i in 1 ..< sorted.count {
-            let prev = sorted[i - 1], curr = sorted[i]
-            let dd: Double = {
-                guard let a = prev.coordinate, let b = curr.coordinate else { return 0 }
-                return haversine(a, b)
+            let curr = sorted[i]
+            let isSpatialJump: Bool = {
+                guard let currCoordinate = curr.coordinate,
+                      let centroid = currentCentroid.coordinate
+                else { return false }
+                return haversine(centroid, currCoordinate) > spatialThreshold
             }()
-            if dd > spatialThreshold {
+            if isSpatialJump {
                 groups.append([curr])
+                currentCentroid = RunningCoordinateCentroid(first: curr.coordinate)
             } else {
                 groups[groups.count - 1].append(curr)
+                currentCentroid.add(curr.coordinate)
             }
         }
         return groups
@@ -214,5 +241,30 @@ enum ClusteringEngine {
         let Δλ = (b.longitude - a.longitude) * .pi / 180
         let x = sin(Δφ/2) * sin(Δφ/2) + cos(φ1) * cos(φ2) * sin(Δλ/2) * sin(Δλ/2)
         return R * 2 * atan2(sqrt(x), sqrt(1 - x))
+    }
+
+    private struct RunningCoordinateCentroid {
+        private var latitudeTotal: Double = 0
+        private var longitudeTotal: Double = 0
+        private var coordinateCount: Double = 0
+
+        init(first coordinate: CLLocationCoordinate2D?) {
+            add(coordinate)
+        }
+
+        var coordinate: CLLocationCoordinate2D? {
+            guard coordinateCount > 0 else { return nil }
+            return CLLocationCoordinate2D(
+                latitude: latitudeTotal / coordinateCount,
+                longitude: longitudeTotal / coordinateCount
+            )
+        }
+
+        mutating func add(_ coordinate: CLLocationCoordinate2D?) {
+            guard let coordinate else { return }
+            latitudeTotal += coordinate.latitude
+            longitudeTotal += coordinate.longitude
+            coordinateCount += 1
+        }
     }
 }

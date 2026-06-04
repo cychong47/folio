@@ -26,7 +26,7 @@ struct WelcomeView: View {
                 .animation(.easeInOut(duration: 0.15), value: isDragTargeted)
 
                 VStack(spacing: 6) {
-                    Text("Folio")
+                    Text("Photolog")
                         .font(.title2.weight(.semibold))
                     if isDragTargeted {
                         Text("Drop to start a new post")
@@ -139,7 +139,7 @@ private struct PhotosAccessBanner: View {
         case .denied, .restricted:
             return "Photos access is denied. Enable it in System Settings → Privacy & Security → Photos to detect screenshot dates automatically."
         default:
-            return "Grant Photos access so Folio can detect the correct date for screenshots and downloaded images."
+            return "Grant Photos access so Photolog can detect the correct date for screenshots and downloaded images."
         }
     }
 

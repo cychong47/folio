@@ -1,8 +1,14 @@
-# Folio — Change History
+# Photolog — Change History
 
 ---
 
 ## Released
+
+### v1.20.8
+- Smarter event suggestions — photo clustering now anchors spatial splits to each event's running GPS centroid and keeps manual Both-mode splits from breaking up long stops without movement
+
+### v1.20.7
+- Rename app to Photolog — app display name, product name, build artifact, and public documentation now use the Photolog brand
 
 ### v1.20.6
 - Replace spaces with underscores in exported filenames — photos with spaces in their camera-roll name (e.g. "Photo 2026-03-15.jpg") are saved as "Photo_2026-03-15.jpg" so filenames are URL-safe in the blog

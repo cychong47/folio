@@ -1,0 +1,102 @@
+---
+layout: default
+title: Features
+description: Full feature list for Folio — a native macOS app for creating Hugo blog posts from photos
+---
+
+# Features
+
+[← Release Notes](index)
+
+---
+
+## Content Authoring
+
+- **Post list view** — "Browse Posts" opens a full list of every `.md` file in the content directory, sorted by date descending; each row shows title, date, categories, and a Draft badge; select any post to open it for re-editing
+- **Split-view post editor** — monospaced markdown editor on the left; text + image preview on the right showing content in document order
+- **External editor live reload** — body text in the editor refreshes automatically when the post file is modified by an external editor (VSCode, Neovim, etc.); changes made by Folio's own Save are excluded
+- **Live text + image preview** — typed text and photos rendered in sequence so you can see how captions relate to photos before publishing
+- **Hugo frontmatter auto-generation** — title, date (with time and timezone offset), categories, tags, and series written automatically at Save time
+- **Custom frontmatter fields** — define extra key/value pairs per profile (e.g. `author`, `description`, `og_image`) appended to every post's frontmatter
+- **Live slug** — filename slug auto-generated from the title and kept in sync as you type; independently editable
+- **Title validation** — Save is blocked with a red-bordered title field when the title is empty
+- **Editable post date** — date picker in the editor header; defaults to first photo's EXIF date or today; changing it renames staged photos and updates markdown references
+- **Series field** — optional series picker below Tags; written as `series: [Name]` in frontmatter
+
+---
+
+## Photos & Image Import
+
+- **Drag & drop from Photos.app** — uses `NSFilePromiseReceiver` to handle Photos.app file promises
+- **Drag & drop from Finder** — plain file URL drops also supported
+- **Video file support** — drag `.mp4`, `.mov`, or `.webm` from Finder; inserts a Hugo `{{< video >}}` shortcode and copies the file to the static directory; preview panel shows a film-strip placeholder
+- **EXIF date prefix** — filenames derived from `DateTimeOriginal` (e.g. `2026-03-05-photo.jpg`)
+- **Non-EXIF date fallback** — screenshots and downloaded images get their date from `PHAsset.creationDate` (Photos access required), file creation date, or today
+- **Sort by filename** — photos dropped in the same session are sorted by filename ascending, preserving capture sequence
+- **Duplicate photo prevention** — the same filename dropped twice is silently ignored
+- **Import progress overlay** — frosted-glass overlay with `x / y` counter and progress bar during photo import
+- **Photo strip in editor** — horizontal thumbnail strip above the markdown editor; shows all photos in the current post at a glance
+- **Add photos while editing** — drag more photos onto the editor window or click the `+` button to open a file picker; new refs appended to the body without overwriting edits
+- **Remove photos while editing** — hover a thumbnail and click × (or right-click → Remove Photo) to remove a photo; staging file is kept until Reset or Publish so `Cmd+Z` can restore the ref
+- **Orphaned photo indicator** — thumbnails whose refs were manually deleted from the markdown body are greyed out in the strip
+
+---
+
+## Image Export
+
+- **Image resize cap** — set a max long-edge dimension per profile; images exceeding the limit are downscaled while preserving aspect ratio
+- **EXIF metadata stripping** — GPS coordinates and device info removed from images on export (on by default); preserves `DateTimeOriginal` for filename generation only
+- **Image file permissions** — exported images set to `0644` so web servers (nginx, Apache) can serve them
+- **Subpath templates** — configurable date-based subdirectories using `YYYY`, `MM`, `DD` tokens; separate templates for content posts and static images
+
+---
+
+## Categories & Taxonomy
+
+- **Chip-based category editor** — pick from known categories or type a new one inline; written to `categories:` frontmatter in real time
+- **Tags field** — same chip UI as categories; written to `tags:` frontmatter
+- **Scan Posts** — scans all `.md` files in the content directory and collects every `categories:` and `series:` value
+- **Auto-scan** — background scan every 30 minutes while the app is running; toggle per profile in Settings
+- **Taxonomy manager** — Settings → General → Manage…; aggregates all categories, tags, and series across the site with post counts; rename a term or merge two terms into one with bulk frontmatter rewriting across all affected files
+
+---
+
+## Publishing
+
+- **Save to local Hugo repo** — writes `YYYY-MM-DD-slug.md` and copies images to the configured static directory
+- **Auto git commit on Save** — per-profile toggle; runs `git add -A && git commit && git push` in the blog root after each successful Save; commit message template supports `{{title}}`; success/error shown inline in the editor footer
+- **GitHub publish** — commits and pushes only the saved files via the GitHub REST API (no git binary required)
+- **Codeberg & Gitea support** — full URL accepted in the Repo field; API base auto-derived from the host
+- **Auto-detect GitHub settings** — reads repo and branch from the blog root's `.git/config`
+- **Delete local files after publish** — markdown and image files removed from the local Hugo repo automatically after a successful GitHub push
+
+---
+
+## Settings & Profiles
+
+- **Multi-blog profiles** — each profile stores name, blog root, content path, images path, subpath templates, categories, GitHub settings, image export settings, and custom frontmatter fields
+- **Settings export / import** — transfer all profiles to another Mac via a JSON file
+- **Image URL prefix** — auto-derived from blog root and static images path; no manual configuration needed
+- **Live path preview** — shows the resolved content and image paths as subpath templates change
+
+---
+
+## Keyboard Shortcuts
+
+- **`⌘N` — New Post** — start a blank text post from the welcome screen
+- **`⌘B` — Browse Posts** — open the post list from the welcome screen
+- **`⌘S` — Save** — save the current post (available in the editor)
+- **`⌘⇧U` — Publish** — publish the current post to GitHub (available in the editor when a saved post exists)
+- **Check for Updates** — Folio menu bar item; shows a popup with update status and a Download button when a new version is available
+
+---
+
+## App & Distribution
+
+- **OTA updates** — Settings → Updates checks GitHub Releases; one-click download and install via Archive Utility
+- **Release Notes** — Settings → Updates links to the release notes page
+- **What's New sheet** — shown automatically on first launch of each new version; lists all changes since the last-seen version
+- **Tag scanning** — Scan Posts collects tags from existing markdown files; tag suggestions appear in the post editor menu alongside categories
+- **Share Extension** — trigger the app from the Photos.app Share sheet; photos exported and app opened automatically
+- **Theme switcher** — System / Light / Dark; fully adaptive warm-cream / dark-charcoal palette
+- **Quit on window close** — closing the main window also dismisses Settings and quits the app
