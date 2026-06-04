@@ -44,6 +44,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Drag & drop from Finder** — plain file URL drops also supported
 - **Video file support** — drag `.mp4`, `.mov`, or `.webm` from Finder; inserts a Hugo `{{< video >}}` shortcode and copies the file to the static directory; preview panel shows a film-strip placeholder
 - **EXIF date prefix** — filenames derived from `DateTimeOriginal` (e.g. `2026-03-05-photo.jpg`)
+- **EXIF timezone preservation** — folder-scanned curation photos honor `OffsetTimeOriginal`, keeping no-GPS photo timestamps aligned with GPS-backed photos from the same shoot
 - **Non-EXIF date fallback** — screenshots and downloaded images get their date from `PHAsset.creationDate` (Photos access required), file creation date, or today
 - **Sort by filename** — photos dropped in the same session are sorted by filename ascending, preserving capture sequence
 - **Duplicate photo prevention** — the same filename dropped twice is silently ignored

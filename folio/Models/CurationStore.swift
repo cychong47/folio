@@ -42,7 +42,7 @@ class CurationStore: ObservableObject {
         guard let cluster = activeCluster else { return [] }
         // Show only stack primaries (or unstacked photos), plus all stacked when expanded
         // For simplicity in Phase 1, show all assets
-        return cluster.assets
+        return cluster.assets.sorted { $0.timestamp < $1.timestamp }
     }
 
     func ingest(startDate: Date, endDate: Date) async {
@@ -101,6 +101,7 @@ class CurationStore: ObservableObject {
             assets.append(CurationAsset(
                 phAsset: ph, url: nil,
                 timestamp: ph.creationDate ?? Date(),
+                captureTimeZone: nil,
                 coordinate: coord,
                 pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight),
                 isScreenshot: ph.mediaSubtypes.contains(.photoScreenshot),

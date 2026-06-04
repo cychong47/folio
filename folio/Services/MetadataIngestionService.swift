@@ -90,6 +90,7 @@ enum MetadataIngestionService {
                 phAsset: ph,
                 url: nil,
                 timestamp: ph.creationDate ?? Date(),
+                captureTimeZone: nil,
                 coordinate: coord,
                 pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight)
             )
@@ -105,18 +106,26 @@ enum MetadataIngestionService {
     static func makeAsset(from url: URL) -> CurationAsset {
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
               let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else {
-            return CurationAsset(phAsset: nil, url: url, timestamp: fileDate(url), coordinate: nil, pixelSize: .zero)
+            return CurationAsset(phAsset: nil, url: url, timestamp: fileDate(url), captureTimeZone: nil, coordinate: nil, pixelSize: .zero)
         }
 
-        let timestamp = exifDate(from: props) ?? fileDate(url)
+        let exifTimestamp = exifDate(from: props)
+        let timestamp = exifTimestamp?.date ?? fileDate(url)
         let coordinate = gpsCoordinate(from: props)
         let w = props[kCGImagePropertyPixelWidth as String] as? CGFloat ?? 0
         let h = props[kCGImagePropertyPixelHeight as String] as? CGFloat ?? 0
 
-        return CurationAsset(phAsset: nil, url: url, timestamp: timestamp, coordinate: coordinate, pixelSize: CGSize(width: w, height: h))
+        return CurationAsset(
+            phAsset: nil,
+            url: url,
+            timestamp: timestamp,
+            captureTimeZone: exifTimestamp?.timeZone,
+            coordinate: coordinate,
+            pixelSize: CGSize(width: w, height: h)
+        )
     }
 
-    private static func exifDate(from props: [String: Any]) -> Date? {
+    private static func exifDate(from props: [String: Any]) -> (date: Date, timeZone: TimeZone?)? {
         let exif = props[kCGImagePropertyExifDictionary as String] as? [String: Any]
         let tiff = props[kCGImagePropertyTIFFDictionary as String] as? [String: Any]
         let raw = (exif?[kCGImagePropertyExifDateTimeOriginal as String] as? String)
@@ -128,14 +137,28 @@ enum MetadataIngestionService {
             f.locale = Locale(identifier: "en_US_POSIX")
             f.dateFormat = "yyyy:MM:dd HH:mm:ssXXXXX"
             if let date = f.date(from: raw + offset) {
-                return date
+                return (date, timeZone(fromEXIFOffset: offset))
             }
         }
 
         let f = DateFormatter()
         f.locale = Locale(identifier: "en_US_POSIX")
         f.dateFormat = "yyyy:MM:dd HH:mm:ss"
-        return f.date(from: raw)
+        guard let date = f.date(from: raw) else { return nil }
+        return (date, nil)
+    }
+
+    private static func timeZone(fromEXIFOffset offset: String) -> TimeZone? {
+        guard offset.count == 6,
+              let sign = offset.first,
+              sign == "+" || sign == "-",
+              offset[offset.index(offset.startIndex, offsetBy: 3)] == ":",
+              let hours = Int(offset.dropFirst().prefix(2)),
+              let minutes = Int(offset.suffix(2)) else {
+            return nil
+        }
+        let seconds = (hours * 3600 + minutes * 60) * (sign == "-" ? -1 : 1)
+        return TimeZone(secondsFromGMT: seconds)
     }
 
     private static func gpsCoordinate(from props: [String: Any]) -> CLLocationCoordinate2D? {

@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.1
+- Fix curation timestamp display and ordering — folder-scanned photos now keep EXIF `OffsetTimeOriginal` for thumbnail/detail timezone display, and the grid defensively sorts assets by capture timestamp
+
 ### v1.21.0
 - Event duration cap — auto-clustering now splits events once a photo chain spans more than 4 hours, preventing morning and evening photos from staying together just because each adjacent gap is under 90 minutes
 

@@ -11,6 +11,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Photolog branding** — app display name, build artifact, and release packaging use the Photolog name
 - **Video file support** — drag `.mp4`, `.mov`, or `.webm` files from Finder; inserts a Hugo `{{< video >}}` shortcode and copies the file to the static directory on save
 - **EXIF date prefix** — filenames derived from `DateTimeOriginal` (e.g. `2026-03-05-IMG_1234.jpg`)
+- **EXIF timezone preservation** — photo curation honors `OffsetTimeOriginal` so no-GPS photos display in their capture timezone instead of the Mac's current timezone
 - **Split-view post editor** — markdown editor on the left, live text+image preview on the right showing content in document order
 - **External editor live reload** — body text refreshes automatically when the post file is modified in an external editor (VSCode, Neovim, etc.)
 - **Hugo frontmatter** — auto-generated with title, date, categories, and image references

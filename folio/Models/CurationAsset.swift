@@ -8,6 +8,7 @@ struct CurationAsset: Identifiable, Hashable {
     var phAsset: PHAsset?     // set when source is PhotoKit
     var url: URL?             // set when source is file system
     var timestamp: Date
+    var captureTimeZone: TimeZone?
     var coordinate: CLLocationCoordinate2D?
     var pixelSize: CGSize
     var isSelected: Bool = false
