@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.0
+
+- Event duration cap — auto-clustering now splits events once a photo chain spans more than 4 hours, preventing morning and evening photos from staying together just because each adjacent gap is under 90 minutes
+
+---
+
 ### v1.20.9
 
 - Fix no-GPS photo timestamps — EXIF `OffsetTimeOriginal` is now honored when parsing `DateTimeOriginal`, so exported or folder-scanned photos without GPS keep the correct capture instant
