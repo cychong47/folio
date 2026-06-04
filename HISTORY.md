@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.20.9
+- Fix no-GPS photo timestamps — EXIF `OffsetTimeOriginal` is now honored when parsing `DateTimeOriginal`, so exported or folder-scanned photos without GPS keep the correct capture instant
+
 ### v1.20.8
 - Smarter event suggestions — photo clustering now anchors spatial splits to each event's running GPS centroid and keeps manual Both-mode splits from breaking up long stops without movement
 

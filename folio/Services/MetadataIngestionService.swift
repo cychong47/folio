@@ -122,6 +122,16 @@ enum MetadataIngestionService {
         let raw = (exif?[kCGImagePropertyExifDateTimeOriginal as String] as? String)
                ?? (tiff?[kCGImagePropertyTIFFDateTime as String] as? String)
         guard let raw else { return nil }
+
+        if let offset = exif?[kCGImagePropertyExifOffsetTimeOriginal as String] as? String {
+            let f = DateFormatter()
+            f.locale = Locale(identifier: "en_US_POSIX")
+            f.dateFormat = "yyyy:MM:dd HH:mm:ssXXXXX"
+            if let date = f.date(from: raw + offset) {
+                return date
+            }
+        }
+
         let f = DateFormatter()
         f.locale = Locale(identifier: "en_US_POSIX")
         f.dateFormat = "yyyy:MM:dd HH:mm:ss"

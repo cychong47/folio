@@ -56,6 +56,16 @@ enum PhotoExporter {
               let dateString = exifDict[kCGImagePropertyExifDateTimeOriginal as String] as? String else {
             return nil
         }
+
+        if let offset = exifDict[kCGImagePropertyExifOffsetTimeOriginal as String] as? String {
+            let formatter = DateFormatter()
+            formatter.locale = Locale(identifier: "en_US_POSIX")
+            formatter.dateFormat = "yyyy:MM:dd HH:mm:ssXXXXX"
+            if let date = formatter.date(from: dateString + offset) {
+                return date
+            }
+        }
+
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
