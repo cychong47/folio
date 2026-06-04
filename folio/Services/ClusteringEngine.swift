@@ -10,6 +10,7 @@ enum SplitMode: String, CaseIterable {
 enum ClusteringEngine {
     static let defaultTemporalThreshold: TimeInterval = 5400  // 90 min
     static let defaultSpatialThreshold: Double = 500          // metres
+    static let defaultMaxEventDuration: TimeInterval = 14400  // 4 hours
     static let burstThreshold: TimeInterval = 3               // seconds
 
     private enum TimeLocationSplitRule {
@@ -20,7 +21,8 @@ enum ClusteringEngine {
     static func cluster(
         assets: [CurationAsset],
         temporalThreshold: TimeInterval = defaultTemporalThreshold,
-        spatialThreshold: Double = defaultSpatialThreshold
+        spatialThreshold: Double = defaultSpatialThreshold,
+        maxEventDuration: TimeInterval = defaultMaxEventDuration
     ) -> [EventCluster] {
         guard !assets.isEmpty else { return [] }
 
@@ -31,13 +33,15 @@ enum ClusteringEngine {
         let photoGroups = clusterByTimeAndLocation(
             photos,
             temporalThreshold: temporalThreshold,
-            spatialThreshold: spatialThreshold
+            spatialThreshold: spatialThreshold,
+            maxEventDuration: maxEventDuration
         )
 
         // Screenshots: cluster by time only (no GPS on screenshots)
         let screenshotGroups = clusterByTimeOnly(
             screenshots,
-            temporalThreshold: temporalThreshold
+            temporalThreshold: temporalThreshold,
+            maxEventDuration: maxEventDuration
         )
 
         var clusters: [EventCluster] = []
@@ -112,17 +116,22 @@ enum ClusteringEngine {
         _ assets: [CurationAsset],
         temporalThreshold: TimeInterval,
         spatialThreshold: Double,
+        maxEventDuration: TimeInterval? = nil,
         splitRule: TimeLocationSplitRule = .timeOrLocation
     ) -> [[CurationAsset]] {
         guard !assets.isEmpty else { return [] }
         let sorted = assets.sorted { $0.timestamp < $1.timestamp }
         var groups: [[CurationAsset]] = [[sorted[0]]]
+        var currentGroupStart = sorted[0].timestamp
         var currentCentroid = RunningCoordinateCentroid(first: sorted[0].coordinate)
 
         for i in 1 ..< sorted.count {
             let prev = sorted[i - 1]
             let curr = sorted[i]
             let dt = curr.timestamp.timeIntervalSince(prev.timestamp)
+            let exceedsMaxDuration = maxEventDuration.map {
+                curr.timestamp.timeIntervalSince(currentGroupStart) > $0
+            } ?? false
             let isSpatialJump: Bool = {
                 guard dt > 60,
                       let currCoordinate = curr.coordinate,
@@ -134,13 +143,14 @@ enum ClusteringEngine {
             let shouldSplit: Bool
             switch splitRule {
             case .timeOrLocation:
-                shouldSplit = isTimeGap || isSpatialJump
+                shouldSplit = isTimeGap || isSpatialJump || exceedsMaxDuration
             case .timeAndLocation:
-                shouldSplit = isTimeGap && isSpatialJump
+                shouldSplit = (isTimeGap && isSpatialJump) || exceedsMaxDuration
             }
 
             if shouldSplit {
                 groups.append([curr])
+                currentGroupStart = curr.timestamp
                 currentCentroid = RunningCoordinateCentroid(first: curr.coordinate)
             } else {
                 groups[groups.count - 1].append(curr)
@@ -152,16 +162,22 @@ enum ClusteringEngine {
 
     private static func clusterByTimeOnly(
         _ assets: [CurationAsset],
-        temporalThreshold: TimeInterval
+        temporalThreshold: TimeInterval,
+        maxEventDuration: TimeInterval? = nil
     ) -> [[CurationAsset]] {
         guard !assets.isEmpty else { return [] }
         let sorted = assets.sorted { $0.timestamp < $1.timestamp }
         var groups: [[CurationAsset]] = [[sorted[0]]]
+        var currentGroupStart = sorted[0].timestamp
 
         for i in 1 ..< sorted.count {
             let dt = sorted[i].timestamp.timeIntervalSince(sorted[i - 1].timestamp)
-            if dt > temporalThreshold {
+            let exceedsMaxDuration = maxEventDuration.map {
+                sorted[i].timestamp.timeIntervalSince(currentGroupStart) > $0
+            } ?? false
+            if dt > temporalThreshold || exceedsMaxDuration {
                 groups.append([sorted[i]])
+                currentGroupStart = sorted[i].timestamp
             } else {
                 groups[groups.count - 1].append(sorted[i])
             }

@@ -39,6 +39,11 @@ for each consecutive pair (prev, curr):
 
 Default `temporalThreshold`: **5400 s (90 min)**
 
+Initial auto-clustering also applies a maximum event duration of **14 400 s
+(4 hours)**. This prevents a dense chain of photos from bridging morning and
+evening activity into a single event just because every adjacent gap is below the
+90-minute threshold.
+
 ### Time + location (`clusterByTimeAndLocation`)
 
 ```
@@ -47,12 +52,14 @@ for each consecutive pair (prev, curr):
     dt = curr.time − prev.time
     dd = haversine(currentGroup.centroid, curr.coord)
     if dt > temporalThreshold
+        OR curr.time − currentGroup.start > maxEventDuration
         OR (dd > spatialThreshold AND dt > 60)  →  new group, reset centroid
     else                                         →  same group
                                                    add curr.coord to centroid
 ```
 
 Default `spatialThreshold`: **500 m**  
+Default `maxEventDuration` for initial clustering: **4 hours**
 The `dt > 60` guard prevents GPS jitter from splitting a stationary burst.
 Photos without GPS do not contribute to the centroid and do not trigger spatial
 splits; they can still trigger a time-gap split.
@@ -84,10 +91,9 @@ cluster:
 | Both | `clusterByTimeAndLocation` with `timeAndLocation` split rule |
 
 Initial ingestion uses the `timeOrLocation` rule: a long time gap or a meaningful
-move can start a new event. Manual Both mode uses the `timeAndLocation` rule: the
-candidate split point must have both a long time gap and a meaningful move. This
-keeps a long lunch or café stop together when the user is manually refining an
-event by place.
+move can start a new event, and it also caps each auto-event at 4 hours. Manual
+Split modes use the explicit thresholds in the panel, so the duration cap does
+not add hidden splits while the user is refining an event.
 
 `computeGroupAssignments` returns a `[Int]` (one group index per asset in original
 order) used for live color-coding in the grid. `applySplit` in `CurationStore`
