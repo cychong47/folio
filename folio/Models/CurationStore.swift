@@ -98,10 +98,11 @@ class CurationStore: ObservableObject {
             let coord = ph.location.map {
                 CLLocationCoordinate2D(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude)
             }
+            let exifTimestamp = await photoLibraryEXIFTimestamp(for: ph)
             assets.append(CurationAsset(
                 phAsset: ph, url: nil,
-                timestamp: ph.creationDate ?? Date(),
-                captureTimeZone: nil,
+                timestamp: exifTimestamp?.date ?? ph.creationDate ?? Date(),
+                captureTimeZone: exifTimestamp?.timeZone,
                 coordinate: coord,
                 pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight),
                 isScreenshot: ph.mediaSubtypes.contains(.photoScreenshot),
@@ -210,6 +211,23 @@ class CurationStore: ObservableObject {
             }
         }
         return nil
+    }
+
+    private nonisolated func photoLibraryEXIFTimestamp(for asset: PHAsset) async -> (date: Date, timeZone: TimeZone?)? {
+        await withCheckedContinuation { continuation in
+            let options = PHImageRequestOptions()
+            options.deliveryMode = .fastFormat
+            options.isNetworkAccessAllowed = true
+            options.isSynchronous = false
+
+            PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { data, _, _, _ in
+                guard let data else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                continuation.resume(returning: MetadataIngestionService.exifTimestamp(from: data))
+            }
+        }
     }
 
     func export(settings: AppSettings) async {

@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.2
+- Fix Photos-library curation timestamps — PhotoKit ingestion now reads original image metadata and preserves EXIF `OffsetTimeOriginal`, so no-GPS Photos assets sort and display against the same capture timezone as folder-scanned images
+
 ### v1.21.1
 - Fix curation timestamp display and ordering — folder-scanned photos now keep EXIF `OffsetTimeOriginal` for thumbnail/detail timezone display, and the grid defensively sorts assets by capture timestamp
 

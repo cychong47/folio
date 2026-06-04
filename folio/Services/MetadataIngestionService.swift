@@ -125,6 +125,14 @@ enum MetadataIngestionService {
         )
     }
 
+    static func exifTimestamp(from data: Data) -> (date: Date, timeZone: TimeZone?)? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
+              let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else {
+            return nil
+        }
+        return exifDate(from: props)
+    }
+
     private static func exifDate(from props: [String: Any]) -> (date: Date, timeZone: TimeZone?)? {
         let exif = props[kCGImagePropertyExifDictionary as String] as? [String: Any]
         let tiff = props[kCGImagePropertyTIFFDictionary as String] as? [String: Any]
