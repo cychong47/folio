@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.3
+
+- Fix map camera icon tumbling — map pins now disable annotation animation, avoid Button press transforms, and restrict the map to pan/zoom interactions so camera icons stay upright
+
+---
+
 ### v1.21.2
 
 - Fix Photos-library curation timestamps — PhotoKit ingestion now reads original image metadata and preserves EXIF `OffsetTimeOriginal`, so no-GPS Photos assets sort and display against the same capture timezone as folder-scanned images
