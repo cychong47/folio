@@ -564,9 +564,12 @@ private struct CurationMapView: View {
             .onAppear { buildPins() }
         } else {
             ZStack(alignment: .bottomTrailing) {
-                Map(coordinateRegion: $region, annotationItems: cachedPins) { pin in
+                Map(coordinateRegion: $region, interactionModes: [.pan, .zoom], annotationItems: cachedPins) { pin in
                     MapAnnotation(coordinate: pin.coordinate) {
                         PhotoPin { onSelectAsset(pin.index) }
+                            .transaction { transaction in
+                                transaction.animation = nil
+                            }
                     }
                 }
 
@@ -615,19 +618,22 @@ private struct PhotoPin: View {
     let onTap: () -> Void
 
     var body: some View {
-        Button(action: onTap) {
-            ZStack {
-                Circle()
-                    .fill(Color.white)
-                    .frame(width: 26, height: 26)
-                    .overlay(Circle().stroke(Theme.accent, lineWidth: 2))
-                    .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 1)
-                Image(systemName: "camera.fill")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(Theme.accent)
-            }
+        ZStack {
+            Circle()
+                .fill(Color.white)
+                .frame(width: 26, height: 26)
+                .overlay(Circle().stroke(Theme.accent, lineWidth: 2))
+                .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 1)
+            Image(systemName: "camera.fill")
+                .font(.system(size: 10, weight: .bold))
+                .foregroundStyle(Theme.accent)
         }
-        .buttonStyle(.plain)
+        .frame(width: 26, height: 26)
+        .contentShape(Circle())
+        .transaction { transaction in
+            transaction.animation = nil
+        }
+        .onTapGesture(perform: onTap)
     }
 }
 
