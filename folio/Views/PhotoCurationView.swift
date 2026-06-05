@@ -537,18 +537,19 @@ private struct CurationMapView: View {
     @ObservedObject var store: CurationStore
     let onSelectAsset: (Int) -> Void
 
-    @State private var region = MKCoordinateRegion(
-        center: CLLocationCoordinate2D(latitude: 37, longitude: -100),
-        span: MKCoordinateSpan(latitudeDelta: 60, longitudeDelta: 80)
-    )
-    // Cached — only rebuilt when cluster changes, NOT on every store publish.
-    // This prevents MapKit from re-presenting annotations (and tumbling) on
-    // unrelated state changes like selection toggles.
-    @State private var cachedPins: [AssetPin] = []
-    @State private var noGPSCount: Int = 0
+    private var pins: [AssetPin] {
+        store.visibleAssets.enumerated().compactMap { idx, asset in
+            guard let coord = asset.coordinate else { return nil }
+            return AssetPin(id: asset.id, index: idx, coordinate: coord)
+        }
+    }
+
+    private var noGPSCount: Int {
+        store.visibleAssets.count - pins.count
+    }
 
     var body: some View {
-        if cachedPins.isEmpty && noGPSCount == 0 {
+        if pins.isEmpty && noGPSCount == 0 {
             VStack(spacing: 12) {
                 Image(systemName: "location.slash")
                     .font(.system(size: 40, weight: .light))
@@ -561,17 +562,9 @@ private struct CurationMapView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Theme.background)
-            .onAppear { buildPins() }
         } else {
             ZStack(alignment: .bottomTrailing) {
-                Map(coordinateRegion: $region, interactionModes: [.pan, .zoom], annotationItems: cachedPins) { pin in
-                    MapAnnotation(coordinate: pin.coordinate) {
-                        PhotoPin { onSelectAsset(pin.index) }
-                            .transaction { transaction in
-                                transaction.animation = nil
-                            }
-                    }
-                }
+                NativeCurationMap(pins: pins, onSelectAsset: onSelectAsset)
 
                 if noGPSCount > 0 {
                     Text("\(noGPSCount) photo\(noGPSCount == 1 ? "" : "s") without GPS not shown")
@@ -582,23 +575,41 @@ private struct CurationMapView: View {
                         .padding(12)
                 }
             }
-            .onAppear { buildPins() }
-            .onChange(of: store.selectedClusterIndex) { _ in buildPins() }
         }
     }
+}
 
-    private func buildPins() {
-        let assets = store.visibleAssets
-        cachedPins = assets.enumerated().compactMap { idx, asset in
-            guard let coord = asset.coordinate else { return nil }
-            return AssetPin(id: asset.id, index: idx, coordinate: coord)
-        }
-        noGPSCount = assets.count - cachedPins.count
-        fitRegion()
+private struct NativeCurationMap: NSViewRepresentable {
+    let pins: [AssetPin]
+    let onSelectAsset: (Int) -> Void
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(onSelectAsset: onSelectAsset)
     }
 
-    private func fitRegion() {
-        let coords = cachedPins.map(\.coordinate)
+    func makeNSView(context: Context) -> MKMapView {
+        let mapView = MKMapView()
+        mapView.delegate = context.coordinator
+        mapView.isPitchEnabled = false
+        mapView.isRotateEnabled = false
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Coordinator.reuseID)
+        return mapView
+    }
+
+    func updateNSView(_ mapView: MKMapView, context: Context) {
+        context.coordinator.onSelectAsset = onSelectAsset
+        let pinIDs = pins.map(\.id)
+        guard context.coordinator.pinIDs != pinIDs else { return }
+
+        context.coordinator.pinIDs = pinIDs
+        mapView.removeAnnotations(mapView.annotations)
+        let annotations = pins.map(PhotoMapAnnotation.init(pin:))
+        mapView.addAnnotations(annotations)
+        fitRegion(for: annotations, in: mapView)
+    }
+
+    private func fitRegion(for annotations: [PhotoMapAnnotation], in mapView: MKMapView) {
+        let coords = annotations.map(\.coordinate)
         guard !coords.isEmpty else { return }
         let lats = coords.map(\.latitude)
         let lons = coords.map(\.longitude)
@@ -610,30 +621,50 @@ private struct CurationMapView: View {
             latitudeDelta: max(0.005, (lats.max()! - lats.min()!) * 1.5),
             longitudeDelta: max(0.005, (lons.max()! - lons.min()!) * 1.5)
         )
-        region = MKCoordinateRegion(center: center, span: span)
+        mapView.setRegion(MKCoordinateRegion(center: center, span: span), animated: false)
+    }
+
+    final class Coordinator: NSObject, MKMapViewDelegate {
+        static let reuseID = "PhotoMapPin"
+
+        var onSelectAsset: (Int) -> Void
+        var pinIDs: [UUID] = []
+
+        init(onSelectAsset: @escaping (Int) -> Void) {
+            self.onSelectAsset = onSelectAsset
+        }
+
+        func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+            guard annotation is PhotoMapAnnotation else { return nil }
+            let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.reuseID, for: annotation) as? MKMarkerAnnotationView
+                ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: Self.reuseID)
+            view.annotation = annotation
+            view.canShowCallout = false
+            view.markerTintColor = .white
+            view.glyphTintColor = .controlAccentColor
+            view.glyphImage = NSImage(systemSymbolName: "camera.fill", accessibilityDescription: nil)
+            view.animatesWhenAdded = false
+            view.displayPriority = .required
+            return view
+        }
+
+        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+            guard let annotation = view.annotation as? PhotoMapAnnotation else { return }
+            onSelectAsset(annotation.index)
+            mapView.deselectAnnotation(annotation, animated: false)
+        }
     }
 }
 
-private struct PhotoPin: View {
-    let onTap: () -> Void
+private final class PhotoMapAnnotation: NSObject, MKAnnotation {
+    let id: UUID
+    let index: Int
+    let coordinate: CLLocationCoordinate2D
 
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(Color.white)
-                .frame(width: 26, height: 26)
-                .overlay(Circle().stroke(Theme.accent, lineWidth: 2))
-                .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 1)
-            Image(systemName: "camera.fill")
-                .font(.system(size: 10, weight: .bold))
-                .foregroundStyle(Theme.accent)
-        }
-        .frame(width: 26, height: 26)
-        .contentShape(Circle())
-        .transaction { transaction in
-            transaction.animation = nil
-        }
-        .onTapGesture(perform: onTap)
+    init(pin: AssetPin) {
+        id = pin.id
+        index = pin.index
+        coordinate = pin.coordinate
     }
 }
 
