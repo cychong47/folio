@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.23
+- Inferred display timezone for no-GPS Photos dates — ambiguous Photos-library JPEGs that fall back to `PHAsset.creationDate` now display event, thumbnail, and detail times in the dominant timezone from the curated batch instead of the Mac timezone when nearby assets provide timezone evidence
+
 ### v1.21.22
 - Divergent GPS-assumed EXIF timestamps — Photos-library curation now falls back to Photos' own date when timezone-less EXIF plus GPS timezone disagrees with `PHAsset.creationDate`, preventing phantom early-morning event and thumbnail times
 

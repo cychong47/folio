@@ -54,6 +54,33 @@ final class EventClusterTests: XCTestCase {
         )
     }
 
+    func testDisplayTimestampUsesAssetDisplayTimeZoneWhenProvided() {
+        let systemTimeZone = TimeZone(secondsFromGMT: 9 * 3600)!
+        let inferredTimeZone = TimeZone(secondsFromGMT: -7 * 3600)!
+        let timestamp = date(year: 2026, month: 3, day: 15, hour: 7, minute: 9, timeZone: systemTimeZone)
+        let asset = CurationAsset(
+            phAsset: nil,
+            url: nil,
+            timestamp: timestamp,
+            captureTimeZone: nil,
+            coordinate: nil,
+            pixelSize: .zero,
+            usesPhotoLibraryCreationDate: true,
+            displayTimeZone: inferredTimeZone
+        )
+        let cluster = EventCluster(
+            name: "Event 1",
+            assets: [asset],
+            startDate: timestamp,
+            endDate: timestamp
+        )
+
+        XCTAssertEqual(
+            cluster.displayDateText(selectionTimeZone: systemTimeZone, locale: Locale(identifier: "en_US_POSIX")),
+            "Mar 14, 2026 at 3:09\u{202F}PM"
+        )
+    }
+
     private func date(
         year: Int,
         month: Int,

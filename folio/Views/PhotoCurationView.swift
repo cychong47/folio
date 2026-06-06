@@ -878,7 +878,7 @@ private struct ThumbnailCell: View {
     private var timestampText: String {
         photoLocalTime(
             asset.timestamp,
-            timeZone: asset.usesPhotoLibraryCreationDate ? nil : asset.captureTimeZone ?? geocodeResult?.timeZone
+            timeZone: asset.preferredDisplayTimeZone ?? (asset.usesPhotoLibraryCreationDate ? nil : geocodeResult?.timeZone)
         )
     }
 
@@ -1047,7 +1047,7 @@ private struct PhotoDetailSheet: View {
                     VStack(spacing: 2) {
                         Text(photoLocalTime(
                             asset.timestamp,
-                            timeZone: asset.usesPhotoLibraryCreationDate ? nil : asset.captureTimeZone ?? geocodeResult?.timeZone,
+                            timeZone: asset.preferredDisplayTimeZone ?? (asset.usesPhotoLibraryCreationDate ? nil : geocodeResult?.timeZone),
                             dateStyle: .medium,
                             timeStyle: .short
                         ))

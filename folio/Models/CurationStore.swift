@@ -172,6 +172,14 @@ class CurationStore: ObservableObject {
             }
         }
 
+        if let inferredDisplayTimeZone = Self.dominantDisplayTimeZone(in: assets) {
+            for index in assets.indices where assets[index].usesPhotoLibraryCreationDate &&
+                assets[index].captureTimeZone == nil &&
+                assets[index].coordinate == nil {
+                assets[index].displayTimeZone = inferredDisplayTimeZone
+            }
+        }
+
         lastFetchCount = assets.count
         clusters = ClusteringEngine.cluster(assets: assets)
         selectedClusterIndex = 0
@@ -210,6 +218,16 @@ class CurationStore: ObservableObject {
             return (exifTimestamp.date, nil, "exif:no-creation")
         }
         return (fallbackDate, nil, "fallback")
+    }
+
+    nonisolated static func dominantDisplayTimeZone(in assets: [CurationAsset]) -> TimeZone? {
+        let grouped = Dictionary(grouping: assets.compactMap(\.preferredDisplayTimeZone)) {
+            $0.secondsFromGMT()
+        }
+        guard let dominant = grouped.max(by: { lhs, rhs in lhs.value.count < rhs.value.count })?.value.first else {
+            return nil
+        }
+        return dominant
     }
 
     private func appendDiagnostic(

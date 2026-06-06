@@ -18,6 +18,11 @@ struct CurationAsset: Identifiable, Hashable {
     var isStackPrimary: Bool = false  // the frame shown when stack is collapsed
     var curationDiagnostic: String? = nil
     var usesPhotoLibraryCreationDate: Bool = false
+    var displayTimeZone: TimeZone? = nil
+
+    var preferredDisplayTimeZone: TimeZone? {
+        displayTimeZone ?? captureTimeZone
+    }
 
     var filename: String {
         if let url { return url.lastPathComponent }

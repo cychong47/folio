@@ -20,7 +20,7 @@ struct EventCluster: Identifiable {
     }
 
     var displayTimeZone: TimeZone? {
-        assets.sorted { $0.timestamp < $1.timestamp }.first?.captureTimeZone
+        assets.sorted { $0.timestamp < $1.timestamp }.first?.preferredDisplayTimeZone
     }
 
     var displaySortDate: Date {
