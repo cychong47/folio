@@ -144,22 +144,38 @@ enum MetadataIngestionService {
         guard let raw else { return nil }
 
         if let offset = exif?[kCGImagePropertyExifOffsetTimeOriginal as String] as? String {
-            let f = DateFormatter()
-            f.locale = Locale(identifier: "en_US_POSIX")
-            f.dateFormat = "yyyy:MM:dd HH:mm:ssXXXXX"
-            if let date = f.date(from: raw + offset) {
+            if let date = parseEXIFDate(raw + offset, formats: [
+                "yyyy:MM:dd HH:mm:ss.SSSXXXXX",
+                "yyyy:MM:dd HH:mm:ssXXXXX"
+            ]) {
                 return (date, timeZone(fromEXIFOffset: offset))
             }
         }
 
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "en_US_POSIX")
-        f.dateFormat = "yyyy:MM:dd HH:mm:ss"
-        if let assumedTimeZone {
-            f.timeZone = assumedTimeZone
-        }
-        guard let date = f.date(from: raw) else { return nil }
+        guard let date = parseEXIFDate(raw, formats: [
+            "yyyy:MM:dd HH:mm:ss.SSS",
+            "yyyy:MM:dd HH:mm:ss"
+        ], timeZone: assumedTimeZone) else { return nil }
         return (date, assumedTimeZone)
+    }
+
+    private static func parseEXIFDate(
+        _ raw: String,
+        formats: [String],
+        timeZone: TimeZone? = nil
+    ) -> Date? {
+        for format in formats {
+            let f = DateFormatter()
+            f.locale = Locale(identifier: "en_US_POSIX")
+            f.dateFormat = format
+            if let timeZone {
+                f.timeZone = timeZone
+            }
+            if let date = f.date(from: raw) {
+                return date
+            }
+        }
+        return nil
     }
 
     private static func timeZone(fromEXIFOffset offset: String) -> TimeZone? {

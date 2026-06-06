@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.16
+- Fractional EXIF capture timestamps — curation now parses sub-second EXIF timestamps with timezone offsets so Photos-library events display the original capture-local time instead of falling back to the Mac timezone
+
 ### v1.21.15
 - Sequential curation event labels — generated event names are now renumbered after sidebar sorting so Event 1, Event 2, and later events follow the visible capture-time order
 
