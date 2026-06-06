@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.26
+
+- Curation date selection clarity — the welcome screen now separates new Photos-library scans from resuming an existing curation session, and the date picker echoes the exact selected range before loading
+
+---
+
 ### v1.21.25
 
 - Curation date-filter diagnostics — Photos-library metadata rows now include the selected date range, computed capture day, selection timezone, and applied timezone so no-GPS filter decisions can be audited directly from the curation sidebar
