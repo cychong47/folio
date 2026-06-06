@@ -142,6 +142,13 @@ class CurationStore: ObservableObject {
                 startDate: startDate,
                 endDate: endDate
             )
+            let filterSummary = PhotoDateRangeFilter.debugSummary(
+                timestamp,
+                captureTimeZone: captureTimeZone,
+                displayTimeZone: locationTimeZone,
+                startDate: startDate,
+                endDate: endDate
+            )
 
             let diagnostic = appendDiagnostic(
                 phAsset: ph,
@@ -149,6 +156,7 @@ class CurationStore: ObservableObject {
                 exifTimestamp: exifTimestamp,
                 locationTimeZone: locationTimeZone,
                 finalTimestamp: timestamp,
+                filterSummary: filterSummary,
                 resolution: timestampResolution.source,
                 included: isInSelectedDateRange
             )
@@ -218,6 +226,7 @@ class CurationStore: ObservableObject {
         exifTimestamp: (date: Date, timeZone: TimeZone?)?,
         locationTimeZone: TimeZone?,
         finalTimestamp: Date,
+        filterSummary: String,
         resolution: String,
         included: Bool
     ) -> String {
@@ -231,7 +240,8 @@ class CurationStore: ObservableObject {
             "exifTZ=\(Self.debugTimeZone(exifTimestamp?.timeZone))",
             "locTZ=\(Self.debugTimeZone(locationTimeZone))",
             "resolution=\(resolution)",
-            "final=\(Self.debugDate(finalTimestamp))"
+            "final=\(Self.debugDate(finalTimestamp))",
+            filterSummary
         ].joined(separator: " | ")
         if curationDiagnostics.count < 80 {
             curationDiagnostics.append(line)

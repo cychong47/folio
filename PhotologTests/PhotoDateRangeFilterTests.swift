@@ -61,6 +61,39 @@ final class PhotoDateRangeFilterTests: XCTestCase {
         XCTAssertEqual(range.end, date(year: 2026, month: 3, day: 16, hour: 23, minute: 59, second: 59, timeZone: systemTimeZone))
     }
 
+    func testNoGPSPhotoLibraryCreationDateExcludesPreviousSelectedDay() {
+        let systemTimeZone = TimeZone(secondsFromGMT: 9 * 3600)!
+        let selectedDay = date(year: 2026, month: 3, day: 15, hour: 12, timeZone: systemTimeZone)
+        let photoLibraryCreationDate = isoDate("2026-03-13T18:47:02.691Z")
+
+        XCTAssertFalse(PhotoDateRangeFilter.contains(
+            photoLibraryCreationDate,
+            captureTimeZone: nil,
+            startDate: selectedDay,
+            endDate: selectedDay,
+            selectionCalendar: calendar(timeZone: systemTimeZone)
+        ))
+    }
+
+    func testDebugSummaryShowsSelectedRangeAndCaptureDayForNoGPSCreationFallback() {
+        let systemTimeZone = TimeZone(secondsFromGMT: 9 * 3600)!
+        let selectedDay = date(year: 2026, month: 3, day: 15, hour: 12, timeZone: systemTimeZone)
+        let photoLibraryCreationDate = isoDate("2026-03-13T18:47:02.691Z")
+
+        let summary = PhotoDateRangeFilter.debugSummary(
+            photoLibraryCreationDate,
+            captureTimeZone: nil,
+            startDate: selectedDay,
+            endDate: selectedDay,
+            selectionCalendar: calendar(timeZone: systemTimeZone)
+        )
+
+        XCTAssertEqual(
+            summary,
+            "selected=2026-03-15...2026-03-15 | captureDay=2026-03-14 | selectionTZ=GMT+09:00 | appliedTZ=GMT+09:00"
+        )
+    }
+
     private func date(
         year: Int,
         month: Int,
@@ -84,5 +117,11 @@ final class PhotoDateRangeFilterTests: XCTestCase {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone
         return calendar
+    }
+
+    private func isoDate(_ value: String) -> Date {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter.date(from: value)!
     }
 }
