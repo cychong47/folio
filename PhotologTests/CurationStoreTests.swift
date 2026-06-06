@@ -56,16 +56,4 @@ final class CurationStoreTests: XCTestCase {
         XCTAssertEqual(resolved.source, "creation:diverged-exif")
     }
 
-    func testDominantDisplayTimeZoneUsesMostCommonKnownCaptureZone() {
-        let pacific = TimeZone(secondsFromGMT: -7 * 3600)!
-        let korea = TimeZone(secondsFromGMT: 9 * 3600)!
-        let assets = [
-            CurationAsset(phAsset: nil, url: nil, timestamp: Date(), captureTimeZone: pacific, coordinate: nil, pixelSize: .zero),
-            CurationAsset(phAsset: nil, url: nil, timestamp: Date(), captureTimeZone: pacific, coordinate: nil, pixelSize: .zero),
-            CurationAsset(phAsset: nil, url: nil, timestamp: Date(), captureTimeZone: korea, coordinate: nil, pixelSize: .zero),
-            CurationAsset(phAsset: nil, url: nil, timestamp: Date(), captureTimeZone: nil, coordinate: nil, pixelSize: .zero)
-        ]
-
-        XCTAssertEqual(CurationStore.dominantDisplayTimeZone(in: assets), pacific)
-    }
 }

@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.24
+- No-GPS Photos date display rollback — ambiguous Photos-library JPEGs that fall back to `PHAsset.creationDate` no longer inherit the curated batch timezone, preventing selected March 15 photos from displaying as March 14
+
 ### v1.21.23
 - Inferred display timezone for no-GPS Photos dates — ambiguous Photos-library JPEGs that fall back to `PHAsset.creationDate` now display event, thumbnail, and detail times in the dominant timezone from the curated batch instead of the Mac timezone when nearby assets provide timezone evidence
 
