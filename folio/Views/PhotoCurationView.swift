@@ -234,6 +234,14 @@ struct PhotoCurationView: View {
 private struct EventNavigatorPanel: View {
     @ObservedObject var store: CurationStore
 
+    private var activeDiagnostic: String? {
+        if let cluster = store.activeCluster,
+           let diagnostic = cluster.assets.sorted(by: { $0.timestamp < $1.timestamp }).first?.curationDiagnostic {
+            return diagnostic
+        }
+        return store.curationDiagnostics.first(where: { $0.hasPrefix("IN") }) ?? store.curationDiagnostics.first
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             List(store.clusters.indices, id: \.self, selection: Binding(
@@ -245,7 +253,7 @@ private struct EventNavigatorPanel: View {
             }
             .listStyle(.sidebar)
 
-            if let diagnostic = store.curationDiagnostics.first(where: { $0.hasPrefix("IN") }) ?? store.curationDiagnostics.first {
+            if let diagnostic = activeDiagnostic {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Curation Metadata")
                         .font(.caption.weight(.semibold))

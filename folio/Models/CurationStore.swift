@@ -127,8 +127,14 @@ class CurationStore: ObservableObject {
             let exifTimestamp = metadataData.flatMap {
                 MetadataIngestionService.exifTimestamp(from: $0, assumedTimeZone: locationTimeZone)
             }
-            let timestamp = exifTimestamp?.date ?? ph.creationDate ?? Date()
-            let captureTimeZone = exifTimestamp?.timeZone
+            let timestampResolution = Self.resolvedPhotoLibraryTimestamp(
+                exifTimestamp: exifTimestamp,
+                locationTimeZone: locationTimeZone,
+                creationDate: ph.creationDate,
+                fallbackDate: Date()
+            )
+            let timestamp = timestampResolution.date
+            let captureTimeZone = timestampResolution.timeZone
             let isInSelectedDateRange = PhotoDateRangeFilter.contains(
                 timestamp,
                 captureTimeZone: captureTimeZone,
@@ -137,12 +143,13 @@ class CurationStore: ObservableObject {
                 endDate: endDate
             )
 
-            appendDiagnostic(
+            let diagnostic = appendDiagnostic(
                 phAsset: ph,
                 metadata: metadata,
                 exifTimestamp: exifTimestamp,
                 locationTimeZone: locationTimeZone,
                 finalTimestamp: timestamp,
+                resolution: timestampResolution.source,
                 included: isInSelectedDateRange
             )
 
@@ -154,7 +161,8 @@ class CurationStore: ObservableObject {
                     coordinate: coord,
                     pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight),
                     isScreenshot: ph.mediaSubtypes.contains(.photoScreenshot),
-                    isFavorite: ph.isFavorite
+                    isFavorite: ph.isFavorite,
+                    curationDiagnostic: diagnostic
                 ))
             }
             if (i + 1) % 10 == 0 || i == total - 1 {
@@ -181,15 +189,33 @@ class CurationStore: ObservableObject {
         }
     }
 
+    nonisolated static func resolvedPhotoLibraryTimestamp(
+        exifTimestamp: (date: Date, timeZone: TimeZone?)?,
+        locationTimeZone: TimeZone?,
+        creationDate: Date?,
+        fallbackDate: Date
+    ) -> (date: Date, timeZone: TimeZone?, source: String) {
+        if let exifTimestamp, exifTimestamp.timeZone != nil || locationTimeZone != nil {
+            return (exifTimestamp.date, exifTimestamp.timeZone ?? locationTimeZone, "exif")
+        }
+        if let creationDate {
+            return (creationDate, nil, exifTimestamp == nil ? "creation:no-exif" : "creation:ambiguous-exif")
+        }
+        if let exifTimestamp {
+            return (exifTimestamp.date, nil, "exif:no-creation")
+        }
+        return (fallbackDate, nil, "fallback")
+    }
+
     private func appendDiagnostic(
         phAsset: PHAsset,
         metadata: MetadataLoadResult,
         exifTimestamp: (date: Date, timeZone: TimeZone?)?,
         locationTimeZone: TimeZone?,
         finalTimestamp: Date,
+        resolution: String,
         included: Bool
-    ) {
-        guard curationDiagnostics.count < 80 else { return }
+    ) -> String {
         let line = [
             included ? "IN" : "OUT",
             "file=\(Self.assetFilename(phAsset))",
@@ -199,10 +225,14 @@ class CurationStore: ObservableObject {
             "exif=\(Self.debugDate(exifTimestamp?.date))",
             "exifTZ=\(Self.debugTimeZone(exifTimestamp?.timeZone))",
             "locTZ=\(Self.debugTimeZone(locationTimeZone))",
+            "resolution=\(resolution)",
             "final=\(Self.debugDate(finalTimestamp))"
         ].joined(separator: " | ")
-        curationDiagnostics.append(line)
+        if curationDiagnostics.count < 80 {
+            curationDiagnostics.append(line)
+        }
         print("[Photolog][CurationDate] \(line)")
+        return line
     }
 
     func toggleSelection(assetID: UUID) {

@@ -16,6 +16,7 @@ struct CurationAsset: Identifiable, Hashable {
     var isFavorite: Bool = false
     var stackID: UUID?        // non-nil = part of a burst/near-duplicate stack
     var isStackPrimary: Bool = false  // the frame shown when stack is collapsed
+    var curationDiagnostic: String? = nil
 
     var filename: String {
         if let url { return url.lastPathComponent }

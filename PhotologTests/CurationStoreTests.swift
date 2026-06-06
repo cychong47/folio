@@ -8,4 +8,35 @@ final class CurationStoreTests: XCTestCase {
 
         XCTAssertTrue(options.isNetworkAccessAllowed)
     }
+
+    func testPhotoLibraryTimestampUsesCreationDateWhenEXIFHasNoTimeZoneEvidence() {
+        let exifDate = Date(timeIntervalSince1970: 1_765_000_000)
+        let creationDate = Date(timeIntervalSince1970: 1_766_000_000)
+        let resolved = CurationStore.resolvedPhotoLibraryTimestamp(
+            exifTimestamp: (date: exifDate, timeZone: nil),
+            locationTimeZone: nil,
+            creationDate: creationDate,
+            fallbackDate: Date(timeIntervalSince1970: 0)
+        )
+
+        XCTAssertEqual(resolved.date, creationDate)
+        XCTAssertNil(resolved.timeZone)
+        XCTAssertEqual(resolved.source, "creation:ambiguous-exif")
+    }
+
+    func testPhotoLibraryTimestampKeepsEXIFWhenOffsetIsPresent() {
+        let captureTimeZone = TimeZone(secondsFromGMT: -7 * 3600)!
+        let exifDate = Date(timeIntervalSince1970: 1_765_000_000)
+        let creationDate = Date(timeIntervalSince1970: 1_766_000_000)
+        let resolved = CurationStore.resolvedPhotoLibraryTimestamp(
+            exifTimestamp: (date: exifDate, timeZone: captureTimeZone),
+            locationTimeZone: nil,
+            creationDate: creationDate,
+            fallbackDate: Date(timeIntervalSince1970: 0)
+        )
+
+        XCTAssertEqual(resolved.date, exifDate)
+        XCTAssertEqual(resolved.timeZone, captureTimeZone)
+        XCTAssertEqual(resolved.source, "exif")
+    }
 }
