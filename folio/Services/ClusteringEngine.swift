@@ -69,6 +69,7 @@ enum ClusteringEngine {
         }
 
         clusters.sort { $0.displaySortDate < $1.displaySortDate }
+        renumberGeneratedEvents(&clusters)
         return clusters
     }
 
@@ -210,6 +211,14 @@ enum ClusteringEngine {
             }
         }
         return groups
+    }
+
+    private static func renumberGeneratedEvents(_ clusters: inout [EventCluster]) {
+        var eventNumber = 1
+        for index in clusters.indices where clusters[index].name.hasPrefix("Event ") {
+            clusters[index].name = "Event \(eventNumber)"
+            eventNumber += 1
+        }
     }
 
     // MARK: - Burst detection
