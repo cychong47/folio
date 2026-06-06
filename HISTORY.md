@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.5
+- Fix persistent map camera icon tumbling — curation map pins now use plain `MKAnnotationView` bitmap camera icons instead of MapKit marker glyphs, removing marker-level animation
+
 ### v1.21.4
 - Fix map camera icon tumbling for native annotations — curation map now uses `MKMapView` with `MKMarkerAnnotationView` camera pins instead of SwiftUI `MapAnnotation`, eliminating SwiftUI annotation transforms
 

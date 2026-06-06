@@ -592,7 +592,9 @@ private struct NativeCurationMap: NSViewRepresentable {
         mapView.delegate = context.coordinator
         mapView.isPitchEnabled = false
         mapView.isRotateEnabled = false
-        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: Coordinator.reuseID)
+        mapView.camera.heading = 0
+        mapView.camera.pitch = 0
+        mapView.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: Coordinator.reuseID)
         return mapView
     }
 
@@ -605,6 +607,8 @@ private struct NativeCurationMap: NSViewRepresentable {
         mapView.removeAnnotations(mapView.annotations)
         let annotations = pins.map(PhotoMapAnnotation.init(pin:))
         mapView.addAnnotations(annotations)
+        mapView.camera.heading = 0
+        mapView.camera.pitch = 0
         fitRegion(for: annotations, in: mapView)
     }
 
@@ -626,6 +630,7 @@ private struct NativeCurationMap: NSViewRepresentable {
 
     final class Coordinator: NSObject, MKMapViewDelegate {
         static let reuseID = "PhotoMapPin"
+        private static let pinImage = makePinImage()
 
         var onSelectAsset: (Int) -> Void
         var pinIDs: [UUID] = []
@@ -636,15 +641,13 @@ private struct NativeCurationMap: NSViewRepresentable {
 
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             guard annotation is PhotoMapAnnotation else { return nil }
-            let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.reuseID, for: annotation) as? MKMarkerAnnotationView
-                ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: Self.reuseID)
+            let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.reuseID, for: annotation)
             view.annotation = annotation
             view.canShowCallout = false
-            view.markerTintColor = .white
-            view.glyphTintColor = .controlAccentColor
-            view.glyphImage = NSImage(systemSymbolName: "camera.fill", accessibilityDescription: nil)
-            view.animatesWhenAdded = false
+            view.image = Self.pinImage
+            view.centerOffset = CGPoint(x: 0, y: -Self.pinImage.size.height / 2)
             view.displayPriority = .required
+            view.layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             return view
         }
 
@@ -652,6 +655,30 @@ private struct NativeCurationMap: NSViewRepresentable {
             guard let annotation = view.annotation as? PhotoMapAnnotation else { return }
             onSelectAsset(annotation.index)
             mapView.deselectAnnotation(annotation, animated: false)
+        }
+
+        private static func makePinImage() -> NSImage {
+            let size = CGSize(width: 30, height: 30)
+            let image = NSImage(size: size)
+            image.lockFocus()
+
+            let bounds = CGRect(origin: .zero, size: size).insetBy(dx: 2, dy: 2)
+            NSColor.white.setFill()
+            NSBezierPath(ovalIn: bounds).fill()
+            NSColor.controlAccentColor.setStroke()
+            let outline = NSBezierPath(ovalIn: bounds)
+            outline.lineWidth = 2
+            outline.stroke()
+
+            NSColor.controlAccentColor.setFill()
+            NSBezierPath(roundedRect: CGRect(x: 9, y: 10, width: 12, height: 9), xRadius: 2, yRadius: 2).fill()
+            NSBezierPath(roundedRect: CGRect(x: 11, y: 18, width: 5, height: 2.5), xRadius: 1, yRadius: 1).fill()
+            NSColor.white.setFill()
+            NSBezierPath(ovalIn: CGRect(x: 13, y: 12, width: 4, height: 4)).fill()
+
+            image.unlockFocus()
+            image.isTemplate = false
+            return image
         }
     }
 }
