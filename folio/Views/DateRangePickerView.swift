@@ -8,6 +8,8 @@ struct DateRangePickerView: View {
 
     @State private var startDate: Date
     @State private var endDate: Date
+    @State private var startText: String
+    @State private var endText: String
     @State private var authStatus: PHAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
 
     init(
@@ -21,9 +23,13 @@ struct DateRangePickerView: View {
         let defaultStartDate = Calendar.current.startOfDay(
             for: Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
         )
+        let initialStart = Calendar.current.startOfDay(for: initialStartDate ?? defaultStartDate)
+        let initialEnd = Calendar.current.startOfDay(for: initialEndDate ?? defaultEndDate)
         _isPresented = isPresented
-        _startDate = State(initialValue: Calendar.current.startOfDay(for: initialStartDate ?? defaultStartDate))
-        _endDate = State(initialValue: Calendar.current.startOfDay(for: initialEndDate ?? defaultEndDate))
+        _startDate = State(initialValue: initialStart)
+        _endDate = State(initialValue: initialEnd)
+        _startText = State(initialValue: PhotoDateRangeSelection.string(from: initialStart))
+        _endText = State(initialValue: PhotoDateRangeSelection.string(from: initialEnd))
         self.confirmLabel = confirmLabel
         self.onConfirm = onConfirm
     }
@@ -39,8 +45,17 @@ struct DateRangePickerView: View {
                         Text("From")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        DatePicker("", selection: $startDate, in: ...Date(), displayedComponents: .date)
+                        DatePicker("", selection: Binding(
+                            get: { startDate },
+                            set: { updateStartDate($0) }
+                        ), in: ...Date(), displayedComponents: .date)
                             .labelsHidden()
+                        TextField(PhotoDateRangeSelection.formatHint, text: $startText)
+                            .textFieldStyle(.roundedBorder)
+                            .font(.system(.caption, design: .monospaced))
+                            .onChange(of: startText) { newValue in
+                                syncStartText(newValue)
+                            }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -48,8 +63,17 @@ struct DateRangePickerView: View {
                         Text("To")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        DatePicker("", selection: $endDate, in: startDate...Date(), displayedComponents: .date)
+                        DatePicker("", selection: Binding(
+                            get: { endDate },
+                            set: { updateEndDate($0) }
+                        ), in: startDate...Date(), displayedComponents: .date)
                             .labelsHidden()
+                        TextField(PhotoDateRangeSelection.formatHint, text: $endText)
+                            .textFieldStyle(.roundedBorder)
+                            .font(.system(.caption, design: .monospaced))
+                            .onChange(of: endText) { newValue in
+                                syncEndText(newValue)
+                            }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -63,15 +87,13 @@ struct DateRangePickerView: View {
                     Spacer()
                     Button("Cancel") { isPresented = false }
                     Button(confirmLabel) {
+                        guard let range = selectedRange else { return }
                         isPresented = false
-                        onConfirm(
-                            Calendar.current.startOfDay(for: startDate),
-                            Calendar.current.startOfDay(for: endDate)
-                        )
+                        onConfirm(range.start, range.end)
                     }
                     .buttonStyle(.borderedProminent)
                     .keyboardShortcut(.defaultAction)
-                    .disabled(endDate < startDate)
+                    .disabled(selectedRange == nil)
                 }
             } else {
                 VStack(spacing: 12) {
@@ -107,9 +129,12 @@ struct DateRangePickerView: View {
     }
 
     private var selectedRangeLabel: String {
+        guard let range = selectedRange else {
+            return "Invalid date. Use \(PhotoDateRangeSelection.formatHint)."
+        }
         let calendar = Calendar.current
-        let start = calendar.startOfDay(for: startDate)
-        let end = calendar.startOfDay(for: endDate)
+        let start = range.start
+        let end = range.end
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
@@ -118,5 +143,38 @@ struct DateRangePickerView: View {
             return formatter.string(from: start)
         }
         return "\(formatter.string(from: start)) - \(formatter.string(from: end))"
+    }
+
+    private var selectedRange: (start: Date, end: Date)? {
+        PhotoDateRangeSelection.range(startText: startText, endText: endText)
+    }
+
+    private func updateStartDate(_ date: Date) {
+        let normalized = Calendar.current.startOfDay(for: date)
+        startDate = normalized
+        startText = PhotoDateRangeSelection.string(from: normalized)
+        if endDate < normalized {
+            updateEndDate(normalized)
+        }
+    }
+
+    private func updateEndDate(_ date: Date) {
+        let normalized = Calendar.current.startOfDay(for: date)
+        endDate = normalized
+        endText = PhotoDateRangeSelection.string(from: normalized)
+    }
+
+    private func syncStartText(_ text: String) {
+        guard let date = PhotoDateRangeSelection.date(from: text) else { return }
+        startDate = date
+        if let end = PhotoDateRangeSelection.date(from: endText), end < date {
+            endDate = date
+            endText = PhotoDateRangeSelection.string(from: date)
+        }
+    }
+
+    private func syncEndText(_ text: String) {
+        guard let date = PhotoDateRangeSelection.date(from: text) else { return }
+        endDate = date
     }
 }

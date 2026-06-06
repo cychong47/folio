@@ -37,7 +37,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Event rename** — double-click or use the Rename button to give events meaningful names (e.g. "Sunrise hike")
 - **Create posts from curation** — exports selected photos to the configured static images directory, opens a separate post editor window with image refs preloaded, and keeps the curation workspace open for repeated post creation
 - **Start screen return** — the curation toolbar's Start button returns to the welcome screen for drag-and-drop posts while preserving the loaded curation session, with Resume Curation kept separate from starting a new scan
-- **Editable date range** — the curation toolbar calendar action reopens the current Photos-library date range, echoes the exact selected range before loading, then rescans and reclusters photos after confirmation
+- **Editable date range** — the curation toolbar calendar action reopens the current Photos-library date range with explicit `yyyy-MM-dd` fields, then rescans and reclusters photos after confirmation
 - **Side-by-side date fields** — the Photos-library date range picker places From and To controls in one row so calendar popovers do not hide the other date input
 - **Keyboard shortcut** — `⌘K` opens the curation folder picker from the welcome screen; `⌘E` creates a post from the active event selection
 

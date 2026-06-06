@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.27
+- Explicit curation date entry — Photos-library range selection now submits the visible `yyyy-MM-dd` date fields instead of relying on compact picker instants, preventing a selected March 15 scan from being sent as March 14
+
 ### v1.21.26
 - Curation date selection clarity — the welcome screen now separates new Photos-library scans from resuming an existing curation session, and the date picker echoes the exact selected range before loading
 
