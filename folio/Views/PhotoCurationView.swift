@@ -104,8 +104,8 @@ struct PhotoCurationView: View {
                 }
             }
             ToolbarItem(placement: .primaryAction) {
-                Button(action: { Task { await store.export(settings: settings) } }) {
-                    Label("Export Event", systemImage: "square.and.arrow.up")
+                Button(action: { Task { await createPostFromSelection() } }) {
+                    Label("Create Post", systemImage: "square.and.pencil")
                 }
                 .disabled(store.activeCluster?.selectedCount == 0 || store.isExporting)
                 .keyboardShortcut("e", modifiers: .command)
@@ -135,6 +135,17 @@ struct PhotoCurationView: View {
             }
         } message: {
             Text(store.exportError ?? "")
+        }
+    }
+
+    private func createPostFromSelection() async {
+        let date = store.activeCluster?.startDate ?? Date()
+        await store.export(settings: settings)
+        guard let markdown = store.exportedMarkdown else { return }
+
+        if let onCreatePost {
+            onCreatePost(markdown, date)
+            store.exportedMarkdown = nil
         }
     }
 
@@ -1147,7 +1158,7 @@ private struct ExportSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Exported Markdown")
+            Text("Post Markdown")
                 .font(.headline)
             ScrollView {
                 Text(markdown)
@@ -1164,7 +1175,7 @@ private struct ExportSheet: View {
                     dismiss()
                 }
                 Spacer()
-                Button("Create New Post") {
+                Button("Open Post Editor") {
                     onCreatePost?(markdown, date)
                     dismiss()
                 }

@@ -33,8 +33,8 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Burst stack detection** — photos taken within 3 seconds of each other are grouped into a stack; the largest file (proxy for sharpest) is marked as the primary frame
 - **Grid selection UI** — 160×120 pt thumbnails with aspect-ratio fill; selected photos shown at full opacity with a blue border and checkmark; unselected photos dimmed to 50%
 - **Event rename** — double-click or use the Rename button to give events meaningful names (e.g. "Sunrise hike")
-- **Export to markdown** — exports selected photos to the configured static images directory with EXIF stripping and resize cap; generates a ready-to-paste markdown snippet with image references
-- **Keyboard shortcut** — `⌘K` opens the curation folder picker from the welcome screen; `⌘E` exports the active event
+- **Create posts from curation** — exports selected photos to the configured static images directory, opens a separate post editor window with image refs preloaded, and keeps the curation workspace open for repeated post creation
+- **Keyboard shortcut** — `⌘K` opens the curation folder picker from the welcome screen; `⌘E` creates a post from the active event selection
 
 ---
 

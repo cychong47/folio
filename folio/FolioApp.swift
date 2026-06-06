@@ -5,6 +5,7 @@ struct FolioApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var settings = AppSettings()
     @StateObject private var pendingPost = PendingPost()
+    @StateObject private var postDraftStore = PostDraftStore()
     @StateObject private var updateChecker = UpdateChecker()
 
     private var preferredScheme: ColorScheme? {
@@ -28,6 +29,7 @@ struct FolioApp: App {
             ContentView()
                 .environmentObject(settings)
                 .environmentObject(pendingPost)
+                .environmentObject(postDraftStore)
                 .environmentObject(updateChecker)
                 .frame(minWidth: 800, minHeight: 500)
                 .onAppear {
@@ -54,6 +56,20 @@ struct FolioApp: App {
                     }
                 }
                 .preferredColorScheme(preferredScheme)
+        }
+
+        WindowGroup("Post Editor", id: "post-editor", for: UUID.self) { $draftID in
+            if let draftID, let draft = postDraftStore.draft(for: draftID) {
+                PostEditorWindowView(draftID: draftID, draft: draft)
+                    .environmentObject(settings)
+                    .environmentObject(postDraftStore)
+                    .environmentObject(updateChecker)
+                    .frame(minWidth: 800, minHeight: 500)
+                    .preferredColorScheme(preferredScheme)
+            } else {
+                Text("Post draft is no longer available.")
+                    .frame(width: 360, height: 160)
+            }
         }
 
         Settings {

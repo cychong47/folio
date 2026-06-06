@@ -34,7 +34,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Post list view** — "Browse Posts" on the welcome screen lists all existing posts in the content directory sorted by date; select any post to re-edit its title, body, frontmatter, or metadata
 - **Auto git commit on Save** — per-profile toggle in Settings; runs `git add -A && git commit && git push` in the blog root after each Save; commit message template supports `{{title}}`
 - **Taxonomy manager** — Settings → General → Manage…; lists all categories, tags, and series with post counts; rename a term or merge two terms across every post in the content directory
-- **Photo Curation Workspace** — scan a vacation photo folder (`⌘K`); photos are auto-grouped into events by time and location using centroid-anchored spatio-temporal clustering; grid UI to select shots; exports selected photos with a markdown snippet ready to paste into a blog post
+- **Photo Curation Workspace** — scan a vacation photo folder (`⌘K`); photos are auto-grouped into events by time and location using centroid-anchored spatio-temporal clustering; grid UI to select shots; create posts from selected photos in separate editor windows while curation stays open
 - **Smarter event suggestions** — event generation compares GPS movement against each event's running location center and caps auto-events at 4 hours so long photo chains do not merge a whole day
 - **Keyboard shortcuts** — `⌘N` New Post, `⌘B` Browse Posts, `⌘K` Curate Photos, `⌘S` Save, `⌘⇧U` Publish
 - **Check for Updates** — Photolog menu bar item; shows a popup with update status and a one-click Download button when a new version is available

@@ -4,6 +4,8 @@ import AppKit
 struct ContentView: View {
     @EnvironmentObject var pendingPost: PendingPost
     @EnvironmentObject var settings: AppSettings
+    @EnvironmentObject var postDraftStore: PostDraftStore
+    @Environment(\.openWindow) private var openWindow
     @State private var isDragTargeted = false
     @State private var importTotal: Int = 0
     @State private var importCompleted: Int = 0
@@ -34,17 +36,8 @@ struct ContentView: View {
                     onBack: { curating = false },
                     onCreatePost: { markdown, date in
                         let photos = resolvedPhotos(from: markdown, postDate: date)
-                        pendingPost.clear()
-                        pendingPost.lastPublished = nil
-                        pendingPost.photos = photos
-                        pendingPost.markdownBody = markdown
-                        let f = DateFormatter()
-                        f.dateFormat = "yyyy-MM-dd"
-                        pendingPost.slug = f.string(from: date)
-                        // curating stays true — PostEditorView shows because pendingPost
-                        // is non-empty (takes priority in the if/else chain). When the
-                        // post is saved or discarded, pendingPost clears and the app
-                        // returns here automatically.
+                        let draftID = postDraftStore.createDraft(markdown: markdown, date: date, photos: photos)
+                        openWindow(id: "post-editor", value: draftID)
                     }
                 )
                 .environmentObject(settings)

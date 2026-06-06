@@ -54,6 +54,17 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B442369C70A6A35BF59464D8"
+               BuildableName = "PhotologTests.xctest"
+               BlueprintName = "PhotologTests"
+               ReferencedContainer = "container:Photolog.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>

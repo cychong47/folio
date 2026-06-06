@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.7
+- Curation creates posts in separate editor windows — "Create Post" now opens a new post editor window while keeping the photo curation workspace open for repeated post creation from different selections
+
 ### v1.21.6
 - Fix map camera icon tumbling without MapKit annotations — curation map now renders photo camera pins in an AppKit overlay above `MKMapView`, keeping icons upright while MapKit handles only map tiles and coordinate conversion
 

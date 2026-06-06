@@ -28,7 +28,7 @@ targets:
         CFBundleIdentifier: com.folio.app
         CFBundleName: Photolog
         CFBundleDisplayName: Photolog
-        CFBundleShortVersionString: "1.21.6"
+        CFBundleShortVersionString: "1.21.7"
         CFBundleVersion: "2"
         LSMinimumSystemVersion: "13.0"
         NSPrincipalClass: NSApplication
@@ -83,7 +83,7 @@ targets:
       path: FolioShareExtension/Info.plist
       properties:
         CFBundleDisplayName: Photolog
-        CFBundleShortVersionString: "1.21.6"
+        CFBundleShortVersionString: "1.21.7"
         CFBundleVersion: "2"
         NSExtension:
           NSExtensionAttributes:
@@ -107,6 +107,19 @@ targets:
     dependencies:
       - sdk: ImageIO.framework
 
+  PhotologTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: PhotologTests
+    dependencies:
+      - target: Photolog
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.folio.app.tests
+        PRODUCT_NAME: PhotologTests
+
 schemes:
   Photolog:
     build:
@@ -117,6 +130,8 @@ schemes:
       config: Debug
     test:
       config: Debug
+      targets:
+        - PhotologTests
     profile:
       config: Release
     analyze:
