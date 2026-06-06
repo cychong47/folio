@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.11
+
+- Side-by-side curation date fields — Photos-library date range picker now places From and To dates in one row so the From calendar popover no longer hides the To input
+
+---
+
 ### v1.21.10
 
 - Location-timezone curation filtering — Photos-library date ranges now use GPS-derived timezone when EXIF offset is missing, preventing next-day displayed photos from leaking into a selected day
