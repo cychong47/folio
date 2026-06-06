@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.14
+
+- Capture-local curation ordering — Photos-library EXIF timestamps without offsets now use GPS-derived timezones before parsing, and event rows sort by the same capture-local time shown in the sidebar
+
+---
+
 ### v1.21.13
 
 - Event navigator timestamps — curation event rows now show capture-local date plus hour and minute under the event title
