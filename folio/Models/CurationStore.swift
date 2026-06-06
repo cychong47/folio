@@ -32,6 +32,12 @@ class CurationStore: ObservableObject {
         return options
     }
 
+    nonisolated static func photoLibraryMetadataResourceRequestOptions() -> PHAssetResourceRequestOptions {
+        let options = PHAssetResourceRequestOptions()
+        options.isNetworkAccessAllowed = true
+        return options
+    }
+
     var dateRangeLabel: String {
         guard let r = dateRange else { return "" }
         let f = DateFormatter()
@@ -106,10 +112,10 @@ class CurationStore: ObservableObject {
             let coord = ph.location.map {
                 CLLocationCoordinate2D(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude)
             }
-            let imageData = await photoLibraryImageData(for: ph)
-            let initialEXIFTimestamp = imageData.flatMap { MetadataIngestionService.exifTimestamp(from: $0) }
+            let metadataData = await photoLibraryMetadataData(for: ph)
+            let initialEXIFTimestamp = metadataData.flatMap { MetadataIngestionService.exifTimestamp(from: $0) }
             let locationTimeZone = initialEXIFTimestamp?.timeZone == nil ? await timeZone(for: coord) : nil
-            let exifTimestamp = imageData.flatMap {
+            let exifTimestamp = metadataData.flatMap {
                 MetadataIngestionService.exifTimestamp(from: $0, assumedTimeZone: locationTimeZone)
             }
             let timestamp = exifTimestamp?.date ?? ph.creationDate ?? Date()
@@ -252,6 +258,26 @@ class CurationStore: ObservableObject {
         }
     }
 
+    private nonisolated func photoLibraryMetadataData(for asset: PHAsset) async -> Data? {
+        let resources = PHAssetResource.assetResources(for: asset)
+        guard let resource = resources.first(where: { $0.type == .photo }) ?? resources.first else {
+            return await photoLibraryImageData(for: asset)
+        }
+
+        let originalExt = (resource.originalFilename as NSString).pathExtension
+        let tempExt = originalExt.isEmpty ? "photo" : originalExt
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString + "." + tempExt)
+        defer { try? FileManager.default.removeItem(at: tempURL) }
+
+        do {
+            try await writePHAssetResource(resource, to: tempURL)
+            return try Data(contentsOf: tempURL)
+        } catch {
+            return await photoLibraryImageData(for: asset)
+        }
+    }
+
     private func timeZone(for coordinate: CLLocationCoordinate2D?) async -> TimeZone? {
         guard let coordinate else { return nil }
         let key = String(format: "%.2f,%.2f", coordinate.latitude, coordinate.longitude)
@@ -372,10 +398,9 @@ class CurationStore: ObservableObject {
 
     // MARK: - Private helpers
 
-    private func writePHAssetResource(_ resource: PHAssetResource, to url: URL) async throws {
+    private nonisolated func writePHAssetResource(_ resource: PHAssetResource, to url: URL) async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            let options = PHAssetResourceRequestOptions()
-            options.isNetworkAccessAllowed = true
+            let options = Self.photoLibraryMetadataResourceRequestOptions()
             PHAssetResourceManager.default().writeData(for: resource, toFile: url, options: options) { error in
                 if let error {
                     continuation.resume(throwing: error)

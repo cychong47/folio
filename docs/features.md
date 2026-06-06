@@ -28,7 +28,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 ## Photo Curation
 
 - **Photo Curation Workspace** — open a vacation photo folder with `⌘K`; photos are auto-grouped into timed events using centroid-anchored spatio-temporal clustering (90-minute temporal gap, 500-metre movement from the event center, or 4-hour event span triggers a new event)
-- **Capture-local date filtering** — Photos-library date ranges read original PhotoKit metadata and match the capture-local day shown in curation, using separated EXIF offsets, inline EXIF offsets, or GPS-derived timezones so previous-day and next-day timezone offsets do not leak into the selected day
+- **Capture-local date filtering** — Photos-library date ranges read original asset-resource metadata and match the capture-local day shown in curation, using separated EXIF offsets, subsecond EXIF fields, inline EXIF offsets, or GPS-derived timezones so previous-day and next-day timezone offsets do not leak into the selected day
 - **Smarter event suggestions** — GPS movement is compared against each event's running location center, reducing accidental bridging between nearby places and preventing all-day photo chains from staying in one event; manual Both-mode splits require both a time gap and movement
 - **Event navigator** — sidebar lists each event with its name, capture-local date and time, duration, and selected/total photo count, sorted and numbered by the same displayed capture time
 - **Burst stack detection** — photos taken within 3 seconds of each other are grouped into a stack; the largest file (proxy for sharpest) is marked as the primary frame
@@ -48,7 +48,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Drag & drop from Finder** — plain file URL drops also supported
 - **Video file support** — drag `.mp4`, `.mov`, or `.webm` from Finder; inserts a Hugo `{{< video >}}` shortcode and copies the file to the static directory; preview panel shows a film-strip placeholder
 - **EXIF date prefix** — filenames derived from `DateTimeOriginal` (e.g. `2026-03-05-photo.jpg`)
-- **EXIF timezone preservation** — curation reads original metadata and honors `OffsetTimeOriginal` plus inline EXIF timezone offsets, including fractional-second timestamps, keeping no-GPS photo timestamps aligned with GPS-backed photos from the same shoot
+- **EXIF timezone preservation** — curation reads original asset-resource metadata and honors `OffsetTimeOriginal`, `SubSecTimeOriginal`, and inline EXIF timezone offsets, keeping no-GPS photo timestamps aligned with GPS-backed photos from the same shoot
 - **Non-EXIF date fallback** — screenshots and downloaded images get their date from `PHAsset.creationDate` (Photos access required), file creation date, or today
 - **Sort by filename** — photos dropped in the same session are sorted by filename ascending, preserving capture sequence
 - **Duplicate photo prevention** — the same filename dropped twice is silently ignored

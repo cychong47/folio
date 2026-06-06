@@ -139,8 +139,12 @@ enum MetadataIngestionService {
     ) -> (date: Date, timeZone: TimeZone?)? {
         let exif = props[kCGImagePropertyExifDictionary as String] as? [String: Any]
         let tiff = props[kCGImagePropertyTIFFDictionary as String] as? [String: Any]
-        let raw = (exif?[kCGImagePropertyExifDateTimeOriginal as String] as? String)
+        let rawDate = (exif?[kCGImagePropertyExifDateTimeOriginal as String] as? String)
                ?? (tiff?[kCGImagePropertyTIFFDateTime as String] as? String)
+        let raw = appendSubsecondIfNeeded(
+            to: rawDate,
+            subsecond: exif?[kCGImagePropertyExifSubsecTimeOriginal as String] as? String
+        )
         guard let raw else { return nil }
 
         if let inlineOffset = inlineEXIFOffset(in: raw),
@@ -184,6 +188,14 @@ enum MetadataIngestionService {
             }
         }
         return nil
+    }
+
+    private static func appendSubsecondIfNeeded(to raw: String?, subsecond: String?) -> String? {
+        guard let raw,
+              !raw.contains("."),
+              let subsecond,
+              !subsecond.isEmpty else { return raw }
+        return raw + "." + subsecond
     }
 
     private static func inlineEXIFOffset(in raw: String) -> String? {

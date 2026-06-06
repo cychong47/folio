@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.19
+- Original asset-resource metadata for curation — Photos-library scans now read EXIF from the original `PHAssetResource` temp file, preserving separate `OffsetTimeOriginal` and `SubSecTimeOriginal` values from HEIC originals instead of relying on rendered PhotoKit image data
+
 ### v1.21.18
 - Original PhotoKit metadata for curation — Photos-library scans now request original high-quality image data for metadata so HEIC assets retain `OffsetTimeOriginal` and filter/display by the camera capture timezone instead of proxy fallback dates
 

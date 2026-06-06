@@ -11,7 +11,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Photolog branding** — app display name, build artifact, and release packaging use the Photolog name
 - **Video file support** — drag `.mp4`, `.mov`, or `.webm` files from Finder; inserts a Hugo `{{< video >}}` shortcode and copies the file to the static directory on save
 - **EXIF date prefix** — filenames derived from `DateTimeOriginal` (e.g. `2026-03-05-IMG_1234.jpg`)
-- **EXIF timezone preservation** — photo curation reads original PhotoKit metadata and honors `OffsetTimeOriginal` plus inline EXIF timezone offsets, including fractional-second timestamps, so no-GPS photos display in their capture timezone instead of the Mac's current timezone
+- **EXIF timezone preservation** — photo curation reads original asset-resource metadata and honors `OffsetTimeOriginal`, `SubSecTimeOriginal`, and inline EXIF timezone offsets so no-GPS photos display in their capture timezone instead of the Mac's current timezone
 - **Split-view post editor** — markdown editor on the left, live text+image preview on the right showing content in document order
 - **External editor live reload** — body text refreshes automatically when the post file is modified in an external editor (VSCode, Neovim, etc.)
 - **Hugo frontmatter** — auto-generated with title, date, categories, and image references
@@ -34,7 +34,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Post list view** — "Browse Posts" on the welcome screen lists all existing posts in the content directory sorted by date; select any post to re-edit its title, body, frontmatter, or metadata
 - **Auto git commit on Save** — per-profile toggle in Settings; runs `git add -A && git commit && git push` in the blog root after each Save; commit message template supports `{{title}}`
 - **Taxonomy manager** — Settings → General → Manage…; lists all categories, tags, and series with post counts; rename a term or merge two terms across every post in the content directory
-- **Photo Curation Workspace** — scan a vacation photo folder (`⌘K`); Photos-library curation reads original metadata so photos and event rows use capture-local date and time from separated EXIF offsets, inline EXIF offsets, or GPS-derived timezones, event rows sort and number by the displayed capture time, and the side-by-side date range picker can be updated from the curation toolbar while curation stays open
+- **Photo Curation Workspace** — scan a vacation photo folder (`⌘K`); Photos-library curation reads original asset-resource metadata so photos and event rows use capture-local date and time from separated EXIF offsets, subsecond EXIF fields, inline EXIF offsets, or GPS-derived timezones, event rows sort and number by the displayed capture time, and the side-by-side date range picker can be updated from the curation toolbar while curation stays open
 - **Smarter event suggestions** — event generation compares GPS movement against each event's running location center and caps auto-events at 4 hours so long photo chains do not merge a whole day
 - **Keyboard shortcuts** — `⌘N` New Post, `⌘B` Browse Posts, `⌘K` Curate Photos, `⌘S` Save, `⌘⇧U` Publish
 - **Check for Updates** — Photolog menu bar item; shows a popup with update status and a one-click Download button when a new version is available
