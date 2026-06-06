@@ -587,33 +587,42 @@ private struct NativeCurationMap: NSViewRepresentable {
         Coordinator(onSelectAsset: onSelectAsset)
     }
 
-    func makeNSView(context: Context) -> MKMapView {
-        let mapView = MKMapView()
+    func makeNSView(context: Context) -> CurationMapContainer {
+        let container = CurationMapContainer()
+        let mapView = container.mapView
         mapView.delegate = context.coordinator
         mapView.isPitchEnabled = false
         mapView.isRotateEnabled = false
         mapView.camera.heading = 0
         mapView.camera.pitch = 0
-        mapView.register(MKAnnotationView.self, forAnnotationViewWithReuseIdentifier: Coordinator.reuseID)
-        return mapView
+        container.onLayout = { [weak coordinator = context.coordinator] in
+            coordinator?.updatePinPositions()
+        }
+        context.coordinator.container = container
+        return container
     }
 
-    func updateNSView(_ mapView: MKMapView, context: Context) {
+    func updateNSView(_ container: CurationMapContainer, context: Context) {
         context.coordinator.onSelectAsset = onSelectAsset
+        context.coordinator.container = container
         let pinIDs = pins.map(\.id)
-        guard context.coordinator.pinIDs != pinIDs else { return }
+        guard context.coordinator.pinIDs != pinIDs else {
+            context.coordinator.updatePinPositions()
+            return
+        }
 
         context.coordinator.pinIDs = pinIDs
-        mapView.removeAnnotations(mapView.annotations)
-        let annotations = pins.map(PhotoMapAnnotation.init(pin:))
-        mapView.addAnnotations(annotations)
+        context.coordinator.pins = pins
+        context.coordinator.rebuildPinOverlay()
+        let mapView = container.mapView
         mapView.camera.heading = 0
         mapView.camera.pitch = 0
-        fitRegion(for: annotations, in: mapView)
+        fitRegion(for: pins, in: mapView)
+        context.coordinator.updatePinPositions()
     }
 
-    private func fitRegion(for annotations: [PhotoMapAnnotation], in mapView: MKMapView) {
-        let coords = annotations.map(\.coordinate)
+    private func fitRegion(for pins: [AssetPin], in mapView: MKMapView) {
+        let coords = pins.map(\.coordinate)
         guard !coords.isEmpty else { return }
         let lats = coords.map(\.latitude)
         let lons = coords.map(\.longitude)
@@ -629,32 +638,57 @@ private struct NativeCurationMap: NSViewRepresentable {
     }
 
     final class Coordinator: NSObject, MKMapViewDelegate {
-        static let reuseID = "PhotoMapPin"
         private static let pinImage = makePinImage()
 
         var onSelectAsset: (Int) -> Void
         var pinIDs: [UUID] = []
+        var pins: [AssetPin] = []
+        weak var container: CurationMapContainer?
 
         init(onSelectAsset: @escaping (Int) -> Void) {
             self.onSelectAsset = onSelectAsset
         }
 
-        func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-            guard annotation is PhotoMapAnnotation else { return nil }
-            let view = mapView.dequeueReusableAnnotationView(withIdentifier: Self.reuseID, for: annotation)
-            view.annotation = annotation
-            view.canShowCallout = false
-            view.image = Self.pinImage
-            view.centerOffset = CGPoint(x: 0, y: -Self.pinImage.size.height / 2)
-            view.displayPriority = .required
-            view.layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-            return view
+        func rebuildPinOverlay() {
+            guard let container else { return }
+            container.pinOverlay.subviews.forEach { $0.removeFromSuperview() }
+            for pin in pins {
+                let pinView = PhotoMapPinView(image: Self.pinImage) { [weak self] in
+                    self?.onSelectAsset(pin.index)
+                }
+                pinView.identifier = NSUserInterfaceItemIdentifier(pin.id.uuidString)
+                container.pinOverlay.addSubview(pinView)
+            }
+            updatePinPositions()
         }
 
-        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            guard let annotation = view.annotation as? PhotoMapAnnotation else { return }
-            onSelectAsset(annotation.index)
-            mapView.deselectAnnotation(annotation, animated: false)
+        func updatePinPositions() {
+            guard let container else { return }
+            let overlay = container.pinOverlay
+            for pin in pins {
+                guard let pinView = overlay.subviews.first(where: { $0.identifier?.rawValue == pin.id.uuidString }) else { continue }
+                let point = container.mapView.convert(pin.coordinate, toPointTo: overlay)
+                let size = Self.pinImage.size
+                pinView.frame = CGRect(
+                    x: point.x - size.width / 2,
+                    y: point.y - size.height,
+                    width: size.width,
+                    height: size.height
+                )
+                pinView.isHidden = !overlay.bounds.insetBy(dx: -size.width, dy: -size.height).contains(point)
+            }
+        }
+
+        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+            mapView.camera.heading = 0
+            mapView.camera.pitch = 0
+            updatePinPositions()
+        }
+
+        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+            mapView.camera.heading = 0
+            mapView.camera.pitch = 0
+            updatePinPositions()
         }
 
         private static func makePinImage() -> NSImage {
@@ -683,15 +717,69 @@ private struct NativeCurationMap: NSViewRepresentable {
     }
 }
 
-private final class PhotoMapAnnotation: NSObject, MKAnnotation {
-    let id: UUID
-    let index: Int
-    let coordinate: CLLocationCoordinate2D
+private final class CurationMapContainer: NSView {
+    let mapView = MKMapView()
+    let pinOverlay = MapPinOverlayView()
+    var onLayout: (() -> Void)?
 
-    init(pin: AssetPin) {
-        id = pin.id
-        index = pin.index
-        coordinate = pin.coordinate
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        addSubview(mapView)
+        addSubview(pinOverlay)
+        pinOverlay.wantsLayer = true
+        pinOverlay.layer?.backgroundColor = NSColor.clear.cgColor
+    }
+
+    required init?(coder: NSCoder) {
+        nil
+    }
+
+    override func layout() {
+        super.layout()
+        mapView.frame = bounds
+        pinOverlay.frame = bounds
+        onLayout?()
+    }
+
+    override var isFlipped: Bool { true }
+}
+
+private final class MapPinOverlayView: NSView {
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        for subview in subviews.reversed() {
+            let convertedPoint = convert(point, to: subview)
+            if let hitView = subview.hitTest(convertedPoint) {
+                return hitView
+            }
+        }
+        return nil
+    }
+}
+
+private final class PhotoMapPinView: NSView {
+    private let image: NSImage
+    private let onClick: () -> Void
+
+    init(image: NSImage, onClick: @escaping () -> Void) {
+        self.image = image
+        self.onClick = onClick
+        super.init(frame: CGRect(origin: .zero, size: image.size))
+        wantsLayer = true
+        layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+    }
+
+    required init?(coder: NSCoder) {
+        nil
+    }
+
+    override var isFlipped: Bool { true }
+
+    override func draw(_ dirtyRect: NSRect) {
+        image.draw(in: bounds)
+    }
+
+    override func mouseDown(with event: NSEvent) {
+        onClick()
     }
 }
 

@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.6
+- Fix map camera icon tumbling without MapKit annotations — curation map now renders photo camera pins in an AppKit overlay above `MKMapView`, keeping icons upright while MapKit handles only map tiles and coordinate conversion
+
 ### v1.21.5
 - Fix persistent map camera icon tumbling — curation map pins now use plain `MKAnnotationView` bitmap camera icons instead of MapKit marker glyphs, removing marker-level animation
 
