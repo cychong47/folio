@@ -80,9 +80,15 @@ struct ContentView: View {
             }
         }
         .sheet(isPresented: $showDatePicker) {
-            DateRangePickerView(isPresented: $showDatePicker) { start, end in
+            DateRangePickerView(isPresented: $showDatePicker) { start, end, noLocationTimeZone in
                 curating = true
-                Task { await curationStore.ingest(startDate: start, endDate: end) }
+                Task {
+                    await curationStore.ingest(
+                        startDate: start,
+                        endDate: end,
+                        noLocationTimeZone: noLocationTimeZone
+                    )
+                }
             }
         }
     }

@@ -18,6 +18,7 @@ class CurationStore: ObservableObject {
     @Published var isExporting: Bool = false
     @Published var exportError: String? = nil
     @Published var dateRange: (start: Date, end: Date)? = nil
+    @Published var noLocationTimeZone: TimeZone? = nil
     @Published var lastFetchCount: Int = 0    // date-range count
     @Published var lastLibraryTotal: Int = 0  // total library count (no filter)
     @Published var lastAuthStatus: String = ""
@@ -68,7 +69,7 @@ class CurationStore: ObservableObject {
         return cluster.assets.sorted { $0.timestamp < $1.timestamp }
     }
 
-    func ingest(startDate: Date, endDate: Date) async {
+    func ingest(startDate: Date, endDate: Date, noLocationTimeZone: TimeZone? = nil) async {
         isIngesting = true
         ingestProgress = (0, 0)
         lastFetchCount = 0
@@ -76,6 +77,7 @@ class CurationStore: ObservableObject {
         lastAuthStatus = ""
         curationDiagnostics = []
         dateRange = (start: startDate, end: endDate)
+        self.noLocationTimeZone = noLocationTimeZone
 
         // Check auth — all PhotoKit calls stay on the MainActor (avoids thread-hop issues)
         let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
@@ -124,12 +126,19 @@ class CurationStore: ObservableObject {
             let metadataData = metadata.data
             let initialEXIFTimestamp = metadataData.flatMap { MetadataIngestionService.exifTimestamp(from: $0) }
             let locationTimeZone = initialEXIFTimestamp?.timeZone == nil ? await timeZone(for: coord) : nil
+            let appliedNoLocationTimeZone = initialEXIFTimestamp?.timeZone == nil && coord == nil
+                ? noLocationTimeZone
+                : nil
             let exifTimestamp = metadataData.flatMap {
-                MetadataIngestionService.exifTimestamp(from: $0, assumedTimeZone: locationTimeZone)
+                MetadataIngestionService.exifTimestamp(
+                    from: $0,
+                    assumedTimeZone: locationTimeZone ?? appliedNoLocationTimeZone
+                )
             }
             let timestampResolution = Self.resolvedPhotoLibraryTimestamp(
                 exifTimestamp: exifTimestamp,
                 locationTimeZone: locationTimeZone,
+                noLocationTimeZone: appliedNoLocationTimeZone,
                 creationDate: ph.creationDate,
                 fallbackDate: Date()
             )
@@ -155,6 +164,7 @@ class CurationStore: ObservableObject {
                 metadata: metadata,
                 exifTimestamp: exifTimestamp,
                 locationTimeZone: locationTimeZone,
+                noLocationTimeZone: appliedNoLocationTimeZone,
                 finalTimestamp: timestamp,
                 filterSummary: filterSummary,
                 resolution: timestampResolution.source,
@@ -201,12 +211,16 @@ class CurationStore: ObservableObject {
     nonisolated static func resolvedPhotoLibraryTimestamp(
         exifTimestamp: (date: Date, timeZone: TimeZone?)?,
         locationTimeZone: TimeZone?,
+        noLocationTimeZone: TimeZone?,
         creationDate: Date?,
         fallbackDate: Date
     ) -> (date: Date, timeZone: TimeZone?, source: String) {
         if let exifTimestamp, locationTimeZone != nil, let creationDate,
            abs(exifTimestamp.date.timeIntervalSince(creationDate)) > 2 * 3600 {
             return (creationDate, nil, "creation:diverged-exif")
+        }
+        if let exifTimestamp, locationTimeZone == nil, let noLocationTimeZone {
+            return (exifTimestamp.date, noLocationTimeZone, "exif:manual-offset")
         }
         if let exifTimestamp, exifTimestamp.timeZone != nil || locationTimeZone != nil {
             return (exifTimestamp.date, exifTimestamp.timeZone ?? locationTimeZone, "exif")
@@ -225,6 +239,7 @@ class CurationStore: ObservableObject {
         metadata: MetadataLoadResult,
         exifTimestamp: (date: Date, timeZone: TimeZone?)?,
         locationTimeZone: TimeZone?,
+        noLocationTimeZone: TimeZone?,
         finalTimestamp: Date,
         filterSummary: String,
         resolution: String,
@@ -239,6 +254,7 @@ class CurationStore: ObservableObject {
             "exif=\(Self.debugDate(exifTimestamp?.date))",
             "exifTZ=\(Self.debugTimeZone(exifTimestamp?.timeZone))",
             "locTZ=\(Self.debugTimeZone(locationTimeZone))",
+            "manualNoLocTZ=\(Self.debugTimeZone(noLocationTimeZone))",
             "resolution=\(resolution)",
             "final=\(Self.debugDate(finalTimestamp))",
             filterSummary

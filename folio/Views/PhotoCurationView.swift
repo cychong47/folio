@@ -130,9 +130,16 @@ struct PhotoCurationView: View {
                 isPresented: $showDatePicker,
                 initialStartDate: store.dateRange?.start,
                 initialEndDate: store.dateRange?.end,
+                initialNoLocationTimeZone: store.noLocationTimeZone,
                 confirmLabel: store.dateRange == nil ? "Load Photos" : "Update Photos"
-            ) { start, end in
-                Task { await store.ingest(startDate: start, endDate: end) }
+            ) { start, end, noLocationTimeZone in
+                Task {
+                    await store.ingest(
+                        startDate: start,
+                        endDate: end,
+                        noLocationTimeZone: noLocationTimeZone
+                    )
+                }
             }
         }
         .sheet(item: Binding(

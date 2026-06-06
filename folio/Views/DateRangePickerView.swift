@@ -4,20 +4,30 @@ import Photos
 struct DateRangePickerView: View {
     @Binding var isPresented: Bool
     let confirmLabel: String
-    let onConfirm: (Date, Date) -> Void
+    let onConfirm: (Date, Date, TimeZone?) -> Void
 
     @State private var startDate: Date
     @State private var endDate: Date
     @State private var startText: String
     @State private var endText: String
+    @State private var noLocationTimeZoneMode: NoLocationTimeZoneMode
+    @State private var noLocationOffsetSeconds: Int
     @State private var authStatus: PHAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+
+    private enum NoLocationTimeZoneMode: String, CaseIterable, Identifiable {
+        case mac
+        case manual
+
+        var id: String { rawValue }
+    }
 
     init(
         isPresented: Binding<Bool>,
         initialStartDate: Date? = nil,
         initialEndDate: Date? = nil,
+        initialNoLocationTimeZone: TimeZone? = nil,
         confirmLabel: String = "Load Photos",
-        onConfirm: @escaping (Date, Date) -> Void
+        onConfirm: @escaping (Date, Date, TimeZone?) -> Void
     ) {
         let defaultEndDate = Calendar.current.startOfDay(for: Date())
         let defaultStartDate = Calendar.current.startOfDay(
@@ -30,6 +40,10 @@ struct DateRangePickerView: View {
         _endDate = State(initialValue: initialEnd)
         _startText = State(initialValue: PhotoDateRangeSelection.string(from: initialStart))
         _endText = State(initialValue: PhotoDateRangeSelection.string(from: initialEnd))
+        _noLocationTimeZoneMode = State(initialValue: initialNoLocationTimeZone == nil ? .mac : .manual)
+        _noLocationOffsetSeconds = State(
+            initialValue: initialNoLocationTimeZone?.secondsFromGMT() ?? TimeZone.current.secondsFromGMT()
+        )
         self.confirmLabel = confirmLabel
         self.onConfirm = onConfirm
     }
@@ -83,13 +97,38 @@ struct DateRangePickerView: View {
                     .foregroundStyle(.secondary)
                     .textSelection(.enabled)
 
+                DisclosureGroup("Advanced") {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Picker("No-location camera timezone", selection: $noLocationTimeZoneMode) {
+                            Text("Use Mac timezone").tag(NoLocationTimeZoneMode.mac)
+                            Text("Manual UTC offset").tag(NoLocationTimeZoneMode.manual)
+                        }
+                        .pickerStyle(.segmented)
+
+                        if noLocationTimeZoneMode == .manual {
+                            Picker("UTC offset", selection: $noLocationOffsetSeconds) {
+                                ForEach(Self.noLocationOffsetOptions, id: \.self) { seconds in
+                                    Text(Self.offsetLabel(seconds)).tag(seconds)
+                                }
+                            }
+                            .frame(maxWidth: 220)
+                        }
+
+                        Text(noLocationTimeZoneHelp)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding(.top, 8)
+                }
+
                 HStack {
                     Spacer()
                     Button("Cancel") { isPresented = false }
                     Button(confirmLabel) {
                         guard let range = selectedRange else { return }
                         isPresented = false
-                        onConfirm(range.start, range.end)
+                        onConfirm(range.start, range.end, selectedNoLocationTimeZone)
                     }
                     .buttonStyle(.borderedProminent)
                     .keyboardShortcut(.defaultAction)
@@ -147,6 +186,32 @@ struct DateRangePickerView: View {
 
     private var selectedRange: (start: Date, end: Date)? {
         PhotoDateRangeSelection.range(startText: startText, endText: endText)
+    }
+
+    private var selectedNoLocationTimeZone: TimeZone? {
+        guard noLocationTimeZoneMode == .manual else { return nil }
+        return TimeZone(secondsFromGMT: noLocationOffsetSeconds)
+    }
+
+    private var noLocationTimeZoneHelp: String {
+        if noLocationTimeZoneMode == .manual {
+            return "No-GPS photos without an EXIF timezone use \(Self.offsetLabel(noLocationOffsetSeconds))."
+        }
+        return "No-GPS photos without an EXIF timezone use this Mac's timezone."
+    }
+
+    private static let noLocationOffsetOptions = Array(stride(
+        from: -12 * 3600,
+        through: 14 * 3600,
+        by: 30 * 60
+    ))
+
+    private static func offsetLabel(_ seconds: Int) -> String {
+        let sign = seconds >= 0 ? "+" : "-"
+        let absoluteSeconds = abs(seconds)
+        let hours = absoluteSeconds / 3600
+        let minutes = (absoluteSeconds % 3600) / 60
+        return String(format: "UTC%@%02d:%02d", sign, hours, minutes)
     }
 
     private func updateStartDate(_ date: Date) {
