@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.12
+- Capture-local event dates — curation event rows now format event dates in the first photo's capture timezone so events match the photo dates shown in the grid and detail views
+
 ### v1.21.11
 - Side-by-side curation date fields — Photos-library date range picker now places From and To dates in one row so the From calendar popover no longer hides the To input
 

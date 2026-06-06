@@ -256,7 +256,7 @@ private struct EventRow: View {
                 .font(.headline)
                 .lineLimit(1)
             HStack(spacing: 6) {
-                Text(cluster.startDate, format: .dateTime.month(.abbreviated).day().year())
+                Text(cluster.displayDateText())
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Text("·")

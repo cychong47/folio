@@ -19,6 +19,19 @@ struct EventCluster: Identifiable {
         return m > 0 ? "\(h)h \(m)m" : "\(h)h"
     }
 
+    var displayTimeZone: TimeZone? {
+        assets.sorted { $0.timestamp < $1.timestamp }.first?.captureTimeZone
+    }
+
+    func displayDateText(selectionTimeZone: TimeZone = .current, locale: Locale = .current) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        formatter.timeZone = displayTimeZone ?? selectionTimeZone
+        return formatter.string(from: startDate)
+    }
+
     var representativeCoordinate: CLLocationCoordinate2D? {
         assets.compactMap(\.coordinate).first
     }

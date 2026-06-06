@@ -47,6 +47,7 @@
 		AC4B0BF9B1FBF2B0EBAC594F /* PhotoStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B342D008C3E49EFB58A457A6 /* PhotoStripView.swift */; };
 		AED3AC7D7A1CD0B8F59641A5 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE00A927414153A0DE14E83C /* Photos.framework */; };
 		B4EE67767B38199595A2261B /* TaxonomyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F59762BF945E9692952F6 /* TaxonomyManager.swift */; };
+		C14348A8DE8DC8100D7ADA76 /* EventClusterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA8013EC0B167B4D7A3490F /* EventClusterTests.swift */; };
 		C24BCB37D782ED3AECB95ED4 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1FA5A8E7688AA874A3A378E /* ShareViewController.swift */; };
 		CE4FA9FFB4693FADAEED9E88 /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F821DE7FE5DA95974D89AE2 /* WhatsNewView.swift */; };
 		DA60B977A9B3E1B520B4BDD9 /* PhotoLibraryDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D69EBD5ACE0B2CE1E447E1 /* PhotoLibraryDate.swift */; };
@@ -94,6 +95,7 @@
 		760C9031D528EC24C90F0CD2 /* TaxonomyManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxonomyManagerView.swift; sourceTree = "<group>"; };
 		78A8AFF3ADA9F600D0D840A1 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		7A5F6A29732582E659146537 /* Folio.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Folio.entitlements; sourceTree = "<group>"; };
+		7DA8013EC0B167B4D7A3490F /* EventClusterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventClusterTests.swift; sourceTree = "<group>"; };
 		7F821DE7FE5DA95974D89AE2 /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
 		82F63BD90F093F00EA8F5532 /* FolioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolioApp.swift; sourceTree = "<group>"; };
 		964EEE3A6800F4D4524D1A90 /* HugoConfigReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HugoConfigReader.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 		6549FE4B0BDCA954F38DA1C6 /* PhotologTests */ = {
 			isa = PBXGroup;
 			children = (
+				7DA8013EC0B167B4D7A3490F /* EventClusterTests.swift */,
 				CEDE4B61DE96611382DE88F3 /* PhotoDateRangeFilterTests.swift */,
 				6984FC3C1145C8B4868D4C78 /* PostDraftStoreTests.swift */,
 			);
@@ -481,6 +484,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C14348A8DE8DC8100D7ADA76 /* EventClusterTests.swift in Sources */,
 				89139432AA719A59BFDEC30A /* PhotoDateRangeFilterTests.swift in Sources */,
 				3BBAA6E143E9B776B51305DA /* PostDraftStoreTests.swift in Sources */,
 			);
