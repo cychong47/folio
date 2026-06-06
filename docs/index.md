@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.13
+
+- Event navigator timestamps — curation event rows now show capture-local date plus hour and minute under the event title
+
+---
+
 ### v1.21.12
 
 - Capture-local event dates — curation event rows now format event dates in the first photo's capture timezone so events match the photo dates shown in the grid and detail views
