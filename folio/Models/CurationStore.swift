@@ -23,6 +23,15 @@ class CurationStore: ObservableObject {
     @Published var lastAuthStatus: String = ""
     private var locationTimeZoneCache: [String: TimeZone] = [:]
 
+    nonisolated static func photoLibraryMetadataRequestOptions() -> PHImageRequestOptions {
+        let options = PHImageRequestOptions()
+        options.version = .original
+        options.deliveryMode = .highQualityFormat
+        options.isNetworkAccessAllowed = true
+        options.isSynchronous = false
+        return options
+    }
+
     var dateRangeLabel: String {
         guard let r = dateRange else { return "" }
         let f = DateFormatter()
@@ -231,10 +240,7 @@ class CurationStore: ObservableObject {
 
     private nonisolated func photoLibraryImageData(for asset: PHAsset) async -> Data? {
         await withCheckedContinuation { continuation in
-            let options = PHImageRequestOptions()
-            options.deliveryMode = .fastFormat
-            options.isNetworkAccessAllowed = true
-            options.isSynchronous = false
+            let options = Self.photoLibraryMetadataRequestOptions()
 
             PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { data, _, _, _ in
                 guard let data else {
