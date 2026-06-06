@@ -4,6 +4,10 @@
 
 ## Released
 
+### v1.21.8
+- Capture-date curation filtering — Photos-library date ranges now filter by the same capture-local date shown in curation, preventing previous-day timezone captures from appearing in a selected day
+- Curation mode switch clarity — curation's Back button is now labelled "Start" and the in-panel action uses "Create Post" so users can return to the start screen for drag-and-drop posts without losing curation state
+
 ### v1.21.7
 - Curation creates posts in separate editor windows — "Create Post" now opens a new post editor window while keeping the photo curation workspace open for repeated post creation from different selections
 

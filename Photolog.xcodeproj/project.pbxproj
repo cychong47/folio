@@ -30,6 +30,7 @@
 		690B7ADF10E64AE1AB65138E /* UpdatePopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF750207707E38843A6119B0 /* UpdatePopupView.swift */; };
 		6A01C7665628D2D16C081962 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B84007A366F8AA80FB25B94B /* CoreLocation.framework */; };
 		6C6F134AD9AE273D2543558E /* CategoryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7D097A371C70C4CBC1E593 /* CategoryScanner.swift */; };
+		70C0EBF848F7DE78507215DE /* PhotoDateRangeFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE01D57016EA670C74EB3F /* PhotoDateRangeFilter.swift */; };
 		735018C258C8712391F96EE9 /* DateRangePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C84621F2CDE7AFFB1B552AB /* DateRangePickerView.swift */; };
 		74B934171FFC9297CCA785EE /* PostIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EF8BF2401EF1B9AB1FA693 /* PostIndexer.swift */; };
 		76BBD91EED7FBB16912BB5A4 /* DropTargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F752EDDDD23A9A5AEF32F98A /* DropTargetView.swift */; };
@@ -37,6 +38,7 @@
 		856FBBDA4437BB1CA6702196 /* MarkdownGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460680A1E7BCEB87EC38DF20 /* MarkdownGenerator.swift */; };
 		863D91AC46C5831B0A61E90F /* BlogProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD9081EA7674BA2004834C /* BlogProfile.swift */; };
 		8655A6E16252422A9143D0DC /* TaxonomyManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760C9031D528EC24C90F0CD2 /* TaxonomyManagerView.swift */; };
+		89139432AA719A59BFDEC30A /* PhotoDateRangeFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDE4B61DE96611382DE88F3 /* PhotoDateRangeFilterTests.swift */; };
 		8ABE7F2912264DA34C23CF5F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A5000DD6608801D86733D /* SettingsView.swift */; };
 		9686D2C010CFD7331E5A4FA6 /* PhotoExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743D8A890F966B79334440BB /* PhotoExporter.swift */; };
 		9C91926C5243CEDAB3F98795 /* SharedContainerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1439E6A443FD16ED4B98FBD5 /* SharedContainerService.swift */; };
@@ -71,6 +73,7 @@
 		0DDACFA16152026E44438844 /* FolioShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FolioShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FAE42F314747ED03B6BDCA3 /* Photolog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Photolog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1439E6A443FD16ED4B98FBD5 /* SharedContainerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContainerService.swift; sourceTree = "<group>"; };
+		19DE01D57016EA670C74EB3F /* PhotoDateRangeFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDateRangeFilter.swift; sourceTree = "<group>"; };
 		1C84621F2CDE7AFFB1B552AB /* DateRangePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRangePickerView.swift; sourceTree = "<group>"; };
 		268845472ABC1740FC1598BE /* PendingPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingPost.swift; sourceTree = "<group>"; };
 		2AF1C70C0633BC507F18D1DF /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -108,6 +111,7 @@
 		C7C49D9D3E58B8CD00F03BFC /* PostEditorWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEditorWindowView.swift; sourceTree = "<group>"; };
 		C7F54A067B60BC3800BCA29B /* PostDraftStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraftStore.swift; sourceTree = "<group>"; };
 		CC4E6884E05041E736292F05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		CEDE4B61DE96611382DE88F3 /* PhotoDateRangeFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDateRangeFilterTests.swift; sourceTree = "<group>"; };
 		D284DDCF73FE724EC137C563 /* PhotologTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhotologTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D62C67143EEA23DF166A9C75 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D66DD383BFB1DF6D69917EC0 /* HugoServerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HugoServerManager.swift; sourceTree = "<group>"; };
@@ -187,6 +191,7 @@
 		6549FE4B0BDCA954F38DA1C6 /* PhotologTests */ = {
 			isa = PBXGroup;
 			children = (
+				CEDE4B61DE96611382DE88F3 /* PhotoDateRangeFilterTests.swift */,
 				6984FC3C1145C8B4868D4C78 /* PostDraftStoreTests.swift */,
 			);
 			path = PhotologTests;
@@ -211,6 +216,7 @@
 				D66DD383BFB1DF6D69917EC0 /* HugoServerManager.swift */,
 				460680A1E7BCEB87EC38DF20 /* MarkdownGenerator.swift */,
 				A3B9104DCD621F058D193F5E /* MetadataIngestionService.swift */,
+				19DE01D57016EA670C74EB3F /* PhotoDateRangeFilter.swift */,
 				743D8A890F966B79334440BB /* PhotoExporter.swift */,
 				B4D69EBD5ACE0B2CE1E447E1 /* PhotoLibraryDate.swift */,
 				E1EF8BF2401EF1B9AB1FA693 /* PostIndexer.swift */,
@@ -440,6 +446,7 @@
 				EB43046D84C60851EEC040E1 /* MetadataIngestionService.swift in Sources */,
 				5DBBCC82E16A674DE8B68DE9 /* PendingPost.swift in Sources */,
 				2A4D9C4D72F8BCF7423350E2 /* PhotoCurationView.swift in Sources */,
+				70C0EBF848F7DE78507215DE /* PhotoDateRangeFilter.swift in Sources */,
 				9686D2C010CFD7331E5A4FA6 /* PhotoExporter.swift in Sources */,
 				DA60B977A9B3E1B520B4BDD9 /* PhotoLibraryDate.swift in Sources */,
 				AC4B0BF9B1FBF2B0EBAC594F /* PhotoStripView.swift in Sources */,
@@ -474,6 +481,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89139432AA719A59BFDEC30A /* PhotoDateRangeFilterTests.swift in Sources */,
 				3BBAA6E143E9B776B51305DA /* PostDraftStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

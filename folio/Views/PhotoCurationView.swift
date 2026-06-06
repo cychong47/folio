@@ -85,7 +85,9 @@ struct PhotoCurationView: View {
                     EventNavigatorPanel(store: store)
                         .navigationSplitViewColumnWidth(min: 200, ideal: 240, max: 300)
                 } detail: {
-                    CurationGridPanel(store: store)
+                    CurationGridPanel(store: store) {
+                        Task { await createPostFromSelection() }
+                    }
                 }
                 .navigationSplitViewStyle(.balanced)
             }
@@ -93,7 +95,7 @@ struct PhotoCurationView: View {
         .toolbar {
             ToolbarItem(placement: .navigation) {
                 Button(action: onBack) {
-                    Label("Back", systemImage: "chevron.left")
+                    Label("Start", systemImage: "chevron.left")
                 }
             }
             ToolbarItem(placement: .principal) {
@@ -258,7 +260,7 @@ private struct EventRow: View {
 
 private struct CurationGridPanel: View {
     @ObservedObject var store: CurationStore
-    @EnvironmentObject var settings: AppSettings
+    let onCreatePost: () -> Void
 
     @State private var thumbSize: CGFloat = 160
     @State private var isShowingDetail = false
@@ -311,10 +313,8 @@ private struct CurationGridPanel: View {
                     Text("\(cluster.selectedCount) of \(cluster.totalCount) selected")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Button {
-                        Task { await store.export(settings: settings) }
-                    } label: {
-                        Label("Export", systemImage: "square.and.arrow.up")
+                    Button(action: onCreatePost) {
+                        Label("Create Post", systemImage: "square.and.pencil")
                             .font(.caption)
                     }
                     .buttonStyle(.borderedProminent)

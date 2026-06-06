@@ -61,13 +61,11 @@ class CurationStore: ObservableObject {
             return
         }
 
-        let cal = Calendar.current
-        let dayStart = cal.startOfDay(for: startDate)
-        let dayEnd = cal.date(bySettingHour: 23, minute: 59, second: 59, of: endDate) ?? endDate
+        let queryRange = PhotoDateRangeFilter.photoKitQueryRange(startDate: startDate, endDate: endDate)
         let opts = PHFetchOptions()
         opts.predicate = NSPredicate(
             format: "creationDate >= %@ AND creationDate <= %@",
-            dayStart as CVarArg, dayEnd as CVarArg
+            queryRange.start as CVarArg, queryRange.end as CVarArg
         )
         opts.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
 
@@ -99,15 +97,26 @@ class CurationStore: ObservableObject {
                 CLLocationCoordinate2D(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude)
             }
             let exifTimestamp = await photoLibraryEXIFTimestamp(for: ph)
-            assets.append(CurationAsset(
-                phAsset: ph, url: nil,
-                timestamp: exifTimestamp?.date ?? ph.creationDate ?? Date(),
-                captureTimeZone: exifTimestamp?.timeZone,
-                coordinate: coord,
-                pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight),
-                isScreenshot: ph.mediaSubtypes.contains(.photoScreenshot),
-                isFavorite: ph.isFavorite
-            ))
+            let timestamp = exifTimestamp?.date ?? ph.creationDate ?? Date()
+            let captureTimeZone = exifTimestamp?.timeZone
+            let isInSelectedDateRange = PhotoDateRangeFilter.contains(
+                timestamp,
+                captureTimeZone: captureTimeZone,
+                startDate: startDate,
+                endDate: endDate
+            )
+
+            if isInSelectedDateRange {
+                assets.append(CurationAsset(
+                    phAsset: ph, url: nil,
+                    timestamp: timestamp,
+                    captureTimeZone: captureTimeZone,
+                    coordinate: coord,
+                    pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight),
+                    isScreenshot: ph.mediaSubtypes.contains(.photoScreenshot),
+                    isFavorite: ph.isFavorite
+                ))
+            }
             if (i + 1) % 10 == 0 || i == total - 1 {
                 ingestProgress = (i + 1, total)
                 await Task.yield()
