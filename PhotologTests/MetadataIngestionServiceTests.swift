@@ -3,6 +3,29 @@ import XCTest
 @testable import Photolog
 
 final class MetadataIngestionServiceTests: XCTestCase {
+    func testEXIFTimestampWithInlineFractionalSecondsAndOffsetPreservesCaptureTimeZone() {
+        let captureTimeZone = TimeZone(secondsFromGMT: -7 * 3600)!
+        let timestamp = MetadataIngestionService.exifTimestamp(
+            from: [
+                kCGImagePropertyExifDictionary as String: [
+                    kCGImagePropertyExifDateTimeOriginal as String: "2026:03:14 12:01:40.217-07:00"
+                ]
+            ]
+        )
+
+        let expected = date(
+            year: 2026,
+            month: 3,
+            day: 14,
+            hour: 12,
+            minute: 1,
+            second: 40,
+            timeZone: captureTimeZone
+        ).addingTimeInterval(0.217)
+        XCTAssertEqual(timestamp?.date.timeIntervalSince1970 ?? 0, expected.timeIntervalSince1970, accuracy: 0.001)
+        XCTAssertEqual(timestamp?.timeZone, captureTimeZone)
+    }
+
     func testEXIFTimestampWithFractionalSecondsAndOffsetPreservesCaptureTimeZone() {
         let captureTimeZone = TimeZone(secondsFromGMT: -7 * 3600)!
         let timestamp = MetadataIngestionService.exifTimestamp(

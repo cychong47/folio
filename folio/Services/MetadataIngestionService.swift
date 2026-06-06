@@ -143,6 +143,14 @@ enum MetadataIngestionService {
                ?? (tiff?[kCGImagePropertyTIFFDateTime as String] as? String)
         guard let raw else { return nil }
 
+        if let inlineOffset = inlineEXIFOffset(in: raw),
+           let date = parseEXIFDate(raw, formats: [
+               "yyyy:MM:dd HH:mm:ss.SSSXXXXX",
+               "yyyy:MM:dd HH:mm:ssXXXXX"
+           ]) {
+            return (date, timeZone(fromEXIFOffset: inlineOffset))
+        }
+
         if let offset = exif?[kCGImagePropertyExifOffsetTimeOriginal as String] as? String {
             if let date = parseEXIFDate(raw + offset, formats: [
                 "yyyy:MM:dd HH:mm:ss.SSSXXXXX",
@@ -176,6 +184,12 @@ enum MetadataIngestionService {
             }
         }
         return nil
+    }
+
+    private static func inlineEXIFOffset(in raw: String) -> String? {
+        guard raw.count >= 6 else { return nil }
+        let offset = String(raw.suffix(6))
+        return timeZone(fromEXIFOffset: offset) == nil ? nil : offset
     }
 
     private static func timeZone(fromEXIFOffset offset: String) -> TimeZone? {
