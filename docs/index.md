@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.18
+
+- Original PhotoKit metadata for curation — Photos-library scans now request original high-quality image data for metadata so HEIC assets retain `OffsetTimeOriginal` and filter/display by the camera capture timezone instead of proxy fallback dates
+
+---
+
 ### v1.21.17
 
 - Inline EXIF timezone timestamps — curation now parses `DateTimeOriginal` values that contain the timezone offset inline, preventing Photos-library items such as `2026:03:14 12:01:40.217-07:00` from falling back to the Mac timezone
