@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.29
+
+- Manual no-location camera timezone — Photos-library range selection can apply a UTC offset to no-GPS photos that have EXIF capture time but no EXIF timezone, with diagnostics showing `exif:manual-offset`
+
+---
+
 ### v1.21.28
 
 - No-GPS camera-local EXIF time — Photos-library curation now trusts timezone-less EXIF camera time when GPS is absent, using Photos creation date only when EXIF is missing or GPS-assumed EXIF conflicts with Photos
