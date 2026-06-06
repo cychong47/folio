@@ -21,7 +21,14 @@ class CurationStore: ObservableObject {
     @Published var lastFetchCount: Int = 0    // date-range count
     @Published var lastLibraryTotal: Int = 0  // total library count (no filter)
     @Published var lastAuthStatus: String = ""
+    @Published var curationDiagnostics: [String] = []
     private var locationTimeZoneCache: [String: TimeZone] = [:]
+
+    private struct MetadataLoadResult {
+        var data: Data?
+        var source: String
+        var resourceSummary: String
+    }
 
     nonisolated static func photoLibraryMetadataRequestOptions() -> PHImageRequestOptions {
         let options = PHImageRequestOptions()
@@ -67,6 +74,7 @@ class CurationStore: ObservableObject {
         lastFetchCount = 0
         lastLibraryTotal = 0
         lastAuthStatus = ""
+        curationDiagnostics = []
         dateRange = (start: startDate, end: endDate)
 
         // Check auth — all PhotoKit calls stay on the MainActor (avoids thread-hop issues)
@@ -112,7 +120,8 @@ class CurationStore: ObservableObject {
             let coord = ph.location.map {
                 CLLocationCoordinate2D(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude)
             }
-            let metadataData = await photoLibraryMetadataData(for: ph)
+            let metadata = await photoLibraryMetadataData(for: ph)
+            let metadataData = metadata.data
             let initialEXIFTimestamp = metadataData.flatMap { MetadataIngestionService.exifTimestamp(from: $0) }
             let locationTimeZone = initialEXIFTimestamp?.timeZone == nil ? await timeZone(for: coord) : nil
             let exifTimestamp = metadataData.flatMap {
@@ -126,6 +135,15 @@ class CurationStore: ObservableObject {
                 displayTimeZone: locationTimeZone,
                 startDate: startDate,
                 endDate: endDate
+            )
+
+            appendDiagnostic(
+                phAsset: ph,
+                metadata: metadata,
+                exifTimestamp: exifTimestamp,
+                locationTimeZone: locationTimeZone,
+                finalTimestamp: timestamp,
+                included: isInSelectedDateRange
             )
 
             if isInSelectedDateRange {
@@ -161,6 +179,30 @@ class CurationStore: ObservableObject {
         case .notDetermined: return "Not Determined"
         @unknown default:    return "Unknown (\(status.rawValue))"
         }
+    }
+
+    private func appendDiagnostic(
+        phAsset: PHAsset,
+        metadata: MetadataLoadResult,
+        exifTimestamp: (date: Date, timeZone: TimeZone?)?,
+        locationTimeZone: TimeZone?,
+        finalTimestamp: Date,
+        included: Bool
+    ) {
+        guard curationDiagnostics.count < 80 else { return }
+        let line = [
+            included ? "IN" : "OUT",
+            "file=\(Self.assetFilename(phAsset))",
+            "creation=\(Self.debugDate(phAsset.creationDate))",
+            "source=\(metadata.source)",
+            "resources=\(metadata.resourceSummary)",
+            "exif=\(Self.debugDate(exifTimestamp?.date))",
+            "exifTZ=\(Self.debugTimeZone(exifTimestamp?.timeZone))",
+            "locTZ=\(Self.debugTimeZone(locationTimeZone))",
+            "final=\(Self.debugDate(finalTimestamp))"
+        ].joined(separator: " | ")
+        curationDiagnostics.append(line)
+        print("[Photolog][CurationDate] \(line)")
     }
 
     func toggleSelection(assetID: UUID) {
@@ -258,10 +300,17 @@ class CurationStore: ObservableObject {
         }
     }
 
-    private nonisolated func photoLibraryMetadataData(for asset: PHAsset) async -> Data? {
+    private nonisolated func photoLibraryMetadataData(for asset: PHAsset) async -> MetadataLoadResult {
         let resources = PHAssetResource.assetResources(for: asset)
-        guard let resource = resources.first(where: { $0.type == .photo }) ?? resources.first else {
-            return await photoLibraryImageData(for: asset)
+        let resourceSummary = resources.map {
+            "\(Self.resourceTypeName($0.type)):\($0.originalFilename)"
+        }.joined(separator: ",")
+        guard let resource = Self.preferredMetadataResource(from: resources) else {
+            return MetadataLoadResult(
+                data: await photoLibraryImageData(for: asset),
+                source: "imageManager:no-resource",
+                resourceSummary: resourceSummary.isEmpty ? "none" : resourceSummary
+            )
         }
 
         let originalExt = (resource.originalFilename as NSString).pathExtension
@@ -272,10 +321,64 @@ class CurationStore: ObservableObject {
 
         do {
             try await writePHAssetResource(resource, to: tempURL)
-            return try Data(contentsOf: tempURL)
+            return MetadataLoadResult(
+                data: try Data(contentsOf: tempURL),
+                source: "assetResource:\(Self.resourceTypeName(resource.type)):\(resource.originalFilename)",
+                resourceSummary: resourceSummary
+            )
         } catch {
-            return await photoLibraryImageData(for: asset)
+            return MetadataLoadResult(
+                data: await photoLibraryImageData(for: asset),
+                source: "imageManager:fallback:\(Self.resourceTypeName(resource.type)):\(resource.originalFilename)",
+                resourceSummary: resourceSummary
+            )
         }
+    }
+
+    nonisolated static func preferredMetadataResource(from resources: [PHAssetResource]) -> PHAssetResource? {
+        let preferredTypes: [PHAssetResourceType] = [
+            .adjustmentBasePhoto,
+            .fullSizePhoto,
+            .photo,
+            .alternatePhoto
+        ]
+        for type in preferredTypes {
+            if let resource = resources.first(where: { $0.type == type }) {
+                return resource
+            }
+        }
+        return resources.first
+    }
+
+    private nonisolated static func resourceTypeName(_ type: PHAssetResourceType) -> String {
+        switch type {
+        case .photo: return "photo"
+        case .video: return "video"
+        case .audio: return "audio"
+        case .alternatePhoto: return "alternatePhoto"
+        case .fullSizePhoto: return "fullSizePhoto"
+        case .fullSizeVideo: return "fullSizeVideo"
+        case .adjustmentData: return "adjustmentData"
+        case .adjustmentBasePhoto: return "adjustmentBasePhoto"
+        case .pairedVideo: return "pairedVideo"
+        @unknown default: return "unknown(\(type.rawValue))"
+        }
+    }
+
+    private nonisolated static func assetFilename(_ asset: PHAsset) -> String {
+        PHAssetResource.assetResources(for: asset).first?.originalFilename ?? asset.localIdentifier
+    }
+
+    private nonisolated static func debugDate(_ date: Date?) -> String {
+        guard let date else { return "nil" }
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter.string(from: date)
+    }
+
+    private nonisolated static func debugTimeZone(_ timeZone: TimeZone?) -> String {
+        guard let timeZone else { return "nil" }
+        return "\(timeZone.identifier)(\(timeZone.secondsFromGMT()))"
     }
 
     private func timeZone(for coordinate: CLLocationCoordinate2D?) async -> TimeZone? {

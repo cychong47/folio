@@ -235,14 +235,31 @@ private struct EventNavigatorPanel: View {
     @ObservedObject var store: CurationStore
 
     var body: some View {
-        List(store.clusters.indices, id: \.self, selection: Binding(
-            get: { store.selectedClusterIndex },
-            set: { store.selectedClusterIndex = $0 ?? 0 }
-        )) { idx in
-            EventRow(cluster: store.clusters[idx])
-                .tag(idx)
+        VStack(spacing: 0) {
+            List(store.clusters.indices, id: \.self, selection: Binding(
+                get: { store.selectedClusterIndex },
+                set: { store.selectedClusterIndex = $0 ?? 0 }
+            )) { idx in
+                EventRow(cluster: store.clusters[idx])
+                    .tag(idx)
+            }
+            .listStyle(.sidebar)
+
+            if let diagnostic = store.curationDiagnostics.first(where: { $0.hasPrefix("IN") }) ?? store.curationDiagnostics.first {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Curation Metadata")
+                        .font(.caption.weight(.semibold))
+                    Text(diagnostic)
+                        .font(.caption2.monospaced())
+                        .foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+                        .lineLimit(8)
+                }
+                .padding(8)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Theme.background)
+            }
         }
-        .listStyle(.sidebar)
         .background(Theme.panel)
     }
 }

@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.20
+- Curation metadata diagnostics and resource preference — Photos-library scans now prefer original/base photo resources for EXIF and show the selected resource, parsed EXIF timestamp, timezone, and final filter decision in the curation sidebar to diagnose remaining Photos metadata mismatches
+
 ### v1.21.19
 - Original asset-resource metadata for curation — Photos-library scans now read EXIF from the original `PHAssetResource` temp file, preserving separate `OffsetTimeOriginal` and `SubSecTimeOriginal` values from HEIC originals instead of relying on rendered PhotoKit image data
 
