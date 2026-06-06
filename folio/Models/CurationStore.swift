@@ -162,7 +162,8 @@ class CurationStore: ObservableObject {
                     pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight),
                     isScreenshot: ph.mediaSubtypes.contains(.photoScreenshot),
                     isFavorite: ph.isFavorite,
-                    curationDiagnostic: diagnostic
+                    curationDiagnostic: diagnostic,
+                    usesPhotoLibraryCreationDate: timestampResolution.source.hasPrefix("creation:")
                 ))
             }
             if (i + 1) % 10 == 0 || i == total - 1 {
@@ -195,6 +196,10 @@ class CurationStore: ObservableObject {
         creationDate: Date?,
         fallbackDate: Date
     ) -> (date: Date, timeZone: TimeZone?, source: String) {
+        if let exifTimestamp, locationTimeZone != nil, let creationDate,
+           abs(exifTimestamp.date.timeIntervalSince(creationDate)) > 2 * 3600 {
+            return (creationDate, nil, "creation:diverged-exif")
+        }
         if let exifTimestamp, exifTimestamp.timeZone != nil || locationTimeZone != nil {
             return (exifTimestamp.date, exifTimestamp.timeZone ?? locationTimeZone, "exif")
         }

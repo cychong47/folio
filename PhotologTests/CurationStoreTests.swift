@@ -39,4 +39,20 @@ final class CurationStoreTests: XCTestCase {
         XCTAssertEqual(resolved.timeZone, captureTimeZone)
         XCTAssertEqual(resolved.source, "exif")
     }
+
+    func testPhotoLibraryTimestampUsesCreationDateWhenGPSAssumedEXIFDivergesFromPhotosDate() {
+        let gpsTimeZone = TimeZone(secondsFromGMT: -7 * 3600)!
+        let exifDate = Date(timeIntervalSince1970: 1_765_000_000)
+        let creationDate = exifDate.addingTimeInterval(8 * 3600)
+        let resolved = CurationStore.resolvedPhotoLibraryTimestamp(
+            exifTimestamp: (date: exifDate, timeZone: gpsTimeZone),
+            locationTimeZone: gpsTimeZone,
+            creationDate: creationDate,
+            fallbackDate: Date(timeIntervalSince1970: 0)
+        )
+
+        XCTAssertEqual(resolved.date, creationDate)
+        XCTAssertNil(resolved.timeZone)
+        XCTAssertEqual(resolved.source, "creation:diverged-exif")
+    }
 }

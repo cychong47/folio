@@ -876,7 +876,10 @@ private struct ThumbnailCell: View {
 
     // Format in photo's local timezone so a SF photo shows PST, not KST
     private var timestampText: String {
-        photoLocalTime(asset.timestamp, timeZone: asset.captureTimeZone ?? geocodeResult?.timeZone)
+        photoLocalTime(
+            asset.timestamp,
+            timeZone: asset.usesPhotoLibraryCreationDate ? nil : asset.captureTimeZone ?? geocodeResult?.timeZone
+        )
     }
 
     var body: some View {
@@ -1042,8 +1045,12 @@ private struct PhotoDetailSheet: View {
 
                 if let asset {
                     VStack(spacing: 2) {
-                        Text(photoLocalTime(asset.timestamp, timeZone: asset.captureTimeZone ?? geocodeResult?.timeZone,
-                                            dateStyle: .medium, timeStyle: .short))
+                        Text(photoLocalTime(
+                            asset.timestamp,
+                            timeZone: asset.usesPhotoLibraryCreationDate ? nil : asset.captureTimeZone ?? geocodeResult?.timeZone,
+                            dateStyle: .medium,
+                            timeStyle: .short
+                        ))
                             .font(.callout.weight(.medium))
                         Text(asset.filename)
                             .font(.caption)
