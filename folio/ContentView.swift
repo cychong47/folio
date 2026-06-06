@@ -44,11 +44,10 @@ struct ContentView: View {
             } else {
                 WelcomeView(
                     isDragTargeted: isDragTargeted,
+                    hasCurationSession: !curationStore.clusters.isEmpty,
                     onBrowse: { browsing = true },
-                    // Skip the date picker if photos are already loaded
-                    onCurate: {
-                        if curationStore.clusters.isEmpty { showDatePicker = true } else { curating = true }
-                    }
+                    onCurate: { showDatePicker = true },
+                    onResumeCuration: { curating = true }
                 )
             }
 

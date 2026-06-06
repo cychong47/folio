@@ -3,8 +3,10 @@ import Photos
 
 struct WelcomeView: View {
     var isDragTargeted: Bool = false
+    var hasCurationSession: Bool = false
     var onBrowse: (() -> Void)? = nil
     var onCurate: (() -> Void)? = nil
+    var onResumeCuration: (() -> Void)? = nil
     @EnvironmentObject var pendingPost: PendingPost
     @State private var showCancelConfirm = false
     @State private var photosStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
@@ -52,6 +54,13 @@ struct WelcomeView: View {
                                 .foregroundStyle(Theme.accent)
                                 .focusable(false)
                                 .keyboardShortcut("k", modifiers: .command)
+                            if hasCurationSession {
+                                Text(" · ")
+                                Button("Resume Curation") { onResumeCuration?() }
+                                    .buttonStyle(.plain)
+                                    .foregroundStyle(Theme.accent)
+                                    .focusable(false)
+                            }
                         }
                         .font(.callout)
                         .foregroundStyle(.secondary)

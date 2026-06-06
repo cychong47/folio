@@ -54,6 +54,11 @@ struct DateRangePickerView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
+                Text("Selected: \(selectedRangeLabel)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+
                 HStack {
                     Spacer()
                     Button("Cancel") { isPresented = false }
@@ -99,5 +104,19 @@ struct DateRangePickerView: View {
         .onAppear {
             authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         }
+    }
+
+    private var selectedRangeLabel: String {
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: startDate)
+        let end = calendar.startOfDay(for: endDate)
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        formatter.timeZone = calendar.timeZone
+        if calendar.isDate(start, inSameDayAs: end) {
+            return formatter.string(from: start)
+        }
+        return "\(formatter.string(from: start)) - \(formatter.string(from: end))"
     }
 }
