@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.9
+
+- Editable curation date range — curation toolbar calendar action now reopens the current Photos-library date range for updates without returning to the start screen
+
+---
+
 ### v1.21.8
 
 - Capture-date curation filtering — Photos-library date ranges now filter by the same capture-local date shown in curation, preventing previous-day timezone captures from appearing in a selected day
