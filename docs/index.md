@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.21
+
+- Ambiguous Photos timestamp fallback — Photos-library curation now uses `PHAsset.creationDate` when EXIF has no timezone and no GPS-derived timezone, matching Photos.app for timezone-less JPEGs, and the sidebar metadata diagnostic now follows the selected event instead of showing an unrelated excluded scan row
+
+---
+
 ### v1.21.20
 
 - Curation metadata diagnostics and resource preference — Photos-library scans now prefer original/base photo resources for EXIF and show the selected resource, parsed EXIF timestamp, timezone, and final filter decision in the curation sidebar to diagnose remaining Photos metadata mismatches
