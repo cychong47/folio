@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.5
+
+- Fix persistent map camera icon tumbling — curation map pins now use plain `MKAnnotationView` bitmap camera icons instead of MapKit marker glyphs, removing marker-level animation
+
+---
+
 ### v1.21.4
 
 - Fix map camera icon tumbling for native annotations — curation map now uses `MKMapView` with `MKMarkerAnnotationView` camera pins instead of SwiftUI `MapAnnotation`, eliminating SwiftUI annotation transforms
