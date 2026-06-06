@@ -34,11 +34,25 @@ struct DateRangePickerView: View {
                 .font(.headline)
 
             if authStatus == .authorized || authStatus == .limited {
-                Form {
-                    DatePicker("From", selection: $startDate, in: ...Date(), displayedComponents: .date)
-                    DatePicker("To", selection: $endDate, in: startDate...Date(), displayedComponents: .date)
+                HStack(alignment: .top, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("From")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        DatePicker("", selection: $startDate, in: ...Date(), displayedComponents: .date)
+                            .labelsHidden()
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("To")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        DatePicker("", selection: $endDate, in: startDate...Date(), displayedComponents: .date)
+                            .labelsHidden()
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .formStyle(.grouped)
 
                 HStack {
                     Spacer()
@@ -81,7 +95,7 @@ struct DateRangePickerView: View {
             }
         }
         .padding(24)
-        .frame(width: 360)
+        .frame(width: 520)
         .onAppear {
             authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         }
