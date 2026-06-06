@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.17
+
+- Inline EXIF timezone timestamps — curation now parses `DateTimeOriginal` values that contain the timezone offset inline, preventing Photos-library items such as `2026:03:14 12:01:40.217-07:00` from falling back to the Mac timezone
+
+---
+
 ### v1.21.16
 
 - Fractional EXIF capture timestamps — curation now parses sub-second EXIF timestamps with timezone offsets so Photos-library events display the original capture-local time instead of falling back to the Mac timezone
