@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.9
+- Editable curation date range — curation toolbar calendar action now reopens the current Photos-library date range for updates without returning to the start screen
+
 ### v1.21.8
 - Capture-date curation filtering — Photos-library date ranges now filter by the same capture-local date shown in curation, preventing previous-day timezone captures from appearing in a selected day
 - Curation mode switch clarity — curation's Back button is now labelled "Start" and the in-panel action uses "Create Post" so users can return to the start screen for drag-and-drop posts without losing curation state

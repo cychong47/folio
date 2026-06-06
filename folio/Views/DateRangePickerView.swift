@@ -3,13 +3,30 @@ import Photos
 
 struct DateRangePickerView: View {
     @Binding var isPresented: Bool
+    let confirmLabel: String
     let onConfirm: (Date, Date) -> Void
 
-    @State private var startDate: Date = Calendar.current.startOfDay(
-        for: Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
-    )
-    @State private var endDate: Date = Calendar.current.startOfDay(for: Date())
+    @State private var startDate: Date
+    @State private var endDate: Date
     @State private var authStatus: PHAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+
+    init(
+        isPresented: Binding<Bool>,
+        initialStartDate: Date? = nil,
+        initialEndDate: Date? = nil,
+        confirmLabel: String = "Load Photos",
+        onConfirm: @escaping (Date, Date) -> Void
+    ) {
+        let defaultEndDate = Calendar.current.startOfDay(for: Date())
+        let defaultStartDate = Calendar.current.startOfDay(
+            for: Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date()
+        )
+        _isPresented = isPresented
+        _startDate = State(initialValue: Calendar.current.startOfDay(for: initialStartDate ?? defaultStartDate))
+        _endDate = State(initialValue: Calendar.current.startOfDay(for: initialEndDate ?? defaultEndDate))
+        self.confirmLabel = confirmLabel
+        self.onConfirm = onConfirm
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -26,7 +43,7 @@ struct DateRangePickerView: View {
                 HStack {
                     Spacer()
                     Button("Cancel") { isPresented = false }
-                    Button("Load Photos") {
+                    Button(confirmLabel) {
                         isPresented = false
                         onConfirm(
                             Calendar.current.startOfDay(for: startDate),

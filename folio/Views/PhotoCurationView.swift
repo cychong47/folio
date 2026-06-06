@@ -73,6 +73,7 @@ struct PhotoCurationView: View {
 
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var showDatePicker = false
+    @State private var showChangeRangeConfirmation = false
 
     var body: some View {
         ZStack {
@@ -100,9 +101,17 @@ struct PhotoCurationView: View {
             }
             ToolbarItem(placement: .principal) {
                 if !store.dateRangeLabel.isEmpty {
-                    Text(store.dateRangeLabel)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
+                    HStack(spacing: 8) {
+                        Text(store.dateRangeLabel)
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                        Button(action: requestDateRangeChange) {
+                            Label("Change Date Range", systemImage: "calendar")
+                        }
+                        .labelStyle(.iconOnly)
+                        .buttonStyle(.borderless)
+                        .help("Change Date Range")
+                    }
                 }
             }
             ToolbarItem(placement: .primaryAction) {
@@ -115,6 +124,16 @@ struct PhotoCurationView: View {
         }
         .sheet(isPresented: $store.isRenaming) {
             RenameSheet(store: store)
+        }
+        .sheet(isPresented: $showDatePicker) {
+            DateRangePickerView(
+                isPresented: $showDatePicker,
+                initialStartDate: store.dateRange?.start,
+                initialEndDate: store.dateRange?.end,
+                confirmLabel: store.dateRange == nil ? "Load Photos" : "Update Photos"
+            ) { start, end in
+                Task { await store.ingest(startDate: start, endDate: end) }
+            }
         }
         .sheet(item: Binding(
             get: { store.exportedMarkdown.map {
@@ -137,6 +156,20 @@ struct PhotoCurationView: View {
             }
         } message: {
             Text(store.exportError ?? "")
+        }
+        .alert("Change Date Range?", isPresented: $showChangeRangeConfirmation) {
+            Button("Cancel", role: .cancel) {}
+            Button("Change Dates") { showDatePicker = true }
+        } message: {
+            Text("Changing the date range will rescan photos and reset the current curation selections.")
+        }
+    }
+
+    private func requestDateRangeChange() {
+        if store.clusters.reduce(0, { $0 + $1.selectedCount }) > 0 {
+            showChangeRangeConfirmation = true
+        } else {
+            showDatePicker = true
         }
     }
 
@@ -188,16 +221,11 @@ struct PhotoCurationView: View {
                         .frame(maxWidth: 380)
                 }
             }
-            Button("Try Different Dates") { showDatePicker = true }
+            Button("Try Different Dates") { requestDateRangeChange() }
                 .buttonStyle(.borderedProminent)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Theme.background)
-        .sheet(isPresented: $showDatePicker) {
-            DateRangePickerView(isPresented: $showDatePicker) { start, end in
-                Task { await store.ingest(startDate: start, endDate: end) }
-            }
-        }
     }
 }
 
