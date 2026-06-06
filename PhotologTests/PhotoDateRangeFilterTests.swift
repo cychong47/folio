@@ -32,6 +32,22 @@ final class PhotoDateRangeFilterTests: XCTestCase {
         ))
     }
 
+    func testDisplayTimeZoneExcludesNextDisplayedDayWhenEXIFTimeZoneIsMissing() {
+        let systemTimeZone = TimeZone(secondsFromGMT: 9 * 3600)!
+        let displayTimeZone = TimeZone(secondsFromGMT: 14 * 3600)!
+        let selectedDay = date(year: 2026, month: 3, day: 15, hour: 12, timeZone: systemTimeZone)
+        let captureInstant = date(year: 2026, month: 3, day: 16, hour: 0, minute: 30, timeZone: displayTimeZone)
+
+        XCTAssertFalse(PhotoDateRangeFilter.contains(
+            captureInstant,
+            captureTimeZone: nil,
+            displayTimeZone: displayTimeZone,
+            startDate: selectedDay,
+            endDate: selectedDay,
+            selectionCalendar: calendar(timeZone: systemTimeZone)
+        ))
+    }
+
     func testPhotoKitQueryRangeWidensByOneDayOnBothSides() {
         let systemTimeZone = TimeZone(secondsFromGMT: 9 * 3600)!
         let selectedDay = date(year: 2026, month: 3, day: 15, hour: 12, timeZone: systemTimeZone)

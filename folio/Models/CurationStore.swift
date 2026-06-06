@@ -21,6 +21,7 @@ class CurationStore: ObservableObject {
     @Published var lastFetchCount: Int = 0    // date-range count
     @Published var lastLibraryTotal: Int = 0  // total library count (no filter)
     @Published var lastAuthStatus: String = ""
+    private var locationTimeZoneCache: [String: TimeZone] = [:]
 
     var dateRangeLabel: String {
         guard let r = dateRange else { return "" }
@@ -99,9 +100,11 @@ class CurationStore: ObservableObject {
             let exifTimestamp = await photoLibraryEXIFTimestamp(for: ph)
             let timestamp = exifTimestamp?.date ?? ph.creationDate ?? Date()
             let captureTimeZone = exifTimestamp?.timeZone
+            let locationTimeZone = captureTimeZone == nil ? await timeZone(for: coord) : nil
             let isInSelectedDateRange = PhotoDateRangeFilter.contains(
                 timestamp,
                 captureTimeZone: captureTimeZone,
+                displayTimeZone: locationTimeZone,
                 startDate: startDate,
                 endDate: endDate
             )
@@ -110,7 +113,7 @@ class CurationStore: ObservableObject {
                 assets.append(CurationAsset(
                     phAsset: ph, url: nil,
                     timestamp: timestamp,
-                    captureTimeZone: captureTimeZone,
+                    captureTimeZone: captureTimeZone ?? locationTimeZone,
                     coordinate: coord,
                     pixelSize: CGSize(width: ph.pixelWidth, height: ph.pixelHeight),
                     isScreenshot: ph.mediaSubtypes.contains(.photoScreenshot),
@@ -237,6 +240,20 @@ class CurationStore: ObservableObject {
                 continuation.resume(returning: MetadataIngestionService.exifTimestamp(from: data))
             }
         }
+    }
+
+    private func timeZone(for coordinate: CLLocationCoordinate2D?) async -> TimeZone? {
+        guard let coordinate else { return nil }
+        let key = String(format: "%.2f,%.2f", coordinate.latitude, coordinate.longitude)
+        if let cached = locationTimeZoneCache[key] { return cached }
+
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        guard let placemark = try? await CLGeocoder().reverseGeocodeLocation(location).first,
+              let timeZone = placemark.timeZone else {
+            return nil
+        }
+        locationTimeZoneCache[key] = timeZone
+        return timeZone
     }
 
     func export(settings: AppSettings) async {

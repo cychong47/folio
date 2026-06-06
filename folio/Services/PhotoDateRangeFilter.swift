@@ -17,6 +17,7 @@ enum PhotoDateRangeFilter {
     static func contains(
         _ timestamp: Date,
         captureTimeZone: TimeZone?,
+        displayTimeZone: TimeZone? = nil,
         startDate: Date,
         endDate: Date,
         selectionCalendar: Calendar = .current
@@ -25,8 +26,8 @@ enum PhotoDateRangeFilter {
         let selectionEnd = selectionCalendar.startOfDay(for: endDate)
 
         var captureCalendar = selectionCalendar
-        if let captureTimeZone {
-            captureCalendar.timeZone = captureTimeZone
+        if let timeZone = captureTimeZone ?? displayTimeZone {
+            captureCalendar.timeZone = timeZone
         }
 
         let captureDay = captureCalendar.startOfDay(for: timestamp)

@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.10
+- Location-timezone curation filtering — Photos-library date ranges now use GPS-derived timezone when EXIF offset is missing, preventing next-day displayed photos from leaking into a selected day
+
 ### v1.21.9
 - Editable curation date range — curation toolbar calendar action now reopens the current Photos-library date range for updates without returning to the start screen
 
