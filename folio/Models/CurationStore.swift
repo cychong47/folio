@@ -97,10 +97,14 @@ class CurationStore: ObservableObject {
             let coord = ph.location.map {
                 CLLocationCoordinate2D(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude)
             }
-            let exifTimestamp = await photoLibraryEXIFTimestamp(for: ph)
+            let imageData = await photoLibraryImageData(for: ph)
+            let initialEXIFTimestamp = imageData.flatMap { MetadataIngestionService.exifTimestamp(from: $0) }
+            let locationTimeZone = initialEXIFTimestamp?.timeZone == nil ? await timeZone(for: coord) : nil
+            let exifTimestamp = imageData.flatMap {
+                MetadataIngestionService.exifTimestamp(from: $0, assumedTimeZone: locationTimeZone)
+            }
             let timestamp = exifTimestamp?.date ?? ph.creationDate ?? Date()
             let captureTimeZone = exifTimestamp?.timeZone
-            let locationTimeZone = captureTimeZone == nil ? await timeZone(for: coord) : nil
             let isInSelectedDateRange = PhotoDateRangeFilter.contains(
                 timestamp,
                 captureTimeZone: captureTimeZone,
@@ -186,7 +190,7 @@ class CurationStore: ObservableObject {
         }
         clusters.remove(at: clusterIndex)
         clusters.insert(contentsOf: newClusters, at: min(clusterIndex, clusters.count))
-        clusters.sort { $0.startDate < $1.startDate }
+        clusters.sort { $0.displaySortDate < $1.displaySortDate }
         if let firstIdx = clusters.firstIndex(where: { $0.id == newClusters[0].id }) {
             selectedClusterIndex = firstIdx
         }
@@ -225,7 +229,7 @@ class CurationStore: ObservableObject {
         return nil
     }
 
-    private nonisolated func photoLibraryEXIFTimestamp(for asset: PHAsset) async -> (date: Date, timeZone: TimeZone?)? {
+    private nonisolated func photoLibraryImageData(for asset: PHAsset) async -> Data? {
         await withCheckedContinuation { continuation in
             let options = PHImageRequestOptions()
             options.deliveryMode = .fastFormat
@@ -237,7 +241,7 @@ class CurationStore: ObservableObject {
                     continuation.resume(returning: nil)
                     return
                 }
-                continuation.resume(returning: MetadataIngestionService.exifTimestamp(from: data))
+                continuation.resume(returning: data)
             }
         }
     }

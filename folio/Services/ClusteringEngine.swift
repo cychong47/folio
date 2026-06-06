@@ -68,7 +68,7 @@ enum ClusteringEngine {
             ))
         }
 
-        clusters.sort { $0.startDate < $1.startDate }
+        clusters.sort { $0.displaySortDate < $1.displaySortDate }
         return clusters
     }
 

@@ -23,6 +23,20 @@ struct EventCluster: Identifiable {
         assets.sorted { $0.timestamp < $1.timestamp }.first?.captureTimeZone
     }
 
+    var displaySortDate: Date {
+        let timeZone = displayTimeZone ?? .current
+        var displayCalendar = Calendar(identifier: .gregorian)
+        displayCalendar.timeZone = timeZone
+        var sortCalendar = Calendar(identifier: .gregorian)
+        sortCalendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .gmt
+
+        let components = displayCalendar.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second],
+            from: startDate
+        )
+        return sortCalendar.date(from: components) ?? startDate
+    }
+
     func displayDateText(selectionTimeZone: TimeZone = .current, locale: Locale = .current) -> String {
         let formatter = DateFormatter()
         formatter.locale = locale

@@ -2,6 +2,33 @@ import XCTest
 @testable import Photolog
 
 final class EventClusterTests: XCTestCase {
+    func testSortDateUsesDisplayedCaptureLocalTime() {
+        let earlyDisplayZone = TimeZone(secondsFromGMT: 14 * 3600)!
+        let lateDisplayZone = TimeZone(secondsFromGMT: -8 * 3600)!
+        let morning = CurationAsset(
+            phAsset: nil,
+            url: nil,
+            timestamp: date(year: 2026, month: 3, day: 15, hour: 4, minute: 1, timeZone: earlyDisplayZone),
+            captureTimeZone: earlyDisplayZone,
+            coordinate: nil,
+            pixelSize: .zero
+        )
+        let evening = CurationAsset(
+            phAsset: nil,
+            url: nil,
+            timestamp: date(year: 2026, month: 3, day: 15, hour: 18, minute: 1, timeZone: lateDisplayZone),
+            captureTimeZone: lateDisplayZone,
+            coordinate: nil,
+            pixelSize: .zero
+        )
+        let clusters = [
+            EventCluster(name: "Evening", assets: [evening], startDate: evening.timestamp, endDate: evening.timestamp),
+            EventCluster(name: "Morning", assets: [morning], startDate: morning.timestamp, endDate: morning.timestamp)
+        ].sorted { $0.displaySortDate < $1.displaySortDate }
+
+        XCTAssertEqual(clusters.map(\.name), ["Morning", "Evening"])
+    }
+
     func testDisplayTimestampUsesFirstAssetCaptureTimeZone() {
         let systemTimeZone = TimeZone(secondsFromGMT: 9 * 3600)!
         let captureTimeZone = TimeZone(secondsFromGMT: -8 * 3600)!

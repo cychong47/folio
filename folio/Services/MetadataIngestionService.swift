@@ -109,7 +109,7 @@ enum MetadataIngestionService {
             return CurationAsset(phAsset: nil, url: url, timestamp: fileDate(url), captureTimeZone: nil, coordinate: nil, pixelSize: .zero)
         }
 
-        let exifTimestamp = exifDate(from: props)
+        let exifTimestamp = exifTimestamp(from: props)
         let timestamp = exifTimestamp?.date ?? fileDate(url)
         let coordinate = gpsCoordinate(from: props)
         let w = props[kCGImagePropertyPixelWidth as String] as? CGFloat ?? 0
@@ -125,15 +125,18 @@ enum MetadataIngestionService {
         )
     }
 
-    static func exifTimestamp(from data: Data) -> (date: Date, timeZone: TimeZone?)? {
+    static func exifTimestamp(from data: Data, assumedTimeZone: TimeZone? = nil) -> (date: Date, timeZone: TimeZone?)? {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil),
               let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else {
             return nil
         }
-        return exifDate(from: props)
+        return exifTimestamp(from: props, assumedTimeZone: assumedTimeZone)
     }
 
-    private static func exifDate(from props: [String: Any]) -> (date: Date, timeZone: TimeZone?)? {
+    static func exifTimestamp(
+        from props: [String: Any],
+        assumedTimeZone: TimeZone? = nil
+    ) -> (date: Date, timeZone: TimeZone?)? {
         let exif = props[kCGImagePropertyExifDictionary as String] as? [String: Any]
         let tiff = props[kCGImagePropertyTIFFDictionary as String] as? [String: Any]
         let raw = (exif?[kCGImagePropertyExifDateTimeOriginal as String] as? String)
@@ -152,8 +155,11 @@ enum MetadataIngestionService {
         let f = DateFormatter()
         f.locale = Locale(identifier: "en_US_POSIX")
         f.dateFormat = "yyyy:MM:dd HH:mm:ss"
+        if let assumedTimeZone {
+            f.timeZone = assumedTimeZone
+        }
         guard let date = f.date(from: raw) else { return nil }
-        return (date, nil)
+        return (date, assumedTimeZone)
     }
 
     private static func timeZone(fromEXIFOffset offset: String) -> TimeZone? {
