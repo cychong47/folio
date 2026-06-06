@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.25
+
+- Curation date-filter diagnostics — Photos-library metadata rows now include the selected date range, computed capture day, selection timezone, and applied timezone so no-GPS filter decisions can be audited directly from the curation sidebar
+
+---
+
 ### v1.21.24
 
 - No-GPS Photos date display rollback — ambiguous Photos-library JPEGs that fall back to `PHAsset.creationDate` no longer inherit the curated batch timezone, preventing selected March 15 photos from displaying as March 14
