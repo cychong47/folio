@@ -2,7 +2,7 @@ import XCTest
 @testable import Photolog
 
 final class EventClusterTests: XCTestCase {
-    func testDisplayDateUsesFirstAssetCaptureTimeZone() {
+    func testDisplayTimestampUsesFirstAssetCaptureTimeZone() {
         let systemTimeZone = TimeZone(secondsFromGMT: 9 * 3600)!
         let captureTimeZone = TimeZone(secondsFromGMT: -8 * 3600)!
         let timestamp = date(year: 2026, month: 3, day: 15, hour: 23, minute: 30, timeZone: captureTimeZone)
@@ -23,7 +23,7 @@ final class EventClusterTests: XCTestCase {
 
         XCTAssertEqual(
             cluster.displayDateText(selectionTimeZone: systemTimeZone, locale: Locale(identifier: "en_US_POSIX")),
-            "Mar 15, 2026"
+            "Mar 15, 2026 at 11:30\u{202F}PM"
         )
     }
 

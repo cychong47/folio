@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.13
+- Event navigator timestamps — curation event rows now show capture-local date plus hour and minute under the event title
+
 ### v1.21.12
 - Capture-local event dates — curation event rows now format event dates in the first photo's capture timezone so events match the photo dates shown in the grid and detail views
 

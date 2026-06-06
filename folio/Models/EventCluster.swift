@@ -27,7 +27,7 @@ struct EventCluster: Identifiable {
         let formatter = DateFormatter()
         formatter.locale = locale
         formatter.dateStyle = .medium
-        formatter.timeStyle = .none
+        formatter.timeStyle = .short
         formatter.timeZone = displayTimeZone ?? selectionTimeZone
         return formatter.string(from: startDate)
     }

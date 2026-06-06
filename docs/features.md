@@ -30,7 +30,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Photo Curation Workspace** — open a vacation photo folder with `⌘K`; photos are auto-grouped into timed events using centroid-anchored spatio-temporal clustering (90-minute temporal gap, 500-metre movement from the event center, or 4-hour event span triggers a new event)
 - **Capture-local date filtering** — Photos-library date ranges match the capture-local day shown in curation, using EXIF offsets or GPS-derived timezones so previous-day and next-day timezone offsets do not leak into the selected day
 - **Smarter event suggestions** — GPS movement is compared against each event's running location center, reducing accidental bridging between nearby places and preventing all-day photo chains from staying in one event; manual Both-mode splits require both a time gap and movement
-- **Event navigator** — sidebar lists each event with its name, capture-local date, duration, and selected/total photo count
+- **Event navigator** — sidebar lists each event with its name, capture-local date and time, duration, and selected/total photo count
 - **Burst stack detection** — photos taken within 3 seconds of each other are grouped into a stack; the largest file (proxy for sharpest) is marked as the primary frame
 - **Grid selection UI** — 160×120 pt thumbnails with aspect-ratio fill; selected photos shown at full opacity with a blue border and checkmark; unselected photos dimmed to 50%
 - **Event rename** — double-click or use the Rename button to give events meaningful names (e.g. "Sunrise hike")
