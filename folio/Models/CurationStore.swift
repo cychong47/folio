@@ -211,11 +211,11 @@ class CurationStore: ObservableObject {
         if let exifTimestamp, exifTimestamp.timeZone != nil || locationTimeZone != nil {
             return (exifTimestamp.date, exifTimestamp.timeZone ?? locationTimeZone, "exif")
         }
-        if let creationDate {
-            return (creationDate, nil, exifTimestamp == nil ? "creation:no-exif" : "creation:ambiguous-exif")
-        }
         if let exifTimestamp {
-            return (exifTimestamp.date, nil, "exif:no-creation")
+            return (exifTimestamp.date, nil, "exif:camera-local")
+        }
+        if let creationDate {
+            return (creationDate, nil, "creation:no-exif")
         }
         return (fallbackDate, nil, "fallback")
     }

@@ -61,7 +61,7 @@ final class PhotoDateRangeFilterTests: XCTestCase {
         XCTAssertEqual(range.end, date(year: 2026, month: 3, day: 16, hour: 23, minute: 59, second: 59, timeZone: systemTimeZone))
     }
 
-    func testNoGPSPhotoLibraryCreationDateExcludesPreviousSelectedDay() {
+    func testPhotoLibraryCreationDateExcludesPreviousSelectedDayWhenEXIFIsMissing() {
         let systemTimeZone = TimeZone(secondsFromGMT: 9 * 3600)!
         let selectedDay = date(year: 2026, month: 3, day: 15, hour: 12, timeZone: systemTimeZone)
         let photoLibraryCreationDate = isoDate("2026-03-13T18:47:02.691Z")
@@ -75,7 +75,7 @@ final class PhotoDateRangeFilterTests: XCTestCase {
         ))
     }
 
-    func testDebugSummaryShowsSelectedRangeAndCaptureDayForNoGPSCreationFallback() {
+    func testDebugSummaryShowsSelectedRangeAndCaptureDayForCreationFallback() {
         let systemTimeZone = TimeZone(secondsFromGMT: 9 * 3600)!
         let selectedDay = date(year: 2026, month: 3, day: 15, hour: 12, timeZone: systemTimeZone)
         let photoLibraryCreationDate = isoDate("2026-03-13T18:47:02.691Z")
