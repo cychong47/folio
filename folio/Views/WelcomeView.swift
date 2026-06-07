@@ -15,59 +15,54 @@ struct WelcomeView: View {
         ZStack {
             Theme.background.ignoresSafeArea()
 
-            VStack(spacing: 18) {
-                // Icon in a soft circle, like Things' onboarding
-                ZStack {
-                    Circle()
-                        .fill(isDragTargeted ? Theme.accent.opacity(0.12) : Theme.panel)
-                        .frame(width: 100, height: 100)
-                    Image(systemName: isDragTargeted ? "photo.badge.plus" : "photo.on.rectangle.angled")
-                        .font(.system(size: 40, weight: .light))
-                        .foregroundStyle(isDragTargeted ? Theme.accent : Color.secondary)
-                }
-                .animation(.easeInOut(duration: 0.15), value: isDragTargeted)
+            VStack(spacing: 34) {
+                Text("Photolog")
+                    .font(.largeTitle.weight(.semibold))
+                    .foregroundStyle(.primary)
 
-                VStack(spacing: 6) {
-                    Text("Photolog")
-                        .font(.title2.weight(.semibold))
-                    if isDragTargeted {
-                        Text("Drop to start a new post")
-                            .font(.callout)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        HStack(spacing: 0) {
-                            Text("Drag photos here, or ")
-                            Button("New Post") { startTextPost() }
-                                .buttonStyle(.plain)
-                                .foregroundStyle(Theme.accent)
-                                .focusable(false)
-                                .keyboardShortcut("n", modifiers: .command)
-                            Text(" · ")
-                            Button("Browse Posts") { onBrowse?() }
-                                .buttonStyle(.plain)
-                                .foregroundStyle(Theme.accent)
-                                .focusable(false)
-                                .keyboardShortcut("b", modifiers: .command)
-                            Text(" · ")
-                            Button("Curate Photos") { onCurate?() }
-                                .buttonStyle(.plain)
-                                .foregroundStyle(Theme.accent)
-                                .focusable(false)
-                                .keyboardShortcut("k", modifiers: .command)
-                            if hasCurationSession {
-                                Text(" · ")
-                                Button("Resume Curation") { onResumeCuration?() }
-                                    .buttonStyle(.plain)
-                                    .foregroundStyle(Theme.accent)
-                                    .focusable(false)
-                            }
-                        }
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
-                    }
+                LazyVGrid(columns: actionColumns, spacing: 18) {
+                    DropActionTile(isTargeted: isDragTargeted)
+
+                    WelcomeActionTile(
+                        title: "New Post",
+                        subtitle: "Start writing",
+                        systemImage: "square.and.pencil",
+                        action: startTextPost
+                    )
+                    .keyboardShortcut("n", modifiers: .command)
+
+                    WelcomeActionTile(
+                        title: "Browse Posts",
+                        subtitle: "Edit existing",
+                        systemImage: "doc.text.magnifyingglass",
+                        action: { onBrowse?() }
+                    )
+                    .keyboardShortcut("b", modifiers: .command)
+
+                    WelcomeActionTile(
+                        title: "Curate Photos",
+                        subtitle: hasCurationSession ? "Load new range" : "Build events",
+                        systemImage: "rectangle.stack.badge.person.crop",
+                        action: { onCurate?() }
+                    )
+                    .keyboardShortcut("k", modifiers: .command)
                 }
-                .animation(.easeInOut(duration: 0.15), value: isDragTargeted)
+                .frame(maxWidth: 660)
+
+                if hasCurationSession {
+                    Button {
+                        onResumeCuration?()
+                    } label: {
+                        Label("Resume Curation", systemImage: "arrow.uturn.forward.circle")
+                    }
+                    .buttonStyle(.borderless)
+                    .font(.callout.weight(.medium))
+                    .foregroundStyle(Theme.accent)
+                    .focusable(false)
+                }
             }
+            .padding(.horizontal, 40)
+            .padding(.bottom, 44)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .overlay(
                 RoundedRectangle(cornerRadius: 20)
@@ -103,6 +98,13 @@ struct WelcomeView: View {
         }
     }
 
+    private var actionColumns: [GridItem] {
+        [
+            GridItem(.flexible(minimum: 140, maximum: 300), spacing: 18),
+            GridItem(.flexible(minimum: 140, maximum: 300), spacing: 18)
+        ]
+    }
+
     private func startTextPost() {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
@@ -117,6 +119,80 @@ struct WelcomeView: View {
             try? fm.removeItem(at: url)
         }
         pendingPost.lastPublished = nil
+    }
+}
+
+private struct DropActionTile: View {
+    let isTargeted: Bool
+
+    var body: some View {
+        VStack(spacing: 12) {
+            Image(systemName: isTargeted ? "tray.and.arrow.down.fill" : "photo.on.rectangle.angled")
+                .font(.system(size: 42, weight: .light))
+                .symbolRenderingMode(.hierarchical)
+                .foregroundStyle(isTargeted ? Theme.accent : Color.secondary)
+                .frame(height: 48)
+            VStack(spacing: 3) {
+                Text(isTargeted ? "Drop Photos" : "Drag Photos")
+                    .font(.headline.weight(.semibold))
+                    .foregroundStyle(.primary)
+                Text(isTargeted ? "Release to import" : "Drop anywhere")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 150)
+        .padding(.horizontal, 18)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(isTargeted ? Theme.accent.opacity(0.12) : Theme.card)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .strokeBorder(
+                    isTargeted ? Theme.accent : Color.secondary.opacity(0.12),
+                    style: StrokeStyle(lineWidth: isTargeted ? 2 : 1, dash: isTargeted ? [8, 4] : [])
+                )
+        )
+        .animation(.easeInOut(duration: 0.15), value: isTargeted)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Drag Photos. Drop photos anywhere in the window.")
+    }
+}
+
+private struct WelcomeActionTile: View {
+    let title: String
+    let subtitle: String
+    let systemImage: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 12) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 42, weight: .light))
+                    .symbolRenderingMode(.hierarchical)
+                    .foregroundStyle(Theme.accent)
+                    .frame(height: 48)
+                VStack(spacing: 3) {
+                    Text(title)
+                        .font(.headline.weight(.semibold))
+                        .foregroundStyle(.primary)
+                    Text(subtitle)
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: 150)
+            .padding(.horizontal, 18)
+            .background(Theme.card, in: RoundedRectangle(cornerRadius: 10))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(Color.secondary.opacity(0.12), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .focusable(false)
     }
 }
 

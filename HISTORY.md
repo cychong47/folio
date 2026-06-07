@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.39
+- Welcome action launcher — the start window now presents Drag Photos, New Post, Browse Posts, and Curate Photos as large icon tiles with clearer labels instead of inline text links
+
 ### v1.21.38
 - Spacebar curation selection — photo curation grid and preview now toggle the focused or previewed photo selection with Space for faster keyboard-driven review
 - Capture-local event ordering — curation now clusters, ranges, and displays event photos with the same capture-local ordering key, preventing a later timestamp in one event from appearing before an earlier timestamp in the next event
