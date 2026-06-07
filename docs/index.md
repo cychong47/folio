@@ -17,6 +17,13 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.46
+
+- Curation filename stability — curation thumbnails now use filenames captured during ingestion instead of querying Photos resources during SwiftUI rendering, preventing crashes after fetching photos
+- Welcome window size restoration — returning to or relaunching the welcome screen now restores the compact welcome size instead of reusing the larger curation window size
+
+---
+
 ### v1.21.45
 
 - Curation event switching stability — thumbnail location lookups now use an actor-backed geocode cache, preventing crashes caused by concurrent cache mutation when selecting later events
