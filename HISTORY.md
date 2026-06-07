@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.45
+- Curation event switching stability — thumbnail location lookups now use an actor-backed geocode cache, preventing crashes caused by concurrent cache mutation when selecting later events
+
 ### v1.21.44
 - Autosaved post drafts — editor windows now persist unsaved draft metadata and selected photo references so the latest draft can be resumed after app restart or update
 - Curation filename visibility — curation grid thumbnails now show each photo filename, making large manual selections easier to verify before creating a post

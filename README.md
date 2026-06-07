@@ -44,6 +44,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Curation filename visibility** — curation grid thumbnails show each photo filename so large selections can be checked without opening every preview
 - **Curation image subpaths** — curated-photo posts and photo-only exports write selected images and markdown URLs under the configured Static image subpath template such as `YYYY/MM`
 - **Curation post save reliability** — posts created from already-exported curation photos save without deleting or recopying the selected image files
+- **Curation event switching stability** — thumbnail location lookups use a concurrency-safe geocode cache so switching between GPS-heavy events does not crash the app
 - **Photos-only curation export** — `⌘E` exports selected event photos without creating a post, applying blog resize/EXIF settings and prompting for a blog only when configured resize caps differ
 - **Spacebar curation selection** — press Space in the curation grid or preview window to select or unselect the focused photo
 - **Capture-local event ordering** — curation clusters and displays event photo ranges with the same capture-local time order shown in the UI

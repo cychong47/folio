@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		06B36660B1393D2D5132F749 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AF1C70C0633BC507F18D1DF /* ImageIO.framework */; };
 		0A7392243764440A496417F7 /* PostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F3B552995A664883E7BEB9 /* PostListView.swift */; };
+		0C7E8E684F61DDD1C129FE55 /* CurationGeocoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA369F463FAB0A19EE183DD /* CurationGeocoderTests.swift */; };
 		0D3033F18E28EDADA7DFC987 /* PostEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60965A441D6FD363B2D8ACC6 /* PostEditorView.swift */; };
 		16ABCDBB17DA3AA04706AB0E /* ClusteringEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABE01D6BC67BACECD8D1651 /* ClusteringEngine.swift */; };
 		18C9E37F446405718ABEE4A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9E95163A251F43C9FDACF8F /* Assets.xcassets */; };
@@ -24,6 +25,7 @@
 		3A55BDF76D6A8FA6D007A471 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C67143EEA23DF166A9C75 /* ContentView.swift */; };
 		3BBAA6E143E9B776B51305DA /* PostDraftStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6984FC3C1145C8B4868D4C78 /* PostDraftStoreTests.swift */; };
 		3CF2C7692467B3BA0D31F07C /* CurationExportTargetResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0B77150D7667A2E400FF1B /* CurationExportTargetResolver.swift */; };
+		4CCE1F0F5CBD05353075B169 /* CurationGeocoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C04C74A8EC1765D3AE115B /* CurationGeocoder.swift */; };
 		51D95A1F27DA333F27D945E5 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A8AFF3ADA9F600D0D840A1 /* WelcomeView.swift */; };
 		584E130CF3772C06E9CE8B45 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD30B5BA80F037090A0D61A2 /* Constants.swift */; };
 		5DBBCC82E16A674DE8B68DE9 /* PendingPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268845472ABC1740FC1598BE /* PendingPost.swift */; };
@@ -116,6 +118,7 @@
 		7F821DE7FE5DA95974D89AE2 /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
 		82F63BD90F093F00EA8F5532 /* FolioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolioApp.swift; sourceTree = "<group>"; };
 		964EEE3A6800F4D4524D1A90 /* HugoConfigReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HugoConfigReader.swift; sourceTree = "<group>"; };
+		9AA369F463FAB0A19EE183DD /* CurationGeocoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurationGeocoderTests.swift; sourceTree = "<group>"; };
 		9B1971F8472C8DA3DB76B949 /* SlugGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlugGenerator.swift; sourceTree = "<group>"; };
 		A1FA5A8E7688AA874A3A378E /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		A3B9104DCD621F058D193F5E /* MetadataIngestionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataIngestionService.swift; sourceTree = "<group>"; };
@@ -127,6 +130,7 @@
 		B342D008C3E49EFB58A457A6 /* PhotoStripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStripView.swift; sourceTree = "<group>"; };
 		B4D69EBD5ACE0B2CE1E447E1 /* PhotoLibraryDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryDate.swift; sourceTree = "<group>"; };
 		B84007A366F8AA80FB25B94B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C6C04C74A8EC1765D3AE115B /* CurationGeocoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurationGeocoder.swift; sourceTree = "<group>"; };
 		C7C49D9D3E58B8CD00F03BFC /* PostEditorWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEditorWindowView.swift; sourceTree = "<group>"; };
 		C7F54A067B60BC3800BCA29B /* PostDraftStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDraftStore.swift; sourceTree = "<group>"; };
 		CC4E6884E05041E736292F05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -213,6 +217,7 @@
 			children = (
 				5EC874A15869F3547ECAAF91 /* ClusteringEngineTests.swift */,
 				015A85562E3F67356F99F179 /* CurationExportTargetResolverTests.swift */,
+				9AA369F463FAB0A19EE183DD /* CurationGeocoderTests.swift */,
 				D74559F72800E703E8FA6432 /* CurationStoreTests.swift */,
 				7DA8013EC0B167B4D7A3490F /* EventClusterTests.swift */,
 				4F7131FDF6D00C696F50C1A0 /* MetadataIngestionServiceTests.swift */,
@@ -238,6 +243,7 @@
 			children = (
 				AC7D097A371C70C4CBC1E593 /* CategoryScanner.swift */,
 				DABE01D6BC67BACECD8D1651 /* ClusteringEngine.swift */,
+				C6C04C74A8EC1765D3AE115B /* CurationGeocoder.swift */,
 				E2D56F102BF7775E8874D16C /* GitHubPublisher.swift */,
 				4A3D3F2D3CE36699F1B4FEEA /* GitRunner.swift */,
 				964EEE3A6800F4D4524D1A90 /* HugoConfigReader.swift */,
@@ -464,6 +470,7 @@
 				3A55BDF76D6A8FA6D007A471 /* ContentView.swift in Sources */,
 				7C27C094788D6B114D9F7F5E /* CurationAsset.swift in Sources */,
 				3CF2C7692467B3BA0D31F07C /* CurationExportTargetResolver.swift in Sources */,
+				4CCE1F0F5CBD05353075B169 /* CurationGeocoder.swift in Sources */,
 				37F30C436DDDDF87E7C3B361 /* CurationStore.swift in Sources */,
 				735018C258C8712391F96EE9 /* DateRangePickerView.swift in Sources */,
 				76BBD91EED7FBB16912BB5A4 /* DropTargetView.swift in Sources */,
@@ -515,6 +522,7 @@
 			files = (
 				A2094EF6C5870456223F7616 /* ClusteringEngineTests.swift in Sources */,
 				A4B8789FA2E7AC28B7D63D0A /* CurationExportTargetResolverTests.swift in Sources */,
+				0C7E8E684F61DDD1C129FE55 /* CurationGeocoderTests.swift in Sources */,
 				3044A619690FB9D4BC97952A /* CurationStoreTests.swift in Sources */,
 				C14348A8DE8DC8100D7ADA76 /* EventClusterTests.swift in Sources */,
 				8B191B9836B0D0A59DE87B5B /* MetadataIngestionServiceTests.swift in Sources */,

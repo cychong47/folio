@@ -4,38 +4,6 @@ import Photos
 import CoreLocation
 import MapKit
 
-// MARK: - Geocode cache (shared across all thumbnail cells and detail sheets)
-
-private struct GeocodeResult {
-    let locationName: String
-    let timeZone: TimeZone?
-}
-
-// Key = lat/lon rounded to ~1 km — good enough for timezone lookup
-private var _geocodeCache: [String: GeocodeResult] = [:]
-
-private func reverseGeocode(coordinate: CLLocationCoordinate2D) async -> GeocodeResult {
-    let key = String(format: "%.2f,%.2f", coordinate.latitude, coordinate.longitude)
-    if let cached = _geocodeCache[key] { return cached }
-
-    let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-    if let pms = try? await CLGeocoder().reverseGeocodeLocation(location), let pm = pms.first {
-        let parts = [pm.locality, pm.administrativeArea].compactMap { $0 }.filter { !$0.isEmpty }
-        let name = parts.isEmpty
-            ? String(format: "%.3f°, %.3f°", coordinate.latitude, coordinate.longitude)
-            : parts.joined(separator: ", ")
-        let result = GeocodeResult(locationName: name, timeZone: pm.timeZone)
-        _geocodeCache[key] = result
-        return result
-    }
-    let fallback = GeocodeResult(
-        locationName: String(format: "%.3f°, %.3f°", coordinate.latitude, coordinate.longitude),
-        timeZone: nil
-    )
-    _geocodeCache[key] = fallback
-    return fallback
-}
-
 /// Format a date in the timezone where the photo was taken (falls back to device timezone).
 private func photoLocalTime(_ date: Date, timeZone: TimeZone?, dateStyle: DateFormatter.Style = .none,
                              timeStyle: DateFormatter.Style = .short) -> String {
@@ -1148,7 +1116,7 @@ private struct ThumbnailCell: View {
     private func loadLocationName() {
         guard !asset.isScreenshot, geocodeResult == nil, let coord = asset.coordinate else { return }
         Task {
-            geocodeResult = await reverseGeocode(coordinate: coord)
+            geocodeResult = await CurationGeocoder.reverseGeocode(coordinate: coord)
         }
     }
 }
@@ -1325,7 +1293,7 @@ private struct PhotoDetailSheet: View {
         geocodeResult = nil
         guard let coord = asset?.coordinate else { return }
         Task {
-            geocodeResult = await reverseGeocode(coordinate: coord)
+            geocodeResult = await CurationGeocoder.reverseGeocode(coordinate: coord)
         }
     }
 }
