@@ -26,8 +26,9 @@ struct ContentView: View {
                 PostListView(
                     onBack: { browsing = false },
                     onSelect: { summary in
-                        loadPost(summary)
-                        browsing = false
+                        let photos = resolvedPhotos(from: summary.bodyText, postDate: summary.date)
+                        let draftID = postDraftStore.createDraft(from: summary, photos: photos)
+                        openWindow(id: "post-editor", value: draftID)
                     }
                 )
             } else if curating {
@@ -91,20 +92,6 @@ struct ContentView: View {
                 }
             }
         }
-    }
-
-    private func loadPost(_ summary: PostSummary) {
-        pendingPost.clear()
-        pendingPost.lastPublished = nil   // don't carry previous session's record into a re-edit
-        pendingPost.title = summary.title
-        pendingPost.slug = summary.slug
-        pendingPost.dateOverride = summary.date
-        pendingPost.categories = summary.categories
-        pendingPost.tags = summary.tags
-        pendingPost.series = summary.series
-        pendingPost.markdownBody = summary.bodyText
-        pendingPost.existingFileURL = summary.fileURL
-        pendingPost.photos = resolvedPhotos(from: summary.bodyText, postDate: summary.date)
     }
 
     /// Parses image references from markdown body and resolves them to ExportedPhoto instances

@@ -1260,7 +1260,7 @@ private struct ExportSheet: View {
                     dismiss()
                 }
                 Spacer()
-                Button("Open Post Editor") {
+                Button("Create Post") {
                     onCreatePost?(markdown, date)
                     dismiss()
                 }

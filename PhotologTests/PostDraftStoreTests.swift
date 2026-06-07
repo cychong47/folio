@@ -32,4 +32,46 @@ final class PostDraftStoreTests: XCTestCase {
         XCTAssertEqual(mainPost.slug, "main-window-post")
         XCTAssertTrue(mainPost.photos.isEmpty)
     }
+
+    func testCreateDraftFromPostSummaryCopiesExistingPostForWindowEditing() {
+        let store = PostDraftStore()
+        let date = Calendar.current.date(from: DateComponents(
+            year: 2026,
+            month: 3,
+            day: 15,
+            hour: 9
+        ))!
+        let fileURL = URL(fileURLWithPath: "/tmp/content/posts/2026-03-15-trip.md")
+        let photo = ExportedPhoto(
+            filename: "2026-03-15-photo.jpg",
+            markdownPath: "/images/2026-03-15-photo.jpg",
+            localURL: URL(fileURLWithPath: "/tmp/static/images/2026-03-15-photo.jpg"),
+            exifDate: date
+        )
+        let summary = PostSummary(
+            fileURL: fileURL,
+            title: "Trip",
+            date: date,
+            slug: "trip",
+            categories: ["travel"],
+            tags: ["spring"],
+            series: "Seoul",
+            isDraft: false,
+            bodyText: "Body text"
+        )
+
+        let draftID = store.createDraft(from: summary, photos: [photo])
+        let draft = store.draft(for: draftID)
+
+        XCTAssertEqual(draft?.title, "Trip")
+        XCTAssertEqual(draft?.slug, "trip")
+        XCTAssertEqual(draft?.postDate, date)
+        XCTAssertEqual(draft?.categories, ["travel"])
+        XCTAssertEqual(draft?.tags, ["spring"])
+        XCTAssertEqual(draft?.series, "Seoul")
+        XCTAssertEqual(draft?.markdownBody, "Body text")
+        XCTAssertEqual(draft?.existingFileURL, fileURL)
+        XCTAssertEqual(draft?.photos.map(\.filename), ["2026-03-15-photo.jpg"])
+        XCTAssertNil(draft?.lastPublished)
+    }
 }

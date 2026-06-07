@@ -19,6 +19,25 @@ final class PostDraftStore: ObservableObject {
         return id
     }
 
+    @discardableResult
+    func createDraft(from summary: PostSummary, photos: [ExportedPhoto]) -> UUID {
+        let draft = PendingPost()
+        draft.photos = photos
+        draft.title = summary.title
+        draft.slug = summary.slug
+        draft.dateOverride = summary.date
+        draft.categories = summary.categories
+        draft.tags = summary.tags
+        draft.series = summary.series
+        draft.markdownBody = summary.bodyText
+        draft.existingFileURL = summary.fileURL
+        draft.lastPublished = nil
+
+        let id = UUID()
+        drafts[id] = draft
+        return id
+    }
+
     func draft(for id: UUID) -> PendingPost? {
         drafts[id]
     }
