@@ -118,6 +118,11 @@ enum PhotoExporter {
             let destDir = subpath.isEmpty ? base : base.appendingPathComponent(subpath, isDirectory: true)
             try FileManager.default.createDirectory(at: destDir, withIntermediateDirectories: true)
             let dest = destDir.appendingPathComponent(photo.filename)
+            if photo.localURL.standardizedFileURL == dest.standardizedFileURL {
+                try FileManager.default.setAttributes([.posixPermissions: 0o644], ofItemAtPath: dest.path)
+                written.append(dest)
+                continue
+            }
             if FileManager.default.fileExists(atPath: dest.path) {
                 try FileManager.default.removeItem(at: dest)
             }

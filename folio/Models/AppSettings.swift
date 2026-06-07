@@ -201,6 +201,25 @@ class AppSettings: ObservableObject {
         applyAutoScan()
     }
 
+    #if DEBUG
+    init(testDefaults defaults: UserDefaults) {
+        self.defaults = defaults
+        self.appTheme = defaults.string(forKey: Constants.UserDefaultsKeys.appTheme) ?? "system"
+        if let data = defaults.data(forKey: Constants.UserDefaultsKeys.blogProfiles),
+           let decoded = try? JSONDecoder().decode([BlogProfile].self, from: data) {
+            self.profiles = decoded
+        } else {
+            self.profiles = []
+        }
+        if let idStr = defaults.string(forKey: Constants.UserDefaultsKeys.selectedProfileID),
+           let id = UUID(uuidString: idStr) {
+            self.selectedProfileID = id
+        } else {
+            self.selectedProfileID = profiles.first?.id
+        }
+    }
+    #endif
+
     // MARK: - Persistence
 
     private func saveProfiles() {
