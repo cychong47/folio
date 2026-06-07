@@ -135,6 +135,14 @@ enum MetadataIngestionService {
         return cameraModel(from: props)
     }
 
+    static func gpsCoordinate(from data: Data) -> CLLocationCoordinate2D? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
+              let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else {
+            return nil
+        }
+        return gpsCoordinate(from: props)
+    }
+
     static func cameraModel(from props: [String: Any]) -> String? {
         let tiff = props[kCGImagePropertyTIFFDictionary as String] as? [String: Any]
         let make = cleanedCameraComponent(tiff?[kCGImagePropertyTIFFMake as String])
@@ -253,7 +261,7 @@ enum MetadataIngestionService {
         return TimeZone(secondsFromGMT: seconds)
     }
 
-    private static func gpsCoordinate(from props: [String: Any]) -> CLLocationCoordinate2D? {
+    static func gpsCoordinate(from props: [String: Any]) -> CLLocationCoordinate2D? {
         guard let gps = props[kCGImagePropertyGPSDictionary as String] as? [String: Any],
               let lat = gps[kCGImagePropertyGPSLatitude as String] as? Double,
               let lon = gps[kCGImagePropertyGPSLongitude as String] as? Double else { return nil }

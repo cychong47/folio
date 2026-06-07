@@ -125,6 +125,23 @@ final class CurationStoreTests: XCTestCase {
         XCTAssertEqual(resolved.source, "exif")
     }
 
+    func testGPSDisplayTimeZoneOverridesConflictingEXIFOffsetWhenInstantMatchesPhotosDate() {
+        let gpsTimeZone = TimeZone(secondsFromGMT: -7 * 3600)!
+        let exifTimeZone = TimeZone(secondsFromGMT: 9 * 3600)!
+        let captureInstant = isoDate("2026-03-14T19:01:40.217Z")
+        let resolved = CurationStore.resolvedPhotoLibraryTimestamp(
+            exifTimestamp: (date: captureInstant, timeZone: exifTimeZone),
+            locationTimeZone: gpsTimeZone,
+            noLocationTimeZone: nil,
+            creationDate: captureInstant,
+            fallbackDate: Date(timeIntervalSince1970: 0)
+        )
+
+        XCTAssertEqual(resolved.date, captureInstant)
+        XCTAssertEqual(resolved.timeZone, gpsTimeZone)
+        XCTAssertEqual(resolved.source, "exif:gps-timezone")
+    }
+
     private func isoDate(_ value: String) -> Date {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]

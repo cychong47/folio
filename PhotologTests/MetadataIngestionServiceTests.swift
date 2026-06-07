@@ -42,6 +42,22 @@ final class MetadataIngestionServiceTests: XCTestCase {
         XCTAssertNil(cameraModel)
     }
 
+    func testGPSCoordinateParsesFromImageMetadata() {
+        let coordinate = MetadataIngestionService.gpsCoordinate(
+            from: [
+                kCGImagePropertyGPSDictionary as String: [
+                    kCGImagePropertyGPSLatitude as String: 37.7749,
+                    kCGImagePropertyGPSLatitudeRef as String: "N",
+                    kCGImagePropertyGPSLongitude as String: 122.4194,
+                    kCGImagePropertyGPSLongitudeRef as String: "W"
+                ]
+            ]
+        )
+
+        XCTAssertEqual(coordinate?.latitude ?? 0, 37.7749, accuracy: 0.0001)
+        XCTAssertEqual(coordinate?.longitude ?? 0, -122.4194, accuracy: 0.0001)
+    }
+
     func testEXIFTimestampWithSeparatedSubsecondAndOffsetPreservesCaptureTimeZone() {
         let captureTimeZone = TimeZone(secondsFromGMT: -7 * 3600)!
         let timestamp = MetadataIngestionService.exifTimestamp(

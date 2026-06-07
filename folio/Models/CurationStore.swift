@@ -120,14 +120,16 @@ class CurationStore: ObservableObject {
         assets.reserveCapacity(total)
         for i in 0 ..< total {
             let ph = result.object(at: i)
-            let coord = ph.location.map {
-                CLLocationCoordinate2D(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude)
-            }
             let metadata = await photoLibraryMetadataData(for: ph)
             let metadataData = metadata.data
+            let coord = ph.location.map {
+                CLLocationCoordinate2D(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude)
+            } ?? metadataData.flatMap {
+                MetadataIngestionService.gpsCoordinate(from: $0)
+            }
             let initialEXIFTimestamp = metadataData.flatMap { MetadataIngestionService.exifTimestamp(from: $0) }
             let cameraModel = metadataData.flatMap { MetadataIngestionService.cameraModel(from: $0) }
-            let locationTimeZone = initialEXIFTimestamp?.timeZone == nil ? await timeZone(for: coord) : nil
+            let locationTimeZone = await timeZone(for: coord)
             let appliedNoLocationTimeZone = initialEXIFTimestamp?.timeZone == nil && coord == nil
                 ? noLocationTimeZone
                 : nil
@@ -222,6 +224,12 @@ class CurationStore: ObservableObject {
         if let exifTimestamp, locationTimeZone != nil, let creationDate,
            abs(exifTimestamp.date.timeIntervalSince(creationDate)) > 2 * 3600 {
             return (creationDate, nil, "creation:diverged-exif")
+        }
+        if let exifTimestamp, let locationTimeZone, let exifTimeZone = exifTimestamp.timeZone,
+           exifTimeZone.secondsFromGMT() != locationTimeZone.secondsFromGMT(),
+           let creationDate,
+           abs(exifTimestamp.date.timeIntervalSince(creationDate)) <= 2 * 3600 {
+            return (exifTimestamp.date, locationTimeZone, "exif:gps-timezone")
         }
         if let exifTimestamp, locationTimeZone == nil, let noLocationTimeZone {
             return (exifTimestamp.date, noLocationTimeZone, "exif:manual-offset")
