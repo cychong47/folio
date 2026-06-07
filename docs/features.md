@@ -12,7 +12,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 
 ## Content Authoring
 
-- **Post list view** — "Browse Posts" opens a full list of every `.md` file in the content directory, sorted by date descending; each row shows title, date, categories, and a Draft badge; select any post to re-edit it in a separate editor window while the browse list stays open
+- **Post list view** — "Browse Posts" opens a full list of every `.md` file in the content directory, sorted by date descending; each row shows title, date, series, categories, and a Draft badge; select any post to re-edit it in a separate editor window while the browse list stays open
 - **Split-view post editor** — monospaced markdown editor on the left; text + image preview on the right showing content in document order
 - **External editor live reload** — body text in the editor refreshes automatically when the post file is modified by an external editor (VSCode, Neovim, etc.); changes made by Photolog's own Save are excluded
 - **Live text + image preview** — typed text and photos rendered in sequence so you can see how captions relate to photos before publishing

@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.33
+- Series in Browse Posts — post rows now show a Series chip when the selected post has series frontmatter
+
 ### v1.21.32
 - Browse-preserving post editing — selecting a post from Browse Posts now opens it in a separate editor window so the browse list remains available, and curation uses Create Post wording consistently
 

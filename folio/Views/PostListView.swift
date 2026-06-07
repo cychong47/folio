@@ -141,6 +141,16 @@ private struct PostRowView: View {
                     .clipShape(Capsule())
             }
 
+            if !post.series.isEmpty {
+                Text("Series: \(post.series)")
+                    .font(.caption2.weight(.semibold))
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 2)
+                    .background(Theme.accent.opacity(0.14))
+                    .foregroundStyle(Theme.accent)
+                    .clipShape(Capsule())
+            }
+
             ForEach(post.categories, id: \.self) { cat in
                 Text(cat)
                     .font(.caption2.weight(.medium))
