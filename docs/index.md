@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.47
+
+- Welcome access banner visibility — the compact welcome window now leaves enough vertical room for the Photos Grant Access message and button
+
+---
+
 ### v1.21.46
 
 - Curation filename stability — curation thumbnails now use filenames captured during ingestion instead of querying Photos resources during SwiftUI rendering, preventing crashes after fetching photos
