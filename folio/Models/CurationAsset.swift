@@ -7,6 +7,7 @@ struct CurationAsset: Identifiable, Hashable {
     var id: UUID = UUID()
     var phAsset: PHAsset?     // set when source is PhotoKit
     var url: URL?             // set when source is file system
+    var filename: String = "photo"
     var timestamp: Date
     var captureTimeZone: TimeZone?
     var coordinate: CLLocationCoordinate2D?
@@ -26,15 +27,6 @@ struct CurationAsset: Identifiable, Hashable {
 
     var displaySortDate: Date {
         Self.displaySortDate(for: timestamp, timeZone: preferredDisplayTimeZone ?? .current)
-    }
-
-    var filename: String {
-        if let url { return url.lastPathComponent }
-        if let phAsset {
-            return PHAssetResource.assetResources(for: phAsset).first?.originalFilename
-                ?? phAsset.localIdentifier
-        }
-        return "photo"
     }
 
     static func displaySortDate(for timestamp: Date, timeZone: TimeZone) -> Date {

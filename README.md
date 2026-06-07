@@ -10,6 +10,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Drag & drop from Photos.app or Finder** — uses `NSFilePromiseReceiver` to handle Photos.app drags
 - **Welcome action launcher** — the start window presents Drag Photos, New Post, Browse Posts, and Curate Photos as large icon tiles for faster first-step selection
 - **Compact welcome window** — the start window opens shorter around the large action tiles while work modes keep a roomier editor-sized minimum
+- **Welcome window size restoration** — returning to or relaunching the welcome screen restores the compact welcome size instead of reusing a larger curation window
 - **Photolog branding** — app display name, build artifact, and release packaging use the Photolog name
 - **Video file support** — drag `.mp4`, `.mov`, or `.webm` files from Finder; inserts a Hugo `{{< video >}}` shortcode and copies the file to the static directory on save
 - **EXIF date prefix** — filenames derived from `DateTimeOriginal` (e.g. `2026-03-05-IMG_1234.jpg`)
@@ -42,6 +43,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Taxonomy manager** — Settings → General → Manage…; lists all categories, tags, and series with post counts; rename a term or merge two terms across every post in the content directory
 - **Photo Curation Workspace** — scan a vacation photo folder (`⌘K`); Photos-library curation prefers original/base asset resources for metadata, shows camera make/model next to each photo timestamp, shows the selected event's resource plus timestamp and date-filter decisions in the sidebar, submits explicit `yyyy-MM-dd` date fields, can apply a manual UTC offset to no-GPS/no-timezone Photos, uses capture-local date and time from separated EXIF offsets, subsecond EXIF fields, inline EXIF offsets, GPS-derived timezones from PhotoKit or original metadata, camera-local EXIF when GPS is absent, or Photos' own date when EXIF is missing, sorts and numbers event rows by the displayed capture time, uses the visible event day for created post filenames, and keeps the date range editable from the curation toolbar
 - **Curation filename visibility** — curation grid thumbnails show each photo filename so large selections can be checked without opening every preview
+- **Curation filename stability** — curation thumbnails use filenames captured during ingestion instead of querying Photos resources during rendering
 - **Curation image subpaths** — curated-photo posts and photo-only exports write selected images and markdown URLs under the configured Static image subpath template such as `YYYY/MM`
 - **Curation post save reliability** — posts created from already-exported curation photos save without deleting or recopying the selected image files
 - **Curation event switching stability** — thumbnail location lookups use a concurrency-safe geocode cache so switching between GPS-heavy events does not crash the app

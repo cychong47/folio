@@ -179,6 +179,7 @@ class CurationStore: ObservableObject {
             if isInSelectedDateRange {
                 assets.append(CurationAsset(
                     phAsset: ph, url: nil,
+                    filename: Self.assetFilename(ph),
                     timestamp: timestamp,
                     captureTimeZone: captureTimeZone ?? locationTimeZone,
                     coordinate: coord,

@@ -28,7 +28,7 @@ targets:
         CFBundleIdentifier: com.folio.app
         CFBundleName: Photolog
         CFBundleDisplayName: Photolog
-        CFBundleShortVersionString: "1.21.45"
+        CFBundleShortVersionString: "1.21.46"
         CFBundleVersion: "2"
         LSMinimumSystemVersion: "13.0"
         NSPrincipalClass: NSApplication
@@ -83,7 +83,7 @@ targets:
       path: FolioShareExtension/Info.plist
       properties:
         CFBundleDisplayName: Photolog
-        CFBundleShortVersionString: "1.21.45"
+        CFBundleShortVersionString: "1.21.46"
         CFBundleVersion: "2"
         NSExtension:
           NSExtensionAttributes:

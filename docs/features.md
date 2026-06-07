@@ -14,6 +14,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 
 - **Welcome action launcher** — the start window presents Drag Photos, New Post, Browse Posts, and Curate Photos as large icon tiles with labels below each symbol
 - **Compact welcome window** — the start window opens shorter around the large action tiles while editor, browse, and curation modes keep a roomier working minimum
+- **Welcome window size restoration** — returning to or relaunching the welcome screen restores the compact welcome size instead of reusing a larger curation window
 - **Post list view** — "Browse Posts" opens a full list of every `.md` file in the content directory, sorted by date descending; each row shows title, date, series, categories, and a Draft badge; select any post to re-edit it in a separate editor window while the browse list stays open
 - **Split-view post editor** — monospaced markdown editor on the left; text + image preview on the right showing content in document order
 - **Preview filename captions** — the post editor preview shows each media filename below its rendered image or video placeholder for editing reference only; captions are not written into the markdown file
@@ -41,6 +42,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Burst stack detection** — photos taken within 3 seconds of each other are grouped into a stack; the largest file (proxy for sharpest) is marked as the primary frame
 - **Grid selection UI** — 160×120 pt thumbnails with aspect-ratio fill; selected photos shown at full opacity with a blue border and checkmark; unselected photos dimmed to 50%
 - **Curation filename visibility** — each curation thumbnail shows the source filename so large selections can be verified without opening every photo preview
+- **Curation filename stability** — curation thumbnails use filenames captured during ingestion instead of querying Photos resources during SwiftUI rendering
 - **Spacebar curation selection** — press Space in the curation grid or preview window to select or unselect the focused photo while reviewing an event
 - **Event rename** — double-click or use the Rename button to give events meaningful names (e.g. "Sunrise hike")
 - **Create posts from curation** — exports selected photos to the configured static images directory, opens a separate post editor window with image refs preloaded, uses the event's displayed capture-local day for the post filename prefix, and keeps the curation workspace open for repeated post creation

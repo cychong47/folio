@@ -41,7 +41,15 @@ enum MetadataIngestionService {
     static func makeAsset(from url: URL) -> CurationAsset {
         guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
               let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else {
-            return CurationAsset(phAsset: nil, url: url, timestamp: fileDate(url), captureTimeZone: nil, coordinate: nil, pixelSize: .zero)
+            return CurationAsset(
+                phAsset: nil,
+                url: url,
+                filename: url.lastPathComponent,
+                timestamp: fileDate(url),
+                captureTimeZone: nil,
+                coordinate: nil,
+                pixelSize: .zero
+            )
         }
 
         let exifTimestamp = exifTimestamp(from: props)
@@ -54,6 +62,7 @@ enum MetadataIngestionService {
         return CurationAsset(
             phAsset: nil,
             url: url,
+            filename: url.lastPathComponent,
             timestamp: timestamp,
             captureTimeZone: exifTimestamp?.timeZone,
             coordinate: coordinate,

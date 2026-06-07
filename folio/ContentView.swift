@@ -12,11 +12,15 @@ struct ContentView: View {
     @State private var browsing = false
     @State private var curating = false
     @State private var showDatePicker = false
+    @State private var welcomeResizeTrigger = 0
     @StateObject private var curationStore = CurationStore()
 
     private var isImporting: Bool { importTotal > 0 }
+    private var isWelcomeMode: Bool {
+        pendingPost.isEmpty && !browsing && !curating
+    }
     private var minimumWindowHeight: CGFloat {
-        pendingPost.isEmpty && !browsing && !curating ? 430 : 500
+        isWelcomeMode ? 430 : 500
     }
 
     var body: some View {
@@ -85,6 +89,23 @@ struct ContentView: View {
             }
         }
         .frame(minWidth: 800, minHeight: minimumWindowHeight)
+        .background(
+            WindowFrameResetter(
+                isEnabled: isWelcomeMode,
+                trigger: welcomeResizeTrigger,
+                targetSize: MainWindowSizing.welcomeSize
+            )
+            .frame(width: 0, height: 0)
+        )
+        .onAppear {
+            if isWelcomeMode {
+                welcomeResizeTrigger += 1
+            }
+        }
+        .onChange(of: isWelcomeMode) { isWelcome in
+            guard isWelcome else { return }
+            welcomeResizeTrigger += 1
+        }
         .sheet(isPresented: $showDatePicker) {
             DateRangePickerView(isPresented: $showDatePicker) { start, end, noLocationTimeZone in
                 curating = true
