@@ -48,24 +48,12 @@ enum ClusteringEngine {
 
         for (i, group) in photoGroups.enumerated() {
             let stacked = detectBursts(in: group)
-            let dates = stacked.map(\.timestamp)
-            clusters.append(EventCluster(
-                name: "Event \(i + 1)",
-                assets: stacked,
-                startDate: dates.min() ?? Date(),
-                endDate: dates.max() ?? Date()
-            ))
+            clusters.append(makeCluster(name: "Event \(i + 1)", assets: stacked))
         }
 
         for group in screenshotGroups {
             let stacked = detectBursts(in: group)
-            let dates = stacked.map(\.timestamp)
-            clusters.append(EventCluster(
-                name: "Screenshots",
-                assets: stacked,
-                startDate: dates.min() ?? Date(),
-                endDate: dates.max() ?? Date()
-            ))
+            clusters.append(makeCluster(name: "Screenshots", assets: stacked))
         }
 
         clusters.sort { $0.displaySortDate < $1.displaySortDate }
@@ -121,17 +109,17 @@ enum ClusteringEngine {
         splitRule: TimeLocationSplitRule = .timeOrLocation
     ) -> [[CurationAsset]] {
         guard !assets.isEmpty else { return [] }
-        let sorted = assets.sorted { $0.timestamp < $1.timestamp }
+        let sorted = assets.sorted { $0.displaySortDate < $1.displaySortDate }
         var groups: [[CurationAsset]] = [[sorted[0]]]
-        var currentGroupStart = sorted[0].timestamp
+        var currentGroupStart = sorted[0].displaySortDate
         var currentCentroid = RunningCoordinateCentroid(first: sorted[0].coordinate)
 
         for i in 1 ..< sorted.count {
             let prev = sorted[i - 1]
             let curr = sorted[i]
-            let dt = curr.timestamp.timeIntervalSince(prev.timestamp)
+            let dt = curr.displaySortDate.timeIntervalSince(prev.displaySortDate)
             let exceedsMaxDuration = maxEventDuration.map {
-                curr.timestamp.timeIntervalSince(currentGroupStart) > $0
+                curr.displaySortDate.timeIntervalSince(currentGroupStart) > $0
             } ?? false
             let isSpatialJump: Bool = {
                 guard dt > 60,
@@ -151,7 +139,7 @@ enum ClusteringEngine {
 
             if shouldSplit {
                 groups.append([curr])
-                currentGroupStart = curr.timestamp
+                currentGroupStart = curr.displaySortDate
                 currentCentroid = RunningCoordinateCentroid(first: curr.coordinate)
             } else {
                 groups[groups.count - 1].append(curr)
@@ -167,18 +155,18 @@ enum ClusteringEngine {
         maxEventDuration: TimeInterval? = nil
     ) -> [[CurationAsset]] {
         guard !assets.isEmpty else { return [] }
-        let sorted = assets.sorted { $0.timestamp < $1.timestamp }
+        let sorted = assets.sorted { $0.displaySortDate < $1.displaySortDate }
         var groups: [[CurationAsset]] = [[sorted[0]]]
-        var currentGroupStart = sorted[0].timestamp
+        var currentGroupStart = sorted[0].displaySortDate
 
         for i in 1 ..< sorted.count {
-            let dt = sorted[i].timestamp.timeIntervalSince(sorted[i - 1].timestamp)
+            let dt = sorted[i].displaySortDate.timeIntervalSince(sorted[i - 1].displaySortDate)
             let exceedsMaxDuration = maxEventDuration.map {
-                sorted[i].timestamp.timeIntervalSince(currentGroupStart) > $0
+                sorted[i].displaySortDate.timeIntervalSince(currentGroupStart) > $0
             } ?? false
             if dt > temporalThreshold || exceedsMaxDuration {
                 groups.append([sorted[i]])
-                currentGroupStart = sorted[i].timestamp
+                currentGroupStart = sorted[i].displaySortDate
             } else {
                 groups[groups.count - 1].append(sorted[i])
             }
@@ -191,7 +179,7 @@ enum ClusteringEngine {
         spatialThreshold: Double
     ) -> [[CurationAsset]] {
         guard !assets.isEmpty else { return [] }
-        let sorted = assets.sorted { $0.timestamp < $1.timestamp }
+        let sorted = assets.sorted { $0.displaySortDate < $1.displaySortDate }
         var groups: [[CurationAsset]] = [[sorted[0]]]
         var currentCentroid = RunningCoordinateCentroid(first: sorted[0].coordinate)
         for i in 1 ..< sorted.count {
@@ -219,6 +207,16 @@ enum ClusteringEngine {
             clusters[index].name = "Event \(eventNumber)"
             eventNumber += 1
         }
+    }
+
+    private static func makeCluster(name: String, assets: [CurationAsset]) -> EventCluster {
+        let sorted = assets.sorted { $0.displaySortDate < $1.displaySortDate }
+        return EventCluster(
+            name: name,
+            assets: sorted,
+            startDate: sorted.first?.timestamp ?? Date(),
+            endDate: sorted.last?.timestamp ?? Date()
+        )
     }
 
     // MARK: - Burst detection

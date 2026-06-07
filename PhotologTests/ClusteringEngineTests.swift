@@ -2,6 +2,48 @@ import XCTest
 @testable import Photolog
 
 final class ClusteringEngineTests: XCTestCase {
+    func testClustersDoNotOverlapByDisplayedCaptureLocalTime() {
+        let eastTimeZone = TimeZone(secondsFromGMT: 14 * 3600)!
+        let westTimeZone = TimeZone(secondsFromGMT: -8 * 3600)!
+        let onePM = CurationAsset(
+            phAsset: nil,
+            url: nil,
+            timestamp: date(year: 2026, month: 3, day: 15, hour: 13, minute: 0, timeZone: eastTimeZone),
+            captureTimeZone: eastTimeZone,
+            coordinate: nil,
+            pixelSize: .zero
+        )
+        let oneThirtySevenPM = CurationAsset(
+            phAsset: nil,
+            url: nil,
+            timestamp: date(year: 2026, month: 3, day: 15, hour: 13, minute: 37, timeZone: eastTimeZone),
+            captureTimeZone: eastTimeZone,
+            coordinate: nil,
+            pixelSize: .zero
+        )
+        let oneThirteenPM = CurationAsset(
+            phAsset: nil,
+            url: nil,
+            timestamp: date(year: 2026, month: 3, day: 15, hour: 13, minute: 13, timeZone: westTimeZone),
+            captureTimeZone: westTimeZone,
+            coordinate: nil,
+            pixelSize: .zero
+        )
+
+        let clusters = ClusteringEngine.cluster(
+            assets: [onePM, oneThirtySevenPM, oneThirteenPM],
+            temporalThreshold: 20 * 60,
+            spatialThreshold: 500,
+            maxEventDuration: 4 * 3600
+        )
+
+        XCTAssertEqual(clusters.count, 2)
+        XCTAssertLessThanOrEqual(
+            clusters[0].displayEndSortDate.timeIntervalSince1970,
+            clusters[1].displaySortDate.timeIntervalSince1970
+        )
+    }
+
     func testGeneratedEventNamesFollowFinalDisplaySortOrder() {
         let eastTimeZone = TimeZone(secondsFromGMT: 14 * 3600)!
         let westTimeZone = TimeZone(secondsFromGMT: -8 * 3600)!

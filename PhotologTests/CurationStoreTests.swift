@@ -3,6 +3,32 @@ import XCTest
 @testable import Photolog
 
 final class CurationStoreTests: XCTestCase {
+    @MainActor
+    func testToggleFocusedAssetSelectionUsesVisibleAssetOrder() {
+        let store = CurationStore()
+        let firstID = UUID()
+        let secondID = UUID()
+        let firstDate = Date(timeIntervalSince1970: 200)
+        let secondDate = Date(timeIntervalSince1970: 100)
+        store.clusters = [
+            EventCluster(
+                name: "Event",
+                assets: [
+                    CurationAsset(id: firstID, timestamp: firstDate, pixelSize: .zero),
+                    CurationAsset(id: secondID, timestamp: secondDate, pixelSize: .zero)
+                ],
+                startDate: secondDate,
+                endDate: firstDate
+            )
+        ]
+        store.focusedAssetIndex = 0
+
+        store.toggleFocusedAssetSelection()
+
+        XCTAssertFalse(store.clusters[0].assets[0].isSelected)
+        XCTAssertTrue(store.clusters[0].assets[1].isSelected)
+    }
+
     func testPhotoLibraryMetadataResourceRequestAllowsNetworkAccess() {
         let options = CurationStore.photoLibraryMetadataResourceRequestOptions()
 

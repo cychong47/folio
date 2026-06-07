@@ -67,7 +67,7 @@ class CurationStore: ObservableObject {
         guard let cluster = activeCluster else { return [] }
         // Show only stack primaries (or unstacked photos), plus all stacked when expanded
         // For simplicity in Phase 1, show all assets
-        return cluster.assets.sorted { $0.timestamp < $1.timestamp }
+        return cluster.assets.sorted { $0.displaySortDate < $1.displaySortDate }
     }
 
     func ingest(startDate: Date, endDate: Date, noLocationTimeZone: TimeZone? = nil) async {
@@ -285,6 +285,19 @@ class CurationStore: ObservableObject {
         if let i = clusters[selectedClusterIndex].assets.firstIndex(where: { $0.id == assetID }) {
             clusters[selectedClusterIndex].assets[i].isSelected.toggle()
         }
+    }
+
+    func setFocusedAssetIndex(_ index: Int) {
+        guard !visibleAssets.isEmpty else {
+            focusedAssetIndex = 0
+            return
+        }
+        focusedAssetIndex = min(max(index, 0), visibleAssets.count - 1)
+    }
+
+    func toggleFocusedAssetSelection() {
+        guard visibleAssets.indices.contains(focusedAssetIndex) else { return }
+        toggleSelection(assetID: visibleAssets[focusedAssetIndex].id)
     }
 
     func selectAll() {

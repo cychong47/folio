@@ -24,6 +24,10 @@ struct CurationAsset: Identifiable, Hashable {
         captureTimeZone
     }
 
+    var displaySortDate: Date {
+        Self.displaySortDate(for: timestamp, timeZone: preferredDisplayTimeZone ?? .current)
+    }
+
     var filename: String {
         if let url { return url.lastPathComponent }
         if let phAsset {
@@ -31,6 +35,19 @@ struct CurationAsset: Identifiable, Hashable {
                 ?? phAsset.localIdentifier
         }
         return "photo"
+    }
+
+    static func displaySortDate(for timestamp: Date, timeZone: TimeZone) -> Date {
+        var displayCalendar = Calendar(identifier: .gregorian)
+        displayCalendar.timeZone = timeZone
+        var sortCalendar = Calendar(identifier: .gregorian)
+        sortCalendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .gmt
+
+        let components = displayCalendar.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second, .nanosecond],
+            from: timestamp
+        )
+        return sortCalendar.date(from: components) ?? timestamp
     }
 
     static func == (lhs: CurationAsset, rhs: CurationAsset) -> Bool { lhs.id == rhs.id }

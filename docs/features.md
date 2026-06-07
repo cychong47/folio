@@ -33,8 +33,10 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Camera model display** — curation thumbnails and detail views show parsed camera make/model immediately after each photo timestamp when metadata is available
 - **Smarter event suggestions** — GPS movement is compared against each event's running location center, reducing accidental bridging between nearby places and preventing all-day photo chains from staying in one event; manual Both-mode splits require both a time gap and movement
 - **Event navigator** — sidebar lists each event with its name, capture-local date and time, duration, and selected/total photo count, sorted and numbered by the same displayed capture time
+- **Capture-local event ordering** — curation clusters, event ranges, durations, and grid order use the same capture-local time key shown in the UI so adjacent events do not appear to overlap by displayed timestamp
 - **Burst stack detection** — photos taken within 3 seconds of each other are grouped into a stack; the largest file (proxy for sharpest) is marked as the primary frame
 - **Grid selection UI** — 160×120 pt thumbnails with aspect-ratio fill; selected photos shown at full opacity with a blue border and checkmark; unselected photos dimmed to 50%
+- **Spacebar curation selection** — press Space in the curation grid or preview window to select or unselect the focused photo while reviewing an event
 - **Event rename** — double-click or use the Rename button to give events meaningful names (e.g. "Sunrise hike")
 - **Create posts from curation** — exports selected photos to the configured static images directory, opens a separate post editor window with image refs preloaded, uses the event's displayed capture-local day for the post filename prefix, and keeps the curation workspace open for repeated post creation
 - **Photos-only curation export** — `⌘E` exports selected event photos without creating a post, applies the chosen blog profile's resize/EXIF settings, and prompts for a blog only when configured resize caps differ; `⌘N` creates a post from the same selection
@@ -42,7 +44,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Editable date range** — the curation toolbar calendar action reopens the current Photos-library date range with explicit `yyyy-MM-dd` fields and the no-location timezone option, then rescans and reclusters photos after confirmation
 - **Side-by-side date fields** — the Photos-library date range picker places From and To controls in one row so calendar popovers do not hide the other date input
 - **Stable date range picker layout** — no-location timezone controls stay visible in the Photos-library date range picker so helper text is not hidden behind a collapsing Advanced section
-- **Keyboard shortcut** — `⌘K` opens the curation folder picker from the welcome screen; `⌘E` exports selected event photos; `⌘N` creates a post from the active event selection
+- **Keyboard shortcut** — `⌘K` opens the curation folder picker from the welcome screen; `⌘E` exports selected event photos; `⌘N` creates a post from the active event selection; Space toggles the focused photo selection in curation grid and preview
 
 ---
 

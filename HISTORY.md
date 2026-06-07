@@ -4,6 +4,10 @@
 
 ## Released
 
+### v1.21.38
+- Spacebar curation selection — photo curation grid and preview now toggle the focused or previewed photo selection with Space for faster keyboard-driven review
+- Capture-local event ordering — curation now clusters, ranges, and displays event photos with the same capture-local ordering key, preventing a later timestamp in one event from appearing before an earlier timestamp in the next event
+
 ### v1.21.37
 - Timestamp handling audit cleanup — drag-and-drop photo imports now reuse the curation EXIF parser for fractional and offset timestamps, curation markdown headers use the event timezone, and an unused legacy Photos scanner with stale creation-date-only logic was removed
 

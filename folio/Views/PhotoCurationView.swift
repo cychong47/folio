@@ -64,6 +64,45 @@ private func photoTimestampLine(
     return "\(timestamp) · \(cameraModel)"
 }
 
+private struct SpaceKeyHandler: NSViewRepresentable {
+    let onSpace: () -> Void
+
+    func makeNSView(context: Context) -> SpaceKeyHandlingView {
+        let view = SpaceKeyHandlingView()
+        view.onSpace = onSpace
+        return view
+    }
+
+    func updateNSView(_ view: SpaceKeyHandlingView, context: Context) {
+        view.onSpace = onSpace
+        DispatchQueue.main.async {
+            view.window?.makeFirstResponder(view)
+        }
+    }
+}
+
+private final class SpaceKeyHandlingView: NSView {
+    var onSpace: (() -> Void)?
+
+    override var acceptsFirstResponder: Bool { true }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        DispatchQueue.main.async {
+            self.window?.makeFirstResponder(self)
+        }
+    }
+
+    override func keyDown(with event: NSEvent) {
+        let modifierFlags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        if event.charactersIgnoringModifiers == " ", modifierFlags.isSubset(of: [.shift]) {
+            onSpace?()
+            return
+        }
+        super.keyDown(with: event)
+    }
+}
+
 private enum ViewMode: Hashable { case grid, map }
 
 private let splitPalette: [Color] = [
@@ -493,10 +532,18 @@ private struct CurationGridPanel: View {
                         ForEach(Array(store.visibleAssets.enumerated()), id: \.element.id) { idx, asset in
                             ThumbnailCell(
                                 asset: asset,
+                                isFocused: store.focusedAssetIndex == idx,
                                 thumbSize: thumbSize,
                                 splitGroupIndex: isSplitting ? splitAssignments[asset.id] : nil,
-                                onTap: { store.toggleSelection(assetID: asset.id) },
-                                onDoubleTap: { detailIndex = idx; isShowingDetail = true }
+                                onTap: {
+                                    store.setFocusedAssetIndex(idx)
+                                    store.toggleSelection(assetID: asset.id)
+                                },
+                                onDoubleTap: {
+                                    store.setFocusedAssetIndex(idx)
+                                    detailIndex = idx
+                                    isShowingDetail = true
+                                }
                             )
                         }
                     }
@@ -510,6 +557,9 @@ private struct CurationGridPanel: View {
                 }
             }
         }
+        .background(SpaceKeyHandler {
+            store.toggleFocusedAssetSelection()
+        })
         .overlay(alignment: .bottom) {
             VStack(spacing: 0) {
                 if store.isExporting {
@@ -553,7 +603,11 @@ private struct CurationGridPanel: View {
         .onChange(of: splitMode) { _ in if isSplitting { updateSplitAssignments() } }
         .onChange(of: splitTemporalMinutes) { _ in if isSplitting { updateSplitAssignments() } }
         .onChange(of: splitSpatialMeters) { _ in if isSplitting { updateSplitAssignments() } }
-        .onChange(of: store.selectedClusterIndex) { _ in isSplitting = false; splitAssignments = [:] }
+        .onChange(of: store.selectedClusterIndex) { _ in
+            isSplitting = false
+            splitAssignments = [:]
+            store.setFocusedAssetIndex(0)
+        }
         .sheet(isPresented: $isShowingDetail) {
             PhotoDetailSheet(store: store, currentIndex: $detailIndex)
         }
@@ -928,6 +982,7 @@ private final class PhotoMapPinView: NSView {
 
 private struct ThumbnailCell: View {
     let asset: CurationAsset
+    let isFocused: Bool
     var thumbSize: CGFloat = 160
     var splitGroupIndex: Int? = nil
     let onTap: () -> Void
@@ -987,8 +1042,8 @@ private struct ThumbnailCell: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)
                         .strokeBorder(
-                            asset.isSelected ? Theme.accent : Color.clear,
-                            lineWidth: 2.5
+                            asset.isSelected ? Theme.accent : (isFocused ? Color.secondary.opacity(0.65) : Color.clear),
+                            lineWidth: asset.isSelected ? 2.5 : 1.5
                         )
                 )
                 .cornerRadius(6)
@@ -1220,8 +1275,21 @@ private struct PhotoDetailSheet: View {
             .background(Theme.panel)
         }
         .frame(minWidth: 720, minHeight: 560)
-        .onAppear { loadFullImage(); loadGeocode() }
-        .onChange(of: currentIndex) { _ in loadFullImage(); loadGeocode() }
+        .background(SpaceKeyHandler {
+            if let asset {
+                store.toggleSelection(assetID: asset.id)
+            }
+        })
+        .onAppear {
+            store.setFocusedAssetIndex(currentIndex)
+            loadFullImage()
+            loadGeocode()
+        }
+        .onChange(of: currentIndex) { newValue in
+            store.setFocusedAssetIndex(newValue)
+            loadFullImage()
+            loadGeocode()
+        }
     }
 
     private func loadFullImage() {

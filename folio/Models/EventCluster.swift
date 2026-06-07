@@ -12,7 +12,7 @@ struct EventCluster: Identifiable {
     var totalCount: Int { assets.count }
 
     var durationFormatted: String {
-        let interval = endDate.timeIntervalSince(startDate)
+        let interval = displayEndSortDate.timeIntervalSince(displaySortDate)
         if interval < 3600 { return "\(Int(interval / 60))m" }
         let h = Int(interval / 3600)
         let m = Int(interval.truncatingRemainder(dividingBy: 3600) / 60)
@@ -20,21 +20,17 @@ struct EventCluster: Identifiable {
     }
 
     var displayTimeZone: TimeZone? {
-        assets.sorted { $0.timestamp < $1.timestamp }.first?.preferredDisplayTimeZone
+        assets.sorted { $0.displaySortDate < $1.displaySortDate }.first?.preferredDisplayTimeZone
     }
 
     var displaySortDate: Date {
-        let timeZone = displayTimeZone ?? .current
-        var displayCalendar = Calendar(identifier: .gregorian)
-        displayCalendar.timeZone = timeZone
-        var sortCalendar = Calendar(identifier: .gregorian)
-        sortCalendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .gmt
+        assets.map(\.displaySortDate).min()
+            ?? CurationAsset.displaySortDate(for: startDate, timeZone: displayTimeZone ?? .current)
+    }
 
-        let components = displayCalendar.dateComponents(
-            [.year, .month, .day, .hour, .minute, .second],
-            from: startDate
-        )
-        return sortCalendar.date(from: components) ?? startDate
+    var displayEndSortDate: Date {
+        assets.map(\.displaySortDate).max()
+            ?? CurationAsset.displaySortDate(for: endDate, timeZone: displayTimeZone ?? .current)
     }
 
     func displayDateText(selectionTimeZone: TimeZone = .current, locale: Locale = .current) -> String {
