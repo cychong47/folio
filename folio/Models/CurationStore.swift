@@ -556,6 +556,7 @@ class CurationStore: ObservableObject {
 
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
+        formatter.timeZone = cluster.displayTimeZone ?? .current
         let dateStr = formatter.string(from: cluster.startDate)
 
         var lines: [String] = includeMarkdown ? ["## \(cluster.name) — \(dateStr)", ""] : []

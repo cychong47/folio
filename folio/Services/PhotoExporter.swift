@@ -38,6 +38,10 @@ enum PhotoExporter {
         return exifDate(from: source)
     }
 
+    static func readEXIFDate(from props: [String: Any]) -> Date? {
+        MetadataIngestionService.exifTimestamp(from: props)?.date
+    }
+
     /// Best available date for any image:
     ///  1. EXIF DateTimeOriginal (camera photos)
     ///  2. PHAsset creationDate via UUID in the exported filename (Photos.app drags, when authorized)
@@ -51,25 +55,8 @@ enum PhotoExporter {
     }
 
     private static func exifDate(from source: CGImageSource) -> Date? {
-        guard let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any],
-              let exifDict = props[kCGImagePropertyExifDictionary as String] as? [String: Any],
-              let dateString = exifDict[kCGImagePropertyExifDateTimeOriginal as String] as? String else {
-            return nil
-        }
-
-        if let offset = exifDict[kCGImagePropertyExifOffsetTimeOriginal as String] as? String {
-            let formatter = DateFormatter()
-            formatter.locale = Locale(identifier: "en_US_POSIX")
-            formatter.dateFormat = "yyyy:MM:dd HH:mm:ssXXXXX"
-            if let date = formatter.date(from: dateString + offset) {
-                return date
-            }
-        }
-
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
-        return formatter.date(from: dateString)
+        guard let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else { return nil }
+        return readEXIFDate(from: props)
     }
 
     /// Scans `directory` for JPEG/PNG images whose EXIF orientation is not `.up`,
