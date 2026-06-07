@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.34
+
+- Stable date range picker layout — no-location timezone controls are now always visible in the Photos date range window, avoiding Advanced-section height changes and hidden helper text
+
+---
+
 ### v1.21.33
 
 - Series in Browse Posts — post rows now show a Series chip when the selected post has series frontmatter
