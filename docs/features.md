@@ -57,7 +57,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Import progress overlay** — frosted-glass overlay with `x / y` counter and progress bar during photo import
 - **Photo strip in editor** — horizontal thumbnail strip above the markdown editor; shows all photos in the current post at a glance
 - **Add photos while editing** — drag more photos onto the editor window or click the `+` button to open a file picker; new refs appended to the body without overwriting edits
-- **Remove photos while editing** — hover a thumbnail and click × (or right-click → Remove Photo) to remove a photo; staging file is kept until Reset or Publish so `Cmd+Z` can restore the ref
+- **Remove photos while editing** — hover a thumbnail and click × (or right-click → Remove Photo) to remove a photo; staging file is kept until Reset so `Cmd+Z` can restore the ref
 - **Orphaned photo indicator** — thumbnails whose refs were manually deleted from the markdown body are greyed out in the strip
 
 ---
@@ -85,16 +85,13 @@ description: Full feature list for Photolog — a native macOS app for creating 
 
 - **Save to local Hugo repo** — writes `YYYY-MM-DD-slug.md` and copies images to the configured static directory
 - **Auto git commit on Save** — per-profile toggle; runs `git add -A && git commit && git push` in the blog root after each successful Save; commit message template supports `{{title}}`; success/error shown inline in the editor footer
-- **GitHub publish** — commits and pushes only the saved files via the GitHub REST API (no git binary required)
-- **Codeberg & Gitea support** — full URL accepted in the Repo field; API base auto-derived from the host
-- **Auto-detect GitHub settings** — reads repo and branch from the blog root's `.git/config`
-- **Delete local files after publish** — markdown and image files removed from the local Hugo repo automatically after a successful GitHub push
+- **Preview current draft** — Preview saves locally without git automation, starts the configured Hugo server if needed, and opens the saved post in the browser
 
 ---
 
 ## Settings & Profiles
 
-- **Multi-blog profiles** — each profile stores name, blog root, content path, images path, subpath templates, categories, GitHub settings, image export settings, and custom frontmatter fields
+- **Multi-blog profiles** — each profile stores name, blog root, content path, images path, subpath templates, categories, git automation settings, image export settings, and custom frontmatter fields
 - **Settings export / import** — transfer all profiles to another Mac via a JSON file
 - **Image URL prefix** — auto-derived from blog root and static images path; no manual configuration needed
 - **Live path preview** — shows the resolved content and image paths as subpath templates change
@@ -106,7 +103,6 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **`⌘N` — New Post** — start a blank text post from the welcome screen
 - **`⌘B` — Browse Posts** — open the post list from the welcome screen
 - **`⌘S` — Save** — save the current post (available in the editor)
-- **`⌘⇧U` — Publish** — publish the current post to GitHub (available in the editor when a saved post exists)
 - **Check for Updates** — Photolog menu bar item; shows a popup with update status and a Download button when a new version is available
 
 ---

@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.31
+- Single editor publish action — removed the redundant Publish button and GitHub publish settings so Save is the commit/push path, while Preview now saves locally before opening Hugo
+
 ### v1.21.30
 - Camera model in curation photo timestamps — thumbnail and detail views now show the parsed camera make/model immediately after each photo timestamp
 - Event-local post dates from curation — posts created from curation now use the event's displayed capture-local day for the draft date and `.md` filename prefix

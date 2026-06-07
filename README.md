@@ -1,7 +1,7 @@
 # Photolog
 
 A native macOS app for creating [Hugo](https://gohugo.io/) blog posts from photos.
-Drag photos from Photos.app or Finder, write a post in the split-view editor, and publish directly to your Hugo site.
+Drag photos from Photos.app or Finder, write a post in the split-view editor, and save directly to your Hugo site repo.
 
 ---
 
@@ -34,10 +34,11 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Quit on window close** — closing the main window also dismisses Settings and quits the app
 - **Post list view** — "Browse Posts" on the welcome screen lists all existing posts in the content directory sorted by date; select any post to re-edit its title, body, frontmatter, or metadata
 - **Auto git commit on Save** — per-profile toggle in Settings; runs `git add -A && git commit && git push` in the blog root after each Save; commit message template supports `{{title}}`
+- **Save-before-preview** — Preview saves the current draft locally without git automation before starting Hugo and opening the post in the browser
 - **Taxonomy manager** — Settings → General → Manage…; lists all categories, tags, and series with post counts; rename a term or merge two terms across every post in the content directory
 - **Photo Curation Workspace** — scan a vacation photo folder (`⌘K`); Photos-library curation prefers original/base asset resources for metadata, shows camera make/model next to each photo timestamp, shows the selected event's resource plus timestamp and date-filter decisions in the sidebar, submits explicit `yyyy-MM-dd` date fields, can apply a manual UTC offset to no-GPS/no-timezone Photos, uses capture-local date and time from separated EXIF offsets, subsecond EXIF fields, inline EXIF offsets, GPS-derived timezones that agree with Photos, camera-local EXIF when GPS is absent, or Photos' own date when EXIF is missing, sorts and numbers event rows by the displayed capture time, uses the visible event day for created post filenames, and keeps the date range editable from the curation toolbar
 - **Smarter event suggestions** — event generation compares GPS movement against each event's running location center and caps auto-events at 4 hours so long photo chains do not merge a whole day
-- **Keyboard shortcuts** — `⌘N` New Post, `⌘B` Browse Posts, `⌘K` Curate Photos, `⌘S` Save, `⌘⇧U` Publish
+- **Keyboard shortcuts** — `⌘N` New Post, `⌘B` Browse Posts, `⌘K` Curate Photos, `⌘S` Save
 - **Check for Updates** — Photolog menu bar item; shows a popup with update status and a one-click Download button when a new version is available
 - **OTA updates** — Settings → Updates checks GitHub releases; one-click download and install via Archive Utility
 - **What's New sheet** — shown automatically on first launch of each new version; lists changes since the last-seen version
@@ -104,17 +105,17 @@ The staging folder location is shown above the photo list — click the arrow bu
 
 ---
 
-### 4. Publish
+### 4. Save and Preview
 
-Press **Publish** (`⌘⇧↩`) to:
+Press **Save** (`⌘S`) to:
 
 1. Copy photos from the staging area to `{staticImagesPath}/{resolvedSubpath}/`
 2. Write the markdown file to `{contentPath}/{resolvedSubpath}/YYYY-MM-DD-slug.md`
-3. Show the saved file path in a confirmation dialog
+3. Optionally run `git add -A`, `git commit`, and `git push` when Auto git commit on Save is enabled
 
-After confirming, staged photo files are deleted automatically.
+Press **Preview** to save the current draft locally without git automation, start the configured Hugo server if needed, and open the saved post in your browser.
 
-Press **Reset** to discard the current post and delete staged files without publishing.
+Press **Reset** to discard the current post and delete staged files.
 
 ---
 

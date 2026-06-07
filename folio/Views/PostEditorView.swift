@@ -71,7 +71,6 @@ struct PostEditorView: View {
     @StateObject private var fileWatcher = FileWatcher()
 
     @State private var publishError: String?
-    @State private var isPublishing = false
     @State private var gitStatus: String?
     @State private var gitSuccess = false
     @State private var showResetConfirm = false
@@ -85,7 +84,7 @@ struct PostEditorView: View {
     @State private var previewBody: String = ""
     @State private var previewDebounceTask: Task<Void, Never>? = nil
     @State private var originalSnapshot: String = ""
-    /// Staging files queued for deletion on Reset or successful Publish.
+    /// Staging files queued for deletion on Reset.
     @State private var pendingDeletion: [URL] = []
     /// Paths in `pendingPost.photos` not currently referenced in `markdownBody`.
     @State private var orphanedPaths: Set<String> = []
@@ -678,19 +677,10 @@ struct PostEditorView: View {
                 .buttonStyle(.borderedProminent)
                 .tint(Theme.accent)
                 .keyboardShortcut("s", modifiers: .command)
-            if pendingPost.lastPublished != nil {
-                Button("Preview") { previewInBrowser() }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.indigo)
-                    .help(hugoServer.isRunning ? "Hugo server running — opens post in browser" : "Start Hugo server and open post in browser")
-            }
-            if pendingPost.lastPublished != nil {
-                Button(isPublishing ? "Publishing…" : "Publish") { publishToGitHub() }
-                    .buttonStyle(.borderedProminent)
-                    .tint(.green)
-                    .disabled(isPublishing || !settings.isGitHubConfigured)
-                    .keyboardShortcut("u", modifiers: [.command, .shift])
-            }
+            Button("Preview") { previewInBrowser() }
+                .buttonStyle(.borderedProminent)
+                .tint(.indigo)
+                .help(hugoServer.isRunning ? "Save and open post in browser" : "Save, start Hugo server, and open post in browser")
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 12)
@@ -702,7 +692,7 @@ struct PostEditorView: View {
     // MARK: Photo management
 
     /// Removes a photo from the strip and its ref from the body.
-    /// The staging file is kept until Reset or Publish (deferred deletion).
+    /// The staging file is kept until Reset (deferred deletion).
     private func removePhoto(_ photo: ExportedPhoto) {
         pendingDeletion.append(photo.localURL)
         pendingPost.photos.removeAll { $0.id == photo.id }
@@ -770,6 +760,7 @@ struct PostEditorView: View {
     }
 
     private func previewInBrowser() {
+        guard save(runGitAutomation: false) else { return }
         guard let profile = settings.activeProfile,
               !profile.blogRoot.isEmpty,
               let url = HugoServerManager.previewURL(
@@ -807,20 +798,21 @@ struct PostEditorView: View {
         pendingPost.markdownBody = MarkdownGenerator.initialBody(photos: pendingPost.photos)
     }
 
-    private func save() {
+    @discardableResult
+    private func save(runGitAutomation: Bool = true) -> Bool {
         publishError = nil
         gitStatus = nil
         guard settings.isConfigured else {
             publishError = "Configure paths in Settings first."
-            return
+            return false
         }
         guard !pendingPost.title.isEmpty else {
             titleIsInvalid = true
-            return
+            return false
         }
         guard !pendingPost.slug.isEmpty else {
             publishError = "Filename (slug) cannot be empty."
-            return
+            return false
         }
         let date = pendingPost.postDate
         do {
@@ -854,9 +846,9 @@ struct PostEditorView: View {
                 imageURLs: imageURLs,
                 title: pendingPost.title
             )
-            // Staging files and editor state are preserved until Publish or Reset
+            // Staging files and editor state are preserved until Reset
 
-            if settings.activeProfile?.autoGitCommit == true {
+            if runGitAutomation, settings.activeProfile?.autoGitCommit == true {
                 let blogRoot = settings.activeProfile?.blogRoot ?? ""
                 let template = settings.activeProfile?.gitCommitTemplate ?? "Add post: {{title}}"
                 let message = template.replacingOccurrences(of: "{{title}}", with: pendingPost.title)
@@ -874,70 +866,10 @@ struct PostEditorView: View {
                     }
                 }
             }
+            return true
         } catch {
             publishError = error.localizedDescription
-        }
-    }
-
-    private func publishToGitHub() {
-        guard let last = pendingPost.lastPublished,
-              let profile = settings.activeProfile,
-              profile.isGitHubConfigured else {
-            publishError = "Configure GitHub token and repo in Settings first."
-            return
-        }
-
-        isPublishing = true
-        publishError = nil
-
-        guard let (apiBase, ownerRepo) = profile.resolvedRepoAPI else {
-            publishError = "Invalid repository URL in Settings."
-            isPublishing = false
-            return
-        }
-
-        let blogRoot = profile.blogRoot
-        let token = profile.githubToken
-        let branch = profile.githubBranch.isEmpty ? "main" : profile.githubBranch
-        let message = "Add post: \(last.title)"
-
-        var files: [(relativePath: String, data: Data)] = []
-        let allURLs = [last.markdownURL] + last.imageURLs
-        let prefix = blogRoot.hasSuffix("/") ? blogRoot : blogRoot + "/"
-        for url in allURLs {
-            guard url.path.hasPrefix(prefix),
-                  let data = try? Data(contentsOf: url) else { continue }
-            let relativePath = String(url.path.dropFirst(prefix.count))
-            files.append((relativePath, data))
-        }
-
-        Task {
-            do {
-                try await GitHubPublisher.commit(
-                    files: files,
-                    message: message,
-                    token: token,
-                    apiBase: apiBase,
-                    ownerRepo: ownerRepo,
-                    branch: branch
-                )
-                await MainActor.run {
-                    isPublishing = false
-                    if let last = pendingPost.lastPublished {
-                        let fm = FileManager.default
-                        try? fm.removeItem(at: last.markdownURL)
-                        for url in last.imageURLs { try? fm.removeItem(at: url) }
-                    }
-                    pendingPost.lastPublished = nil
-                    deleteStagingFiles()
-                    pendingPost.clear()
-                }
-            } catch {
-                await MainActor.run {
-                    isPublishing = false
-                    publishError = error.localizedDescription
-                }
-            }
+            return false
         }
     }
 
