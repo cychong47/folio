@@ -14,7 +14,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 
 - **Welcome action launcher** — the start window presents Drag Photos, New Post, Browse Posts, and Curate Photos as large icon tiles with labels below each symbol
 - **Compact welcome window** — the start window opens shorter around the large action tiles while editor, browse, and curation modes keep a roomier working minimum
-- **Welcome window size restoration** — returning to or relaunching the welcome screen restores the compact welcome size instead of reusing a larger curation window
+- **Welcome window size restoration** — returning to or relaunching the welcome screen restores a compact size that still leaves room for the Photos access banner
 - **Post list view** — "Browse Posts" opens a full list of every `.md` file in the content directory, sorted by date descending; each row shows title, date, series, categories, and a Draft badge; select any post to re-edit it in a separate editor window while the browse list stays open
 - **Split-view post editor** — monospaced markdown editor on the left; text + image preview on the right showing content in document order
 - **Preview filename captions** — the post editor preview shows each media filename below its rendered image or video placeholder for editing reference only; captions are not written into the markdown file

@@ -20,7 +20,7 @@ struct ContentView: View {
         pendingPost.isEmpty && !browsing && !curating
     }
     private var minimumWindowHeight: CGFloat {
-        isWelcomeMode ? 430 : 500
+        isWelcomeMode ? MainWindowSizing.welcomeSize.height : 500
     }
 
     var body: some View {

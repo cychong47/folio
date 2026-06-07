@@ -9,12 +9,12 @@ final class MainWindowSizingTests: XCTestCase {
 
         let frame = MainWindowSizing.frame(
             currentFrame: current,
-            targetSize: CGSize(width: 800, height: 430),
+            targetSize: MainWindowSizing.welcomeSize,
             visibleFrame: visible
         )
 
         XCTAssertEqual(frame.width, 800)
-        XCTAssertEqual(frame.height, 430)
+        XCTAssertEqual(frame.height, 500)
         XCTAssertEqual(frame.midX, current.midX)
         XCTAssertEqual(frame.midY, current.midY)
     }
@@ -25,7 +25,7 @@ final class MainWindowSizingTests: XCTestCase {
 
         let frame = MainWindowSizing.frame(
             currentFrame: current,
-            targetSize: CGSize(width: 800, height: 430),
+            targetSize: MainWindowSizing.welcomeSize,
             visibleFrame: visible
         )
 
@@ -33,5 +33,9 @@ final class MainWindowSizingTests: XCTestCase {
         XCTAssertLessThanOrEqual(frame.maxY, visible.maxY)
         XCTAssertGreaterThanOrEqual(frame.minX, visible.minX)
         XCTAssertGreaterThanOrEqual(frame.minY, visible.minY)
+    }
+
+    func testWelcomeSizeLeavesRoomForBottomAccessBanner() {
+        XCTAssertGreaterThanOrEqual(MainWindowSizing.welcomeSize.height, 500)
     }
 }

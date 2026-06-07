@@ -10,7 +10,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Drag & drop from Photos.app or Finder** — uses `NSFilePromiseReceiver` to handle Photos.app drags
 - **Welcome action launcher** — the start window presents Drag Photos, New Post, Browse Posts, and Curate Photos as large icon tiles for faster first-step selection
 - **Compact welcome window** — the start window opens shorter around the large action tiles while work modes keep a roomier editor-sized minimum
-- **Welcome window size restoration** — returning to or relaunching the welcome screen restores the compact welcome size instead of reusing a larger curation window
+- **Welcome window size restoration** — returning to or relaunching the welcome screen restores a compact size that still leaves room for the Photos access banner
 - **Photolog branding** — app display name, build artifact, and release packaging use the Photolog name
 - **Video file support** — drag `.mp4`, `.mov`, or `.webm` files from Finder; inserts a Hugo `{{< video >}}` shortcode and copies the file to the static directory on save
 - **EXIF date prefix** — filenames derived from `DateTimeOriginal` (e.g. `2026-03-05-IMG_1234.jpg`)

@@ -1,7 +1,7 @@
 import CoreGraphics
 
 enum MainWindowSizing {
-    static let welcomeSize = CGSize(width: 800, height: 430)
+    static let welcomeSize = CGSize(width: 800, height: 500)
 
     static func frame(
         currentFrame: CGRect,
