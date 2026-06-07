@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.42
+
+- Preview filename captions — the post editor preview now shows each media filename below its rendered image or video placeholder so authors can locate the matching markdown reference without changing saved post content
+
+---
+
 ### v1.21.41
 
 - Compact welcome window — the start window now opens shorter around the large action tiles while editor, browse, and curation modes keep the taller working minimum
