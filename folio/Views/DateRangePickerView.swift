@@ -97,30 +97,41 @@ struct DateRangePickerView: View {
                     .foregroundStyle(.secondary)
                     .textSelection(.enabled)
 
-                DisclosureGroup("Advanced") {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Picker("No-location camera timezone", selection: $noLocationTimeZoneMode) {
-                            Text("Use Mac timezone").tag(NoLocationTimeZoneMode.mac)
-                            Text("Manual UTC offset").tag(NoLocationTimeZoneMode.manual)
-                        }
-                        .pickerStyle(.segmented)
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("No-location timezone")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
 
-                        if noLocationTimeZoneMode == .manual {
-                            Picker("UTC offset", selection: $noLocationOffsetSeconds) {
-                                ForEach(Self.noLocationOffsetOptions, id: \.self) { seconds in
-                                    Text(Self.offsetLabel(seconds)).tag(seconds)
-                                }
-                            }
-                            .frame(maxWidth: 220)
-                        }
+                    Picker("No-location camera timezone", selection: $noLocationTimeZoneMode) {
+                        Text("Use Mac timezone").tag(NoLocationTimeZoneMode.mac)
+                        Text("Manual UTC offset").tag(NoLocationTimeZoneMode.manual)
+                    }
+                    .pickerStyle(.segmented)
 
-                        Text(noLocationTimeZoneHelp)
+                    HStack(alignment: .firstTextBaseline, spacing: 10) {
+                        Text("UTC offset")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(width: 78, alignment: .leading)
+
+                        Picker("UTC offset", selection: $noLocationOffsetSeconds) {
+                            ForEach(Self.noLocationOffsetOptions, id: \.self) { seconds in
+                                Text(Self.offsetLabel(seconds)).tag(seconds)
+                            }
+                        }
+                        .frame(width: 150)
+                        .disabled(noLocationTimeZoneMode != .manual)
+
+                        Spacer()
                     }
-                    .padding(.top, 8)
+
+                    Text(noLocationTimeZoneHelp)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
+                .padding(12)
+                .background(Theme.panel, in: RoundedRectangle(cornerRadius: 8))
 
                 HStack {
                     Spacer()
@@ -162,6 +173,7 @@ struct DateRangePickerView: View {
         }
         .padding(24)
         .frame(width: 520)
+        .frame(minHeight: 360)
         .onAppear {
             authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         }

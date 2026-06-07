@@ -40,6 +40,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Start screen return** — the curation toolbar's Start button returns to the welcome screen for drag-and-drop posts while preserving the loaded curation session, with Resume Curation kept separate from starting a new scan
 - **Editable date range** — the curation toolbar calendar action reopens the current Photos-library date range with explicit `yyyy-MM-dd` fields and the no-location timezone option, then rescans and reclusters photos after confirmation
 - **Side-by-side date fields** — the Photos-library date range picker places From and To controls in one row so calendar popovers do not hide the other date input
+- **Stable date range picker layout** — no-location timezone controls stay visible in the Photos-library date range picker so helper text is not hidden behind a collapsing Advanced section
 - **Keyboard shortcut** — `⌘K` opens the curation folder picker from the welcome screen; `⌘E` creates a post from the active event selection
 
 ---

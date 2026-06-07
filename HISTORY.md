@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.34
+- Stable date range picker layout — no-location timezone controls are now always visible in the Photos date range window, avoiding Advanced-section height changes and hidden helper text
+
 ### v1.21.33
 - Series in Browse Posts — post rows now show a Series chip when the selected post has series frontmatter
 
