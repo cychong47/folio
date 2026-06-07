@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.37
+
+- Timestamp handling audit cleanup — drag-and-drop photo imports now reuse the curation EXIF parser for fractional and offset timestamps, curation markdown headers use the event timezone, and an unused legacy Photos scanner with stale creation-date-only logic was removed
+
+---
+
 ### v1.21.36
 
 - GPS-backed curation timezone repair — Photos-library HEIC scans now read GPS coordinates from original metadata when PhotoKit omits location and use the capture-location timezone when EXIF offset metadata conflicts, preventing valid midday travel photos from displaying as early-morning events
