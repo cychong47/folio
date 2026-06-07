@@ -112,6 +112,7 @@ enum MetadataIngestionService {
         let exifTimestamp = exifTimestamp(from: props)
         let timestamp = exifTimestamp?.date ?? fileDate(url)
         let coordinate = gpsCoordinate(from: props)
+        let cameraModel = cameraModel(from: props)
         let w = props[kCGImagePropertyPixelWidth as String] as? CGFloat ?? 0
         let h = props[kCGImagePropertyPixelHeight as String] as? CGFloat ?? 0
 
@@ -121,8 +122,37 @@ enum MetadataIngestionService {
             timestamp: timestamp,
             captureTimeZone: exifTimestamp?.timeZone,
             coordinate: coordinate,
-            pixelSize: CGSize(width: w, height: h)
+            pixelSize: CGSize(width: w, height: h),
+            cameraModel: cameraModel
         )
+    }
+
+    static func cameraModel(from data: Data) -> String? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
+              let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else {
+            return nil
+        }
+        return cameraModel(from: props)
+    }
+
+    static func cameraModel(from props: [String: Any]) -> String? {
+        let tiff = props[kCGImagePropertyTIFFDictionary as String] as? [String: Any]
+        let make = cleanedCameraComponent(tiff?[kCGImagePropertyTIFFMake as String])
+        let model = cleanedCameraComponent(tiff?[kCGImagePropertyTIFFModel as String])
+
+        switch (make, model) {
+        case let (make?, model?):
+            if model.range(of: make, options: [.caseInsensitive, .anchored]) != nil {
+                return model
+            }
+            return "\(make) \(model)"
+        case let (make?, nil):
+            return make
+        case let (nil, model?):
+            return model
+        default:
+            return nil
+        }
     }
 
     static func exifTimestamp(from data: Data, assumedTimeZone: TimeZone? = nil) -> (date: Date, timeZone: TimeZone?)? {
@@ -169,6 +199,12 @@ enum MetadataIngestionService {
             "yyyy:MM:dd HH:mm:ss"
         ], timeZone: assumedTimeZone) else { return nil }
         return (date, assumedTimeZone)
+    }
+
+    private static func cleanedCameraComponent(_ value: Any?) -> String? {
+        guard let value = value as? String else { return nil }
+        let cleaned = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return cleaned.isEmpty ? nil : cleaned
     }
 
     private static func parseEXIFDate(

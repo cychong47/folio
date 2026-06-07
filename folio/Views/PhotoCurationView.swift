@@ -46,6 +46,24 @@ private func photoLocalTime(_ date: Date, timeZone: TimeZone?, dateStyle: DateFo
     return f.string(from: date)
 }
 
+private func photoTimestampLine(
+    for asset: CurationAsset,
+    geocodeTimeZone: TimeZone?,
+    dateStyle: DateFormatter.Style = .none,
+    timeStyle: DateFormatter.Style = .short
+) -> String {
+    let timestamp = photoLocalTime(
+        asset.timestamp,
+        timeZone: asset.preferredDisplayTimeZone ?? (asset.usesPhotoLibraryCreationDate ? nil : geocodeTimeZone),
+        dateStyle: dateStyle,
+        timeStyle: timeStyle
+    )
+    guard let cameraModel = asset.cameraModel, !cameraModel.isEmpty else {
+        return timestamp
+    }
+    return "\(timestamp) · \(cameraModel)"
+}
+
 private enum ViewMode: Hashable { case grid, map }
 
 private let splitPalette: [Color] = [
@@ -144,7 +162,7 @@ struct PhotoCurationView: View {
         }
         .sheet(item: Binding(
             get: { store.exportedMarkdown.map {
-                ExportResult(markdown: $0, date: store.activeCluster?.startDate ?? Date())
+                ExportResult(markdown: $0, date: store.activeCluster?.postCreationDate() ?? Date())
             } },
             set: { if $0 == nil { store.exportedMarkdown = nil } }
         )) { result in
@@ -181,7 +199,7 @@ struct PhotoCurationView: View {
     }
 
     private func createPostFromSelection() async {
-        let date = store.activeCluster?.startDate ?? Date()
+        let date = store.activeCluster?.postCreationDate() ?? Date()
         await store.export(settings: settings)
         guard let markdown = store.exportedMarkdown else { return }
 
@@ -883,9 +901,9 @@ private struct ThumbnailCell: View {
 
     // Format in photo's local timezone so a SF photo shows PST, not KST
     private var timestampText: String {
-        photoLocalTime(
-            asset.timestamp,
-            timeZone: asset.preferredDisplayTimeZone ?? (asset.usesPhotoLibraryCreationDate ? nil : geocodeResult?.timeZone)
+        photoTimestampLine(
+            for: asset,
+            geocodeTimeZone: geocodeResult?.timeZone
         )
     }
 
@@ -1052,9 +1070,9 @@ private struct PhotoDetailSheet: View {
 
                 if let asset {
                     VStack(spacing: 2) {
-                        Text(photoLocalTime(
-                            asset.timestamp,
-                            timeZone: asset.preferredDisplayTimeZone ?? (asset.usesPhotoLibraryCreationDate ? nil : geocodeResult?.timeZone),
+                        Text(photoTimestampLine(
+                            for: asset,
+                            geocodeTimeZone: geocodeResult?.timeZone,
                             dateStyle: .medium,
                             timeStyle: .short
                         ))

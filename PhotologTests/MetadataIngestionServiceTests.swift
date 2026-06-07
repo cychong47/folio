@@ -3,6 +3,45 @@ import XCTest
 @testable import Photolog
 
 final class MetadataIngestionServiceTests: XCTestCase {
+    func testCameraModelCombinesMakeAndModelFromTIFFMetadata() {
+        let cameraModel = MetadataIngestionService.cameraModel(
+            from: [
+                kCGImagePropertyTIFFDictionary as String: [
+                    kCGImagePropertyTIFFMake as String: "Panasonic",
+                    kCGImagePropertyTIFFModel as String: "DC-G9M2"
+                ]
+            ]
+        )
+
+        XCTAssertEqual(cameraModel, "Panasonic DC-G9M2")
+    }
+
+    func testCameraModelAvoidsDuplicatingMakeAlreadyInModel() {
+        let cameraModel = MetadataIngestionService.cameraModel(
+            from: [
+                kCGImagePropertyTIFFDictionary as String: [
+                    kCGImagePropertyTIFFMake as String: "Apple",
+                    kCGImagePropertyTIFFModel as String: "Apple iPhone 15 Pro"
+                ]
+            ]
+        )
+
+        XCTAssertEqual(cameraModel, "Apple iPhone 15 Pro")
+    }
+
+    func testCameraModelReturnsNilWhenMetadataIsBlank() {
+        let cameraModel = MetadataIngestionService.cameraModel(
+            from: [
+                kCGImagePropertyTIFFDictionary as String: [
+                    kCGImagePropertyTIFFMake as String: " ",
+                    kCGImagePropertyTIFFModel as String: ""
+                ]
+            ]
+        )
+
+        XCTAssertNil(cameraModel)
+    }
+
     func testEXIFTimestampWithSeparatedSubsecondAndOffsetPreservesCaptureTimeZone() {
         let captureTimeZone = TimeZone(secondsFromGMT: -7 * 3600)!
         let timestamp = MetadataIngestionService.exifTimestamp(

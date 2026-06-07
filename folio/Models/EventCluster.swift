@@ -46,6 +46,20 @@ struct EventCluster: Identifiable {
         return formatter.string(from: startDate)
     }
 
+    func postCreationDate(selectionTimeZone: TimeZone = .current) -> Date {
+        let displayTimeZone = displayTimeZone ?? selectionTimeZone
+        var displayCalendar = Calendar(identifier: .gregorian)
+        displayCalendar.timeZone = displayTimeZone
+        var selectionCalendar = Calendar(identifier: .gregorian)
+        selectionCalendar.timeZone = selectionTimeZone
+
+        let components = displayCalendar.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second],
+            from: startDate
+        )
+        return selectionCalendar.date(from: components) ?? startDate
+    }
+
     var representativeCoordinate: CLLocationCoordinate2D? {
         assets.compactMap(\.coordinate).first
     }

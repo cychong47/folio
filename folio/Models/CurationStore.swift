@@ -125,6 +125,7 @@ class CurationStore: ObservableObject {
             let metadata = await photoLibraryMetadataData(for: ph)
             let metadataData = metadata.data
             let initialEXIFTimestamp = metadataData.flatMap { MetadataIngestionService.exifTimestamp(from: $0) }
+            let cameraModel = metadataData.flatMap { MetadataIngestionService.cameraModel(from: $0) }
             let locationTimeZone = initialEXIFTimestamp?.timeZone == nil ? await timeZone(for: coord) : nil
             let appliedNoLocationTimeZone = initialEXIFTimestamp?.timeZone == nil && coord == nil
                 ? noLocationTimeZone
@@ -165,6 +166,7 @@ class CurationStore: ObservableObject {
                 exifTimestamp: exifTimestamp,
                 locationTimeZone: locationTimeZone,
                 noLocationTimeZone: appliedNoLocationTimeZone,
+                cameraModel: cameraModel,
                 finalTimestamp: timestamp,
                 filterSummary: filterSummary,
                 resolution: timestampResolution.source,
@@ -181,7 +183,8 @@ class CurationStore: ObservableObject {
                     isScreenshot: ph.mediaSubtypes.contains(.photoScreenshot),
                     isFavorite: ph.isFavorite,
                     curationDiagnostic: diagnostic,
-                    usesPhotoLibraryCreationDate: timestampResolution.source.hasPrefix("creation:")
+                    usesPhotoLibraryCreationDate: timestampResolution.source.hasPrefix("creation:"),
+                    cameraModel: cameraModel
                 ))
             }
             if (i + 1) % 10 == 0 || i == total - 1 {
@@ -240,6 +243,7 @@ class CurationStore: ObservableObject {
         exifTimestamp: (date: Date, timeZone: TimeZone?)?,
         locationTimeZone: TimeZone?,
         noLocationTimeZone: TimeZone?,
+        cameraModel: String?,
         finalTimestamp: Date,
         filterSummary: String,
         resolution: String,
@@ -255,6 +259,7 @@ class CurationStore: ObservableObject {
             "exifTZ=\(Self.debugTimeZone(exifTimestamp?.timeZone))",
             "locTZ=\(Self.debugTimeZone(locationTimeZone))",
             "manualNoLocTZ=\(Self.debugTimeZone(noLocationTimeZone))",
+            "camera=\(cameraModel ?? "nil")",
             "resolution=\(resolution)",
             "final=\(Self.debugDate(finalTimestamp))",
             filterSummary

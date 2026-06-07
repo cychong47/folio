@@ -4,6 +4,10 @@
 
 ## Released
 
+### v1.21.30
+- Camera model in curation photo timestamps — thumbnail and detail views now show the parsed camera make/model immediately after each photo timestamp
+- Event-local post dates from curation — posts created from curation now use the event's displayed capture-local day for the draft date and `.md` filename prefix
+
 ### v1.21.29
 - Manual no-location camera timezone — Photos-library range selection can apply a UTC offset to no-GPS photos that have EXIF capture time but no EXIF timezone, with diagnostics showing `exif:manual-offset`
 

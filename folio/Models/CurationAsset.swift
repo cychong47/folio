@@ -18,6 +18,7 @@ struct CurationAsset: Identifiable, Hashable {
     var isStackPrimary: Bool = false  // the frame shown when stack is collapsed
     var curationDiagnostic: String? = nil
     var usesPhotoLibraryCreationDate: Bool = false
+    var cameraModel: String? = nil
 
     var preferredDisplayTimeZone: TimeZone? {
         captureTimeZone

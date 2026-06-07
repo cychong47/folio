@@ -79,6 +79,31 @@ final class EventClusterTests: XCTestCase {
         )
     }
 
+    func testPostDateUsesDisplayedCaptureLocalDay() {
+        let systemTimeZone = TimeZone(secondsFromGMT: 9 * 3600)!
+        let captureTimeZone = TimeZone(secondsFromGMT: -7 * 3600)!
+        let timestamp = date(year: 2026, month: 3, day: 14, hour: 12, minute: 1, timeZone: captureTimeZone)
+        let asset = CurationAsset(
+            phAsset: nil,
+            url: nil,
+            timestamp: timestamp,
+            captureTimeZone: captureTimeZone,
+            coordinate: nil,
+            pixelSize: .zero
+        )
+        let cluster = EventCluster(
+            name: "Event 1",
+            assets: [asset],
+            startDate: timestamp,
+            endDate: timestamp
+        )
+
+        XCTAssertEqual(
+            datePrefix(cluster.postCreationDate(selectionTimeZone: systemTimeZone), timeZone: systemTimeZone),
+            "2026-03-14"
+        )
+    }
+
     private func date(
         year: Int,
         month: Int,
@@ -98,5 +123,12 @@ final class EventClusterTests: XCTestCase {
             minute: minute,
             second: second
         ))!
+    }
+
+    private func datePrefix(_ date: Date, timeZone: TimeZone) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.timeZone = timeZone
+        return formatter.string(from: date)
     }
 }
