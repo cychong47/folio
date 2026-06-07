@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.41
+- Compact welcome window — the start window now opens shorter around the large action tiles while editor, browse, and curation modes keep the taller working minimum
+
 ### v1.21.40
 - Curation image subpaths — posts and photo-only exports created from curated photos now write images and markdown links using the configured Static image subpath template such as `YYYY/MM`
 

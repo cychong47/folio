@@ -15,6 +15,9 @@ struct ContentView: View {
     @StateObject private var curationStore = CurationStore()
 
     private var isImporting: Bool { importTotal > 0 }
+    private var minimumWindowHeight: CGFloat {
+        pendingPost.isEmpty && !browsing && !curating ? 430 : 500
+    }
 
     var body: some View {
         ZStack {
@@ -80,6 +83,7 @@ struct ContentView: View {
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
             }
         }
+        .frame(minWidth: 800, minHeight: minimumWindowHeight)
         .sheet(isPresented: $showDatePicker) {
             DateRangePickerView(isPresented: $showDatePicker) { start, end, noLocationTimeZone in
                 curating = true

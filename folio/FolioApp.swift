@@ -31,7 +31,6 @@ struct FolioApp: App {
                 .environmentObject(pendingPost)
                 .environmentObject(postDraftStore)
                 .environmentObject(updateChecker)
-                .frame(minWidth: 800, minHeight: 500)
                 .onAppear {
                     appDelegate.pendingPost = pendingPost
                     if lastSeenVersion != currentVersion &&
@@ -57,6 +56,7 @@ struct FolioApp: App {
                 }
                 .preferredColorScheme(preferredScheme)
         }
+        .defaultSize(width: 800, height: 430)
 
         WindowGroup("Post Editor", id: "post-editor", for: UUID.self) { $draftID in
             if let draftID, let draft = postDraftStore.draft(for: draftID) {
