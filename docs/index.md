@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.40
+
+- Curation image subpaths — posts and photo-only exports created from curated photos now write images and markdown links using the configured Static image subpath template such as `YYYY/MM`
+
+---
+
 ### v1.21.39
 
 - Welcome action launcher — the start window now presents Drag Photos, New Post, Browse Posts, and Curate Photos as large icon tiles with clearer labels instead of inline text links
