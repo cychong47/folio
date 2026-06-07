@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.36
+
+- GPS-backed curation timezone repair — Photos-library HEIC scans now read GPS coordinates from original metadata when PhotoKit omits location and use the capture-location timezone when EXIF offset metadata conflicts, preventing valid midday travel photos from displaying as early-morning events
+
+---
+
 ### v1.21.35
 
 - Photos-only curation export — Cmd+E now exports selected event photos using blog image settings, prompts for a blog only when resize caps differ, and Cmd+N creates a post from the selection
