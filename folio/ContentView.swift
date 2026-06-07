@@ -51,7 +51,8 @@ struct ContentView: View {
                     hasCurationSession: !curationStore.clusters.isEmpty,
                     onBrowse: { browsing = true },
                     onCurate: { showDatePicker = true },
-                    onResumeCuration: { curating = true }
+                    onResumeCuration: { curating = true },
+                    onResumeDraft: { resumeLatestDraft() }
                 )
             }
 
@@ -96,6 +97,11 @@ struct ContentView: View {
                 }
             }
         }
+    }
+
+    private func resumeLatestDraft() {
+        guard let draftID = postDraftStore.latestDraftID else { return }
+        openWindow(id: "post-editor", value: draftID)
     }
 
     /// Parses image references from markdown body and resolves them to ExportedPhoto instances

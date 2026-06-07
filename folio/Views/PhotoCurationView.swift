@@ -1078,6 +1078,12 @@ private struct ThumbnailCell: View {
 
             // Metadata row
             VStack(alignment: .leading, spacing: 2) {
+                Text(asset.filename)
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+
                 HStack(spacing: 3) {
                     Image(systemName: "clock")
                         .font(.system(size: 9))

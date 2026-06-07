@@ -7,7 +7,9 @@ struct WelcomeView: View {
     var onBrowse: (() -> Void)? = nil
     var onCurate: (() -> Void)? = nil
     var onResumeCuration: (() -> Void)? = nil
+    var onResumeDraft: (() -> Void)? = nil
     @EnvironmentObject var pendingPost: PendingPost
+    @EnvironmentObject var postDraftStore: PostDraftStore
     @State private var showCancelConfirm = false
     @State private var photosStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
 
@@ -49,11 +51,24 @@ struct WelcomeView: View {
                 }
                 .frame(maxWidth: 660)
 
-                if hasCurationSession {
-                    Button {
-                        onResumeCuration?()
-                    } label: {
-                        Label("Resume Curation", systemImage: "arrow.uturn.forward.circle")
+                if hasSecondaryActions {
+                    HStack(spacing: 18) {
+                        if postDraftStore.latestDraftID != nil {
+                            Button {
+                                onResumeDraft?()
+                            } label: {
+                                Label(resumeDraftLabel, systemImage: "doc.badge.clock")
+                            }
+                            .keyboardShortcut("r", modifiers: .command)
+                        }
+
+                        if hasCurationSession {
+                            Button {
+                                onResumeCuration?()
+                            } label: {
+                                Label("Resume Curation", systemImage: "arrow.uturn.forward.circle")
+                            }
+                        }
                     }
                     .buttonStyle(.borderless)
                     .font(.callout.weight(.medium))
@@ -103,6 +118,14 @@ struct WelcomeView: View {
             GridItem(.flexible(minimum: 140, maximum: 300), spacing: 18),
             GridItem(.flexible(minimum: 140, maximum: 300), spacing: 18)
         ]
+    }
+
+    private var hasSecondaryActions: Bool {
+        hasCurationSession || postDraftStore.latestDraftID != nil
+    }
+
+    private var resumeDraftLabel: String {
+        postDraftStore.autosavedDraftCount > 1 ? "Resume Latest Draft" : "Resume Draft"
     }
 
     private func startTextPost() {

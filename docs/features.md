@@ -17,6 +17,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Post list view** — "Browse Posts" opens a full list of every `.md` file in the content directory, sorted by date descending; each row shows title, date, series, categories, and a Draft badge; select any post to re-edit it in a separate editor window while the browse list stays open
 - **Split-view post editor** — monospaced markdown editor on the left; text + image preview on the right showing content in document order
 - **Preview filename captions** — the post editor preview shows each media filename below its rendered image or video placeholder for editing reference only; captions are not written into the markdown file
+- **Autosaved post drafts** — separate editor-window drafts persist unsaved post metadata and selected photo references, then expose a Resume Draft action on the welcome screen after restart or update
 - **External editor live reload** — body text in the editor refreshes automatically when the post file is modified by an external editor (VSCode, Neovim, etc.); changes made by Photolog's own Save are excluded
 - **Live text + image preview** — typed text and photos rendered in sequence so you can see how captions relate to photos before publishing
 - **Hugo frontmatter auto-generation** — title, date (with time and timezone offset), categories, tags, and series written automatically at Save time
@@ -39,6 +40,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Capture-local event ordering** — curation clusters, event ranges, durations, and grid order use the same capture-local time key shown in the UI so adjacent events do not appear to overlap by displayed timestamp
 - **Burst stack detection** — photos taken within 3 seconds of each other are grouped into a stack; the largest file (proxy for sharpest) is marked as the primary frame
 - **Grid selection UI** — 160×120 pt thumbnails with aspect-ratio fill; selected photos shown at full opacity with a blue border and checkmark; unselected photos dimmed to 50%
+- **Curation filename visibility** — each curation thumbnail shows the source filename so large selections can be verified without opening every photo preview
 - **Spacebar curation selection** — press Space in the curation grid or preview window to select or unselect the focused photo while reviewing an event
 - **Event rename** — double-click or use the Rename button to give events meaningful names (e.g. "Sunrise hike")
 - **Create posts from curation** — exports selected photos to the configured static images directory, opens a separate post editor window with image refs preloaded, uses the event's displayed capture-local day for the post filename prefix, and keeps the curation workspace open for repeated post creation

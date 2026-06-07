@@ -4,6 +4,10 @@
 
 ## Released
 
+### v1.21.44
+- Autosaved post drafts — editor windows now persist unsaved draft metadata and selected photo references so the latest draft can be resumed after app restart or update
+- Curation filename visibility — curation grid thumbnails now show each photo filename, making large manual selections easier to verify before creating a post
+
 ### v1.21.43
 - Curation post save reliability — saving a post created from already-exported curation photos no longer deletes the first image before copying, preventing missing-file errors such as `IMG_3469.jpg` on Save
 

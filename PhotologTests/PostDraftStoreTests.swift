@@ -2,6 +2,67 @@ import XCTest
 @testable import Photolog
 
 final class PostDraftStoreTests: XCTestCase {
+    func testDraftPersistsAcrossStoreReload() throws {
+        let storageURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+            .appendingPathComponent("drafts.json")
+        defer { try? FileManager.default.removeItem(at: storageURL.deletingLastPathComponent()) }
+
+        let date = Calendar.current.date(from: DateComponents(
+            year: 2026,
+            month: 3,
+            day: 15,
+            hour: 14,
+            minute: 30
+        ))!
+        let photo = ExportedPhoto(
+            filename: "IMG_3469.jpg",
+            markdownPath: "/images/2026/03/IMG_3469.jpg",
+            localURL: URL(fileURLWithPath: "/tmp/static/images/2026/03/IMG_3469.jpg"),
+            exifDate: date
+        )
+
+        let store = PostDraftStore(storageURL: storageURL)
+        let draftID = store.createDraft(
+            markdown: "![Photo](/images/2026/03/IMG_3469.jpg)",
+            date: date,
+            photos: [photo]
+        )
+        store.draft(for: draftID)?.title = "Recovered Trip"
+        store.saveDraft(draftID)
+
+        let reloaded = PostDraftStore(storageURL: storageURL)
+        let draft = reloaded.draft(for: draftID)
+
+        XCTAssertEqual(reloaded.latestDraftID, draftID)
+        XCTAssertEqual(draft?.title, "Recovered Trip")
+        XCTAssertEqual(draft?.markdownBody, "![Photo](/images/2026/03/IMG_3469.jpg)")
+        XCTAssertEqual(draft?.photos.map(\.filename), ["IMG_3469.jpg"])
+        XCTAssertEqual(draft?.photos.first?.localURL.path, "/tmp/static/images/2026/03/IMG_3469.jpg")
+        XCTAssertEqual(draft?.postDate, date)
+    }
+
+    func testRemoveDraftDeletesPersistedDraft() throws {
+        let storageURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+            .appendingPathComponent("drafts.json")
+        defer { try? FileManager.default.removeItem(at: storageURL.deletingLastPathComponent()) }
+
+        let store = PostDraftStore(storageURL: storageURL)
+        let draftID = store.createDraft(
+            markdown: "Body",
+            date: Date(timeIntervalSince1970: 0),
+            photos: []
+        )
+        XCTAssertNotNil(store.draft(for: draftID))
+
+        store.removeDraft(draftID)
+
+        let reloaded = PostDraftStore(storageURL: storageURL)
+        XCTAssertNil(reloaded.draft(for: draftID))
+        XCTAssertNil(reloaded.latestDraftID)
+    }
+
     func testCreateDraftCopiesCurationPayloadIntoIndependentPost() {
         let mainPost = PendingPost()
         mainPost.slug = "main-window-post"
