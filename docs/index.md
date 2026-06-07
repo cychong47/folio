@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.43
+
+- Curation post save reliability — saving a post created from already-exported curation photos no longer deletes the first image before copying, preventing missing-file errors such as `IMG_3469.jpg` on Save
+
+---
+
 ### v1.21.42
 
 - Preview filename captions — the post editor preview now shows each media filename below its rendered image or video placeholder so authors can locate the matching markdown reference without changing saved post content
