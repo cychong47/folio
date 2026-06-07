@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.32
+
+- Browse-preserving post editing — selecting a post from Browse Posts now opens it in a separate editor window so the browse list remains available, and curation uses Create Post wording consistently
+
+---
+
 ### v1.21.31
 
 - Single editor publish action — removed the redundant Publish button and GitHub publish settings so Save is the commit/push path, while Preview now saves locally before opening Hugo
