@@ -584,33 +584,42 @@ struct PostEditorView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(.horizontal, 4)
                             case .image(let photo):
-                                if let img = NSImage(contentsOf: photo.localURL) {
-                                    Image(nsImage: img)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .cornerRadius(8)
-                                } else {
+                                VStack(alignment: .leading, spacing: 6) {
+                                    if let img = NSImage(contentsOf: photo.localURL) {
+                                        Image(nsImage: img)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .cornerRadius(8)
+                                    } else {
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color.secondary.opacity(0.08))
+                                            .frame(height: 100)
+                                            .overlay(Image(systemName: "photo").foregroundStyle(.secondary))
+                                    }
+                                    Text(PostPreviewBlock.mediaCaption(for: photo))
+                                        .font(.caption2)
+                                        .foregroundStyle(.secondary)
+                                        .lineLimit(1)
+                                        .truncationMode(.middle)
+                                        .textSelection(.enabled)
+                                }
+                            case .video(let video):
+                                VStack(alignment: .leading, spacing: 6) {
                                     RoundedRectangle(cornerRadius: 8)
                                         .fill(Color.secondary.opacity(0.08))
                                         .frame(height: 100)
-                                        .overlay(Image(systemName: "photo").foregroundStyle(.secondary))
-                                }
-                            case .video(let video):
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color.secondary.opacity(0.08))
-                                    .frame(height: 100)
-                                    .overlay(
-                                        VStack(spacing: 6) {
+                                        .overlay(
                                             Image(systemName: "film")
                                                 .font(.title2)
                                                 .foregroundStyle(.secondary)
-                                            Text(video.filename)
-                                                .font(.caption2)
-                                                .foregroundStyle(.secondary)
-                                                .lineLimit(1)
-                                                .truncationMode(.middle)
-                                        }
-                                    )
+                                        )
+                                    Text(PostPreviewBlock.mediaCaption(for: video))
+                                        .font(.caption2)
+                                        .foregroundStyle(.secondary)
+                                        .lineLimit(1)
+                                        .truncationMode(.middle)
+                                        .textSelection(.enabled)
+                                }
                             }
                         }
                     }
@@ -970,4 +979,8 @@ struct PostPreviewBlock: Identifiable {
     let id: Int
     enum Kind { case text(String); case image(ExportedPhoto); case video(ExportedPhoto) }
     let kind: Kind
+
+    nonisolated static func mediaCaption(for photo: ExportedPhoto) -> String {
+        photo.filename
+    }
 }

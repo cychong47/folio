@@ -16,6 +16,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **EXIF timezone preservation** — photo curation and drag-and-drop import share the same EXIF parser for separated offsets, subsecond fields, and inline timezone offsets; curation prefers original/base Photos resources, shows selected-event timestamp and date-filter diagnostics, uses original metadata GPS as a fallback when PhotoKit omits location, trusts camera-local EXIF time when GPS is absent, supports a manual UTC offset for no-GPS/no-timezone Photos, and falls back to Photos' own date only when EXIF is missing or GPS-assumed EXIF conflicts with Photos
 - **Camera model display** — curation thumbnails and detail views show the parsed camera make/model immediately after each photo timestamp
 - **Split-view post editor** — markdown editor on the left, live text+image preview on the right showing content in document order
+- **Preview filename captions** — the post editor preview shows each media filename below its rendered image or video placeholder for editing reference only
 - **External editor live reload** — body text refreshes automatically when the post file is modified in an external editor (VSCode, Neovim, etc.)
 - **Hugo frontmatter** — auto-generated with title, date, categories, and image references
 - **Live slug** — filename slug auto-generated from title and kept in sync as you type
