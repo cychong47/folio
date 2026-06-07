@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.35
+- Photos-only curation export — Cmd+E now exports selected event photos using blog image settings, prompts for a blog only when resize caps differ, and Cmd+N creates a post from the selection
+
 ### v1.21.34
 - Stable date range picker layout — no-location timezone controls are now always visible in the Photos date range window, avoiding Advanced-section height changes and hidden helper text
 

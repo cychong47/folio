@@ -92,6 +92,8 @@ struct PhotoCurationView: View {
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var showDatePicker = false
     @State private var showChangeRangeConfirmation = false
+    @State private var exportProfileChoices: [BlogProfile] = []
+    @State private var showExportProfilePicker = false
 
     var body: some View {
         ZStack {
@@ -104,7 +106,7 @@ struct PhotoCurationView: View {
                     EventNavigatorPanel(store: store)
                         .navigationSplitViewColumnWidth(min: 200, ideal: 240, max: 300)
                 } detail: {
-                    CurationGridPanel(store: store) {
+                    CurationGridPanel(store: store, onExportPhotos: requestPhotoExport) {
                         Task { await createPostFromSelection() }
                     }
                 }
@@ -133,15 +135,35 @@ struct PhotoCurationView: View {
                 }
             }
             ToolbarItem(placement: .primaryAction) {
-                Button(action: { Task { await createPostFromSelection() } }) {
-                    Label("Create Post", systemImage: "square.and.pencil")
+                HStack(spacing: 8) {
+                    Button(action: requestPhotoExport) {
+                        Label("Export Photos", systemImage: "square.and.arrow.down")
+                    }
+                    .disabled(store.activeCluster?.selectedCount == 0 || store.isExporting)
+                    .keyboardShortcut("e", modifiers: .command)
+
+                    Button(action: { Task { await createPostFromSelection() } }) {
+                        Label("Create Post", systemImage: "square.and.pencil")
+                    }
+                    .disabled(store.activeCluster?.selectedCount == 0 || store.isExporting)
+                    .keyboardShortcut("n", modifiers: .command)
                 }
-                .disabled(store.activeCluster?.selectedCount == 0 || store.isExporting)
-                .keyboardShortcut("e", modifiers: .command)
             }
         }
         .sheet(isPresented: $store.isRenaming) {
             RenameSheet(store: store)
+        }
+        .sheet(isPresented: $showExportProfilePicker) {
+            ExportProfilePickerSheet(
+                profiles: exportProfileChoices,
+                onCancel: {
+                    showExportProfilePicker = false
+                },
+                onSelect: { profile in
+                    showExportProfilePicker = false
+                    Task { await store.exportPhotos(profile: profile) }
+                }
+            )
         }
         .sheet(isPresented: $showDatePicker) {
             DateRangePickerView(
@@ -182,11 +204,34 @@ struct PhotoCurationView: View {
         } message: {
             Text(store.exportError ?? "")
         }
+        .alert("Export Complete", isPresented: Binding(
+            get: { store.exportStatus != nil },
+            set: { if !$0 { store.exportStatus = nil } }
+        )) {
+            Button("OK") { store.exportStatus = nil }
+        } message: {
+            Text(store.exportStatus ?? "")
+        }
         .alert("Change Date Range?", isPresented: $showChangeRangeConfirmation) {
             Button("Cancel", role: .cancel) {}
             Button("Change Dates") { showDatePicker = true }
         } message: {
             Text("Changing the date range will rescan photos and reset the current curation selections.")
+        }
+    }
+
+    private func requestPhotoExport() {
+        switch CurationExportTargetResolver.resolve(
+            profiles: settings.profiles,
+            activeProfileID: settings.selectedProfileID
+        ) {
+        case .use(let profile):
+            Task { await store.exportPhotos(profile: profile) }
+        case .choose(let profiles):
+            exportProfileChoices = profiles
+            showExportProfilePicker = true
+        case .unavailable(let message):
+            store.exportError = message
         }
     }
 
@@ -338,6 +383,7 @@ private struct EventRow: View {
 
 private struct CurationGridPanel: View {
     @ObservedObject var store: CurationStore
+    let onExportPhotos: () -> Void
     let onCreatePost: () -> Void
 
     @State private var thumbSize: CGFloat = 160
@@ -391,6 +437,12 @@ private struct CurationGridPanel: View {
                     Text("\(cluster.selectedCount) of \(cluster.totalCount) selected")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                    Button(action: onExportPhotos) {
+                        Label("Export Photos", systemImage: "square.and.arrow.down")
+                            .font(.caption)
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(cluster.selectedCount == 0 || store.isExporting)
                     Button(action: onCreatePost) {
                         Label("Create Post", systemImage: "square.and.pencil")
                             .font(.caption)
@@ -1233,6 +1285,62 @@ private struct ExportResult: Identifiable {
     let id = UUID()
     let markdown: String
     let date: Date
+}
+
+private struct ExportProfilePickerSheet: View {
+    let profiles: [BlogProfile]
+    let onCancel: () -> Void
+    let onSelect: (BlogProfile) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Choose Export Blog")
+                .font(.headline)
+            Text("These blogs use different image resize settings. Choose which blog settings to use for this export.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            VStack(spacing: 8) {
+                ForEach(profiles) { profile in
+                    Button(action: { onSelect(profile) }) {
+                        HStack(spacing: 12) {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(profile.name)
+                                    .font(.body.weight(.medium))
+                                    .foregroundStyle(.primary)
+                                Text(resizeLabel(for: profile))
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding(12)
+                        .background(Theme.panel, in: RoundedRectangle(cornerRadius: 8))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+            HStack {
+                Spacer()
+                Button("Cancel", action: onCancel)
+                    .keyboardShortcut(.cancelAction)
+            }
+        }
+        .padding(24)
+        .frame(width: 420)
+    }
+
+    private func resizeLabel(for profile: BlogProfile) -> String {
+        if let maxImageDimension = profile.maxImageDimension {
+            return "Resize long edge to \(maxImageDimension) px"
+        }
+        return "Export at original size"
+    }
 }
 
 private struct ExportSheet: View {

@@ -23,6 +23,7 @@
 		37F30C436DDDDF87E7C3B361 /* CurationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF44C7511EBADF43BA4F6C5E /* CurationStore.swift */; };
 		3A55BDF76D6A8FA6D007A471 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C67143EEA23DF166A9C75 /* ContentView.swift */; };
 		3BBAA6E143E9B776B51305DA /* PostDraftStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6984FC3C1145C8B4868D4C78 /* PostDraftStoreTests.swift */; };
+		3CF2C7692467B3BA0D31F07C /* CurationExportTargetResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0B77150D7667A2E400FF1B /* CurationExportTargetResolver.swift */; };
 		51D95A1F27DA333F27D945E5 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A8AFF3ADA9F600D0D840A1 /* WelcomeView.swift */; };
 		584E130CF3772C06E9CE8B45 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD30B5BA80F037090A0D61A2 /* Constants.swift */; };
 		5DBBCC82E16A674DE8B68DE9 /* PendingPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268845472ABC1740FC1598BE /* PendingPost.swift */; };
@@ -47,6 +48,7 @@
 		9C4969D11A87EDE16B385E12 /* PhotoDateRangeSelectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182A8FC98D2059AEF875C34E /* PhotoDateRangeSelectionTests.swift */; };
 		9C91926C5243CEDAB3F98795 /* SharedContainerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1439E6A443FD16ED4B98FBD5 /* SharedContainerService.swift */; };
 		A2094EF6C5870456223F7616 /* ClusteringEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC874A15869F3547ECAAF91 /* ClusteringEngineTests.swift */; };
+		A4B8789FA2E7AC28B7D63D0A /* CurationExportTargetResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015A85562E3F67356F99F179 /* CurationExportTargetResolverTests.swift */; };
 		A6FD688A6A15416CF57741BC /* HugoConfigReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964EEE3A6800F4D4524D1A90 /* HugoConfigReader.swift */; };
 		AA9A6B0CBA8A5241339A1189 /* FolioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F63BD90F093F00EA8F5532 /* FolioApp.swift */; };
 		AC4B0BF9B1FBF2B0EBAC594F /* PhotoStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B342D008C3E49EFB58A457A6 /* PhotoStripView.swift */; };
@@ -75,6 +77,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		015A85562E3F67356F99F179 /* CurationExportTargetResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurationExportTargetResolverTests.swift; sourceTree = "<group>"; };
 		0C57FBBB7E561FD6D0FEBDB9 /* PostSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostSummary.swift; sourceTree = "<group>"; };
 		0DDACFA16152026E44438844 /* FolioShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FolioShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FAE42F314747ED03B6BDCA3 /* Photolog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Photolog.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +88,7 @@
 		1C84621F2CDE7AFFB1B552AB /* DateRangePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRangePickerView.swift; sourceTree = "<group>"; };
 		268845472ABC1740FC1598BE /* PendingPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingPost.swift; sourceTree = "<group>"; };
 		2AF1C70C0633BC507F18D1DF /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		2F0B77150D7667A2E400FF1B /* CurationExportTargetResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurationExportTargetResolver.swift; sourceTree = "<group>"; };
 		2FF94CF509FD2FD1670BF151 /* EventCluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCluster.swift; sourceTree = "<group>"; };
 		40F1438295A4EEC960427C30 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		437A5000DD6608801D86733D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -204,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				5EC874A15869F3547ECAAF91 /* ClusteringEngineTests.swift */,
+				015A85562E3F67356F99F179 /* CurationExportTargetResolverTests.swift */,
 				D74559F72800E703E8FA6432 /* CurationStoreTests.swift */,
 				7DA8013EC0B167B4D7A3490F /* EventClusterTests.swift */,
 				4F7131FDF6D00C696F50C1A0 /* MetadataIngestionServiceTests.swift */,
@@ -282,6 +287,7 @@
 				40F1438295A4EEC960427C30 /* AppSettings.swift */,
 				55DD9081EA7674BA2004834C /* BlogProfile.swift */,
 				DDC6841DF0682D9E11F013BE /* CurationAsset.swift */,
+				2F0B77150D7667A2E400FF1B /* CurationExportTargetResolver.swift */,
 				AF44C7511EBADF43BA4F6C5E /* CurationStore.swift */,
 				2FF94CF509FD2FD1670BF151 /* EventCluster.swift */,
 				268845472ABC1740FC1598BE /* PendingPost.swift */,
@@ -451,6 +457,7 @@
 				584E130CF3772C06E9CE8B45 /* Constants.swift in Sources */,
 				3A55BDF76D6A8FA6D007A471 /* ContentView.swift in Sources */,
 				7C27C094788D6B114D9F7F5E /* CurationAsset.swift in Sources */,
+				3CF2C7692467B3BA0D31F07C /* CurationExportTargetResolver.swift in Sources */,
 				37F30C436DDDDF87E7C3B361 /* CurationStore.swift in Sources */,
 				735018C258C8712391F96EE9 /* DateRangePickerView.swift in Sources */,
 				76BBD91EED7FBB16912BB5A4 /* DropTargetView.swift in Sources */,
@@ -501,6 +508,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2094EF6C5870456223F7616 /* ClusteringEngineTests.swift in Sources */,
+				A4B8789FA2E7AC28B7D63D0A /* CurationExportTargetResolverTests.swift in Sources */,
 				3044A619690FB9D4BC97952A /* CurationStoreTests.swift in Sources */,
 				C14348A8DE8DC8100D7ADA76 /* EventClusterTests.swift in Sources */,
 				8B191B9836B0D0A59DE87B5B /* MetadataIngestionServiceTests.swift in Sources */,

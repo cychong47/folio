@@ -17,6 +17,7 @@ class CurationStore: ObservableObject {
     @Published var exportedMarkdown: String? = nil
     @Published var isExporting: Bool = false
     @Published var exportError: String? = nil
+    @Published var exportStatus: String? = nil
     @Published var dateRange: (start: Date, end: Date)? = nil
     @Published var noLocationTimeZone: TimeZone? = nil
     @Published var lastFetchCount: Int = 0    // date-range count
@@ -462,107 +463,176 @@ class CurationStore: ObservableObject {
     }
 
     func export(settings: AppSettings) async {
+        guard let profile = settings.activeProfile else {
+            exportError = "No blog profile is configured. Open Settings and add a blog profile before creating a post."
+            return
+        }
+        await export(profile: profile)
+    }
+
+    func export(profile: BlogProfile) async {
         guard let cluster = activeCluster else { return }
         isExporting = true
         exportError = nil
+        exportStatus = nil
+        exportedMarkdown = nil
+
+        do {
+            let result = try await exportSelectedAssets(from: cluster, to: profile, includeMarkdown: true)
+            exportedMarkdown = result.markdown
+        } catch {
+            exportError = error.localizedDescription
+        }
+        isExporting = false
+    }
+
+    func exportPhotos(profile: BlogProfile) async {
+        guard let cluster = activeCluster else { return }
+        isExporting = true
+        exportError = nil
+        exportStatus = nil
+        exportedMarkdown = nil
+
+        do {
+            let result = try await exportSelectedAssets(from: cluster, to: profile, includeMarkdown: false)
+            exportStatus = "Exported \(result.count) photo\(result.count == 1 ? "" : "s") to \(profile.name)."
+        } catch {
+            exportError = error.localizedDescription
+        }
+        isExporting = false
+    }
+
+    private struct ExportedCurationAssets {
+        let markdown: String?
+        let count: Int
+    }
+
+    private enum CurationExportFailure: LocalizedError {
+        case noSelection(String)
+        case noStaticImagesPath
+        case invalidStaticImagesPath(String)
+
+        var errorDescription: String? {
+            switch self {
+            case .noSelection(let clusterName):
+                return "No photos selected in \"\(clusterName)\"."
+            case .noStaticImagesPath:
+                return "No Static Images Path is configured. Open Settings → Blog and set the path to your Hugo static/images directory."
+            case .invalidStaticImagesPath(let path):
+                return "Static Images Path \"\(path)\" looks like a system path. It should point to a folder inside /Users/… — please check Settings → Blog."
+            }
+        }
+    }
+
+    private func exportSelectedAssets(
+        from cluster: EventCluster,
+        to profile: BlogProfile,
+        includeMarkdown: Bool
+    ) async throws -> ExportedCurationAssets {
         let selected = cluster.assets.filter(\.isSelected)
         guard !selected.isEmpty else {
-            exportError = "No photos selected in \"\(cluster.name)\"."
-            isExporting = false
-            return
+            throw CurationExportFailure.noSelection(cluster.name)
         }
 
-        let rawPath = settings.staticImagesPath
+        let rawPath = profile.staticImagesPath
         guard !rawPath.isEmpty else {
-            exportError = "No Static Images Path is configured. Open Settings → Blog and set the path to your Hugo static/images directory."
-            isExporting = false
-            return
+            throw CurationExportFailure.noStaticImagesPath
         }
         // Reject paths that are clearly on the read-only system volume
         // (e.g. "/images" instead of "/Users/…/blog/static/images").
         let resolvedPath = (rawPath as NSString).expandingTildeInPath
         guard resolvedPath.hasPrefix("/Users") || resolvedPath.hasPrefix("/Volumes") ||
               resolvedPath.hasPrefix("/tmp") || resolvedPath.hasPrefix("/private/tmp") else {
-            exportError = "Static Images Path \"\(rawPath)\" looks like a system path. It should point to a folder inside /Users/… — please check Settings \u{2192} Blog."
-            isExporting = false
-            return
+            throw CurationExportFailure.invalidStaticImagesPath(rawPath)
         }
 
-        do {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd"
-            let dateStr = formatter.string(from: cluster.startDate)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateStr = formatter.string(from: cluster.startDate)
 
-            var lines: [String] = ["## \(cluster.name) — \(dateStr)", ""]
+        var lines: [String] = includeMarkdown ? ["## \(cluster.name) — \(dateStr)", ""] : []
 
-            let base = URL(fileURLWithPath: settings.staticImagesPath)
-            let prefix = settings.imageURLPrefix
-            let prefixWithSlash = prefix.hasSuffix("/") ? prefix : prefix + "/"
-            let maxDim = settings.activeProfile?.maxImageDimension
-            let stripExif = settings.activeProfile?.stripEXIF ?? true
+        let base = URL(fileURLWithPath: resolvedPath)
+        let prefix = profile.imageURLPrefix
+        let prefixWithSlash = prefix.hasSuffix("/") ? prefix : prefix + "/"
+        let maxDim = profile.maxImageDimension
+        let stripExif = profile.stripEXIF
 
-            try FileManager.default.createDirectory(at: base, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: base, withIntermediateDirectories: true)
 
-            for asset in selected {
-                if let phAsset = asset.phAsset {
-                    // PhotoKit path: write original to temp file, then process
-                    let resources = PHAssetResource.assetResources(for: phAsset)
-                    guard let resource = resources.first(where: { $0.type == .photo }) ?? resources.first else {
-                        continue
-                    }
-                    let originalFilename = resource.originalFilename
-                    let originalExt = (originalFilename as NSString).pathExtension.lowercased()
-                    let ext = originalExt == "heic" ? "jpg" : (originalExt.isEmpty ? "jpg" : originalExt)
-                    // Preserve original filename; only swap extension when HEIC→JPEG
-                    let baseName = (originalFilename as NSString).deletingPathExtension
-                        .replacingOccurrences(of: " ", with: "_")
-                    let filename = "\(baseName).\(ext)"
-                    let destURL = base.appendingPathComponent(filename)
-                    let tempURL = FileManager.default.temporaryDirectory
-                        .appendingPathComponent(UUID().uuidString + "." + originalExt)
-
-                    try await writePHAssetResource(resource, to: tempURL)
-
-                    defer { try? FileManager.default.removeItem(at: tempURL) }
-
-                    if let maxDim, let resized = resized(url: tempURL, maxLongEdge: maxDim) {
-                        let final = stripExif ? stripped(data: resized, url: tempURL) ?? resized : resized
-                        try final.write(to: destURL)
-                    } else if stripExif, let s = stripped(url: tempURL) {
-                        try s.write(to: destURL)
-                    } else {
-                        try FileManager.default.copyItem(at: tempURL, to: destURL)
-                    }
-
-                    lines.append("![](\(prefixWithSlash)\(filename))")
-
-                } else if let url = asset.url {
-                    // File system path — use original filename, swap ext only for HEIC
-                    let originalExt = url.pathExtension.lowercased()
-                    let ext = originalExt == "heic" ? "jpg" : (originalExt.isEmpty ? "jpg" : originalExt)
-                    let baseName = url.deletingPathExtension().lastPathComponent
-                        .replacingOccurrences(of: " ", with: "_")
-                    let filename = "\(baseName).\(ext)"
-                    let destURL = base.appendingPathComponent(filename)
-
-                    if let maxDim, let resized = resized(url: url, maxLongEdge: maxDim) {
-                        let final = stripExif ? stripped(data: resized, url: url) ?? resized : resized
-                        try final.write(to: destURL)
-                    } else if stripExif, let s = stripped(url: url) {
-                        try s.write(to: destURL)
-                    } else {
-                        try FileManager.default.copyItem(at: url, to: destURL)
-                    }
-
+        var exportedCount = 0
+        for asset in selected {
+            if let filename = try await exportAsset(asset, to: base, maxDim: maxDim, stripExif: stripExif) {
+                exportedCount += 1
+                if includeMarkdown {
                     lines.append("![](\(prefixWithSlash)\(filename))")
                 }
             }
-
-            exportedMarkdown = lines.joined(separator: "\n")
-        } catch {
-            exportError = error.localizedDescription
         }
-        isExporting = false
+
+        return ExportedCurationAssets(
+            markdown: includeMarkdown ? lines.joined(separator: "\n") : nil,
+            count: exportedCount
+        )
+    }
+
+    private func exportAsset(
+        _ asset: CurationAsset,
+        to base: URL,
+        maxDim: Int?,
+        stripExif: Bool
+    ) async throws -> String? {
+        if let phAsset = asset.phAsset {
+            // PhotoKit path: write original to temp file, then process.
+            let resources = PHAssetResource.assetResources(for: phAsset)
+            guard let resource = resources.first(where: { $0.type == .photo }) ?? resources.first else {
+                return nil
+            }
+            let originalFilename = resource.originalFilename
+            let originalExt = (originalFilename as NSString).pathExtension.lowercased()
+            let ext = originalExt == "heic" ? "jpg" : (originalExt.isEmpty ? "jpg" : originalExt)
+            let baseName = (originalFilename as NSString).deletingPathExtension
+                .replacingOccurrences(of: " ", with: "_")
+            let filename = "\(baseName).\(ext)"
+            let destURL = base.appendingPathComponent(filename)
+            let tempExt = originalExt.isEmpty ? ext : originalExt
+            let tempURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent(UUID().uuidString + "." + tempExt)
+
+            try await writePHAssetResource(resource, to: tempURL)
+            defer { try? FileManager.default.removeItem(at: tempURL) }
+
+            try processImage(from: tempURL, to: destURL, maxDim: maxDim, stripExif: stripExif)
+            return filename
+        }
+
+        if let url = asset.url {
+            let originalExt = url.pathExtension.lowercased()
+            let ext = originalExt == "heic" ? "jpg" : (originalExt.isEmpty ? "jpg" : originalExt)
+            let baseName = url.deletingPathExtension().lastPathComponent
+                .replacingOccurrences(of: " ", with: "_")
+            let filename = "\(baseName).\(ext)"
+            let destURL = base.appendingPathComponent(filename)
+
+            try processImage(from: url, to: destURL, maxDim: maxDim, stripExif: stripExif)
+            return filename
+        }
+
+        return nil
+    }
+
+    private func processImage(from sourceURL: URL, to destURL: URL, maxDim: Int?, stripExif: Bool) throws {
+        if let maxDim, let resized = resized(url: sourceURL, maxLongEdge: maxDim) {
+            let final = stripExif ? stripped(data: resized, url: sourceURL) ?? resized : resized
+            try final.write(to: destURL)
+        } else if stripExif, let strippedData = stripped(url: sourceURL) {
+            try strippedData.write(to: destURL)
+        } else {
+            if FileManager.default.fileExists(atPath: destURL.path) {
+                try FileManager.default.removeItem(at: destURL)
+            }
+            try FileManager.default.copyItem(at: sourceURL, to: destURL)
+        }
     }
 
     // MARK: - Private helpers

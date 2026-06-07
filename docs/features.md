@@ -37,11 +37,12 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Grid selection UI** — 160×120 pt thumbnails with aspect-ratio fill; selected photos shown at full opacity with a blue border and checkmark; unselected photos dimmed to 50%
 - **Event rename** — double-click or use the Rename button to give events meaningful names (e.g. "Sunrise hike")
 - **Create posts from curation** — exports selected photos to the configured static images directory, opens a separate post editor window with image refs preloaded, uses the event's displayed capture-local day for the post filename prefix, and keeps the curation workspace open for repeated post creation
+- **Photos-only curation export** — `⌘E` exports selected event photos without creating a post, applies the chosen blog profile's resize/EXIF settings, and prompts for a blog only when configured resize caps differ; `⌘N` creates a post from the same selection
 - **Start screen return** — the curation toolbar's Start button returns to the welcome screen for drag-and-drop posts while preserving the loaded curation session, with Resume Curation kept separate from starting a new scan
 - **Editable date range** — the curation toolbar calendar action reopens the current Photos-library date range with explicit `yyyy-MM-dd` fields and the no-location timezone option, then rescans and reclusters photos after confirmation
 - **Side-by-side date fields** — the Photos-library date range picker places From and To controls in one row so calendar popovers do not hide the other date input
 - **Stable date range picker layout** — no-location timezone controls stay visible in the Photos-library date range picker so helper text is not hidden behind a collapsing Advanced section
-- **Keyboard shortcut** — `⌘K` opens the curation folder picker from the welcome screen; `⌘E` creates a post from the active event selection
+- **Keyboard shortcut** — `⌘K` opens the curation folder picker from the welcome screen; `⌘E` exports selected event photos; `⌘N` creates a post from the active event selection
 
 ---
 
@@ -66,6 +67,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 ## Image Export
 
 - **Image resize cap** — set a max long-edge dimension per profile; images exceeding the limit are downscaled while preserving aspect ratio
+- **Curation photo export** — selected curation photos can be exported without creating a post, using the target blog profile's resize and EXIF stripping settings
 - **EXIF metadata stripping** — GPS coordinates and device info removed from images on export (on by default); preserves `DateTimeOriginal` for filename generation only
 - **Image file permissions** — exported images set to `0644` so web servers (nginx, Apache) can serve them
 - **Subpath templates** — configurable date-based subdirectories using `YYYY`, `MM`, `DD` tokens; separate templates for content posts and static images
