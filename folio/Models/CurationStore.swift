@@ -575,8 +575,6 @@ class CurationStore: ObservableObject {
         var lines: [String] = includeMarkdown ? ["## \(cluster.name) — \(dateStr)", ""] : []
 
         let base = URL(fileURLWithPath: resolvedPath)
-        let prefix = profile.imageURLPrefix
-        let prefixWithSlash = prefix.hasSuffix("/") ? prefix : prefix + "/"
         let maxDim = profile.maxImageDimension
         let stripExif = profile.stripEXIF
 
@@ -584,10 +582,21 @@ class CurationStore: ObservableObject {
 
         var exportedCount = 0
         for asset in selected {
-            if let filename = try await exportAsset(asset, to: base, maxDim: maxDim, stripExif: stripExif) {
+            let exportDirectory = Self.curationExportDirectory(
+                base: base,
+                captureDate: asset.timestamp,
+                profile: profile
+            )
+            try FileManager.default.createDirectory(at: exportDirectory, withIntermediateDirectories: true)
+            if let filename = try await exportAsset(asset, to: exportDirectory, maxDim: maxDim, stripExif: stripExif) {
                 exportedCount += 1
                 if includeMarkdown {
-                    lines.append("![](\(prefixWithSlash)\(filename))")
+                    let imagePath = Self.curationMarkdownImagePath(
+                        filename: filename,
+                        captureDate: asset.timestamp,
+                        profile: profile
+                    )
+                    lines.append("![](\(imagePath))")
                 }
             }
         }
@@ -596,6 +605,29 @@ class CurationStore: ObservableObject {
             markdown: includeMarkdown ? lines.joined(separator: "\n") : nil,
             count: exportedCount
         )
+    }
+
+    nonisolated static func curationMarkdownImagePath(
+        filename: String,
+        captureDate: Date,
+        profile: BlogProfile
+    ) -> String {
+        let resolvedPrefix = AppSettings.resolveSubpath(profile.imageURLPrefix, for: captureDate)
+        let slash = resolvedPrefix.hasSuffix("/") ? resolvedPrefix : resolvedPrefix + "/"
+        let subpath = AppSettings.resolveSubpath(profile.staticImagesSubpath, for: captureDate)
+        if subpath.isEmpty { return "\(slash)\(filename)" }
+        let subpathSlash = subpath.hasSuffix("/") ? subpath : subpath + "/"
+        return "\(slash)\(subpathSlash)\(filename)"
+    }
+
+    nonisolated static func curationExportDirectory(
+        base: URL,
+        captureDate: Date,
+        profile: BlogProfile
+    ) -> URL {
+        let subpath = AppSettings.resolveSubpath(profile.staticImagesSubpath, for: captureDate)
+        if subpath.isEmpty { return base }
+        return base.appendingPathComponent(subpath, isDirectory: true)
     }
 
     private func exportAsset(

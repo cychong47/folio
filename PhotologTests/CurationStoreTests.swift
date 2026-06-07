@@ -35,6 +35,44 @@ final class CurationStoreTests: XCTestCase {
         XCTAssertTrue(options.isNetworkAccessAllowed)
     }
 
+    func testCurationMarkdownImagePathIncludesStaticImageSubpathTemplate() {
+        let profile = BlogProfile(
+            name: "Blog",
+            blogRoot: "/Users/me/blog",
+            staticImagesPath: "/Users/me/blog/static/images",
+            staticImagesSubpath: "YYYY/MM"
+        )
+        let captureDate = date(year: 2026, month: 3, day: 15)
+
+        XCTAssertEqual(
+            CurationStore.curationMarkdownImagePath(
+                filename: "IMG_0001.jpg",
+                captureDate: captureDate,
+                profile: profile
+            ),
+            "/images/2026/03/IMG_0001.jpg"
+        )
+    }
+
+    func testCurationExportDirectoryIncludesStaticImageSubpathTemplate() {
+        let profile = BlogProfile(
+            name: "Blog",
+            blogRoot: "/Users/me/blog",
+            staticImagesPath: "/Users/me/blog/static/images",
+            staticImagesSubpath: "YYYY/MM"
+        )
+        let captureDate = date(year: 2026, month: 3, day: 15)
+
+        XCTAssertEqual(
+            CurationStore.curationExportDirectory(
+                base: URL(fileURLWithPath: profile.staticImagesPath),
+                captureDate: captureDate,
+                profile: profile
+            ).path,
+            "/Users/me/blog/static/images/2026/03"
+        )
+    }
+
     func testPhotoLibraryTimestampUsesEXIFWhenCameraTimeHasNoTimeZoneEvidence() {
         let exifDate = Date(timeIntervalSince1970: 1_765_000_000)
         let creationDate = Date(timeIntervalSince1970: 1_766_000_000)
@@ -172,6 +210,12 @@ final class CurationStoreTests: XCTestCase {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return formatter.date(from: value)!
+    }
+
+    private func date(year: Int, month: Int, day: Int) -> Date {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        return calendar.date(from: DateComponents(year: year, month: month, day: day))!
     }
 
 }
