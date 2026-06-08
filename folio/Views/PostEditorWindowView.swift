@@ -1,5 +1,24 @@
 import SwiftUI
 
+enum PostEditorDraftLifecycle {
+    enum Event {
+        case becameEmpty
+        case publishedStateChanged
+        case windowDisappeared
+    }
+
+    static func shouldRemoveDraft(isEmpty: Bool, hasPublishedRecord: Bool, event: Event) -> Bool {
+        switch event {
+        case .becameEmpty:
+            return isEmpty && !hasPublishedRecord
+        case .publishedStateChanged:
+            return false
+        case .windowDisappeared:
+            return isEmpty || hasPublishedRecord
+        }
+    }
+}
+
 struct PostEditorWindowView: View {
     let draftID: UUID
     @ObservedObject var draft: PendingPost
@@ -10,7 +29,11 @@ struct PostEditorWindowView: View {
         PostEditorView()
             .environmentObject(draft)
             .onChange(of: draft.isEmpty) { isEmpty in
-                guard isEmpty, draft.lastPublished == nil else { return }
+                guard PostEditorDraftLifecycle.shouldRemoveDraft(
+                    isEmpty: isEmpty,
+                    hasPublishedRecord: draft.lastPublished != nil,
+                    event: .becameEmpty
+                ) else { return }
                 draftStore.removeDraft(draftID)
                 dismiss()
             }
@@ -24,11 +47,19 @@ struct PostEditorWindowView: View {
             .onChange(of: draft.dateOverride) { _ in saveDraft() }
             .onChange(of: draft.existingFileURL) { _ in saveDraft() }
             .onChange(of: draft.lastPublished != nil) { isPublished in
-                guard isPublished else { return }
+                guard PostEditorDraftLifecycle.shouldRemoveDraft(
+                    isEmpty: draft.isEmpty,
+                    hasPublishedRecord: isPublished,
+                    event: .publishedStateChanged
+                ) else { return }
                 draftStore.removeDraft(draftID)
             }
             .onDisappear {
-                if draft.isEmpty {
+                if PostEditorDraftLifecycle.shouldRemoveDraft(
+                    isEmpty: draft.isEmpty,
+                    hasPublishedRecord: draft.lastPublished != nil,
+                    event: .windowDisappeared
+                ) {
                     draftStore.removeDraft(draftID)
                 } else if draft.lastPublished == nil {
                     saveDraft()

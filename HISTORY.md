@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.49
+- Post save confirmation — successful Save now keeps the editor visible, shows a dismissible auto-hiding “Post saved successfully” confirmation, and removes the editor draft only after the post editor window closes
+
 ### v1.21.48
 - Street-level curation locations — reverse-geocoded photo labels now prefer landmarks, street names, neighborhoods, city, and state instead of only showing coarse city/state labels
 

@@ -19,6 +19,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Split-view post editor** — monospaced markdown editor on the left; text + image preview on the right showing content in document order
 - **Preview filename captions** — the post editor preview shows each media filename below its rendered image or video placeholder for editing reference only; captions are not written into the markdown file
 - **Autosaved post drafts** — separate editor-window drafts persist unsaved post metadata and selected photo references, then expose a Resume Draft action on the welcome screen after restart or update
+- **Post save confirmation** — successful Save keeps the editor visible, shows a dismissible auto-hiding confirmation, and clears the saved editor draft only after the editor window closes
 - **External editor live reload** — body text in the editor refreshes automatically when the post file is modified by an external editor (VSCode, Neovim, etc.); changes made by Photolog's own Save are excluded
 - **Live text + image preview** — typed text and photos rendered in sequence so you can see how captions relate to photos before publishing
 - **Hugo frontmatter auto-generation** — title, date (with time and timezone offset), categories, tags, and series written automatically at Save time

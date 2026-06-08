@@ -135,4 +135,9 @@ final class PostDraftStoreTests: XCTestCase {
         XCTAssertEqual(draft?.photos.map(\.filename), ["2026-03-15-photo.jpg"])
         XCTAssertNil(draft?.lastPublished)
     }
+
+    func testPublishedDraftStaysAvailableUntilEditorWindowCloses() {
+        XCTAssertFalse(PostEditorDraftLifecycle.shouldRemoveDraft(isEmpty: false, hasPublishedRecord: true, event: .publishedStateChanged))
+        XCTAssertTrue(PostEditorDraftLifecycle.shouldRemoveDraft(isEmpty: false, hasPublishedRecord: true, event: .windowDisappeared))
+    }
 }

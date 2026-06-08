@@ -88,6 +88,8 @@ struct PostEditorView: View {
     @State private var pendingDeletion: [URL] = []
     /// Paths in `pendingPost.photos` not currently referenced in `markdownBody`.
     @State private var orphanedPaths: Set<String> = []
+    @State private var showSaveConfirmation = false
+    @State private var saveConfirmationTask: Task<Void, Never>? = nil
 
     private var availableCategories: [String] {
         settings.knownCategories.filter { !pendingPost.categories.contains($0) }
@@ -143,6 +145,34 @@ struct PostEditorView: View {
             footerSection
         }
         .background(Theme.background)
+        .overlay(alignment: .top) {
+            if showSaveConfirmation {
+                Button {
+                    hideSaveConfirmation()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(Color.green)
+                        Text("Post saved successfully")
+                            .font(.callout.weight(.medium))
+                    }
+                    .foregroundStyle(.primary)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.primary.opacity(0.08), lineWidth: 1)
+                    )
+                    .shadow(color: .black.opacity(0.18), radius: 12, x: 0, y: 4)
+                }
+                .buttonStyle(.plain)
+                .padding(.top, 14)
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .help("Dismiss")
+            }
+        }
+        .animation(.easeOut(duration: 0.18), value: showSaveConfirmation)
         .confirmationDialog(isReEditing ? "Discard changes?" : "Reset post?", isPresented: $showResetConfirm, titleVisibility: .visible) {
             Button(isReEditing ? "Discard Changes" : "Reset", role: .destructive) {
                 if isReEditing {
@@ -175,6 +205,7 @@ struct PostEditorView: View {
         .onDisappear {
             hugoServer.stop()
             previewDebounceTask?.cancel()
+            saveConfirmationTask?.cancel()
             fileWatcher.stop()
         }
         .onChange(of: pendingPost.existingFileURL) { url in
@@ -682,7 +713,10 @@ struct PostEditorView: View {
                 .buttonStyle(.plain)
                 .foregroundStyle(.red.opacity(0.75))
                 .font(.callout)
-            Button("Save") { save() }
+            Button("Save") {
+                guard save() else { return }
+                showSavedConfirmation()
+            }
                 .buttonStyle(.borderedProminent)
                 .tint(Theme.accent)
                 .keyboardShortcut("s", modifiers: .command)
@@ -697,6 +731,23 @@ struct PostEditorView: View {
     }
 
     // MARK: - Logic
+
+    private func showSavedConfirmation() {
+        saveConfirmationTask?.cancel()
+        showSaveConfirmation = true
+        saveConfirmationTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 2_500_000_000)
+            guard !Task.isCancelled else { return }
+            showSaveConfirmation = false
+            saveConfirmationTask = nil
+        }
+    }
+
+    private func hideSaveConfirmation() {
+        saveConfirmationTask?.cancel()
+        saveConfirmationTask = nil
+        showSaveConfirmation = false
+    }
 
     // MARK: Photo management
 
