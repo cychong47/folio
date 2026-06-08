@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.48
+
+- Street-level curation locations — reverse-geocoded photo labels now prefer landmarks, street names, neighborhoods, city, and state instead of only showing coarse city/state labels
+
+---
+
 ### v1.21.47
 
 - Welcome access banner visibility — the compact welcome window now leaves enough vertical room for the Photos Grant Access message and button
