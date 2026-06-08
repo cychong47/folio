@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.50
+
+- Date-range curation map — map mode can now switch between the selected event and the full loaded date range, with range pins jumping back to the matching event photo
+
+---
+
 ### v1.21.49
 
 - Post save confirmation — successful Save now keeps the editor visible, shows a dismissible auto-hiding “Post saved successfully” confirmation, and removes the editor draft only after the post editor window closes
