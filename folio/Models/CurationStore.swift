@@ -26,6 +26,13 @@ class CurationStore: ObservableObject {
     @Published var curationDiagnostics: [String] = []
     private var locationTimeZoneCache: [String: TimeZone] = [:]
 
+    struct RangeMapTarget: Identifiable {
+        var id: UUID { asset.id }
+        let asset: CurationAsset
+        let clusterIndex: Int
+        let visibleAssetIndex: Int
+    }
+
     private struct MetadataLoadResult {
         var data: Data?
         var source: String
@@ -68,6 +75,44 @@ class CurationStore: ObservableObject {
         // Show only stack primaries (or unstacked photos), plus all stacked when expanded
         // For simplicity in Phase 1, show all assets
         return cluster.assets.sorted { $0.displaySortDate < $1.displaySortDate }
+    }
+
+    func rangeMapTargets() -> [RangeMapTarget] {
+        clusters.enumerated()
+            .flatMap { clusterIndex, cluster -> [RangeMapTarget] in
+                cluster.assets.sorted { $0.displaySortDate < $1.displaySortDate }
+                    .enumerated()
+                    .compactMap { visibleAssetIndex, asset in
+                        guard asset.coordinate != nil else { return nil }
+                        return RangeMapTarget(
+                            asset: asset,
+                            clusterIndex: clusterIndex,
+                            visibleAssetIndex: visibleAssetIndex
+                        )
+                    }
+            }
+            .sorted { lhs, rhs in
+                if lhs.asset.displaySortDate == rhs.asset.displaySortDate {
+                    return lhs.asset.id.uuidString < rhs.asset.id.uuidString
+                }
+                return lhs.asset.displaySortDate < rhs.asset.displaySortDate
+            }
+    }
+
+    func rangeMapHiddenAssetCount() -> Int {
+        clusters.reduce(0) { count, cluster in
+            count + cluster.assets.filter { $0.coordinate == nil }.count
+        }
+    }
+
+    @discardableResult
+    func selectRangeMapTarget(assetID: UUID) -> Int? {
+        guard let target = rangeMapTargets().first(where: { $0.asset.id == assetID }) else {
+            return nil
+        }
+        selectedClusterIndex = target.clusterIndex
+        setFocusedAssetIndex(target.visibleAssetIndex)
+        return target.visibleAssetIndex
     }
 
     func ingest(startDate: Date, endDate: Date, noLocationTimeZone: TimeZone? = nil) async {

@@ -35,6 +35,85 @@ final class CurationStoreTests: XCTestCase {
         XCTAssertTrue(options.isNetworkAccessAllowed)
     }
 
+    @MainActor
+    func testAllRangeMapTargetsIncludeGPSAssetsAcrossClustersInDisplayOrder() {
+        let store = CurationStore()
+        let later = date(year: 2026, month: 3, day: 15).addingTimeInterval(3600)
+        let earlier = date(year: 2026, month: 3, day: 15)
+        let noGPS = date(year: 2026, month: 3, day: 15).addingTimeInterval(1800)
+        let firstID = UUID()
+        let secondID = UUID()
+        store.clusters = [
+            EventCluster(
+                name: "Later",
+                assets: [
+                    CurationAsset(
+                        id: firstID,
+                        timestamp: later,
+                        coordinate: .init(latitude: 37.8, longitude: -122.4),
+                        pixelSize: .zero
+                    )
+                ],
+                startDate: later,
+                endDate: later
+            ),
+            EventCluster(
+                name: "Earlier",
+                assets: [
+                    CurationAsset(id: UUID(), timestamp: noGPS, pixelSize: .zero),
+                    CurationAsset(
+                        id: secondID,
+                        timestamp: earlier,
+                        coordinate: .init(latitude: 37.7, longitude: -122.5),
+                        pixelSize: .zero
+                    )
+                ],
+                startDate: earlier,
+                endDate: noGPS
+            )
+        ]
+
+        let targets = store.rangeMapTargets()
+
+        XCTAssertEqual(targets.map(\.asset.id), [secondID, firstID])
+        XCTAssertEqual(targets.map(\.clusterIndex), [1, 0])
+        XCTAssertEqual(targets.map(\.visibleAssetIndex), [0, 0])
+        XCTAssertEqual(store.rangeMapHiddenAssetCount(), 1)
+    }
+
+    @MainActor
+    func testSelectingRangeMapTargetSwitchesEventAndFocusesVisibleAsset() {
+        let store = CurationStore()
+        let selectedID = UUID()
+        store.clusters = [
+            EventCluster(
+                name: "First",
+                assets: [CurationAsset(id: UUID(), timestamp: date(year: 2026, month: 3, day: 15), pixelSize: .zero)],
+                startDate: date(year: 2026, month: 3, day: 15),
+                endDate: date(year: 2026, month: 3, day: 15)
+            ),
+            EventCluster(
+                name: "Second",
+                assets: [
+                    CurationAsset(
+                        id: selectedID,
+                        timestamp: date(year: 2026, month: 3, day: 16),
+                        coordinate: .init(latitude: 37.7, longitude: -122.5),
+                        pixelSize: .zero
+                    )
+                ],
+                startDate: date(year: 2026, month: 3, day: 16),
+                endDate: date(year: 2026, month: 3, day: 16)
+            )
+        ]
+
+        let selectedIndex = store.selectRangeMapTarget(assetID: selectedID)
+
+        XCTAssertEqual(selectedIndex, 0)
+        XCTAssertEqual(store.selectedClusterIndex, 1)
+        XCTAssertEqual(store.focusedAssetIndex, 0)
+    }
+
     func testCurationMarkdownImagePathIncludesStaticImageSubpathTemplate() {
         let profile = BlogProfile(
             name: "Blog",

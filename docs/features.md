@@ -50,6 +50,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Curation image subpaths** — curated-photo posts and photo-only exports write selected images and markdown URLs under the configured Static image subpath template such as `YYYY/MM`
 - **Curation post save reliability** — posts created from already-exported curation photos save without deleting or recopying the selected image files
 - **Curation event switching stability** — thumbnail location lookups use a concurrency-safe geocode cache so switching between GPS-heavy events does not crash the app
+- **Date-range curation map** — map mode can switch between the selected event and every GPS-tagged photo in the loaded date range; selecting a range pin jumps back to the matching event photo
 - **Street-level curation locations** — GPS photo labels prefer landmarks, street names, neighborhoods, city, and state when Apple reverse geocoding provides them
 - **Photos-only curation export** — `⌘E` exports selected event photos without creating a post, applies the chosen blog profile's resize/EXIF settings, and prompts for a blog only when configured resize caps differ; `⌘N` creates a post from the same selection
 - **Start screen return** — the curation toolbar's Start button returns to the welcome screen for drag-and-drop posts while preserving the loaded curation session, with Resume Curation kept separate from starting a new scan

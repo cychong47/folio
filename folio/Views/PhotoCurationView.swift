@@ -72,6 +72,10 @@ private final class SpaceKeyHandlingView: NSView {
 }
 
 private enum ViewMode: Hashable { case grid, map }
+private enum MapScope: String, Hashable, CaseIterable {
+    case event = "Event"
+    case range = "Range"
+}
 
 private let splitPalette: [Color] = [
     Color(red: 0.96, green: 0.33, blue: 0.33),
@@ -397,6 +401,7 @@ private struct CurationGridPanel: View {
     @State private var isShowingDetail = false
     @State private var detailIndex = 0
     @State private var viewMode: ViewMode = .grid
+    @State private var mapScope: MapScope = .event
 
     private var columns: [GridItem] {
         [GridItem(.adaptive(minimum: thumbSize, maximum: thumbSize), spacing: 8)]
@@ -476,6 +481,16 @@ private struct CurationGridPanel: View {
                     .pickerStyle(.segmented)
                     .frame(width: 64)
                     .help(viewMode == .grid ? "Switch to Map" : "Switch to Grid")
+                    if viewMode == .map {
+                        Picker("", selection: $mapScope) {
+                            ForEach(MapScope.allCases, id: \.self) { scope in
+                                Text(scope.rawValue).tag(scope)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                        .frame(width: 104)
+                        .help("Choose whether the map shows the selected event or the full loaded date range")
+                    }
                     Button("Rename Event") { store.beginRename() }
                         .font(.caption)
                     Button(isSplitting ? "Cancel Split" : "Split Event") {
@@ -519,8 +534,18 @@ private struct CurationGridPanel: View {
                 }
                 .background(Theme.background)
             } else {
-                CurationMapView(store: store) { idx in
-                    detailIndex = idx
+                CurationMapView(store: store, scope: mapScope) { idx in
+                    switch mapScope {
+                    case .event:
+                        detailIndex = idx
+                    case .range:
+                        let targets = store.rangeMapTargets()
+                        guard targets.indices.contains(idx),
+                              let focusedIndex = store.selectRangeMapTarget(assetID: targets[idx].asset.id) else {
+                            return
+                        }
+                        detailIndex = focusedIndex
+                    }
                     isShowingDetail = true
                 }
             }
@@ -698,17 +723,40 @@ private struct SplitEventPanel: View {
 
 private struct CurationMapView: View {
     @ObservedObject var store: CurationStore
+    let scope: MapScope
     let onSelectAsset: (Int) -> Void
 
     private var pins: [AssetPin] {
-        store.visibleAssets.enumerated().compactMap { idx, asset in
-            guard let coord = asset.coordinate else { return nil }
-            return AssetPin(id: asset.id, index: idx, coordinate: coord)
+        switch scope {
+        case .event:
+            return store.visibleAssets.enumerated().compactMap { idx, asset in
+                guard let coord = asset.coordinate else { return nil }
+                return AssetPin(id: asset.id, index: idx, coordinate: coord)
+            }
+        case .range:
+            return store.rangeMapTargets().enumerated().compactMap { idx, target in
+                guard let coord = target.asset.coordinate else { return nil }
+                return AssetPin(id: target.asset.id, index: idx, coordinate: coord)
+            }
         }
     }
 
     private var noGPSCount: Int {
-        store.visibleAssets.count - pins.count
+        switch scope {
+        case .event:
+            return store.visibleAssets.count - pins.count
+        case .range:
+            return store.rangeMapHiddenAssetCount()
+        }
+    }
+
+    private var emptyMessage: String {
+        switch scope {
+        case .event:
+            return "Photos in this event have no GPS coordinates."
+        case .range:
+            return "Photos in this date range have no GPS coordinates."
+        }
     }
 
     var body: some View {
@@ -719,7 +767,7 @@ private struct CurationMapView: View {
                     .foregroundStyle(.secondary)
                 Text("No location data")
                     .font(.title3.weight(.medium))
-                Text("Photos in this event have no GPS coordinates.")
+                Text(emptyMessage)
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
