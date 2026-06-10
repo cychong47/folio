@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.51
+
+- Main editor draft recovery — drag-and-drop and New Post drafts are now autosaved through the draft store so unfinished photo selections and markdown can be resumed after app restart or update
+
+---
+
 ### v1.21.50
 
 - Date-range curation map — map mode can now switch between the selected event and the full loaded date range, with range pins jumping back to the matching event photo
