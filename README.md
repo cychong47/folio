@@ -49,6 +49,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Curation post save reliability** — posts created from already-exported curation photos save without deleting or recopying the selected image files
 - **Curation event switching stability** — thumbnail location lookups use a concurrency-safe geocode cache so switching between GPS-heavy events does not crash the app
 - **Date-range curation map** — curation map mode can show either the selected event or every GPS-tagged photo in the loaded date range, and range pins jump back to the matching event photo
+- **Main editor draft recovery** — drag-and-drop and New Post drafts are autosaved so unfinished photo selections and markdown can be resumed after app restart or update
 - **Street-level curation locations** — GPS photo labels prefer landmarks, street names, neighborhoods, city, and state when Apple reverse geocoding provides them
 - **Photos-only curation export** — `⌘E` exports selected event photos without creating a post, applying blog resize/EXIF settings and prompting for a blog only when configured resize caps differ
 - **Spacebar curation selection** — press Space in the curation grid or preview window to select or unselect the focused photo

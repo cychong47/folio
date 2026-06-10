@@ -61,8 +61,24 @@ final class PostDraftStore: ObservableObject {
         return id
     }
 
+    @discardableResult
+    func createDraft(from post: PendingPost) -> UUID {
+        let id = UUID()
+        drafts[id] = PendingPostSnapshot(post: post).pendingPost()
+        updatedAt[id] = Date()
+        persist()
+        return id
+    }
+
     func draft(for id: UUID) -> PendingPost? {
         drafts[id]
+    }
+
+    func replaceDraft(_ id: UUID, with post: PendingPost) {
+        guard drafts[id] != nil else { return }
+        drafts[id] = PendingPostSnapshot(post: post).pendingPost()
+        updatedAt[id] = Date()
+        persist()
     }
 
     func saveDraft(_ id: UUID) {

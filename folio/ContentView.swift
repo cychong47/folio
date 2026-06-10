@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var curating = false
     @State private var showDatePicker = false
     @State private var welcomeResizeTrigger = 0
+    @State private var mainDraftID: UUID?
     @StateObject private var curationStore = CurationStore()
 
     private var isImporting: Bool { importTotal > 0 }
@@ -106,6 +107,16 @@ struct ContentView: View {
             guard isWelcome else { return }
             welcomeResizeTrigger += 1
         }
+        .onChange(of: pendingPost.photos) { _ in autosaveMainDraft() }
+        .onChange(of: pendingPost.title) { _ in autosaveMainDraft() }
+        .onChange(of: pendingPost.slug) { _ in autosaveMainDraft() }
+        .onChange(of: pendingPost.markdownBody) { _ in autosaveMainDraft() }
+        .onChange(of: pendingPost.categories) { _ in autosaveMainDraft() }
+        .onChange(of: pendingPost.tags) { _ in autosaveMainDraft() }
+        .onChange(of: pendingPost.series) { _ in autosaveMainDraft() }
+        .onChange(of: pendingPost.dateOverride) { _ in autosaveMainDraft() }
+        .onChange(of: pendingPost.existingFileURL) { _ in autosaveMainDraft() }
+        .onChange(of: pendingPost.lastPublished != nil) { _ in autosaveMainDraft() }
         .sheet(isPresented: $showDatePicker) {
             DateRangePickerView(isPresented: $showDatePicker) { start, end, noLocationTimeZone in
                 curating = true
@@ -118,6 +129,30 @@ struct ContentView: View {
                 }
             }
         }
+    }
+
+    private func autosaveMainDraft() {
+        if pendingPost.lastPublished != nil {
+            removeMainDraft()
+            return
+        }
+
+        guard !pendingPost.isEmpty || !pendingPost.markdownBody.isEmpty else {
+            removeMainDraft()
+            return
+        }
+
+        if let mainDraftID {
+            postDraftStore.replaceDraft(mainDraftID, with: pendingPost)
+        } else {
+            mainDraftID = postDraftStore.createDraft(from: pendingPost)
+        }
+    }
+
+    private func removeMainDraft() {
+        guard let mainDraftID else { return }
+        postDraftStore.removeDraft(mainDraftID)
+        self.mainDraftID = nil
     }
 
     private func resumeLatestDraft() {

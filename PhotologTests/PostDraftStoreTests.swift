@@ -94,6 +94,74 @@ final class PostDraftStoreTests: XCTestCase {
         XCTAssertTrue(mainPost.photos.isEmpty)
     }
 
+    func testCreateDraftCopiesPendingPostSnapshot() {
+        let store = PostDraftStore()
+        let date = Calendar.current.date(from: DateComponents(
+            year: 2026,
+            month: 3,
+            day: 15,
+            hour: 10
+        ))!
+        let post = PendingPost()
+        post.title = "Draft Trip"
+        post.slug = "draft-trip"
+        post.dateOverride = date
+        post.markdownBody = "Body"
+        post.categories = ["travel"]
+        post.tags = ["spring"]
+        post.series = "Seoul"
+        post.photos = [
+            ExportedPhoto(
+                filename: "IMG_3469.jpg",
+                markdownPath: "/images/2026/03/IMG_3469.jpg",
+                localURL: URL(fileURLWithPath: "/tmp/static/images/2026/03/IMG_3469.jpg"),
+                exifDate: date
+            )
+        ]
+
+        let draftID = store.createDraft(from: post)
+        post.title = "Changed After Snapshot"
+        post.photos = []
+
+        let draft = store.draft(for: draftID)
+        XCTAssertEqual(draft?.title, "Draft Trip")
+        XCTAssertEqual(draft?.slug, "draft-trip")
+        XCTAssertEqual(draft?.postDate, date)
+        XCTAssertEqual(draft?.markdownBody, "Body")
+        XCTAssertEqual(draft?.categories, ["travel"])
+        XCTAssertEqual(draft?.tags, ["spring"])
+        XCTAssertEqual(draft?.series, "Seoul")
+        XCTAssertEqual(draft?.photos.map(\.filename), ["IMG_3469.jpg"])
+    }
+
+    func testReplaceDraftOverwritesPersistedSnapshot() throws {
+        let storageURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+            .appendingPathComponent("drafts.json")
+        defer { try? FileManager.default.removeItem(at: storageURL.deletingLastPathComponent()) }
+
+        let store = PostDraftStore(storageURL: storageURL)
+        let date = Date(timeIntervalSince1970: 1_800_000_000)
+        let post = PendingPost()
+        post.title = "Initial"
+        post.slug = "initial"
+        post.dateOverride = date
+        post.markdownBody = "Initial body"
+        let draftID = store.createDraft(from: post)
+
+        post.title = "Updated"
+        post.slug = "updated"
+        post.markdownBody = "Updated body"
+        store.replaceDraft(draftID, with: post)
+
+        let reloaded = PostDraftStore(storageURL: storageURL)
+        let draft = reloaded.draft(for: draftID)
+        XCTAssertEqual(draft?.title, "Updated")
+        XCTAssertEqual(draft?.slug, "updated")
+        XCTAssertEqual(draft?.markdownBody, "Updated body")
+        XCTAssertEqual(reloaded.latestDraftID, draftID)
+    }
+
     func testCreateDraftFromPostSummaryCopiesExistingPostForWindowEditing() {
         let store = PostDraftStore()
         let date = Calendar.current.date(from: DateComponents(
