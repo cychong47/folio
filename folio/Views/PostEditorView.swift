@@ -90,6 +90,8 @@ struct PostEditorView: View {
     @State private var orphanedPaths: Set<String> = []
     @State private var showSaveConfirmation = false
     @State private var saveConfirmationTask: Task<Void, Never>? = nil
+    @State private var writingIssues: [WritingIssue] = []
+    @State private var writingReviewStatus: String?
 
     private var availableCategories: [String] {
         settings.knownCategories.filter { !pendingPost.categories.contains($0) }
@@ -659,7 +661,108 @@ struct PostEditorView: View {
                 .background(Theme.panel)
             }
             .frame(minWidth: 200, maxWidth: .infinity)
+
+            reviewSidebar
+                .frame(minWidth: 220, idealWidth: 260, maxWidth: 320)
         }
+    }
+
+    private var reviewSidebar: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 8) {
+                Image(systemName: "checkmark.seal")
+                    .foregroundStyle(Theme.accent)
+                Text("Revise")
+                    .font(.headline)
+                Spacer()
+                Button {
+                    runWritingReview()
+                } label: {
+                    Image(systemName: "arrow.clockwise")
+                }
+                .buttonStyle(.plain)
+                .help("Check writing")
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+
+            Button {
+                runWritingReview()
+            } label: {
+                Label("Check Writing", systemImage: "text.magnifyingglass")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(Theme.accent)
+            .padding(.horizontal, 12)
+            .padding(.bottom, 10)
+
+            Divider().opacity(0.4)
+
+            if writingIssues.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Image(systemName: writingReviewStatus == nil ? "text.badge.checkmark" : "checkmark.circle")
+                        .font(.title2)
+                        .foregroundStyle(writingReviewStatus == nil ? .secondary : Color.green)
+                    Text(writingReviewStatus ?? "Run a local writing check for Korean spelling, repeated words, long sentences, and missing image alt text.")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(14)
+                Spacer()
+            } else {
+                ScrollView {
+                    LazyVStack(alignment: .leading, spacing: 10) {
+                        ForEach(writingIssues) { issue in
+                            writingIssueRow(issue)
+                        }
+                    }
+                    .padding(12)
+                }
+            }
+        }
+        .background(Theme.panel)
+    }
+
+    private func writingIssueRow(_ issue: WritingIssue) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(issue.kind.rawValue)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Theme.accent)
+                Spacer()
+            }
+
+            Text(issue.excerpt)
+                .font(.system(.caption, design: .monospaced))
+                .foregroundStyle(.primary)
+                .lineLimit(3)
+                .textSelection(.enabled)
+
+            Text(issue.message)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            if let replacement = issue.replacement {
+                HStack(spacing: 8) {
+                    Text(replacement)
+                        .font(.caption.weight(.medium))
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                    Spacer()
+                    Button("Apply") {
+                        applyWritingIssue(issue)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                }
+            }
+        }
+        .padding(10)
+        .background(Theme.card)
+        .cornerRadius(8)
     }
 
     private var footerSection: some View {
@@ -747,6 +850,19 @@ struct PostEditorView: View {
         saveConfirmationTask?.cancel()
         saveConfirmationTask = nil
         showSaveConfirmation = false
+    }
+
+    private func runWritingReview() {
+        writingIssues = WritingReviewService.review(markdown: pendingPost.markdownBody)
+        writingReviewStatus = writingIssues.isEmpty ? "No writing issues found." : nil
+    }
+
+    private func applyWritingIssue(_ issue: WritingIssue) {
+        let updated = WritingReviewService.apply(issue: issue, to: pendingPost.markdownBody)
+        guard updated != pendingPost.markdownBody else { return }
+        pendingPost.markdownBody = updated
+        writingIssues = WritingReviewService.review(markdown: updated)
+        writingReviewStatus = writingIssues.isEmpty ? "No writing issues found." : nil
     }
 
     // MARK: Photo management

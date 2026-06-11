@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.52
+- Revise writing sidebar — post editor now includes a local writing review panel for Korean spelling corrections, repeated words, long sentences, and missing image alt text
+
 ### v1.21.51
 - Main editor draft recovery — drag-and-drop and New Post drafts are now autosaved through the draft store so unfinished photo selections and markdown can be resumed after app restart or update
 

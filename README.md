@@ -19,6 +19,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Autosaved post drafts** — separate editor-window drafts persist unsaved post metadata and selected photo references so the latest draft can be resumed after restart or update
 - **Post save confirmation** — successful Save keeps the editor open and shows a dismissible auto-hiding confirmation instead of replacing the editor with a missing-draft message
 - **Split-view post editor** — markdown editor on the left, live text+image preview on the right showing content in document order
+- **Revise writing sidebar** — run local writing checks for Korean spelling corrections, repeated words, long sentences, and missing image alt text, then apply suggested replacements manually
 - **Preview filename captions** — the post editor preview shows each media filename below its rendered image or video placeholder for editing reference only
 - **External editor live reload** — body text refreshes automatically when the post file is modified in an external editor (VSCode, Neovim, etc.)
 - **Hugo frontmatter** — auto-generated with title, date, categories, and image references
