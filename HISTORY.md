@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.53
+- Editor right-panel tabs — Preview and Revise now share the right side of the post editor so grammar review does not squeeze the markdown editor into a three-pane layout
+
 ### v1.21.52
 - Revise writing sidebar — post editor now includes a local writing review panel for Korean spelling corrections, repeated words, long sentences, and missing image alt text
 

@@ -15,6 +15,8 @@ Related releases:
 - v1.21.52 — the post editor gained a Revise sidebar that checks markdown for
   common Korean spelling corrections, repeated adjacent words, long sentences,
   and image references with empty alt text.
+- v1.21.53 — Preview and Revise now share a tabbed right panel, keeping the
+  editor as a two-pane layout during both writing and review.
 
 User value:
 
@@ -29,8 +31,8 @@ Implementation notes:
 
 - `WritingReviewService` is UI-independent and returns stable ranges,
   categories, excerpts, and optional replacements.
-- The Revise sidebar is a third pane in `PostEditorView` beside markdown and
-  preview.
+- `PostEditorRightPanelMode` controls whether the right side of
+  `PostEditorView` shows Preview or Revise.
 - Missing alt text and long-sentence findings are advisory; Korean spelling and
   repeated-word findings can be applied directly.
 

@@ -92,6 +92,7 @@ struct PostEditorView: View {
     @State private var saveConfirmationTask: Task<Void, Never>? = nil
     @State private var writingIssues: [WritingIssue] = []
     @State private var writingReviewStatus: String?
+    @State private var rightPanelMode = PostEditorRightPanelMode.defaultMode
 
     private var availableCategories: [String] {
         settings.knownCategories.filter { !pendingPost.categories.contains($0) }
@@ -577,93 +578,118 @@ struct PostEditorView: View {
                 .scrollContentBackground(.hidden)
                 .background(Theme.background)
 
-            // Right: preview panel
-            VStack(spacing: 0) {
-                // Path bar
-                HStack(spacing: 4) {
-                    Image(systemName: "folder")
-                        .font(.caption2)
-                    let displayPath = pendingPost.existingFileURL?.path ?? stagingDirectory.path
-                    Text(displayPath)
-                        .font(.caption2)
-                        .lineLimit(1)
-                        .truncationMode(.head)
-                        .help(displayPath)
-                    Spacer()
-                    Button {
-                        let revealURL = pendingPost.existingFileURL ?? stagingDirectory
-                        NSWorkspace.shared.activateFileViewerSelecting([revealURL])
-                    } label: {
-                        Image(systemName: "arrow.up.right.circle")
-                            .font(.caption2)
-                    }
-                    .buttonStyle(.plain)
-                    .help("Reveal in Finder")
+            rightPanel
+                .frame(minWidth: 260, maxWidth: .infinity)
+        }
+    }
+
+    private var rightPanel: some View {
+        VStack(spacing: 0) {
+            Picker("", selection: $rightPanelMode) {
+                ForEach(PostEditorRightPanelMode.allCases) { mode in
+                    Text(mode.title).tag(mode)
                 }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 7)
-                .foregroundStyle(.secondary)
-                .background(Theme.panel)
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(Theme.panel)
 
-                Divider().opacity(0.4)
+            Divider().opacity(0.4)
 
-                ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 16) {
-                        ForEach(previewBlocks) { block in
-                            switch block.kind {
-                            case .text(let content):
-                                Text(content.trimmingCharacters(in: .newlines))
-                                    .font(.callout)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal, 4)
-                            case .image(let photo):
-                                VStack(alignment: .leading, spacing: 6) {
-                                    if let img = NSImage(contentsOf: photo.localURL) {
-                                        Image(nsImage: img)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .cornerRadius(8)
-                                    } else {
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(Color.secondary.opacity(0.08))
-                                            .frame(height: 100)
-                                            .overlay(Image(systemName: "photo").foregroundStyle(.secondary))
-                                    }
-                                    Text(PostPreviewBlock.mediaCaption(for: photo))
-                                        .font(.caption2)
-                                        .foregroundStyle(.secondary)
-                                        .lineLimit(1)
-                                        .truncationMode(.middle)
-                                        .textSelection(.enabled)
-                                }
-                            case .video(let video):
-                                VStack(alignment: .leading, spacing: 6) {
+            switch rightPanelMode {
+            case .preview:
+                previewPanel
+            case .revise:
+                reviewSidebar
+            }
+        }
+        .background(Theme.panel)
+    }
+
+    private var previewPanel: some View {
+        VStack(spacing: 0) {
+            // Path bar
+            HStack(spacing: 4) {
+                Image(systemName: "folder")
+                    .font(.caption2)
+                let displayPath = pendingPost.existingFileURL?.path ?? stagingDirectory.path
+                Text(displayPath)
+                    .font(.caption2)
+                    .lineLimit(1)
+                    .truncationMode(.head)
+                    .help(displayPath)
+                Spacer()
+                Button {
+                    let revealURL = pendingPost.existingFileURL ?? stagingDirectory
+                    NSWorkspace.shared.activateFileViewerSelecting([revealURL])
+                } label: {
+                    Image(systemName: "arrow.up.right.circle")
+                        .font(.caption2)
+                }
+                .buttonStyle(.plain)
+                .help("Reveal in Finder")
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 7)
+            .foregroundStyle(.secondary)
+            .background(Theme.panel)
+
+            Divider().opacity(0.4)
+
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 16) {
+                    ForEach(previewBlocks) { block in
+                        switch block.kind {
+                        case .text(let content):
+                            Text(content.trimmingCharacters(in: .newlines))
+                                .font(.callout)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.horizontal, 4)
+                        case .image(let photo):
+                            VStack(alignment: .leading, spacing: 6) {
+                                if let img = NSImage(contentsOf: photo.localURL) {
+                                    Image(nsImage: img)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .cornerRadius(8)
+                                } else {
                                     RoundedRectangle(cornerRadius: 8)
                                         .fill(Color.secondary.opacity(0.08))
                                         .frame(height: 100)
-                                        .overlay(
-                                            Image(systemName: "film")
-                                                .font(.title2)
-                                                .foregroundStyle(.secondary)
-                                        )
-                                    Text(PostPreviewBlock.mediaCaption(for: video))
-                                        .font(.caption2)
-                                        .foregroundStyle(.secondary)
-                                        .lineLimit(1)
-                                        .truncationMode(.middle)
-                                        .textSelection(.enabled)
+                                        .overlay(Image(systemName: "photo").foregroundStyle(.secondary))
                                 }
+                                Text(PostPreviewBlock.mediaCaption(for: photo))
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                                    .truncationMode(.middle)
+                                    .textSelection(.enabled)
+                            }
+                        case .video(let video):
+                            VStack(alignment: .leading, spacing: 6) {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color.secondary.opacity(0.08))
+                                    .frame(height: 100)
+                                    .overlay(
+                                        Image(systemName: "film")
+                                            .font(.title2)
+                                            .foregroundStyle(.secondary)
+                                    )
+                                Text(PostPreviewBlock.mediaCaption(for: video))
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(1)
+                                    .truncationMode(.middle)
+                                    .textSelection(.enabled)
                             }
                         }
                     }
-                    .padding(12)
                 }
-                .background(Theme.panel)
+                .padding(12)
             }
-            .frame(minWidth: 200, maxWidth: .infinity)
-
-            reviewSidebar
-                .frame(minWidth: 220, idealWidth: 260, maxWidth: 320)
+            .background(Theme.panel)
         }
     }
 
