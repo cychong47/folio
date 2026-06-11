@@ -29,40 +29,7 @@ The user's current blog theme does not support image previews or cover images.
 Because of that, cover image and representative image workflows should be
 deprioritized even though they are common in other blogging tools.
 
-## Priority 1: Persistent Drafts
-
-Persistent drafts are the most important missing capability.
-
-Photolog users often select many photos from a curation session. If the app is
-updated, closed, or the editor is dismissed unexpectedly, selecting the same
-photos again is costly and sometimes impossible to reconstruct from memory.
-
-Draft persistence should save enough state to resume work without repeating the
-photo selection process.
-
-Recommended draft state:
-
-- Draft title, date, markdown body, target blog profile, and post path.
-- Staged photo list, original filename, markdown path, local staged URL, and
-  media type.
-- Photo order and current selection state.
-- Source workflow: drag-and-drop, blank new post, browse existing post, or
-  curation.
-- For curation-created drafts: selected date range, event ID or event name,
-  selected asset IDs, and event/photo ordering metadata when available.
-
-Expected behavior:
-
-- Auto-save while editing, with no manual "Save Draft" step required.
-- Restore unfinished drafts on launch or from a Drafts list.
-- Keep saved drafts separate from published/saved posts.
-- After a successful post save, keep the editor stable and only clear the draft
-  when the user closes or explicitly discards it.
-
-This should be treated as foundational work before deeper editor features,
-because every later editing improvement depends on the user's work being safe.
-
-## Priority 2: Existing Post Management
+## Priority 1: Existing Post Management
 
 The app should continue expanding beyond "create a new photo post" into
 "manage the blog's existing posts".
@@ -84,7 +51,7 @@ Recommended direction:
 This aligns Photolog with the referenced editor's broader workflow: the app is
 not only a post generator, but a place to maintain the blog.
 
-## Priority 3: Stronger Markdown Editing Support
+## Priority 2: Stronger Markdown Editing Support
 
 Markdown editing should be improved before adding heavier AI features.
 
@@ -107,7 +74,7 @@ Candidate features:
 These features should apply equally to new posts, curation-created posts, and
 existing posts opened from Browse Posts.
 
-## Priority 4: Writing Statistics Panel
+## Priority 3: Writing Statistics Panel
 
 A compact statistics panel would make the editor more useful for existing post
 maintenance.
@@ -129,7 +96,7 @@ force quality rules. Its value is quick visibility before saving.
 For Korean posts, reading-time calculation should use a Korean-friendly heuristic
 instead of assuming English word boundaries are always meaningful.
 
-## Priority 5: Revise Sidebar
+## Priority 4: Revise Sidebar
 
 A Revise sidebar should provide suggestions without rewriting the post
 automatically.
@@ -155,7 +122,7 @@ Interaction model:
 This is especially useful for editing existing posts, where the app can help
 review older content without changing it unexpectedly.
 
-## Priority 6: Link Assistance
+## Priority 5: Link Assistance
 
 Link assistance can become valuable once Browse Posts is treated as a blog
 library.
@@ -188,22 +155,20 @@ Possible future use:
 - Thumbnail selection for an internal Photolog post browser, independent of the
   published theme.
 
-Until then, effort should go to drafts, editor reliability, markdown assistance,
+Until then, effort should go to editor reliability, markdown assistance,
 statistics, and revision workflows.
 
 ## Suggested Implementation Order
 
-1. Persistent draft storage for all editor entry paths.
-2. Draft recovery UI on launch and from the start screen.
-3. Existing post draft support for Browse Posts editing.
-4. Markdown toolbar and editor helpers.
-5. Editor/preview image-source navigation and filename helpers.
-6. Writing statistics panel.
-7. Revise sidebar with local deterministic checks first.
-8. Optional AI suggestions for revise and alt text after the non-AI workflow is
+1. Existing post draft support for Browse Posts editing.
+2. Markdown toolbar and editor helpers.
+3. Editor/preview image-source navigation and filename helpers.
+4. Writing statistics panel.
+5. Revise sidebar with local deterministic checks first.
+6. Optional AI suggestions for revise and alt text after the non-AI workflow is
    reliable.
-9. Link assistance backed by the existing post index.
-10. Cover image or OpenGraph image support only if the blog theme begins using
+7. Link assistance backed by the existing post index.
+8. Cover image or OpenGraph image support only if the blog theme begins using
     those fields.
 
 ## Non-Goals for the Near Term
@@ -214,11 +179,10 @@ statistics, and revision workflows.
 - Automatic publishing decisions.
 - Rewriting user text without explicit confirmation.
 
-## Success Criteria
+## Remaining Success Criteria
 
-The roadmap is working if:
+The remaining roadmap is working if:
 
-- A user can safely resume an unfinished photo post after restarting the app.
 - A user can edit an existing post without losing Browse Posts context.
 - The editor makes markdown operations faster without hiding the source.
 - The app surfaces useful writing and post-health information before save.
