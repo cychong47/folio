@@ -9,6 +9,15 @@ final class WritingReviewServiceTests: XCTestCase {
         XCTAssertEqual(issues.map(\.kind), [.koreanWriting, .koreanWriting, .koreanWriting])
     }
 
+    func testFindsExpandedKoreanWritingCorrections() {
+        let body = "왠만하면 오랫만에 어떻해라고 쓰지 마세요. 작성됬습니다."
+
+        let issues = WritingReviewService.review(markdown: body)
+
+        XCTAssertEqual(issues.map(\.replacement), ["웬만하면", "오랜만에", "어떡해", "작성됐습니다"])
+        XCTAssertTrue(issues.allSatisfy { $0.kind == .koreanWriting })
+    }
+
     func testFindsMissingMarkdownImageAltText() {
         let issues = WritingReviewService.review(markdown: "![](/images/photo.jpg)\n![caption](/images/ok.jpg)")
 
@@ -32,5 +41,14 @@ final class WritingReviewServiceTests: XCTestCase {
         let updated = WritingReviewService.apply(issue: issue, to: body)
 
         XCTAssertEqual(updated, "이렇게 하면 안 돼요.")
+    }
+
+    func testGroupsIssuesByReviewSection() {
+        let issues = WritingReviewService.review(markdown: "몇일 정말 정말\n![](/images/photo.jpg)")
+
+        let groups = WritingReviewService.groupedIssues(issues)
+
+        XCTAssertEqual(groups.map(\.title), ["Korean spelling", "Repeated words", "Image alt text"])
+        XCTAssertEqual(groups.map { $0.issues.count }, [1, 1, 1])
     }
 }

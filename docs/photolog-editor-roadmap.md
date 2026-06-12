@@ -98,10 +98,11 @@ instead of assuming English word boundaries are always meaningful.
 
 ## Priority 4: Revise Sidebar
 
-Status: local deterministic MVP implemented in v1.21.52 and moved into the
-right-side Preview/Revise tab panel in v1.21.53. Remaining work should focus on
-richer navigation, ignore controls, and optional external/AI-assisted review
-after the basic editor flow is stable.
+Status: local deterministic MVP implemented in v1.21.52, moved into the
+right-side Preview/Revise tab panel in v1.21.53, and improved with grouped
+findings, per-review ignore controls, and additional conservative Korean typo
+patterns in v1.21.54. Remaining work should focus on richer navigation and
+optional external/AI-assisted review after the basic editor flow is stable.
 
 A Revise sidebar should provide suggestions without rewriting the post
 automatically.

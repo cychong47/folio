@@ -16,6 +16,13 @@ struct WritingIssue: Identifiable, Equatable {
     let replacement: String?
 }
 
+struct WritingIssueGroup: Identifiable, Equatable {
+    let title: String
+    let issues: [WritingIssue]
+
+    var id: String { title }
+}
+
 enum WritingReviewService {
     private struct Correction {
         let phrase: String
@@ -30,7 +37,11 @@ enum WritingReviewService {
         Correction(phrase: "할께요", replacement: "할게요", message: "'할게요' is the standard spelling."),
         Correction(phrase: "될께요", replacement: "될게요", message: "'될게요' is the standard spelling."),
         Correction(phrase: "갈께요", replacement: "갈게요", message: "'갈게요' is the standard spelling."),
-        Correction(phrase: "있슴", replacement: "있음", message: "'있음' is the standard spelling.")
+        Correction(phrase: "있슴", replacement: "있음", message: "'있음' is the standard spelling."),
+        Correction(phrase: "왠만하면", replacement: "웬만하면", message: "'웬만하면' is the standard spelling."),
+        Correction(phrase: "오랫만에", replacement: "오랜만에", message: "'오랜만에' is the standard spelling."),
+        Correction(phrase: "어떻해", replacement: "어떡해", message: "'어떡해' is the standard spelling."),
+        Correction(phrase: "작성됬습니다", replacement: "작성됐습니다", message: "'작성됐습니다' is the standard spelling.")
     ]
 
     private static let missingAltRegex = try! NSRegularExpression(pattern: #"!\[\s*\]\([^)]+\)"#)
@@ -55,6 +66,21 @@ enum WritingReviewService {
         var updated = markdown
         updated.replaceSubrange(range, with: replacement)
         return updated
+    }
+
+    static func groupedIssues(_ issues: [WritingIssue]) -> [WritingIssueGroup] {
+        let sections: [(title: String, kind: WritingIssueKind)] = [
+            ("Korean spelling", .koreanWriting),
+            ("Repeated words", .repetition),
+            ("Long sentences", .longSentence),
+            ("Image alt text", .missingAltText)
+        ]
+
+        return sections.compactMap { section in
+            let sectionIssues = issues.filter { $0.kind == section.kind }
+            guard !sectionIssues.isEmpty else { return nil }
+            return WritingIssueGroup(title: section.title, issues: sectionIssues)
+        }
     }
 
     private static func koreanWritingIssues(in markdown: String) -> [WritingIssue] {

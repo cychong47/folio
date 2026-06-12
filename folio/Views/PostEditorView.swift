@@ -91,6 +91,7 @@ struct PostEditorView: View {
     @State private var showSaveConfirmation = false
     @State private var saveConfirmationTask: Task<Void, Never>? = nil
     @State private var writingIssues: [WritingIssue] = []
+    @State private var ignoredWritingIssueIDs: Set<String> = []
     @State private var writingReviewStatus: String?
     @State private var rightPanelMode = PostEditorRightPanelMode.defaultMode
 
@@ -105,6 +106,14 @@ struct PostEditorView: View {
     private var stagingDirectory: URL {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
         return appSupport.appendingPathComponent("Photolog/pending", isDirectory: true)
+    }
+
+    private var visibleWritingIssues: [WritingIssue] {
+        writingIssues.filter { !ignoredWritingIssueIDs.contains($0.id) }
+    }
+
+    private var writingIssueGroups: [WritingIssueGroup] {
+        WritingReviewService.groupedIssues(visibleWritingIssues)
     }
 
     private var postDate: Date { pendingPost.postDate }
@@ -725,7 +734,7 @@ struct PostEditorView: View {
 
             Divider().opacity(0.4)
 
-            if writingIssues.isEmpty {
+            if visibleWritingIssues.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Image(systemName: writingReviewStatus == nil ? "text.badge.checkmark" : "checkmark.circle")
                         .font(.title2)
@@ -739,9 +748,27 @@ struct PostEditorView: View {
                 Spacer()
             } else {
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 10) {
-                        ForEach(writingIssues) { issue in
-                            writingIssueRow(issue)
+                    LazyVStack(alignment: .leading, spacing: 14) {
+                        ForEach(writingIssueGroups) { group in
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack(spacing: 6) {
+                                    Text(group.title)
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(.secondary)
+                                    Text("\(group.issues.count)")
+                                        .font(.caption2.weight(.semibold))
+                                        .foregroundStyle(.secondary)
+                                        .padding(.horizontal, 6)
+                                        .padding(.vertical, 2)
+                                        .background(Theme.card)
+                                        .clipShape(Capsule())
+                                    Spacer()
+                                }
+
+                                ForEach(group.issues) { issue in
+                                    writingIssueRow(issue)
+                                }
+                            }
                         }
                     }
                     .padding(12)
@@ -758,6 +785,15 @@ struct PostEditorView: View {
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(Theme.accent)
                 Spacer()
+                Button {
+                    ignoreWritingIssue(issue)
+                } label: {
+                    Image(systemName: "xmark.circle")
+                        .font(.caption)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(.secondary)
+                .help("Ignore this suggestion")
             }
 
             Text(issue.excerpt)
@@ -880,6 +916,7 @@ struct PostEditorView: View {
 
     private func runWritingReview() {
         writingIssues = WritingReviewService.review(markdown: pendingPost.markdownBody)
+        ignoredWritingIssueIDs = []
         writingReviewStatus = writingIssues.isEmpty ? "No writing issues found." : nil
     }
 
@@ -888,7 +925,15 @@ struct PostEditorView: View {
         guard updated != pendingPost.markdownBody else { return }
         pendingPost.markdownBody = updated
         writingIssues = WritingReviewService.review(markdown: updated)
+        ignoredWritingIssueIDs = ignoredWritingIssueIDs.intersection(Set(writingIssues.map(\.id)))
         writingReviewStatus = writingIssues.isEmpty ? "No writing issues found." : nil
+    }
+
+    private func ignoreWritingIssue(_ issue: WritingIssue) {
+        ignoredWritingIssueIDs.insert(issue.id)
+        if visibleWritingIssues.isEmpty {
+            writingReviewStatus = "No visible writing issues."
+        }
     }
 
     // MARK: Photo management

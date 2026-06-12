@@ -19,7 +19,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Autosaved post drafts** — separate editor-window drafts persist unsaved post metadata and selected photo references so the latest draft can be resumed after restart or update
 - **Post save confirmation** — successful Save keeps the editor open and shows a dismissible auto-hiding confirmation instead of replacing the editor with a missing-draft message
 - **Split-view post editor** — markdown editor on the left, with a right-side panel that switches between live text+image Preview and Revise writing checks
-- **Revise writing panel** — run local writing checks for Korean spelling corrections, repeated words, long sentences, and missing image alt text, then apply suggested replacements manually
+- **Revise writing panel** — run grouped local writing checks for Korean spelling corrections, repeated words, long sentences, and missing image alt text, then apply or ignore individual suggestions
 - **Preview filename captions** — the post editor preview shows each media filename below its rendered image or video placeholder for editing reference only
 - **External editor live reload** — body text refreshes automatically when the post file is modified in an external editor (VSCode, Neovim, etc.)
 - **Hugo frontmatter** — auto-generated with title, date, categories, and image references
@@ -118,7 +118,7 @@ The editor opens automatically once photos are imported.
 | **Categories** | Pick from known categories (populated by Scan Posts) or add a new one inline. Selections are reflected in the frontmatter immediately. |
 
 The **left pane** is a plain-text markdown editor pre-filled with Hugo frontmatter and image references.
-The **right pane** switches between Preview and Revise. Preview renders text and media in document order with filenames for editing reference; Revise runs local writing checks and lets you apply specific suggestions.
+The **right pane** switches between Preview and Revise. Preview renders text and media in document order with filenames for editing reference; Revise groups local writing checks by category and lets you apply or ignore specific suggestions.
 
 The staging folder location is shown above the photo list — click the arrow button to reveal it in Finder.
 

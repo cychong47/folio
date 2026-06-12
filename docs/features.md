@@ -17,7 +17,7 @@ description: Full feature list for Photolog — a native macOS app for creating 
 - **Welcome window size restoration** — returning to or relaunching the welcome screen restores a compact size that still leaves room for the Photos access banner
 - **Post list view** — "Browse Posts" opens a full list of every `.md` file in the content directory, sorted by date descending; each row shows title, date, series, categories, and a Draft badge; select any post to re-edit it in a separate editor window while the browse list stays open
 - **Split-view post editor** — monospaced markdown editor on the left; the right panel switches between text + image Preview and Revise writing checks
-- **Revise writing panel** — the post editor can run local writing checks for Korean spelling corrections, repeated words, long sentences, and missing image alt text, with suggested replacements applied only when selected
+- **Revise writing panel** — the post editor can run grouped local writing checks for Korean spelling corrections, repeated words, long sentences, and missing image alt text, with each suggestion applied or ignored only when selected
 - **Preview filename captions** — the post editor preview shows each media filename below its rendered image or video placeholder for editing reference only; captions are not written into the markdown file
 - **Autosaved post drafts** — separate editor-window drafts persist unsaved post metadata and selected photo references, then expose a Resume Draft action on the welcome screen after restart or update
 - **Post save confirmation** — successful Save keeps the editor visible, shows a dismissible auto-hiding confirmation, and clears the saved editor draft only after the editor window closes

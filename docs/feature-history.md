@@ -17,6 +17,9 @@ Related releases:
   and image references with empty alt text.
 - v1.21.53 — Preview and Revise now share a tabbed right panel, keeping the
   editor as a two-pane layout during both writing and review.
+- v1.21.54 — Revise findings are grouped by category, users can ignore
+  individual suggestions for the current review, and the local Korean correction
+  list covers additional conservative typo patterns.
 
 User value:
 
@@ -24,6 +27,8 @@ User value:
   network service.
 - Suggestions stay passive: the editor never rewrites the post unless the user
   clicks Apply on a specific replacement.
+- Suggestions can be hidden one by one while reviewing a draft, reducing noise
+  without changing the saved markdown.
 - Existing posts opened from Browse Posts get the same review surface as new
   photo-backed posts.
 
@@ -35,11 +40,13 @@ Implementation notes:
   `PostEditorView` shows Preview or Revise.
 - Missing alt text and long-sentence findings are advisory; Korean spelling and
   repeated-word findings can be applied directly.
+- `WritingReviewService.groupedIssues(_:)` keeps category ordering stable for
+  the Revise UI and tests.
 
 Primary verification:
 
 - `WritingReviewServiceTests` covers Korean corrections, missing alt text,
-  repeated adjacent words, and range-based replacement.
+  repeated adjacent words, category grouping, and range-based replacement.
 
 ### Persistent Drafts
 
