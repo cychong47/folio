@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.56
+
+- Photo date quick pick layout — Recent Posts and Recent Photo Browses now use compact single-line rows with the date or range detail aligned on the right so five items remain visible
+
+---
+
 ### v1.21.55
 
 - Photo date quick picks — the Photos date range picker now shows side-by-side Recent Posts and Recent Photo Browses so users can choose a range from editing context or restore a previous browse
