@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.59
+
+- Photo date recent posts menu — Recent Posts in the Photos date range picker is now a drop-down menu instead of a visible list
+
+---
+
 ### v1.21.58
 
 - Photo date range actions visibility — the quick-pick date range picker now opens wider and taller so the Cancel and Load Photos buttons remain visible
