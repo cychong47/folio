@@ -12,6 +12,9 @@ Status: implemented for the Photos date range picker.
 
 Related releases:
 
+- v1.21.56 — Quick Pick rows use compact single-line title/detail layouts so
+  five recent posts and five recent photo browse ranges remain visible without
+  clipped text.
 - v1.21.55 — the Photos date range picker shows Recent Posts and Recent Photo
   Browses side by side; choosing either one fills the current From/To fields
   while leaving final loading behind the existing confirmation button.
@@ -29,6 +32,8 @@ Implementation notes:
   browse ranges in shared user defaults.
 - `DateRangePickerView` receives recent posts from the current blog content
   index and recent browse ranges from the history store.
+- Recent post dates and recent browse range metadata are aligned on the right
+  side of each row to preserve vertical space.
 - Quick Pick rows only fill the picker controls; they do not immediately scan
   Photos until the user confirms.
 

@@ -199,20 +199,20 @@ struct DateRangePickerView: View {
     }
 
     private var quickPicksSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 8) {
             Text("Quick Picks")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
 
-            HStack(alignment: .top, spacing: 12) {
+            HStack(alignment: .top, spacing: 10) {
                 quickPickColumn(title: "Recent Posts") {
                     if recentPosts.isEmpty {
                         quickPickPlaceholder("No recent posts")
                     } else {
                         ForEach(recentPosts) { post in
-                            quickPickButton(
+                            quickPickRow(
                                 title: post.title,
-                                detail: Self.postDateLabel(post.date)
+                                trailing: Self.postDateLabel(post.date)
                             ) {
                                 applyPostDate(post.date)
                             }
@@ -225,9 +225,9 @@ struct DateRangePickerView: View {
                         quickPickPlaceholder("No recent ranges")
                     } else {
                         ForEach(recentBrowseRanges) { range in
-                            quickPickButton(
+                            quickPickRow(
                                 title: Self.rangeLabel(start: range.startDate, end: range.endDate),
-                                detail: range.noLocationOffsetSeconds.map(Self.offsetLabel) ?? "Mac timezone"
+                                trailing: range.noLocationOffsetSeconds.map(Self.offsetLabel) ?? "Mac timezone"
                             ) {
                                 applyBrowseRange(range)
                             }
@@ -236,7 +236,7 @@ struct DateRangePickerView: View {
                 }
             }
         }
-        .padding(12)
+        .padding(10)
         .background(Theme.panel, in: RoundedRectangle(cornerRadius: 8))
     }
 
@@ -244,7 +244,7 @@ struct DateRangePickerView: View {
         title: String,
         @ViewBuilder content: () -> Content
     ) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 5) {
             Text(title)
                 .font(.caption.weight(.semibold))
             content()
@@ -257,29 +257,29 @@ struct DateRangePickerView: View {
             .font(.caption)
             .foregroundStyle(.secondary)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.vertical, 7)
+            .padding(.vertical, 5)
     }
 
-    private func quickPickButton(title: String, detail: String, action: @escaping () -> Void) -> some View {
+    private func quickPickRow(title: String, trailing: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack(spacing: 8) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .font(.caption.weight(.medium))
-                        .foregroundStyle(.primary)
-                        .lineLimit(1)
-                    Text(detail)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
-                Spacer()
-                Image(systemName: "calendar.badge.clock")
-                    .font(.caption)
+                Text(title)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+
+                Spacer(minLength: 8)
+
+                Text(trailing)
+                    .font(.caption2)
                     .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .layoutPriority(1)
             }
-            .padding(.horizontal, 9)
-            .padding(.vertical, 7)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .frame(minHeight: 26)
             .background(Theme.card, in: RoundedRectangle(cornerRadius: 7))
         }
         .buttonStyle(.plain)
