@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.55
+
+- Photo date quick picks — the Photos date range picker now shows side-by-side Recent Posts and Recent Photo Browses so users can choose a range from editing context or restore a previous browse
+
+---
+
 ### v1.21.54
 
 - Revise suggestion organization — local writing checks now include more conservative Korean spelling corrections, group findings by category, and let users ignore individual suggestions during the current review
