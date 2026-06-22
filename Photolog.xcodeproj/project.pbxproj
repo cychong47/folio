@@ -17,6 +17,7 @@
 		1BF58F258850F7D931BEECD3 /* HugoServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66DD383BFB1DF6D69917EC0 /* HugoServerManager.swift */; };
 		21A0099820A924D314126F67 /* GitHubPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D56F102BF7775E8874D16C /* GitHubPublisher.swift */; };
 		228062ED9DEB41AAC1F13CEF /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A63C503CD4EE2587F9555E53 /* Vision.framework */; };
+		22AC3CD85F60DA59A947C2A2 /* PhotoBrowseHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF71346D188B030BE716C2AE /* PhotoBrowseHistoryStore.swift */; };
 		294C66BB40843AB4581871F4 /* PostSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C57FBBB7E561FD6D0FEBDB9 /* PostSummary.swift */; };
 		2A4D9C4D72F8BCF7423350E2 /* PhotoCurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED8F85EEDCDE827BC9849EA /* PhotoCurationView.swift */; };
 		2B81B238D62C98C510784673 /* PostDraftStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F54A067B60BC3800BCA29B /* PostDraftStore.swift */; };
@@ -64,6 +65,7 @@
 		B4EE67767B38199595A2261B /* TaxonomyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F59762BF945E9692952F6 /* TaxonomyManager.swift */; };
 		C14348A8DE8DC8100D7ADA76 /* EventClusterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA8013EC0B167B4D7A3490F /* EventClusterTests.swift */; };
 		C24BCB37D782ED3AECB95ED4 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1FA5A8E7688AA874A3A378E /* ShareViewController.swift */; };
+		C64CBE72EE5EB20035D9152D /* PhotoBrowseHistoryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204A794E1B31A7692BEA63EF /* PhotoBrowseHistoryStoreTests.swift */; };
 		C88EDA0E3D99D5140F72A0B5 /* MainWindowSizingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0007993B185ED3A7D2F186A5 /* MainWindowSizingTests.swift */; };
 		CE4FA9FFB4693FADAEED9E88 /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F821DE7FE5DA95974D89AE2 /* WhatsNewView.swift */; };
 		D4CBED65C7755CF732757A3B /* PostEditorRightPanelModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B78028117B7BE4BBAB0198 /* PostEditorRightPanelModeTests.swift */; };
@@ -101,6 +103,7 @@
 		182A8FC98D2059AEF875C34E /* PhotoDateRangeSelectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDateRangeSelectionTests.swift; sourceTree = "<group>"; };
 		19DE01D57016EA670C74EB3F /* PhotoDateRangeFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDateRangeFilter.swift; sourceTree = "<group>"; };
 		1C84621F2CDE7AFFB1B552AB /* DateRangePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRangePickerView.swift; sourceTree = "<group>"; };
+		204A794E1B31A7692BEA63EF /* PhotoBrowseHistoryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoBrowseHistoryStoreTests.swift; sourceTree = "<group>"; };
 		21D1FDA958709B04E8B92262 /* PostPreviewBlockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPreviewBlockTests.swift; sourceTree = "<group>"; };
 		268845472ABC1740FC1598BE /* PendingPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingPost.swift; sourceTree = "<group>"; };
 		2AF1C70C0633BC507F18D1DF /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -159,6 +162,7 @@
 		DD30B5BA80F037090A0D61A2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DDC6841DF0682D9E11F013BE /* CurationAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurationAsset.swift; sourceTree = "<group>"; };
 		DF6FC8A1B2C80D2DE63115D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		DF71346D188B030BE716C2AE /* PhotoBrowseHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoBrowseHistoryStore.swift; sourceTree = "<group>"; };
 		DF750207707E38843A6119B0 /* UpdatePopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePopupView.swift; sourceTree = "<group>"; };
 		E1EF8BF2401EF1B9AB1FA693 /* PostIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostIndexer.swift; sourceTree = "<group>"; };
 		E2D56F102BF7775E8874D16C /* GitHubPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubPublisher.swift; sourceTree = "<group>"; };
@@ -239,6 +243,7 @@
 				7DA8013EC0B167B4D7A3490F /* EventClusterTests.swift */,
 				0007993B185ED3A7D2F186A5 /* MainWindowSizingTests.swift */,
 				4F7131FDF6D00C696F50C1A0 /* MetadataIngestionServiceTests.swift */,
+				204A794E1B31A7692BEA63EF /* PhotoBrowseHistoryStoreTests.swift */,
 				CEDE4B61DE96611382DE88F3 /* PhotoDateRangeFilterTests.swift */,
 				182A8FC98D2059AEF875C34E /* PhotoDateRangeSelectionTests.swift */,
 				0C59228D919E212C1FBA72D9 /* PhotoExporterTests.swift */,
@@ -326,6 +331,7 @@
 				AF44C7511EBADF43BA4F6C5E /* CurationStore.swift */,
 				2FF94CF509FD2FD1670BF151 /* EventCluster.swift */,
 				268845472ABC1740FC1598BE /* PendingPost.swift */,
+				DF71346D188B030BE716C2AE /* PhotoBrowseHistoryStore.swift */,
 				C7F54A067B60BC3800BCA29B /* PostDraftStore.swift */,
 				706BE101A95C0C6498E81D9B /* PostEditorRightPanelMode.swift */,
 				0C57FBBB7E561FD6D0FEBDB9 /* PostSummary.swift */,
@@ -508,6 +514,7 @@
 				856FBBDA4437BB1CA6702196 /* MarkdownGenerator.swift in Sources */,
 				EB43046D84C60851EEC040E1 /* MetadataIngestionService.swift in Sources */,
 				5DBBCC82E16A674DE8B68DE9 /* PendingPost.swift in Sources */,
+				22AC3CD85F60DA59A947C2A2 /* PhotoBrowseHistoryStore.swift in Sources */,
 				2A4D9C4D72F8BCF7423350E2 /* PhotoCurationView.swift in Sources */,
 				70C0EBF848F7DE78507215DE /* PhotoDateRangeFilter.swift in Sources */,
 				7E29FC5CD3B2090ADAF2E938 /* PhotoDateRangeSelection.swift in Sources */,
@@ -556,6 +563,7 @@
 				C14348A8DE8DC8100D7ADA76 /* EventClusterTests.swift in Sources */,
 				C88EDA0E3D99D5140F72A0B5 /* MainWindowSizingTests.swift in Sources */,
 				8B191B9836B0D0A59DE87B5B /* MetadataIngestionServiceTests.swift in Sources */,
+				C64CBE72EE5EB20035D9152D /* PhotoBrowseHistoryStoreTests.swift in Sources */,
 				89139432AA719A59BFDEC30A /* PhotoDateRangeFilterTests.swift in Sources */,
 				9C4969D11A87EDE16B385E12 /* PhotoDateRangeSelectionTests.swift in Sources */,
 				81F3216C245995B11F6DACCE /* PhotoExporterTests.swift in Sources */,
@@ -634,15 +642,61 @@
 		9703156802AC19B1829BA6FB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"DEBUG=1",
 				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -671,9 +725,54 @@
 		C3E076E385A2F20581BD1545 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";

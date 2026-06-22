@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.55
+- Photo date quick picks — the Photos date range picker now shows side-by-side Recent Posts and Recent Photo Browses so users can choose a range from editing context or restore a previous browse
+
 ### v1.21.54
 - Revise suggestion organization — local writing checks now include more conservative Korean spelling corrections, group findings by category, and let users ignore individual suggestions during the current review
 

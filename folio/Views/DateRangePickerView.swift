@@ -4,6 +4,8 @@ import Photos
 struct DateRangePickerView: View {
     @Binding var isPresented: Bool
     let confirmLabel: String
+    let recentPosts: [PostSummary]
+    let recentBrowseRanges: [RecentPhotoBrowseRange]
     let onConfirm: (Date, Date, TimeZone?) -> Void
 
     @State private var startDate: Date
@@ -26,6 +28,8 @@ struct DateRangePickerView: View {
         initialStartDate: Date? = nil,
         initialEndDate: Date? = nil,
         initialNoLocationTimeZone: TimeZone? = nil,
+        recentPosts: [PostSummary] = [],
+        recentBrowseRanges: [RecentPhotoBrowseRange] = PhotoBrowseHistoryStore().recentRanges(),
         confirmLabel: String = "Load Photos",
         onConfirm: @escaping (Date, Date, TimeZone?) -> Void
     ) {
@@ -44,6 +48,8 @@ struct DateRangePickerView: View {
         _noLocationOffsetSeconds = State(
             initialValue: initialNoLocationTimeZone?.secondsFromGMT() ?? TimeZone.current.secondsFromGMT()
         )
+        self.recentPosts = Array(recentPosts.prefix(5))
+        self.recentBrowseRanges = Array(recentBrowseRanges.prefix(5))
         self.confirmLabel = confirmLabel
         self.onConfirm = onConfirm
     }
@@ -54,6 +60,10 @@ struct DateRangePickerView: View {
                 .font(.headline)
 
             if authStatus == .authorized || authStatus == .limited {
+                if hasQuickPicks {
+                    quickPicksSection
+                }
+
                 HStack(alignment: .top, spacing: 16) {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("From")
@@ -139,6 +149,11 @@ struct DateRangePickerView: View {
                     Button(confirmLabel) {
                         guard let range = selectedRange else { return }
                         isPresented = false
+                        PhotoBrowseHistoryStore().record(
+                            startDate: range.start,
+                            endDate: range.end,
+                            noLocationTimeZone: selectedNoLocationTimeZone
+                        )
                         onConfirm(range.start, range.end, selectedNoLocationTimeZone)
                     }
                     .buttonStyle(.borderedProminent)
@@ -172,11 +187,103 @@ struct DateRangePickerView: View {
             }
         }
         .padding(24)
-        .frame(width: 520)
-        .frame(minHeight: 360)
+        .frame(width: hasQuickPicks ? 720 : 520)
+        .frame(minHeight: hasQuickPicks ? 500 : 360)
         .onAppear {
             authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         }
+    }
+
+    private var hasQuickPicks: Bool {
+        !recentPosts.isEmpty || !recentBrowseRanges.isEmpty
+    }
+
+    private var quickPicksSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Quick Picks")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            HStack(alignment: .top, spacing: 12) {
+                quickPickColumn(title: "Recent Posts") {
+                    if recentPosts.isEmpty {
+                        quickPickPlaceholder("No recent posts")
+                    } else {
+                        ForEach(recentPosts) { post in
+                            quickPickButton(
+                                title: post.title,
+                                detail: Self.postDateLabel(post.date)
+                            ) {
+                                applyPostDate(post.date)
+                            }
+                        }
+                    }
+                }
+
+                quickPickColumn(title: "Recent Photo Browses") {
+                    if recentBrowseRanges.isEmpty {
+                        quickPickPlaceholder("No recent ranges")
+                    } else {
+                        ForEach(recentBrowseRanges) { range in
+                            quickPickButton(
+                                title: Self.rangeLabel(start: range.startDate, end: range.endDate),
+                                detail: range.noLocationOffsetSeconds.map(Self.offsetLabel) ?? "Mac timezone"
+                            ) {
+                                applyBrowseRange(range)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .padding(12)
+        .background(Theme.panel, in: RoundedRectangle(cornerRadius: 8))
+    }
+
+    private func quickPickColumn<Content: View>(
+        title: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.caption.weight(.semibold))
+            content()
+        }
+        .frame(maxWidth: .infinity, alignment: .topLeading)
+    }
+
+    private func quickPickPlaceholder(_ text: String) -> some View {
+        Text(text)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 7)
+    }
+
+    private func quickPickButton(title: String, detail: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 8) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                    Text(detail)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+                Spacer()
+                Image(systemName: "calendar.badge.clock")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 9)
+            .padding(.vertical, 7)
+            .background(Theme.card, in: RoundedRectangle(cornerRadius: 7))
+        }
+        .buttonStyle(.plain)
+        .help("Use this date range")
     }
 
     private var selectedRangeLabel: String {
@@ -224,6 +331,40 @@ struct DateRangePickerView: View {
         let hours = absoluteSeconds / 3600
         let minutes = (absoluteSeconds % 3600) / 60
         return String(format: "UTC%@%02d:%02d", sign, hours, minutes)
+    }
+
+    private static func postDateLabel(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
+    }
+
+    private static func rangeLabel(start: Date, end: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        if Calendar.current.isDate(start, inSameDayAs: end) {
+            return formatter.string(from: start)
+        }
+        return "\(formatter.string(from: start)) - \(formatter.string(from: end))"
+    }
+
+    private func applyPostDate(_ date: Date) {
+        let normalized = Calendar.current.startOfDay(for: date)
+        updateStartDate(normalized)
+        updateEndDate(normalized)
+    }
+
+    private func applyBrowseRange(_ range: RecentPhotoBrowseRange) {
+        updateStartDate(range.startDate)
+        updateEndDate(range.endDate)
+        if let offset = range.noLocationOffsetSeconds {
+            noLocationTimeZoneMode = .manual
+            noLocationOffsetSeconds = offset
+        } else {
+            noLocationTimeZoneMode = .mac
+        }
     }
 
     private func updateStartDate(_ date: Date) {

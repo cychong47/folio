@@ -103,6 +103,7 @@ struct PhotoCurationView: View {
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var showDatePicker = false
     @State private var showChangeRangeConfirmation = false
+    @State private var datePickerRecentPosts: [PostSummary] = []
     @State private var exportProfileChoices: [BlogProfile] = []
     @State private var showExportProfilePicker = false
 
@@ -182,6 +183,7 @@ struct PhotoCurationView: View {
                 initialStartDate: store.dateRange?.start,
                 initialEndDate: store.dateRange?.end,
                 initialNoLocationTimeZone: store.noLocationTimeZone,
+                recentPosts: datePickerRecentPosts,
                 confirmLabel: store.dateRange == nil ? "Load Photos" : "Update Photos"
             ) { start, end, noLocationTimeZone in
                 Task {
@@ -225,7 +227,7 @@ struct PhotoCurationView: View {
         }
         .alert("Change Date Range?", isPresented: $showChangeRangeConfirmation) {
             Button("Cancel", role: .cancel) {}
-            Button("Change Dates") { showDatePicker = true }
+            Button("Change Dates") { openDatePicker() }
         } message: {
             Text("Changing the date range will rescan photos and reset the current curation selections.")
         }
@@ -250,8 +252,18 @@ struct PhotoCurationView: View {
         if store.clusters.reduce(0, { $0 + $1.selectedCount }) > 0 {
             showChangeRangeConfirmation = true
         } else {
-            showDatePicker = true
+            openDatePicker()
         }
+    }
+
+    private func openDatePicker() {
+        datePickerRecentPosts = recentPostsForDatePicker()
+        showDatePicker = true
+    }
+
+    private func recentPostsForDatePicker() -> [PostSummary] {
+        guard !settings.contentPath.isEmpty else { return [] }
+        return Array(PostIndexer.scan(contentPath: settings.contentPath).prefix(5))
     }
 
     private func createPostFromSelection() async {

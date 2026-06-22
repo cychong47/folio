@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var showDatePicker = false
     @State private var welcomeResizeTrigger = 0
     @State private var mainDraftID: UUID?
+    @State private var datePickerRecentPosts: [PostSummary] = []
     @StateObject private var curationStore = CurationStore()
 
     private var isImporting: Bool { importTotal > 0 }
@@ -55,7 +56,7 @@ struct ContentView: View {
                     isDragTargeted: isDragTargeted,
                     hasCurationSession: !curationStore.clusters.isEmpty,
                     onBrowse: { browsing = true },
-                    onCurate: { showDatePicker = true },
+                    onCurate: { openDatePicker() },
                     onResumeCuration: { curating = true },
                     onResumeDraft: { resumeLatestDraft() }
                 )
@@ -118,7 +119,10 @@ struct ContentView: View {
         .onChange(of: pendingPost.existingFileURL) { _ in autosaveMainDraft() }
         .onChange(of: pendingPost.lastPublished != nil) { _ in autosaveMainDraft() }
         .sheet(isPresented: $showDatePicker) {
-            DateRangePickerView(isPresented: $showDatePicker) { start, end, noLocationTimeZone in
+            DateRangePickerView(
+                isPresented: $showDatePicker,
+                recentPosts: datePickerRecentPosts
+            ) { start, end, noLocationTimeZone in
                 curating = true
                 Task {
                     await curationStore.ingest(
@@ -129,6 +133,16 @@ struct ContentView: View {
                 }
             }
         }
+    }
+
+    private func openDatePicker() {
+        datePickerRecentPosts = recentPostsForDatePicker()
+        showDatePicker = true
+    }
+
+    private func recentPostsForDatePicker() -> [PostSummary] {
+        guard !settings.contentPath.isEmpty else { return [] }
+        return Array(PostIndexer.scan(contentPath: settings.contentPath).prefix(5))
     }
 
     private func autosaveMainDraft() {

@@ -6,6 +6,37 @@ completed roadmap items and the user workflow they enable.
 
 ## Implemented
 
+### Photo Date Quick Picks
+
+Status: implemented for the Photos date range picker.
+
+Related releases:
+
+- v1.21.55 — the Photos date range picker shows Recent Posts and Recent Photo
+  Browses side by side; choosing either one fills the current From/To fields
+  while leaving final loading behind the existing confirmation button.
+
+User value:
+
+- Users can start photo curation from memory of a recent post instead of
+  remembering the exact capture date.
+- Users can restore previously browsed Photos-library ranges without retyping
+  dates or timezone options.
+
+Implementation notes:
+
+- `PhotoBrowseHistoryStore` persists the five most recent confirmed photo
+  browse ranges in shared user defaults.
+- `DateRangePickerView` receives recent posts from the current blog content
+  index and recent browse ranges from the history store.
+- Quick Pick rows only fill the picker controls; they do not immediately scan
+  Photos until the user confirms.
+
+Primary verification:
+
+- `PhotoBrowseHistoryStoreTests` covers newest-first ordering, deduplication,
+  history limits, and manual no-location timezone offsets.
+
 ### Revise Writing Sidebar
 
 Status: implemented as a local deterministic writing-review MVP.
