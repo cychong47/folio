@@ -192,8 +192,8 @@ struct DateRangePickerView: View {
             }
         }
         .padding(24)
-        .frame(width: hasQuickPicks ? 720 : 520)
-        .frame(minHeight: hasQuickPicks ? 500 : 360)
+        .frame(width: hasQuickPicks ? 760 : 520)
+        .frame(minHeight: hasQuickPicks ? 620 : 420)
         .onAppear {
             authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         }

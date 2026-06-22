@@ -12,6 +12,8 @@ Status: implemented for the Photos date range picker.
 
 Related releases:
 
+- v1.21.58 — the quick-pick date range picker opens wider and taller so the
+  bottom Cancel and Load Photos actions remain visible.
 - v1.21.57 — the date range picker presentation now carries the loaded recent
   posts into the sheet so they appear on the first Curate Photos click, and the
   two quick-pick columns have more spacing.
@@ -38,6 +40,8 @@ Implementation notes:
 - The picker is presented with an identifiable payload so SwiftUI builds the
   sheet from the current recent-post list instead of stale pre-presentation
   state.
+- The quick-pick picker uses a larger frame than the plain date picker because
+  it contains two recent-history columns above the date and timezone controls.
 - Recent post dates and recent browse range metadata are aligned on the right
   side of each row to preserve vertical space.
 - Quick Pick rows only fill the picker controls; they do not immediately scan

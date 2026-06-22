@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.58
+- Photo date range actions visibility — the quick-pick date range picker now opens wider and taller so the Cancel and Load Photos buttons remain visible
+
 ### v1.21.57
 - Photo date quick pick presentation — Recent Posts now appear on the first Curate Photos click and the quick-pick columns have more spacing for clearer scanning
 
