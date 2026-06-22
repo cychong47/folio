@@ -12,6 +12,8 @@ Status: implemented for the Photos date range picker.
 
 Related releases:
 
+- v1.21.59 — Recent Posts changed from a visible list into a drop-down menu
+  while keeping Recent Photo Browses as direct range shortcuts.
 - v1.21.58 — the quick-pick date range picker opens wider and taller so the
   bottom Cancel and Load Photos actions remain visible.
 - v1.21.57 — the date range picker presentation now carries the loaded recent
@@ -42,6 +44,8 @@ Implementation notes:
   state.
 - The quick-pick picker uses a larger frame than the plain date picker because
   it contains two recent-history columns above the date and timezone controls.
+- Recent Posts uses a menu so post history does not compete vertically with
+  the rest of the date range form.
 - Recent post dates and recent browse range metadata are aligned on the right
   side of each row to preserve vertical space.
 - Quick Pick rows only fill the picker controls; they do not immediately scan

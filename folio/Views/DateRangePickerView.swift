@@ -214,14 +214,7 @@ struct DateRangePickerView: View {
                     if recentPosts.isEmpty {
                         quickPickPlaceholder("No recent posts")
                     } else {
-                        ForEach(recentPosts) { post in
-                            quickPickRow(
-                                title: post.title,
-                                trailing: Self.postDateLabel(post.date)
-                            ) {
-                                applyPostDate(post.date)
-                            }
-                        }
+                        recentPostsMenu
                     }
                 }
 
@@ -263,6 +256,37 @@ struct DateRangePickerView: View {
             .foregroundStyle(.secondary)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.vertical, 5)
+    }
+
+    private var recentPostsMenu: some View {
+        Menu {
+            ForEach(recentPosts) { post in
+                Button {
+                    applyPostDate(post.date)
+                } label: {
+                    Text("\(post.title) - \(Self.postDateLabel(post.date))")
+                }
+            }
+        } label: {
+            HStack(spacing: 8) {
+                Text("Choose a recent post")
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+
+                Spacer(minLength: 8)
+
+                Image(systemName: "chevron.down")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .frame(minHeight: 26)
+            .background(Theme.card, in: RoundedRectangle(cornerRadius: 7))
+        }
+        .menuStyle(.borderlessButton)
+        .help("Choose a recent post date")
     }
 
     private func quickPickRow(title: String, trailing: String, action: @escaping () -> Void) -> some View {

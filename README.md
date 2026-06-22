@@ -56,7 +56,7 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 - **Spacebar curation selection** — press Space in the curation grid or preview window to select or unselect the focused photo
 - **Capture-local event ordering** — curation clusters and displays event photo ranges with the same capture-local time order shown in the UI
 - **Stable Photos date picker** — the Photos-library date range window keeps no-location timezone controls visible so helper text is not hidden behind an expanding Advanced section
-- **Photo date quick picks** — the Photos-library date range window reliably shows compact Recent Posts and Recent Photo Browses side by side, with room for the action buttons, so a post date or previous browse range can fill the date fields
+- **Photo date quick picks** — the Photos-library date range window shows Recent Posts as a drop-down menu beside Recent Photo Browses, with room for the action buttons, so a post date or previous browse range can fill the date fields
 - **Smarter event suggestions** — event generation compares GPS movement against each event's running location center and caps auto-events at 4 hours so long photo chains do not merge a whole day
 - **Keyboard shortcuts** — `⌘N` New Post or Create Post in curation, `⌘E` Export Photos in curation, Space toggles curation photo selection, `⌘B` Browse Posts, `⌘K` Curate Photos, `⌘S` Save
 - **Check for Updates** — Photolog menu bar item; shows a popup with update status and a one-click Download button when a new version is available
