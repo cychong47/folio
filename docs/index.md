@@ -17,6 +17,12 @@ Drag photos from Photos.app or Finder, write a post in the split-view editor, an
 
 <!-- AUTO-GENERATED below this line — edit HISTORY.md instead -->
 
+### v1.21.57
+
+- Photo date quick pick presentation — Recent Posts now appear on the first Curate Photos click and the quick-pick columns have more spacing for clearer scanning
+
+---
+
 ### v1.21.56
 
 - Photo date quick pick layout — Recent Posts and Recent Photo Browses now use compact single-line rows with the date or range detail aligned on the right so five items remain visible
