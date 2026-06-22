@@ -4,6 +4,9 @@
 
 ## Released
 
+### v1.21.57
+- Photo date quick pick presentation — Recent Posts now appear on the first Curate Photos click and the quick-pick columns have more spacing for clearer scanning
+
 ### v1.21.56
 - Photo date quick pick layout — Recent Posts and Recent Photo Browses now use compact single-line rows with the date or range detail aligned on the right so five items remain visible
 

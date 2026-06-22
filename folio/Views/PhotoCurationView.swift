@@ -101,9 +101,8 @@ struct PhotoCurationView: View {
     var onCreatePost: ((String, Date) -> Void)? = nil
 
     @State private var columnVisibility = NavigationSplitViewVisibility.all
-    @State private var showDatePicker = false
     @State private var showChangeRangeConfirmation = false
-    @State private var datePickerRecentPosts: [PostSummary] = []
+    @State private var datePickerPresentation: DateRangePickerPresentation?
     @State private var exportProfileChoices: [BlogProfile] = []
     @State private var showExportProfilePicker = false
 
@@ -177,13 +176,13 @@ struct PhotoCurationView: View {
                 }
             )
         }
-        .sheet(isPresented: $showDatePicker) {
+        .sheet(item: $datePickerPresentation) { presentation in
             DateRangePickerView(
-                isPresented: $showDatePicker,
+                isPresented: datePickerPresentedBinding,
                 initialStartDate: store.dateRange?.start,
                 initialEndDate: store.dateRange?.end,
                 initialNoLocationTimeZone: store.noLocationTimeZone,
-                recentPosts: datePickerRecentPosts,
+                recentPosts: presentation.recentPosts,
                 confirmLabel: store.dateRange == nil ? "Load Photos" : "Update Photos"
             ) { start, end, noLocationTimeZone in
                 Task {
@@ -257,8 +256,18 @@ struct PhotoCurationView: View {
     }
 
     private func openDatePicker() {
-        datePickerRecentPosts = recentPostsForDatePicker()
-        showDatePicker = true
+        datePickerPresentation = DateRangePickerPresentation(recentPosts: recentPostsForDatePicker())
+    }
+
+    private var datePickerPresentedBinding: Binding<Bool> {
+        Binding(
+            get: { datePickerPresentation != nil },
+            set: { isPresented in
+                if !isPresented {
+                    datePickerPresentation = nil
+                }
+            }
+        )
     }
 
     private func recentPostsForDatePicker() -> [PostSummary] {

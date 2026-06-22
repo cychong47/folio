@@ -1,6 +1,11 @@
 import SwiftUI
 import Photos
 
+struct DateRangePickerPresentation: Identifiable {
+    let id = UUID()
+    let recentPosts: [PostSummary]
+}
+
 struct DateRangePickerView: View {
     @Binding var isPresented: Bool
     let confirmLabel: String
@@ -204,7 +209,7 @@ struct DateRangePickerView: View {
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
 
-            HStack(alignment: .top, spacing: 10) {
+            HStack(alignment: .top, spacing: 18) {
                 quickPickColumn(title: "Recent Posts") {
                     if recentPosts.isEmpty {
                         quickPickPlaceholder("No recent posts")

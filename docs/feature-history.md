@@ -12,6 +12,9 @@ Status: implemented for the Photos date range picker.
 
 Related releases:
 
+- v1.21.57 — the date range picker presentation now carries the loaded recent
+  posts into the sheet so they appear on the first Curate Photos click, and the
+  two quick-pick columns have more spacing.
 - v1.21.56 — Quick Pick rows use compact single-line title/detail layouts so
   five recent posts and five recent photo browse ranges remain visible without
   clipped text.
@@ -32,6 +35,9 @@ Implementation notes:
   browse ranges in shared user defaults.
 - `DateRangePickerView` receives recent posts from the current blog content
   index and recent browse ranges from the history store.
+- The picker is presented with an identifiable payload so SwiftUI builds the
+  sheet from the current recent-post list instead of stale pre-presentation
+  state.
 - Recent post dates and recent browse range metadata are aligned on the right
   side of each row to preserve vertical space.
 - Quick Pick rows only fill the picker controls; they do not immediately scan

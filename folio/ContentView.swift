@@ -11,10 +11,9 @@ struct ContentView: View {
     @State private var importCompleted: Int = 0
     @State private var browsing = false
     @State private var curating = false
-    @State private var showDatePicker = false
     @State private var welcomeResizeTrigger = 0
     @State private var mainDraftID: UUID?
-    @State private var datePickerRecentPosts: [PostSummary] = []
+    @State private var datePickerPresentation: DateRangePickerPresentation?
     @StateObject private var curationStore = CurationStore()
 
     private var isImporting: Bool { importTotal > 0 }
@@ -118,10 +117,10 @@ struct ContentView: View {
         .onChange(of: pendingPost.dateOverride) { _ in autosaveMainDraft() }
         .onChange(of: pendingPost.existingFileURL) { _ in autosaveMainDraft() }
         .onChange(of: pendingPost.lastPublished != nil) { _ in autosaveMainDraft() }
-        .sheet(isPresented: $showDatePicker) {
+        .sheet(item: $datePickerPresentation) { presentation in
             DateRangePickerView(
-                isPresented: $showDatePicker,
-                recentPosts: datePickerRecentPosts
+                isPresented: datePickerPresentedBinding,
+                recentPosts: presentation.recentPosts
             ) { start, end, noLocationTimeZone in
                 curating = true
                 Task {
@@ -136,8 +135,18 @@ struct ContentView: View {
     }
 
     private func openDatePicker() {
-        datePickerRecentPosts = recentPostsForDatePicker()
-        showDatePicker = true
+        datePickerPresentation = DateRangePickerPresentation(recentPosts: recentPostsForDatePicker())
+    }
+
+    private var datePickerPresentedBinding: Binding<Bool> {
+        Binding(
+            get: { datePickerPresentation != nil },
+            set: { isPresented in
+                if !isPresented {
+                    datePickerPresentation = nil
+                }
+            }
+        )
     }
 
     private func recentPostsForDatePicker() -> [PostSummary] {
