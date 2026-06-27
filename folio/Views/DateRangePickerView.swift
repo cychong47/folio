@@ -60,7 +60,7 @@ struct DateRangePickerView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: 14) {
             Text("Select Photo Date Range")
                 .font(.headline)
 
@@ -191,9 +191,9 @@ struct DateRangePickerView: View {
                 }
             }
         }
-        .padding(24)
+        .padding(20)
         .frame(width: hasQuickPicks ? 760 : 520)
-        .frame(minHeight: hasQuickPicks ? 620 : 420)
+        .frame(minHeight: hasQuickPicks ? 500 : 380)
         .onAppear {
             authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         }
